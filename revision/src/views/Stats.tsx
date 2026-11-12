@@ -84,7 +84,7 @@ export default function Stats() {
       <section className="panel">
         <div className="section-head">
           <h2>Révisions des 30 derniers jours</h2>
-          <span className="muted small">{plural(total30, "réponse", "réponses")} · {daysActive} jours actifs · aujourd'hui {fmtDuration(timeToday(db, now))}</span>
+          <span className="muted small">{plural(total30, "réponse", "réponses")} · {plural(daysActive, "jour actif", "jours actifs")} · aujourd'hui {fmtDuration(timeToday(db, now))}</span>
         </div>
         <Bars
           max={maxDay}

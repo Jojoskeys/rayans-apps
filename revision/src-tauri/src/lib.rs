@@ -5,15 +5,16 @@
 //! Données : `%APPDATA%\fr.rayan.revision\revision.json` (ou le dossier `REVISION_DATA_DIR`), avec
 //! `revision.bak.json` (version précédente) et une copie par jour dans `sauvegardes\` (14 dernières).
 
-use serde_json::Value;
+mod files;
+
+use files::{cp1252, is_json, prune_daily, read_opt, write_atomic};
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use tauri::{AppHandle, Manager};
 
 const DATA_FILE: &str = "revision.json";
 const BACKUP_FILE: &str = "revision.bak.json";
 const DAILY_DIR: &str = "sauvegardes";
-const DAILY_KEEP: usize = 14;
 
 fn data_dir(app: &AppHandle) -> Result<PathBuf, String> {
     let dir = match std::env::var_os("REVISION_DATA_DIR") {
@@ -22,25 +23,6 @@ fn data_dir(app: &AppHandle) -> Result<PathBuf, String> {
     };
     fs::create_dir_all(&dir).map_err(|e| format!("Impossible de créer {} : {e}", dir.display()))?;
     Ok(dir)
-}
-
-fn read_opt(path: &Path) -> Result<Option<String>, String> {
-    match fs::read_to_string(path) {
-        Ok(s) => Ok(Some(s)),
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(None),
-        Err(e) => Err(format!("Lecture de {} impossible : {e}", path.display())),
-    }
-}
-
-fn is_json(text: &str) -> bool {
-    serde_json::from_str::<Value>(text).is_ok()
-}
-
-/// Écrit d'abord un fichier temporaire, puis le renomme : une coupure ne laisse jamais un fichier à moitié écrit.
-fn write_atomic(path: &Path, text: &str) -> Result<(), String> {
-    let tmp = path.with_extension("tmp");
-    fs::write(&tmp, text).map_err(|e| format!("Écriture de {} impossible : {e}", tmp.display()))?;
-    fs::rename(&tmp, path).map_err(|e| format!("Enregistrement de {} impossible : {e}", path.display()))
 }
 
 #[derive(serde::Serialize)]
@@ -87,24 +69,6 @@ fn save_db(app: AppHandle, text: String, day: Option<String>) -> Result<(), Stri
     Ok(())
 }
 
-fn prune_daily(dir: &Path) {
-    let Ok(entries) = fs::read_dir(dir) else { return };
-    let mut files: Vec<PathBuf> = entries
-        .filter_map(|e| e.ok().map(|e| e.path()))
-        .filter(|p| {
-            p.file_name()
-                .and_then(|n| n.to_str())
-                .is_some_and(|n| n.starts_with("revision-") && n.ends_with(".json"))
-        })
-        .collect();
-    files.sort();
-    if files.len() > DAILY_KEEP {
-        for f in &files[..files.len() - DAILY_KEEP] {
-            let _ = fs::remove_file(f);
-        }
-    }
-}
-
 /// Lit un fichier choisi par l'utilisateur dans la boîte de dialogue « Importer ».
 #[tauri::command]
 fn read_text_file(path: String) -> Result<String, String> {
@@ -116,17 +80,6 @@ fn read_text_file(path: String) -> Result<String, String> {
         Ok(s) => Ok(s),
         // Fichiers enregistrés par Excel en « ANSI » (Windows-1252) : conversion des caractères courants.
         Err(e) => Ok(e.into_bytes().iter().map(|&b| cp1252(b)).collect()),
-    }
-}
-
-fn cp1252(b: u8) -> char {
-    const HIGH: [char; 32] = [
-        '€', '\u{81}', '‚', 'ƒ', '„', '…', '†', '‡', 'ˆ', '‰', 'Š', '‹', 'Œ', '\u{8d}', 'Ž', '\u{8f}', '\u{90}', '‘', '’',
-        '“', '”', '•', '–', '—', '˜', '™', 'š', '›', 'œ', '\u{9d}', 'ž', 'Ÿ',
-    ];
-    match b {
-        0x80..=0x9f => HIGH[(b - 0x80) as usize],
-        _ => b as char,
     }
 }
 
@@ -165,45 +118,4 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![load_db, save_db, read_text_file, write_text_file, smoke_ready])
         .run(tauri::generate_context!())
         .expect("erreur au démarrage de Rayan's Révision");
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn cp1252_accents() {
-        let s: String = [0x45u8, 0xe9, 0x80, 0x92].iter().map(|&b| cp1252(b)).collect();
-        assert_eq!(s, "Eé€’");
-    }
-
-    #[test]
-    fn rotation_des_copies_journalieres() {
-        let dir = std::env::temp_dir().join(format!("revision-test-{}", std::process::id()));
-        let _ = fs::remove_dir_all(&dir);
-        fs::create_dir_all(&dir).unwrap();
-        for d in 1..=20 {
-            fs::write(dir.join(format!("revision-2026-01-{d:02}.json")), "{}").unwrap();
-        }
-        fs::write(dir.join("autre.txt"), "x").unwrap();
-        prune_daily(&dir);
-        let mut left: Vec<String> = fs::read_dir(&dir).unwrap().map(|e| e.unwrap().file_name().into_string().unwrap()).collect();
-        left.sort();
-        assert_eq!(left.len(), DAILY_KEEP + 1);
-        assert_eq!(left[0], "autre.txt");
-        assert_eq!(left[1], "revision-2026-01-07.json");
-        fs::remove_dir_all(&dir).unwrap();
-    }
-
-    #[test]
-    fn ecriture_atomique() {
-        let dir = std::env::temp_dir().join(format!("revision-atomic-{}", std::process::id()));
-        fs::create_dir_all(&dir).unwrap();
-        let f = dir.join("a.json");
-        write_atomic(&f, "{\"v\":1}").unwrap();
-        write_atomic(&f, "{\"v\":2}").unwrap();
-        assert_eq!(fs::read_to_string(&f).unwrap(), "{\"v\":2}");
-        assert!(!dir.join("a.tmp").exists());
-        fs::remove_dir_all(&dir).unwrap();
-    }
 }

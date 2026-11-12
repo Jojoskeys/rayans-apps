@@ -7,7 +7,16 @@ description = "Rayan's Révision : cartes de révision et quiz avec répétition
 
 [lib]
 name = "revision_lib"
-crate-type = ["staticlib", "cdylib", "rlib"]
+# Application de bureau uniquement : pas de cdylib/staticlib (utiles seulement pour Android/iOS).
+crate-type = ["rlib"]
+# Les tests sont dans tests/files.rs (un exe de test lié à Tauri ne démarre pas sans manifeste Windows).
+test = false
+doctest = false
+
+[[bin]]
+name = "rayans-revision"
+path = "src/main.rs"
+test = false
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
@@ -16,6 +25,7 @@ tauri-build = { version = "2", features = [] }
 tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
 tauri-plugin-single-instance = "2"
+serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 [profile.release]

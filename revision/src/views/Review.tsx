@@ -240,7 +240,7 @@ export default function Review({ deckId }: { deckId: string | null }) {
             {GRADES.map((g) => (
               <button key={g} className={`grade g${g}${g === suggested ? " suggested" : ""}`} onClick={() => grade(g)}>
                 <span className="grade-label"><kbd>{g}</kbd> {GRADE_LABELS[g]}</span>
-                <span className="grade-delay">{previews ? formatDelay(previews[g].sched.due - Date.now()) : ""}</span>
+                <span className="grade-delay">{previews ? formatDelay(previews[g].interval * 86_400_000) : ""}</span>
               </button>
             ))}
           </div>
