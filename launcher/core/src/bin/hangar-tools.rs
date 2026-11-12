@@ -208,6 +208,7 @@ fn pack(dir: &Path, out: &Path) -> Result<(), String> {
     let mut w = zip::ZipWriter::new(f);
     for rel in files {
         let full = dir.join(&rel);
+        #[cfg_attr(not(unix), allow(unused_mut))]
         let mut opts = SimpleFileOptions::default()
             .compression_method(zip::CompressionMethod::Deflated)
             .last_modified_time(zip::DateTime::default());

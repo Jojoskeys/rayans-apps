@@ -34,7 +34,7 @@ function init() {
   mkdirSync(join(OUT, "img"), { recursive: true });
   for (const v of VERSIONS) {
     const target = join("target", `demo-${v}`);
-    console.log(`\n== Compilation d'Rayan's Chrono ${v}`);
+    console.log(`\n== Compilation de Rayan's Chrono ${v}`);
     run("cargo", ["build", "--release", "-p", "hangar-demo", "--target-dir", target], { DEMO_VERSION: v });
     const pkg = join(target, "paquet");
     rmSync(pkg, { recursive: true, force: true });
