@@ -1,0 +1,63 @@
+RAYAN'S HIFZ — LICENCES DES CONTENUS ET COMPOSANTS
+====================================================
+
+Code de l'application
+---------------------
+Le code source de Rayan's Hifz (dossiers src/, scripts/, test/) est sous licence MIT.
+
+Texte coranique (data/quran-uthmani.txt)
+----------------------------------------
+Tanzil Quran Text (Uthmani, version 1.1), Copyright (C) 2007-2026 Tanzil Project,
+licence Creative Commons Attribution 3.0. Source : https://tanzil.net/ — mises à jour : https://tanzil.net/updates/
+Le fichier est une copie conforme, non modifiée, téléchargée depuis tanzil.net ; sa notice de copyright figure à la
+fin du fichier. L'application ne modifie pas ce texte : pour l'affichage elle sépare seulement la basmala du
+verset 1 et découpe les versets en mots.
+
+Conditions d'utilisation reproduites de la notice Tanzil :
+
+  - Permission is granted to copy and distribute verbatim copies
+    of this text, but CHANGING IT IS NOT ALLOWED.
+
+  - This Quran text can be used in any website or application,
+    provided that its source (Tanzil Project) is clearly indicated,
+    and a link is made to tanzil.net to enable users to keep
+    track of changes.
+
+  - This copyright notice shall be included in all verbatim copies
+    of the text, and shall be reproduced appropriately in all files
+    derived from or containing substantial portion of this text.
+
+Traduction française (data/fr.hamidullah.txt)
+---------------------------------------------
+Traduction de Muhammad Hamidullah (identifiant Tanzil : fr.hamidullah, mise à jour du 18 juillet 2011),
+fournie par Tanzil Project : https://tanzil.net/trans/
+Conditions de Tanzil pour les traductions : utilisation NON COMMERCIALE uniquement ; tout autre usage demande
+l'autorisation du traducteur ou de l'éditeur. Rayan's Hifz est gratuit et non commercial. Le fichier est inclus
+tel quel, avec son en-tête d'origine.
+
+Métadonnées (data/quran-data.js → src/core/quran-meta.json)
+-----------------------------------------------------------
+Tanzil Quran Metadata 1.0, Copyright (C) 2008-2009 Tanzil.info, licence Creative Commons Attribution 3.0.
+Utilisées pour les sourates, juz, quarts de hizb, pages et prosternations. src/core/quran-meta.json est une
+conversion au format JSON (scripts/build-meta.cjs).
+
+Police (fonts/AmiriQuran.ttf)
+-----------------------------
+Amiri Quran 1.003, Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri),
+SIL Open Font License 1.1 — texte complet dans fonts/OFL.txt (licences/OFL-Amiri.txt dans l'application installée).
+
+Noms français des sourates (src/core/surahNames.ts)
+---------------------------------------------------
+Translittérations et sens courants, rédigés pour cette application (licence MIT avec le code).
+
+Audio
+-----
+Aucun fichier audio n'est inclus dans l'application. La récitation de Mahmoud Khalil Al-Husary (murattal,
+128 kbit/s) est lue à la demande depuis https://everyayah.com/data/Husary_128kbps/ puis gardée dans le dossier
+de données de l'utilisateur pour l'écoute hors ligne. Les droits sur ces enregistrements restent ceux de leurs
+détenteurs.
+
+Composants logiciels
+--------------------
+Electron (MIT), React et React DOM (MIT). Les mentions de licence des modules regroupés dans l'interface sont
+ajoutées à la fin de dist-ui/app.js lors de la construction.
