@@ -33,26 +33,26 @@ function app(p: Partial<AppView> & { id: string; name: string }): AppView {
     running: false,
     task: null,
     lastError: null,
-    dataDir: `C:\\Users\\vous\\AppData\\Local\\dev.hangar.launcher\\data\\${p.id}`,
+    dataDir: `C:\\Users\\vous\\AppData\\Local\\fr.rayan.launcher\\data\\${p.id}`,
     ...p,
   };
 }
 
 const apps: AppView[] = [
   app({
-    id: "horloge-demo",
-    name: "Horloge Démo",
-    description: "Une petite horloge qui compte ses lancements. Elle sert à tester Hangar de bout en bout.",
+    id: "rayans-chrono",
+    name: "Rayan's Chrono",
+    description: "Une petite horloge qui compte ses lancements. Elle sert à tester Rayan's Launcher de bout en bout.",
     availableVersion: "2.0.0",
     installedVersion: "1.0.0",
     updateAvailable: true,
     releaseNotes: "Les secondes sont affichées.\nLe compteur de lancements est conservé pendant la mise à jour.",
     installedReleaseNotes: "Première version.",
   }),
-  app({ id: "atelier-notes", name: "Atelier Notes", description: "Prise de notes rapide, hors ligne, avec export Markdown.", availableVersion: "0.4.2" }),
+  app({ id: "rayans-notes", name: "Rayan's Notes", description: "Prise de notes rapide, hors ligne, avec export Markdown.", availableVersion: "0.4.2" }),
   app({
-    id: "pixel-studio",
-    name: "Pixel Studio",
+    id: "rayans-pixel",
+    name: "Rayan's Pixel",
     description: "Éditeur de sprites minimaliste.",
     availableVersion: "1.3.0",
     installedVersion: "1.3.0",
@@ -63,10 +63,10 @@ let snap: Snapshot = {
   mode: "development",
   publicKeyConfigured: false,
   catalogUrl: "http://127.0.0.1:8787/catalog.json",
-  dataRoot: "C:\\Users\\vous\\AppData\\Local\\dev.hangar.launcher",
+  dataRoot: "C:\\Users\\vous\\AppData\\Local\\fr.rayan.launcher",
   catalog: {
     status: "ready",
-    title: "Mes applications",
+    title: "Le catalogue de Rayan",
     sourceUrl: "http://127.0.0.1:8787/catalog.json",
     fetchedAt: new Date().toISOString(),
     fromCache: false,

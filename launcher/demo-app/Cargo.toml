@@ -3,11 +3,11 @@ name = "hangar-demo"
 version = "0.0.0"
 edition.workspace = true
 license.workspace = true
-description = "Application de démonstration distribuée par Hangar (deux versions)"
+description = "Application de démonstration distribuée par Rayan's Launcher (deux versions)"
 publish = false
 
 [[bin]]
-name = "HorlogeDemo"
+name = "RayansChrono"
 path = "src/main.rs"
 
 [target.'cfg(windows)'.dependencies]

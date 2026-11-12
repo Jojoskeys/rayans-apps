@@ -3,7 +3,7 @@ name = "hangar-core"
 version = "0.1.0"
 edition.workspace = true
 license.workspace = true
-description = "Coeur du launcher Hangar : catalogue signé, installation, mises à jour et lancement"
+description = "Coeur du launcher Rayan's Launcher : catalogue signé, installation, mises à jour et lancement"
 
 [lib]
 name = "hangar_core"

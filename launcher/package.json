@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Hangar : launcher Windows (Tauri + React + TypeScript) pour distribuer, installer, mettre à jour et lancer vos applications",
+  "description": "Rayan's Launcher : launcher Windows (Tauri + React + TypeScript) pour distribuer, installer, mettre à jour et lancer vos applications",
   "license": "MIT",
   "scripts": {
     "dev": "tauri dev",

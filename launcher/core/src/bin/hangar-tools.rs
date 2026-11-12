@@ -1,4 +1,4 @@
-//! Outils de publication Hangar : clés, empreintes, ZIP, édition et signature du catalogue, et une
+//! Outils de publication Rayan's Launcher : clés, empreintes, ZIP, édition et signature du catalogue, et une
 //! petite interface en ligne de commande du launcher (utile pour les tests de bout en bout).
 
 use base64::Engine;
@@ -9,7 +9,7 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-const AIDE: &str = "hangar-tools : outils de publication du launcher Hangar
+const AIDE: &str = "hangar-tools : outils de publication du launcher Rayan's Launcher
 
 CLÉS ET SIGNATURE
   keygen --private <fichier> --public <fichier>
@@ -105,7 +105,7 @@ fn run(mut args: Vec<String>) -> Result<(), String> {
             }
             write_private(&private, &format!("{}\n", b64.encode(seed)))?;
             let pubtxt = format!(
-                "# Clé publique Ed25519 du catalogue Hangar (base64). Générée par hangar-tools keygen.\n{}\n",
+                "# Clé publique Ed25519 du catalogue Rayan's Launcher (base64). Générée par hangar-tools keygen.\n{}\n",
                 b64.encode(sk.verifying_key().to_bytes())
             );
             std::fs::write(&public, pubtxt).map_err(|e| e.to_string())?;
@@ -256,7 +256,7 @@ fn publish(a: Args) -> Result<(), String> {
     let mut doc: Value = if cat_path.exists() {
         serde_json::from_str(&read(&cat_path.to_string_lossy())?).map_err(|e| e.to_string())?
     } else {
-        json!({ "schemaVersion": 1, "title": "Mes applications", "apps": [] })
+        json!({ "schemaVersion": 1, "title": "Le catalogue de Rayan", "apps": [] })
     };
     let apps = doc
         .get_mut("apps")

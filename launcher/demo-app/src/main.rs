@@ -1,4 +1,4 @@
-//! Horloge Démo : petite application distribuée par Hangar pour tester le parcours complet.
+//! Rayan's Chrono : petite application distribuée par Rayan's Launcher pour tester le parcours complet.
 //! La version affichée vient de la compilation (variable DEMO_VERSION), ce qui produit deux binaires
 //! réellement différents pour la v1 et la v2.
 //!
@@ -16,7 +16,7 @@ const VERSION: &str = match option_env!("DEMO_VERSION") {
 fn main() {
     let data = std::env::var_os("HANGAR_APP_DATA")
         .map(std::path::PathBuf::from)
-        .unwrap_or_else(|| std::env::temp_dir().join("horloge-demo"));
+        .unwrap_or_else(|| std::env::temp_dir().join("rayans-chrono"));
     let _ = std::fs::create_dir_all(&data);
     let counter = data.join("lancements.txt");
     let n: u64 = std::fs::read_to_string(&counter)
@@ -36,7 +36,7 @@ fn main() {
         ""
     };
     let msg = format!(
-        "Horloge Démo v{VERSION}\nHeure UTC : {h:02}:{m:02}{}\nLancement n°{n} (compteur conservé dans {})\nDossier de la version : {}{novelty}",
+        "Rayan's Chrono v{VERSION}\nHeure UTC : {h:02}:{m:02}{}\nLancement n°{n} (compteur conservé dans {})\nDossier de la version : {}{novelty}",
         if VERSION.starts_with("2.") { format!(":{s:02}") } else { String::new() },
         data.display(),
         std::env::current_dir().map(|d| d.display().to_string()).unwrap_or_default(),
@@ -70,7 +70,7 @@ fn show(msg: &str) {
         MessageBoxW(
             std::ptr::null_mut(),
             wide(msg).as_ptr(),
-            wide("Horloge Démo").as_ptr(),
+            wide("Rayan's Chrono").as_ptr(),
             MB_OK | MB_ICONINFORMATION,
         );
     }

@@ -3,7 +3,7 @@ name = "hangar"
 version = "0.1.0"
 edition.workspace = true
 license.workspace = true
-description = "Hangar : launcher de bureau pour distribuer, installer, mettre à jour et lancer vos applications"
+description = "Rayan's Launcher : launcher de bureau pour distribuer, installer, mettre à jour et lancer vos applications"
 
 [lib]
 name = "hangar_lib"

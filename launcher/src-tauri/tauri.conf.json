@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Hangar",
+  "productName": "Rayan's Launcher",
   "version": "0.1.0",
-  "identifier": "dev.hangar.launcher",
+  "identifier": "fr.rayan.launcher",
   "build": {
     "beforeDevCommand": "npm run dev:ui",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Hangar",
+        "title": "Rayan's Launcher",
         "width": 1240,
         "height": 780,
         "minWidth": 960,
@@ -31,7 +31,7 @@
     "targets": ["nsis", "msi"],
     "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.ico", "icons/icon.png"],
     "shortDescription": "Launcher de vos applications",
-    "longDescription": "Hangar distribue, installe, met à jour et lance vos applications.",
+    "longDescription": "Rayan's Launcher distribue, installe, met à jour et lance vos applications.",
     "windows": {
       "nsis": {
         "installMode": "currentUser",

@@ -1,4 +1,4 @@
-// Parcours de bout en bout sur la VRAIE application Hangar, pilotée par WebDriver (tauri-driver).
+// Parcours de bout en bout sur la VRAIE application Rayan's Launcher, pilotée par WebDriver (tauri-driver).
 // Clique sur les boutons comme un utilisateur et contrôle le résultat sur le disque.
 //
 // Prérequis (Linux) : tauri-driver (cargo install tauri-driver --locked), WebKitWebDriver
@@ -17,7 +17,7 @@ const OUT = resolve("e2e-output");
 const HOME = mkdtempSync(join(tmpdir(), "hangar-e2e-"));
 const DRIVER = "http://127.0.0.1:4444";
 const ELEMENT = "element-6066-11e4-a52e-4f735466cecf";
-const CARD = "//article[@aria-label='Horloge Démo']";
+const CARD = `//article[@aria-label="Rayan's Chrono"]`;
 const results = [];
 
 if (!existsSync(APP)) throw new Error(`Application introuvable : ${APP} (npx tauri build --debug --no-bundle)`);
@@ -80,7 +80,7 @@ async function shot(name) {
 }
 const btn = (label, scope = CARD) => `${scope}//button[contains(normalize-space(.), "${label}")]`;
 const journal = () => {
-  const f = join(HOME, "data", "horloge-demo", "journal.txt");
+  const f = join(HOME, "data", "rayans-chrono", "journal.txt");
   return existsSync(f) ? readFileSync(f, "utf8").trim().split("\n") : [];
 };
 async function waitLaunch(version, count) {
@@ -130,7 +130,7 @@ try {
     await shot("01-catalogue-vide");
     demo("add");
     await click("//header//button[contains(., 'Actualiser')]", "bouton Actualiser");
-    await waitFor(btn("Installer"), "carte Horloge Démo avec « Installer »");
+    await waitFor(btn("Installer"), "carte Rayan's Chrono avec « Installer »");
     await sleep(600);
     await shot("02-nouvelle-application");
   });
@@ -178,7 +178,7 @@ try {
     await sleep(500);
     await startApp();
     await waitFor("//*[contains(@class,'banner')][contains(., 'Hors ligne')]", "bandeau hors ligne", 30000);
-    await waitFor(btn("Lancer la 2.0.0"), "Horloge Démo lançable hors ligne");
+    await waitFor(btn("Lancer la 2.0.0"), "Rayan's Chrono lançable hors ligne");
     await shot("08-hors-ligne");
     await click(btn("Lancer la 2.0.0"), "Lancer la 2.0.0 hors ligne");
     console.log("  journal :", await waitLaunch("2.0.0", 4));
@@ -192,8 +192,8 @@ try {
     await click("//button[normalize-space(.)='Désinstaller']", "Désinstaller");
     await click("//div[contains(@class,'confirm')]//button[normalize-space(.)='Désinstaller']", "confirmer");
     await waitFor("//*[contains(@class,'toast')][contains(., 'données conservées')]", "confirmation");
-    if (existsSync(join(HOME, "apps", "horloge-demo"))) throw new Error("fichiers de version encore présents");
-    if (!existsSync(join(HOME, "data", "horloge-demo", "lancements.txt"))) throw new Error("données utilisateur supprimées");
+    if (existsSync(join(HOME, "apps", "rayans-chrono"))) throw new Error("fichiers de version encore présents");
+    if (!existsSync(join(HOME, "data", "rayans-chrono", "lancements.txt"))) throw new Error("données utilisateur supprimées");
   });
 } finally {
   await stopApp().catch(() => {});

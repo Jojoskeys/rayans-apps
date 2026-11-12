@@ -1,7 +1,7 @@
 // Prépare et fait évoluer le catalogue local de démonstration (dossier dev-catalog/).
 //
-//   npm run demo -- init      compile Horloge Démo 1.0.0 et 2.0.0, crée un catalogue vide
-//   npm run demo -- add       publie Horloge Démo 1.0.0 (nouvelle entrée du catalogue)
+//   npm run demo -- init      compile Rayan's Chrono 1.0.0 et 2.0.0, crée un catalogue vide
+//   npm run demo -- add       publie Rayan's Chrono 1.0.0 (nouvelle entrée du catalogue)
 //   npm run demo -- v2        publie la mise à jour 2.0.0
 //   npm run demo -- corrupt   publie une 2.1.0 dont le ZIP est corrompu (empreinte de la 2.0.0)
 //   npm run demo -- reset     supprime dev-catalog/
@@ -12,7 +12,7 @@ import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSyn
 import { join } from "node:path";
 
 const win = process.platform === "win32";
-const EXE = win ? "HorlogeDemo.exe" : "HorlogeDemo";
+const EXE = win ? "RayansChrono.exe" : "RayansChrono";
 const OUT = "dev-catalog";
 const CATALOG = join(OUT, "catalog.json");
 const KEY = join(".keys", "catalog-private.key");
@@ -21,7 +21,7 @@ const VERSIONS = ["1.0.0", "2.0.0"];
 const run = (cmd, args, env = {}) =>
   execFileSync(cmd, args, { stdio: "inherit", env: { ...process.env, ...env } });
 const tools = (...args) => run("cargo", ["run", "-q", "-p", "hangar-core", "--bin", "hangar-tools", "--", ...args]);
-const release = (v) => join(OUT, "releases", `horloge-demo-${v}.zip`);
+const release = (v) => join(OUT, "releases", `rayans-chrono-${v}.zip`);
 
 function sign() {
   if (existsSync(KEY)) tools("sign", "--key", KEY, CATALOG);
@@ -34,30 +34,30 @@ function init() {
   mkdirSync(join(OUT, "img"), { recursive: true });
   for (const v of VERSIONS) {
     const target = join("target", `demo-${v}`);
-    console.log(`\n== Compilation d'Horloge Démo ${v}`);
+    console.log(`\n== Compilation d'Rayan's Chrono ${v}`);
     run("cargo", ["build", "--release", "-p", "hangar-demo", "--target-dir", target], { DEMO_VERSION: v });
     const pkg = join(target, "paquet");
     rmSync(pkg, { recursive: true, force: true });
     mkdirSync(pkg, { recursive: true });
     copyFileSync(join(target, "release", EXE), join(pkg, EXE));
-    writeFileSync(join(pkg, "LISEZMOI.txt"), `Horloge Démo ${v}\nApplication de démonstration installée par Hangar.\n`);
+    writeFileSync(join(pkg, "LISEZMOI.txt"), `Rayan's Chrono ${v}\nApplication de démonstration installée par Rayan's Launcher.\n`);
     tools("pack", pkg, release(v));
   }
-  copyFileSync("examples/horloge-demo/icon.svg", join(OUT, "img", "horloge-demo-icon.svg"));
-  copyFileSync("examples/horloge-demo/image.svg", join(OUT, "img", "horloge-demo-image.svg"));
-  writeFileSync(CATALOG, JSON.stringify({ schemaVersion: 1, title: "Catalogue de démonstration", apps: [] }, null, 2) + "\n");
+  copyFileSync("examples/rayans-chrono/icon.svg", join(OUT, "img", "rayans-chrono-icon.svg"));
+  copyFileSync("examples/rayans-chrono/image.svg", join(OUT, "img", "rayans-chrono-image.svg"));
+  writeFileSync(CATALOG, JSON.stringify({ schemaVersion: 1, title: "Le catalogue de Rayan", apps: [] }, null, 2) + "\n");
   sign();
   console.log(`\nCatalogue vide prêt : ${CATALOG}. Étape suivante : npm run demo -- add`);
 }
 
 function publish(v, notes, zipSource = release(v), extra = []) {
-  const zip = join(OUT, "zips", `horloge-demo-${v}.zip`);
+  const zip = join(OUT, "zips", `rayans-chrono-${v}.zip`);
   copyFileSync(zipSource, zip);
   tools(
-    "publish", "--catalog", CATALOG, "--id", "horloge-demo", "--version", v, "--zip", zip,
-    "--name", "Horloge Démo",
-    "--description", "Une petite horloge qui compte ses lancements. Elle sert à tester Hangar de bout en bout.",
-    "--icon", "img/horloge-demo-icon.svg", "--image", "img/horloge-demo-image.svg",
+    "publish", "--catalog", CATALOG, "--id", "rayans-chrono", "--version", v, "--zip", zip,
+    "--name", "Rayan's Chrono",
+    "--description", "Une petite horloge qui compte ses lancements. Elle sert à tester Rayan's Launcher de bout en bout.",
+    "--icon", "img/rayans-chrono-icon.svg", "--image", "img/rayans-chrono-image.svg",
     "--executable", EXE, "--notes", notes, "--date", new Date().toISOString().slice(0, 10), ...extra,
   );
 }
@@ -83,7 +83,7 @@ switch (step) {
     // Publie la 2.1.0 avec l'empreinte d'un ZIP sain, puis abîme le fichier publié : simule un
     // transfert corrompu ou un fichier remplacé sur le serveur.
     publish("2.1.0", "Version de test : son ZIP publié est corrompu.", release("2.0.0"));
-    const zip = join(OUT, "zips", "horloge-demo-2.1.0.zip");
+    const zip = join(OUT, "zips", "rayans-chrono-2.1.0.zip");
     const data = readFileSync(zip);
     for (let i = Math.floor(data.length / 3); i < data.length / 3 + 64; i++) data[i] ^= 0xff;
     writeFileSync(zip, data);

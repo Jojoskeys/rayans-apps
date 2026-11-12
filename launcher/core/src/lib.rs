@@ -1,4 +1,4 @@
-//! Coeur du launcher Hangar. Aucune dépendance à l'interface : la couche Tauri et l'outil en ligne de
+//! Coeur du launcher Rayan's Launcher. Aucune dépendance à l'interface : la couche Tauri et l'outil en ligne de
 //! commande l'utilisent tous les deux, et les tests de bout en bout le pilotent directement.
 
 pub mod archive;

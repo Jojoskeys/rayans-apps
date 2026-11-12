@@ -22,7 +22,7 @@ pub fn client(policy: &TrustPolicy) -> reqwest::Client {
         }
     });
     reqwest::Client::builder()
-        .user_agent(concat!("Hangar/", env!("CARGO_PKG_VERSION")))
+        .user_agent(concat!("RayansLauncher/", env!("CARGO_PKG_VERSION")))
         .connect_timeout(Duration::from_secs(15))
         .read_timeout(Duration::from_secs(60))
         .redirect(redirect)

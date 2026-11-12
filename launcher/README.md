@@ -1,6 +1,6 @@
-# Hangar : launcher Windows pour vos applications
+# Rayan's Launcher : le launcher Windows de Rayan
 
-Hangar distribue, installe, met à jour et lance les applications que vous publiez. Il lit un **catalogue JSON
+Rayan's Launcher distribue, installe, met à jour et lance les applications que vous publiez. Il lit un **catalogue JSON
 distant**, télécharge des **ZIP**, vérifie leur **empreinte SHA-256**, les installe chacune dans son dossier et
 garde le **dernier catalogue valide** pour fonctionner hors ligne.
 
@@ -14,7 +14,7 @@ système (réseau, disque, processus).
 - [Format du catalogue](#format-du-catalogue)
 - [Ajouter une application](#ajouter-une-application)
 - [Publier une mise à jour](#publier-une-mise-à-jour)
-- [Ce que Hangar garantit](#ce-que-hangar-garantit)
+- [Ce que Rayan's Launcher garantit](#ce-que-rayans-launcher-garantit)
 - [Tests et parcours vérifiés](#tests-et-parcours-vérifiés)
 - [Hors périmètre et limites connues](#hors-périmètre-et-limites-connues)
 
@@ -32,7 +32,7 @@ launcher/
   src-tauri/            couche Tauri mince : commandes et événements vers l'interface
     catalog-public-key.txt   clé publique intégrée au launcher (à remplacer par la vôtre)
   src/                  interface React + TypeScript (mock.ts : faux backend pour concevoir dans un navigateur)
-  demo-app/             « Horloge Démo », application de démonstration compilée en 1.0.0 et 2.0.0
+  demo-app/             « Rayan's Chrono », application de démonstration compilée en 1.0.0 et 2.0.0
   scripts/              demo.mjs (catalogue local de démo), serve.mjs (serveur local), e2e-ui.mjs (parcours UI)
   examples/             catalogue d'exemple complet et visuels de la démo
 ```
@@ -60,7 +60,7 @@ cd launcher
 npm ci
 ```
 
-Compilez l'Horloge Démo en 1.0.0 et en 2.0.0, puis créez un catalogue local vide dans `dev-catalog/` :
+Compilez l'Rayan's Chrono en 1.0.0 et en 2.0.0, puis créez un catalogue local vide dans `dev-catalog/` :
 
 ```bash
 npm run demo -- init
@@ -83,15 +83,15 @@ sur **Actualiser** dans le launcher après chacune :
 
 | Étape | Commande | Résultat attendu |
 |---|---|---|
-| 1. Ajouter une application | `npm run demo -- add` | Horloge Démo 1.0.0 apparaît avec **Installer** |
-| 2. Installer et lancer la v1 | *(dans le launcher)* | progression, puis **Lancer** ; une fenêtre « Horloge Démo v1.0.0 » s'ouvre |
+| 1. Ajouter une application | `npm run demo -- add` | Rayan's Chrono 1.0.0 apparaît avec **Installer** |
+| 2. Installer et lancer la v1 | *(dans le launcher)* | progression, puis **Lancer** ; une fenêtre « Rayan's Chrono v1.0.0 » s'ouvre |
 | 3. Publier la v2 | `npm run demo -- v2` | **Mettre à jour** et **Lancer la 1.0.0** ; après la mise à jour, « v2.0.0 » s'ouvre |
 | 4. ZIP corrompu | `npm run demo -- corrupt` | **Mettre à jour** vers 2.1.0 échoue avec un message d'empreinte ; **Lancer la 2.0.0** fonctionne |
 | 5. Hors ligne | arrêtez `npm run serve`, fermez et rouvrez le launcher | bandeau « Hors ligne », l'application installée se lance |
 
 `npm run demo -- reset` efface le catalogue de démonstration.
 
-En mode développement, les données du launcher se trouvent dans `%LOCALAPPDATA%\dev.hangar.launcher\`. La variable
+En mode développement, les données du launcher se trouvent dans `%LOCALAPPDATA%\fr.rayan.launcher\`. La variable
 d'environnement `HANGAR_HOME` permet d'utiliser un autre dossier, par exemple pour des tests isolés.
 
 Pour travailler sur l'interface seule dans un navigateur, avec un faux backend :
@@ -114,8 +114,8 @@ npm run build:windows
 
 Fichiers produits :
 
-- `target\release\bundle\nsis\Hangar_0.1.0_x64-setup.exe` : installateur NSIS, par utilisateur, sans droits administrateur ;
-- `target\release\bundle\msi\Hangar_0.1.0_x64_fr-FR.msi` : paquet MSI.
+- `target\release\bundle\nsis\Rayan's Launcher_0.1.0_x64-setup.exe` : installateur NSIS, par utilisateur, sans droits administrateur ;
+- `target\release\bundle\msi\Rayan's Launcher_0.1.0_x64_fr-FR.msi` : paquet MSI.
 
 Pour un installateur **de test** qui accepte aussi le catalogue local (http://, file://, non signé), utilisez la
 commande ci-dessous. Ne le distribuez pas.
@@ -124,9 +124,9 @@ commande ci-dessous. Ne le distribuez pas.
 npm run build:windows:dev
 ```
 
-Sans machine Windows, poussez la branche : le workflow GitHub Actions *Hangar - launcher* construit les deux
-installateurs et les publie dans les *Artifacts* de l'exécution (`hangar-installateurs-windows`), avec le catalogue
-de démonstration compilé pour Windows (`hangar-catalogue-demo-windows`).
+Sans machine Windows, poussez la branche : le workflow GitHub Actions *Rayan's Launcher* construit les deux
+installateurs et les publie dans les *Artifacts* de l'exécution (`rayans-launcher-installateurs-windows`), avec le catalogue
+de démonstration compilé pour Windows (`rayans-launcher-catalogue-demo-windows`).
 
 Les installateurs ne sont pas signés Authenticode : SmartScreen affichera un avertissement au premier lancement.
 
@@ -183,33 +183,33 @@ Exemple complet (aussi dans [`examples/catalog.example.json`](examples/catalog.e
 ```json
 {
   "schemaVersion": 1,
-  "title": "Mes applications",
+  "title": "Le catalogue de Rayan",
   "apps": [
     {
-      "id": "horloge-demo",
-      "name": "Horloge Démo",
-      "description": "Une petite horloge qui compte ses lancements. Elle sert à tester Hangar de bout en bout.",
-      "icon": "img/horloge-demo-icon.svg",
-      "image": "img/horloge-demo-image.svg",
+      "id": "rayans-chrono",
+      "name": "Rayan's Chrono",
+      "description": "Une petite horloge qui compte ses lancements. Elle sert à tester Rayan's Launcher de bout en bout.",
+      "icon": "img/rayans-chrono-icon.svg",
+      "image": "img/rayans-chrono-image.svg",
       "version": "2.0.0",
       "releaseNotes": "Les secondes sont affichées.\nLe compteur de lancements est conservé pendant la mise à jour.",
       "releaseDate": "2026-11-12",
-      "downloadUrl": "https://telechargements.exemple.fr/hangar/zips/horloge-demo-2.0.0.zip",
+      "downloadUrl": "https://telechargements.exemple.fr/hangar/zips/rayans-chrono-2.0.0.zip",
       "sha256": "a926cf1cabbb09ae3d1c4f44cb358ba34887aa25dc49c7c77beb8bda18674f72",
       "size": 152340,
-      "executable": "HorlogeDemo.exe"
+      "executable": "RayansChrono.exe"
     },
     {
-      "id": "atelier-notes",
-      "name": "Atelier Notes",
+      "id": "rayans-notes",
+      "name": "Rayan's Notes",
       "description": "Prise de notes rapide, hors ligne, avec export Markdown.",
-      "icon": "https://telechargements.exemple.fr/hangar/img/atelier-notes-icon.png",
-      "image": "https://telechargements.exemple.fr/hangar/img/atelier-notes-image.jpg",
+      "icon": "https://telechargements.exemple.fr/hangar/img/rayans-notes-icon.png",
+      "image": "https://telechargements.exemple.fr/hangar/img/rayans-notes-image.jpg",
       "version": "0.4.2",
       "releaseNotes": "Export Markdown.\nCorrection de la sauvegarde automatique.",
-      "downloadUrl": "zips/atelier-notes-0.4.2.zip",
+      "downloadUrl": "zips/rayans-notes-0.4.2.zip",
       "sha256": "5f0c6c3c0b8e4d8f9a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6071",
-      "executable": "bin/AtelierNotes.exe"
+      "executable": "bin/RayansNotes.exe"
     }
   ]
 }
@@ -301,7 +301,7 @@ alors **Mettre à jour** à côté de **Lancer la 1.0.0**.
 Pour retirer une application du catalogue, supprimez son entrée. Les installations existantes restent lançables et
 désinstallables, avec la mention « retirée du catalogue ».
 
-## Ce que Hangar garantit
+## Ce que Rayan's Launcher garantit
 
 - **Catalogue** : validé en entier avant usage ; en distribution, HTTPS et signature Ed25519 vérifiée avec la clé
   intégrée **avant** de faire confiance aux URL et aux empreintes qu'il contient. La copie locale est revérifiée à
@@ -327,7 +327,7 @@ désinstallables, avec la mention « retirée du catalogue ».
 - **Hors ligne** : le dernier catalogue valide et les visuels sont en cache. Les applications installées se lancent
   sans réseau, même si elles ont été retirées du catalogue.
 
-Arborescence locale (`%LOCALAPPDATA%\dev.hangar.launcher\`) :
+Arborescence locale (`%LOCALAPPDATA%\fr.rayan.launcher\`) :
 
 ```text
 settings.json  installed.json  catalog-cache.json
@@ -354,7 +354,7 @@ xvfb-run -a npm run e2e:ui
 
 `npm test` compile la démo puis lance les tests du cœur (unitaires et parcours complets). `e2e:ui` pilote la
 **vraie application** avec WebDriver (`tauri-driver`) : il clique sur les boutons, puis contrôle le journal écrit par
-l'Horloge Démo et l'état du disque. Les captures sont enregistrées dans `e2e-output/`. Sous Linux, ce test demande
+l'Rayan's Chrono et l'état du disque. Les captures sont enregistrées dans `e2e-output/`. Sous Linux, ce test demande
 `cargo install tauri-driver --locked` et le paquet `webkit2gtk-driver`.
 
 | Parcours | `cargo test` (cœur + vrai binaire de démo) | `e2e:ui` (vraie application, clics) |
@@ -371,7 +371,7 @@ l'Horloge Démo et l'état du disque. Les captures sont enregistrées dans `e2e-
 | Désinstallation qui conserve les données | ✔ Linux | ✔ Linux |
 
 Ces tests ont été exécutés sous Linux (WebKitGTK), dans l'environnement où le launcher a été développé. Sous Windows,
-le workflow GitHub Actions exécute les mêmes tests du cœur avec `HorlogeDemo.exe`, tente le parcours UI avec WebView2
+le workflow GitHub Actions exécute les mêmes tests du cœur avec `RayansChrono.exe`, tente le parcours UI avec WebView2
 et construit les installateurs. Consultez son résultat pour l'état sous Windows.
 
 ## Hors périmètre et limites connues

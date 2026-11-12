@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api, type AppView, type ErrorInfo } from "./api";
 import { bytes, phaseLabel, progressPercent } from "./format";
 
-// ----- Icônes (traits simples, dessinées pour Hangar) -------------------------------------------
+// ----- Icônes (traits simples, dessinées pour Rayan's Launcher) -------------------------------------------
 
 export function Icon({ name, size = 18 }: { name: string; size?: number }) {
   const p = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };

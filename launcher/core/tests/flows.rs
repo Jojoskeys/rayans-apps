@@ -11,7 +11,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Once};
 use std::time::Duration;
 
-const EXE: &str = if cfg!(windows) { "HorlogeDemo.exe" } else { "HorlogeDemo" };
+const EXE: &str = if cfg!(windows) { "RayansChrono.exe" } else { "RayansChrono" };
 
 fn demo_bin() -> PathBuf {
     let p = Path::new(env!("CARGO_MANIFEST_DIR")).join("../target/debug").join(EXE);

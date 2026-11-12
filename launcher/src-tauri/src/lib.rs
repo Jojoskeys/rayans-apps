@@ -113,5 +113,5 @@ pub fn run() {
             get_image
         ])
         .run(tauri::generate_context!())
-        .expect("erreur au démarrage de Hangar");
+        .expect("erreur au démarrage de Rayan's Launcher");
 }

@@ -68,8 +68,8 @@ export default function App() {
         <div className="brand">
           <Logo />
           <div>
-            <div className="brand-name">HANGAR</div>
-            <div className="brand-sub">vos applications</div>
+            <div className="brand-name">RAYAN'S</div>
+            <div className="brand-sub">launcher</div>
           </div>
         </div>
         <nav>
@@ -164,7 +164,7 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { sna
           title="Catalogue indisponible"
           text={
             c.error
-              ? "Hangar n'a pas pu charger le catalogue et n'en a encore aucune copie valide."
+              ? "Rayan's Launcher n'a pas pu charger le catalogue et n'en a encore aucune copie valide."
               : snap.catalogUrl
                 ? "Le catalogue n'a pas encore été chargé."
                 : "Aucune adresse de catalogue n'est configurée."

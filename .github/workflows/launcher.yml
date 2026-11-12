@@ -1,6 +1,6 @@
-# Hangar (launcher) : tests du coeur sous Linux et Windows, parcours de bout en bout dans la vraie
+# Rayan's Launcher (launcher) : tests du coeur sous Linux et Windows, parcours de bout en bout dans la vraie
 # application, puis installateurs Windows (NSIS et MSI) et paquets de démonstration en « Artifacts ».
-name: Hangar - launcher
+name: Rayan's Launcher
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: hangar-captures-linux
+          name: rayans-launcher-captures-linux
           path: launcher/e2e-output/
 
   windows:
@@ -57,7 +57,7 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
-      - name: Tests du coeur (dont les 5 parcours sur HorlogeDemo.exe)
+      - name: Tests du coeur (dont les 5 parcours sur RayansChrono.exe)
         run: npm test
       - name: Parcours de bout en bout dans l'application (WebView2 + msedgedriver)
         continue-on-error: true
@@ -81,14 +81,14 @@ jobs:
           cp target/release/bundle/nsis/*.exe target/release/bundle/msi/*.msi ../out/distribution/
       - uses: actions/upload-artifact@v4
         with:
-          name: hangar-installateurs-windows
+          name: rayans-launcher-installateurs-windows
           path: out/
       - uses: actions/upload-artifact@v4
         with:
-          name: hangar-catalogue-demo-windows
+          name: rayans-launcher-catalogue-demo-windows
           path: launcher/dev-catalog/
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: hangar-captures-windows
+          name: rayans-launcher-captures-windows
           path: launcher/e2e-output/
