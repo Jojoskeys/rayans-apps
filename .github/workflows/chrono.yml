@@ -1,0 +1,86 @@
+# Rayan's Chrono (chrono) : vérification du typage, tests unitaires, paquet Windows, lancement du paquet
+# comme un double-clic (l'application clique dans sa propre interface et vérifie le temps enregistré),
+# puis ZIP prêt pour Rayan's Launcher (avec sa fiche rayans-launcher.json) dans les « Artifacts ».
+name: Rayan's Chrono
+
+on:
+  push:
+    paths:
+      - 'chrono/**'
+      - '.github/workflows/chrono.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows 64 bits
+    runs-on: windows-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+        working-directory: chrono
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      ELECTRON_BUILDER_PUBLISH: never
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm ci
+      - name: Typage TypeScript
+        run: npm run typecheck
+      - name: Tests unitaires (minuteur, résumés, export CSV)
+        run: npm test
+      # Version : majeur.mineur de package.json, correctif = numéro d'exécution de la CI. Chaque construction est
+      # ainsi une mise à jour pour Rayan's Launcher.
+      - name: Version de la construction
+        id: version
+        run: |
+          V=$(node -p "const [a,b]=require('./package.json').version.split('.'); a+'.'+b+'.'+process.env.GITHUB_RUN_NUMBER")
+          echo "Version : $V"
+          echo "v=$V" >> "$GITHUB_OUTPUT"
+      - name: Construction du paquet
+        run: |
+          npm run build
+          npx electron-builder --win --x64 --publish never -c.extraMetadata.version=${{ steps.version.outputs.v }}
+      - name: Lancement du paquet comme un double-clic
+        env:
+          CHRONO_CAPTURES: ${{ github.workspace }}/chrono/resultats/captures
+        run: node scripts/test-lancement.mjs "dist/win-unpacked/Rayans Chrono.exe"
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: rayans-chrono-captures
+          path: chrono/resultats/
+          if-no-files-found: ignore
+      # Rayan's Launcher : fiche rayans-launcher.json ajoutée à la racine du ZIP. Le launcher la lit quand le ZIP
+      # est déposé dans « Documents\Rayan's Launcher\À ajouter » ou choisi avec « Ajouter un ZIP ».
+      # Identifiant « rayans-chrono-app » : « rayans-chrono » est déjà pris par l'application de démonstration
+      # des tests du launcher (launcher/demo-app, launcher/scripts/demo.mjs).
+      - name: Paquet pour Rayan's Launcher
+        shell: pwsh
+        run: |
+          $v = '${{ steps.version.outputs.v }}'
+          $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $fiche = [ordered]@{
+            id = 'rayans-chrono-app'
+            name = "Rayan's Chrono"
+            description = 'Minuteur Pomodoro et suivi du temps par projet, avec résumés et export CSV.'
+            version = $v
+            releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+            executable = 'Rayans Chrono.exe'
+          }
+          [IO.File]::WriteAllText("$PWD/rayans-launcher.json", ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          $zip = Get-Item "dist/Rayans-Chrono-$v-Windows-x64.zip"
+          Compress-Archive -Path rayans-launcher.json -DestinationPath $zip.FullName -Update
+          New-Item -ItemType Directory -Force launcher | Out-Null
+          Copy-Item $zip.FullName "launcher/Rayans-Chrono-$v.zip"
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Rayans-Chrono-pour-le-launcher
+          path: chrono/launcher/*.zip
+          compression-level: 0
