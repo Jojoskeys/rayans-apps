@@ -246,6 +246,37 @@ npm run tools -- validate chemin/vers/catalog.json --strict --base-url https://t
 
 ## Ajouter une application
 
+### Le plus simple : depuis le launcher (installateur de test)
+
+Au premier démarrage, l'installateur de test crée un catalogue vide dans
+`Documents\Rayan's Launcher\catalog.json` et l'utilise. Une adresse déjà réglée dans les paramètres est conservée.
+
+Avec un catalogue local (adresse `file://`), deux façons d'ajouter une application :
+
+- **Bouton « Ajouter un ZIP »** (page Catalogue) : choisissez le ZIP. Le launcher trouve le `.exe`, propose le nom, la
+  version et l'identifiant, puis copie le ZIP dans `zips\`, calcule son SHA-256 et écrit l'entrée. Pour une mise à jour,
+  choisissez le nouveau ZIP et indiquez une version plus grande.
+- **Dossier `À ajouter`** (à côté de `catalog.json`) : déposez-y un ZIP. Il est ajouté au démarrage et à chaque clic sur
+  « Actualiser », puis retiré du dossier. Un bandeau dit ce qui a été ajouté ou refusé, et pourquoi. Seuls les ZIP qui se
+  décrivent entièrement sont acceptés : fiche `rayans-launcher.json` à la racine du ZIP, ou application reconnue.
+  Un ZIP d'*Artifact* GitHub (un ZIP qui contient le ZIP) est accepté tel quel.
+
+Fiche `rayans-launcher.json` facultative, à la racine du ZIP :
+
+```json
+{ "id": "mon-app", "name": "Mon app", "description": "…", "version": "1.2.0",
+  "releaseNotes": "…", "executable": "Mon App.exe" }
+```
+
+Le nom et la description déjà présents au catalogue sont toujours conservés. Un catalogue signé (`catalog.json.sig`)
+n'est jamais modifié par le launcher : utilisez `hangar-tools publish` puis re-signez.
+
+**Analyse Échecs.** Chaque construction Windows de la CI (*Analyse Echecs - paquets*) publie l'artifact
+`Rayans-Echecs-pour-le-launcher`. Téléchargez-le et déposez-le dans `À ajouter` : il apparaît sous le nom « Rayan's Échecs ».
+Sa version est `majeur.mineur.<numéro d'exécution CI>`, donc chaque nouvelle construction devient une mise à jour.
+
+### À la main
+
 Votre application reçoit trois variables d'environnement au lancement :
 
 | Variable | Contenu |

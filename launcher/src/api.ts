@@ -1,6 +1,7 @@
 // Pont vers la couche Rust. Hors de Tauri (simple `npm run dev:ui` dans un navigateur), un faux
 // backend en mémoire permet de voir tous les états de l'interface.
 import { invoke } from "@tauri-apps/api/core";
+import { open } from "@tauri-apps/plugin-dialog";
 import { listen } from "@tauri-apps/api/event";
 import { mockBackend } from "./mock";
 
@@ -56,6 +57,27 @@ export interface Snapshot {
   dataRoot: string;
   catalog: CatalogView;
   apps: AppView[];
+  /** Catalogue local modifiable (ajout de ZIP possible), sinon null. */
+  localCatalogPath: string | null;
+  /** Résultat du dernier import du dossier « À ajouter ». */
+  notices: string[];
+}
+
+export interface ZipEntry {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  releaseNotes: string;
+  executable: string;
+}
+
+export interface ZipProposal {
+  entry: ZipEntry;
+  executables: string[];
+  source: "manifeste" | "modèle" | "deviné";
+  existingVersion: string | null;
+  complete: boolean;
 }
 
 export type CoreEvent =
@@ -77,6 +99,15 @@ export const api = {
   launch: (id: string) => call<number>("launch", { id }),
   uninstall: (id: string, removeData: boolean) => call<void>("uninstall", { id, removeData }),
   dismissError: (id: string) => call<void>("dismiss_error", { id }),
+  inspectZip: (path: string) => call<ZipProposal>("inspect_zip", { path }),
+  addZip: (path: string, entry: ZipEntry) => call<string>("add_zip", { path, entry }),
+  dismissNotices: () => call<void>("dismiss_notices"),
+  /** Fenêtre « Ouvrir » de Windows, filtrée sur les ZIP. */
+  pickZip: async (): Promise<string | null> => {
+    if (!inTauri) return "C:\\Users\\vous\\Downloads\\Analyse-Echecs-1.0.0-Windows-x64.zip";
+    const r = await open({ multiple: false, directory: false, filters: [{ name: "Archive ZIP", extensions: ["zip"] }] });
+    return typeof r === "string" ? r : null;
+  },
   image: (id: string, kind: "icon" | "image") => call<string | null>("get_image", { id, kind }),
 };
 

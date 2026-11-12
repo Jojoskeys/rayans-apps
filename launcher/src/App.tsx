@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { api, subscribe, toErrorInfo, type AppView, type ErrorInfo, type Snapshot } from "./api";
+import { api, subscribe, toErrorInfo, type AppView, type ErrorInfo, type Snapshot, type ZipEntry, type ZipProposal } from "./api";
 import { Actions, AppIcon, ErrorBox, Icon, Logo, VersionLine, Visual } from "./components";
 import { bytes, date, dateTime } from "./format";
 
@@ -131,6 +131,7 @@ function CatalogStatus({ snap }: { snap: Snapshot }) {
 
 function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { snap: Snapshot; page: Page; onOpen: (id: string) => void; onRefresh: () => void; goCatalog: () => void; goSettings: () => void }) {
   const c = snap.catalog;
+  const [adding, setAdding] = useState(false);
   const apps = useMemo(
     () => (page === "installed" ? snap.apps.filter((a) => a.installedVersion) : snap.apps.filter((a) => a.inCatalog)),
     [snap, page],
@@ -150,11 +151,20 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { sna
           <h1>{title}</h1>
           {subtitle && <p className="muted">{subtitle}</p>}
         </div>
-        <button className="btn" onClick={onRefresh} disabled={c.refreshing}>
-          <span className={c.refreshing ? "spin" : ""}><Icon name="refresh" size={16} /></span>
-          {c.refreshing ? "Actualisation…" : "Actualiser"}
-        </button>
+        <div className="row">
+          {page === "catalog" && snap.localCatalogPath && (
+            <button className="btn primary" onClick={() => setAdding(true)} disabled={adding}>
+              <Icon name="download" size={16} /> Ajouter un ZIP
+            </button>
+          )}
+          <button className="btn" onClick={onRefresh} disabled={c.refreshing}>
+            <span className={c.refreshing ? "spin" : ""}><Icon name="refresh" size={16} /></span>
+            {c.refreshing ? "Actualisation…" : "Actualiser"}
+          </button>
+        </div>
       </header>
+
+      {adding && <AddZip snap={snap} onClose={() => setAdding(false)} onAdded={(id) => { setAdding(false); onOpen(id); }} />}
 
       <Banners snap={snap} onRetry={onRefresh} />
 
@@ -183,8 +193,16 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { sna
         <EmptyState
           icon="box"
           title="Catalogue vide"
-          text="Le catalogue est valide mais ne contient encore aucune application. Ajoutez une entrée dans « apps », publiez le fichier, puis actualisez."
-          actions={<button className="btn" onClick={onRefresh}><Icon name="refresh" size={16} /> Actualiser</button>}
+          text={
+            snap.localCatalogPath
+              ? "Cliquez sur « Ajouter un ZIP » et choisissez le ZIP d'une application. Vous pouvez aussi déposer des ZIP dans le dossier « À ajouter », à côté du catalogue."
+              : "Le catalogue est valide mais ne contient encore aucune application. Ajoutez une entrée dans « apps », publiez le fichier, puis actualisez."
+          }
+          actions={
+            snap.localCatalogPath
+              ? <button className="btn primary" onClick={() => setAdding(true)}><Icon name="download" size={16} /> Ajouter un ZIP</button>
+              : <button className="btn" onClick={onRefresh}><Icon name="refresh" size={16} /> Actualiser</button>
+          }
         />
       )}
       {page === "installed" && apps.length === 0 && (
@@ -209,9 +227,20 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { sna
 
 function Banners({ snap, onRetry }: { snap: Snapshot; onRetry: () => void }) {
   const c = snap.catalog;
-  if (c.status !== "ready") return null;
+  const notices = snap.notices.length > 0 && (
+    <div className="banner info">
+      <Icon name="box" />
+      <div>
+        <strong>Dossier « À ajouter »</strong>
+        {snap.notices.map((n) => <div key={n} className="muted">{n}</div>)}
+      </div>
+      <button className="btn small" onClick={() => void api.dismissNotices()}>Fermer</button>
+    </div>
+  );
+  if (c.status !== "ready") return notices ? <div className="banners">{notices}</div> : null;
   return (
     <div className="banners">
+      {notices}
       {c.error && (
         <div className={`banner ${c.error.code === "network" || c.error.code === "http" ? "warn" : "bad"}`}>
           <Icon name={c.error.code === "network" ? "offline" : "alert"} />
@@ -233,6 +262,109 @@ function Banners({ snap, onRetry }: { snap: Snapshot; onRetry: () => void }) {
         </div>
       )}
     </div>
+  );
+}
+
+// ----- Ajouter un ZIP ---------------------------------------------------------------------------
+
+const SOURCE_LABEL: Record<ZipProposal["source"], string> = {
+  manifeste: "Informations lues dans le ZIP (fichier rayans-launcher.json).",
+  modèle: "Application reconnue : informations préremplies.",
+  deviné: "Informations devinées à partir du nom du fichier : vérifiez-les.",
+};
+
+function AddZip({ snap, onClose, onAdded }: { snap: Snapshot; onClose: () => void; onAdded: (id: string) => void }) {
+  const [path, setPath] = useState<string | null>(null);
+  const [prop, setProp] = useState<ZipProposal | null>(null);
+  const [entry, setEntry] = useState<ZipEntry | null>(null);
+  const [busy, setBusy] = useState<"pick" | "save" | null>("pick");
+  const [err, setErr] = useState<ErrorInfo | null>(null);
+
+  const pick = useCallback(async () => {
+    setErr(null);
+    setBusy("pick");
+    try {
+      const p = await api.pickZip();
+      if (!p) {
+        if (!path) onClose();
+        return;
+      }
+      const r = await api.inspectZip(p);
+      setPath(p);
+      setProp(r);
+      setEntry(r.entry);
+    } catch (e) {
+      setErr(toErrorInfo(e));
+    } finally {
+      setBusy(null);
+    }
+  }, [path, onClose]);
+
+  useEffect(() => {
+    void pick();
+    // Ouvre la fenêtre de choix une seule fois, à l'ouverture.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!path || !entry) return;
+    setErr(null);
+    setBusy("save");
+    try {
+      onAdded(await api.addZip(path, entry));
+    } catch (e) {
+      setErr(toErrorInfo(e));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const set = (k: keyof ZipEntry) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setEntry((x) => x && { ...x, [k]: e.target.value });
+
+  return (
+    <section className="panel settings add-zip">
+      <div className="row between">
+        <h3>Ajouter un ZIP au catalogue</h3>
+        <button className="link" onClick={onClose} aria-label="Fermer"><Icon name="close" size={16} /></button>
+      </div>
+      {busy === "pick" && !prop && <p className="muted">Choisissez le fichier ZIP de l'application…</p>}
+      {err && <ErrorBox error={err} onClose={() => setErr(null)} />}
+      {prop && entry && path && (
+        <form onSubmit={save}>
+          <p className="muted small"><code className="path">{path}</code></p>
+          <p className="muted small">{SOURCE_LABEL[prop.source]}</p>
+          {prop.existingVersion && (
+            <p className="small accent">
+              Déjà au catalogue en version {prop.existingVersion} : indiquez une version plus grande pour publier une mise à jour.
+            </p>
+          )}
+          <div className="form-grid">
+            <label>Nom<input className="input" value={entry.name} onChange={set("name")} required /></label>
+            <label>Version<input className="input" value={entry.version} onChange={set("version")} placeholder="1.0.0" required /></label>
+            <label>Identifiant<input className="input" value={entry.id} onChange={set("id")} spellCheck={false} required /></label>
+            <label>Programme à lancer
+              <select className="input" value={entry.executable} onChange={set("executable")}>
+                {prop.executables.map((x) => <option key={x} value={x}>{x}</option>)}
+              </select>
+            </label>
+            <label className="wide">Description<input className="input" value={entry.description} onChange={set("description")} required /></label>
+            <label className="wide">Nouveautés de cette version<textarea className="input" rows={3} value={entry.releaseNotes} onChange={set("releaseNotes")} required /></label>
+          </div>
+          <p className="muted small">
+            Le ZIP est copié à côté du catalogue (<code className="path">{snap.localCatalogPath}</code>) et son empreinte SHA-256 est calculée.
+          </p>
+          <div className="row">
+            <button className="btn primary" type="submit" disabled={busy !== null}>
+              {busy === "save" ? "Ajout…" : prop.existingVersion ? "Publier la mise à jour" : "Ajouter au catalogue"}
+            </button>
+            <button className="btn" type="button" onClick={() => void pick()} disabled={busy !== null}>Choisir un autre ZIP</button>
+            <button className="btn ghost" type="button" onClick={onClose}>Annuler</button>
+          </div>
+        </form>
+      )}
+    </section>
   );
 }
 
@@ -433,6 +565,9 @@ function Settings({ snap, onSaved }: { snap: Snapshot; onSaved: () => void }) {
           <div><dt>Dossier du launcher</dt><dd><code className="path">{snap.dataRoot}</code></dd></div>
           <div><dt>Versions installées</dt><dd><code className="path">apps\&lt;id&gt;\versions\</code></dd></div>
           <div><dt>Données utilisateur</dt><dd><code className="path">data\&lt;id&gt;\</code> (conservées lors des mises à jour)</dd></div>
+          {snap.localCatalogPath && (
+            <div><dt>Catalogue local</dt><dd><code className="path">{snap.localCatalogPath}</code><br /><span className="muted small">ZIP déposés dans le dossier « À ajouter » à côté : ajoutés au démarrage et à chaque actualisation.</span></dd></div>
+          )}
         </dl>
       </section>
     </>

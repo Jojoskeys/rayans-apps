@@ -4,6 +4,7 @@
 pub mod archive;
 pub mod catalog;
 pub mod error;
+pub mod local;
 pub mod net;
 pub mod state;
 pub mod util;
@@ -86,6 +87,10 @@ pub struct Snapshot {
     pub data_root: String,
     pub catalog: CatalogView,
     pub apps: Vec<AppView>,
+    /// Chemin du catalogue local modifiable (mode développement et adresse file://), sinon `None`.
+    pub local_catalog_path: Option<String>,
+    /// Résultat du dernier import du dossier « À ajouter ».
+    pub notices: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -127,6 +132,7 @@ struct Inner {
     errors: HashMap<String, ErrorInfo>,
     /// Applications lancées par ce launcher (pid, 0 pendant la préparation du lancement).
     running: HashMap<String, u32>,
+    notices: Vec<String>,
 }
 
 pub type Listener = Box<dyn Fn(Event) + Send + Sync>;
@@ -321,6 +327,39 @@ impl Core {
         }
     }
 
+    pub fn has_catalog_url(&self) -> bool {
+        self.lock().settings.catalog_url.is_some()
+    }
+
+    /// Fichier du catalogue si le launcher peut le modifier : mode développement et adresse file://.
+    pub fn local_catalog_path(&self) -> Option<PathBuf> {
+        if !self.policy.is_dev() {
+            return None;
+        }
+        let url = self.lock().settings.catalog_url.clone()?;
+        local::catalog_file(&url)
+    }
+
+    fn need_local_catalog(&self) -> Result<PathBuf> {
+        self.local_catalog_path().ok_or_else(|| {
+            Error::Other(
+                "l'ajout de ZIP ne fonctionne qu'avec un catalogue local (adresse file://) en mode développement".into(),
+            )
+        })
+    }
+
+    pub fn inspect_zip(&self, zip: &Path) -> Result<local::ZipProposal> {
+        local::inspect_zip(zip, &self.need_local_catalog()?)
+    }
+
+    /// Ajoute un ZIP au catalogue local puis relit le catalogue.
+    pub async fn add_zip(&self, zip: &Path, entry: &local::ZipEntry) -> Result<String> {
+        let cat = self.need_local_catalog()?;
+        let id = local::add_zip(&cat, zip, entry)?;
+        self.refresh_catalog().await?;
+        Ok(id)
+    }
+
     pub fn set_catalog_url(&self, url: &str) -> Result<()> {
         let url = url.trim();
         let parsed = Url::parse(url)
@@ -350,6 +389,12 @@ impl Core {
             inner.settings.catalog_url.clone()
         };
         self.emit(Event::Changed);
+        if let Some(cat) = self.local_catalog_path() {
+            let msgs = local::import_drop_folder(&cat);
+            if !msgs.is_empty() {
+                self.lock().notices = msgs;
+            }
+        }
         let result = self.refresh_inner(url_s).await;
         {
             let mut inner = self.lock();
@@ -518,7 +563,18 @@ impl Core {
             data_root: self.paths.root.display().to_string(),
             catalog,
             apps,
+            local_catalog_path: if self.policy.is_dev() {
+                inner.settings.catalog_url.as_deref().and_then(local::catalog_file).map(|p| p.display().to_string())
+            } else {
+                None
+            },
+            notices: inner.notices.clone(),
         }
+    }
+
+    pub fn clear_notices(&self) {
+        self.lock().notices.clear();
+        self.emit(Event::Changed);
     }
 
     pub fn clear_error(&self, id: &str) {

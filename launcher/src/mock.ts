@@ -77,6 +77,8 @@ let snap: Snapshot = {
     appCount: apps.length,
   },
   apps,
+  localCatalogPath: "C:\\Users\\vous\\Documents\\Rayan's Launcher\\catalog.json",
+  notices: scenario === "ajout" ? ["Analyse-Echecs-1.0.0-Windows-x64.zip ajouté au catalogue (analyse-echecs 1.0.0)."] : [],
 };
 
 const netError = {
@@ -164,6 +166,22 @@ export const mockBackend = {
         return 4242 as T;
       case "uninstall":
         patch(id, { installedVersion: null, updateAvailable: false });
+        return undefined as T;
+      case "inspect_zip":
+        await wait(300);
+        return {
+          entry: { id: "analyse-echecs", name: "Rayan's Échecs", description: "Analyse de parties d'échecs avec un moteur intégré.", version: "1.0.0", releaseNotes: "Version 1.0.0.", executable: "Analyse Echecs.exe" },
+          executables: ["Analyse Echecs.exe"],
+          source: "modèle",
+          existingVersion: null,
+          complete: true,
+        } as T;
+      case "add_zip":
+        await wait(600);
+        return (args?.entry as { id: string }).id as T;
+      case "dismiss_notices":
+        snap = { ...snap, notices: [] };
+        emit();
         return undefined as T;
       case "dismiss_error":
         patch(id, { lastError: null });

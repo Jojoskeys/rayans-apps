@@ -87,6 +87,38 @@ jobs:
         with:
           name: resultats-${{ matrix.os }}
           path: echecs-analyse/test/e2e/resultats/
+      # Rayan's Launcher : fiche rayans-launcher.json ajoutée au ZIP Windows. Le launcher la lit quand le ZIP
+      # est déposé dans « Documents\Rayan's Launcher\À ajouter » ou choisi avec « Ajouter un ZIP ».
+      # Version vue par le launcher : majeur.mineur de package.json, correctif = numéro d'exécution de la CI
+      # (chaque construction est ainsi une mise à jour).
+      - name: Paquet pour Rayan's Launcher
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $pkg = Get-Content package.json -Raw | ConvertFrom-Json
+          $p = $pkg.version.Split('.')
+          $v = "$($p[0]).$($p[1]).$env:GITHUB_RUN_NUMBER"
+          $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $fiche = [ordered]@{
+            id = 'analyse-echecs'
+            name = "Rayan's Échecs"
+            description = "Analyse de parties d'échecs avec un moteur intégré."
+            version = $v
+            releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+            executable = 'Analyse Echecs.exe'
+          }
+          [IO.File]::WriteAllText("$PWD/rayans-launcher.json", ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          $zip = Get-ChildItem dist/Analyse-Echecs-*-Windows-x64.zip | Select-Object -First 1
+          if (-not $zip) { throw "ZIP Windows introuvable dans dist/" }
+          Compress-Archive -Path rayans-launcher.json -DestinationPath $zip.FullName -Update
+          New-Item -ItemType Directory -Force launcher | Out-Null
+          Copy-Item $zip.FullName "launcher/Rayans-Echecs-$v.zip"
+      - uses: actions/upload-artifact@v4
+        if: runner.os == 'Windows'
+        with:
+          name: Rayans-Echecs-pour-le-launcher
+          path: echecs-analyse/launcher/*.zip
+          compression-level: 0
       - uses: actions/upload-artifact@v4
         with:
           name: Analyse-Echecs-${{ matrix.os }}
