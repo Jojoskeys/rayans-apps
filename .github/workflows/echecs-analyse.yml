@@ -1,0 +1,94 @@
+# Construction et vérification d'Analyse Échecs sur les systèmes cibles (macOS Apple Silicon, macOS Intel,
+# Windows 64 bits, Linux). Chaque tâche : tests unitaires, paquet, lancement « double-clic » du paquet,
+# test de bout en bout sur une vraie partie Chess.com avec le moteur embarqué, puis mise à disposition des
+# paquets dans les « Artifacts » de l'exécution.
+name: Analyse Echecs - paquets
+
+on:
+  push:
+    paths:
+      - 'echecs-analyse/**'
+      - '.github/workflows/echecs-analyse.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paquet:
+    name: ${{ matrix.nom }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - nom: macOS Apple Silicon
+            os: macos-14
+            dist: npx electron-builder --mac --arm64
+            sf: mac
+            app: "dist/mac-arm64/Analyse Echecs.app"
+            exe: "dist/mac-arm64/Analyse Echecs.app/Contents/MacOS/Analyse Echecs"
+            fichiers: dist/*.dmg dist/*.zip
+          - nom: macOS Intel
+            os: macos-15-intel
+            dist: npx electron-builder --mac --x64
+            sf: mac
+            app: "dist/mac/Analyse Echecs.app"
+            exe: "dist/mac/Analyse Echecs.app/Contents/MacOS/Analyse Echecs"
+            fichiers: dist/*.dmg dist/*.zip
+          - nom: Windows 64 bits
+            os: windows-latest
+            dist: npx electron-builder --win --x64
+            sf: win-x64
+            app: "dist/Analyse-Echecs-1.0.0-Windows-x64-portable.exe"
+            exe: "dist/win-unpacked/Analyse Echecs.exe"
+            fichiers: dist/*.exe dist/*.zip
+          - nom: Linux 64 bits
+            os: ubuntu-24.04
+            dist: npx electron-builder --linux --x64
+            sf: linux-x64
+            app: "dist/linux-unpacked/analyse-echecs"
+            exe: "dist/linux-unpacked/analyse-echecs"
+            fichiers: dist/*.tar.gz
+    defaults:
+      run:
+        shell: bash
+        working-directory: echecs-analyse
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      ELECTRON_BUILDER_PUBLISH: never
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: node scripts/fetch-stockfish.js ${{ matrix.sf }}
+      - run: npm run build:ui
+      - name: Tests unitaires (formules, seuils, moteur natif)
+        run: npm test
+      - name: Construction du paquet
+        run: ${{ matrix.dist }} --publish never
+      - name: Lancement du paquet comme un double-clic
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then xvfb-run -a node scripts/test-lancement.js "${{ matrix.app }}"; else node scripts/test-lancement.js "${{ matrix.app }}"; fi
+      - name: Test de bout en bout sur une vraie partie (paquet installé)
+        run: |
+          npm install --no-save playwright@1.63.0
+          if [ "$RUNNER_OS" = "Linux" ]; then E2E_EXECUTABLE="${{ matrix.exe }}" xvfb-run -a node test/e2e/run-e2e.js; else E2E_EXECUTABLE="${{ matrix.exe }}" node test/e2e/run-e2e.js; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: resultats-${{ matrix.os }}
+          path: echecs-analyse/test/e2e/resultats/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Analyse-Echecs-${{ matrix.os }}
+          path: |
+            echecs-analyse/dist/*.dmg
+            echecs-analyse/dist/*.zip
+            echecs-analyse/dist/*.exe
+            echecs-analyse/dist/*.tar.gz
+          if-no-files-found: ignore
+          compression-level: 0

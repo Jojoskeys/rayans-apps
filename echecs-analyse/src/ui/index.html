@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyse Échecs</title>
+<link rel="stylesheet" href="chessground.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">♞ Analyse Échecs</div>
+  <div class="engine" id="engine-badge">Moteur : démarrage…</div>
+  <button class="ghost" id="btn-settings" aria-expanded="false">Réglages</button>
+</header>
+<section id="settings" class="settings" hidden>
+  <label>Assouplissement sous 1400 Elo : <input type="range" id="set-leniency" min="0" max="50" step="5"> <span id="set-leniency-val"></span></label>
+  <label><input type="checkbox" id="set-cloud"> Consulter Lichess cloud-eval (positions connues)</label>
+  <label><input type="checkbox" id="set-tb"> Consulter la table de finales Lichess (≤ 7 pièces)</label>
+  <p class="muted">Les réglages de classement s’appliquent immédiatement, sans recalcul. Profondeur : <b id="set-depth"></b>, MultiPV <b id="set-multipv"></b>. Données : <span id="set-datadir"></span></p>
+</section>
+<main class="layout">
+  <aside class="sidebar">
+    <form id="import-form" class="card">
+      <label for="pseudo">Pseudo Chess.com</label>
+      <div class="row">
+        <input id="pseudo" autocomplete="off" spellcheck="false" placeholder="ex. MagnusCarlsen" required>
+        <button type="submit" id="btn-import">Importer</button>
+      </div>
+      <div id="import-status" class="status" aria-live="polite"></div>
+      <div class="progress" id="import-progress" hidden><div></div></div>
+      <div class="row" id="import-actions" hidden>
+        <button type="button" class="ghost" id="btn-import-cancel">Interrompre</button>
+      </div>
+    </form>
+    <div class="card list-card">
+      <div class="row between">
+        <select id="player-select" aria-label="Joueur"></select>
+        <input id="game-filter" placeholder="Filtrer (adversaire, cadence)…" aria-label="Filtrer les parties">
+      </div>
+      <div id="game-count" class="muted small"></div>
+      <ul id="games" class="games" aria-label="Historique des parties"></ul>
+    </div>
+  </aside>
+  <section class="board-zone">
+    <div class="players-line" id="top-player"></div>
+    <div class="board-wrap">
+      <div class="evalbar" id="evalbar" title="Évaluation"><div class="evalfill" id="evalfill"></div><span id="evaltext"></span></div>
+      <div class="board-box"><div id="board" class="cg-wrap-host"></div>
+        <div id="promo" class="promo" hidden></div>
+      </div>
+    </div>
+    <div class="players-line" id="bottom-player"></div>
+    <div class="nav">
+      <button id="nav-first" title="Début (↑ ou Origine)">⏮</button>
+      <button id="nav-prev" title="Coup précédent (←)">◀</button>
+      <button id="nav-next" title="Coup suivant (→)">▶</button>
+      <button id="nav-last" title="Fin (↓ ou Fin)">⏭</button>
+      <button id="nav-flip" title="Retourner l’échiquier (F)">⇅</button>
+    </div>
+    <div id="explore-banner" class="explore" hidden>
+      <span id="explore-text"></span>
+      <button id="btn-back-game">Revenir à la partie</button>
+    </div>
+    <p class="muted small hint">Clavier : ← → pour naviguer, ↑ ↓ début et fin, F pour retourner. Jouez un coup sur l’échiquier pour explorer une variante.</p>
+  </section>
+  <section class="analysis">
+    <div class="card" id="game-head">
+      <div class="muted">Importez vos parties puis choisissez-en une dans l’historique.</div>
+    </div>
+    <div class="card" id="analysis-card" hidden>
+      <div class="row between">
+        <div id="analysis-status" class="status" aria-live="polite"></div>
+        <div class="row">
+          <button id="btn-analyse">Analyser</button>
+          <button id="btn-analyse-cancel" class="ghost" hidden>Annuler</button>
+        </div>
+      </div>
+      <div class="progress" id="analysis-progress" hidden><div></div></div>
+    </div>
+    <div class="card" id="summary" hidden></div>
+    <div class="card" id="detail" hidden></div>
+    <div class="card moves-card" id="moves-card" hidden>
+      <div class="opening" id="opening"></div>
+      <div id="moves" class="moves" role="list"></div>
+    </div>
+  </section>
+</main>
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>

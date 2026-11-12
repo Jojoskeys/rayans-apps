@@ -1,0 +1,118 @@
+{
+  "name": "analyse-echecs",
+  "productName": "Analyse Echecs",
+  "version": "1.0.0",
+  "description": "Analyse locale de parties Chess.com terminées avec Stockfish (application de bureau en français)",
+  "main": "src/main/main.js",
+  "license": "GPL-3.0-or-later",
+  "author": "Analyse Échecs",
+  "private": true,
+  "scripts": {
+    "build:ui": "node scripts/build-ui.js",
+    "build:openings": "node scripts/build-openings.js",
+    "fetch:stockfish": "node scripts/fetch-stockfish.js",
+    "start": "npm run build:ui && electron .",
+    "test": "node --test test/unit/*.test.js",
+    "test:e2e": "node test/e2e/run-e2e.js",
+    "dist:linux": "npm run build:ui && node scripts/fetch-stockfish.js linux-x64 && electron-builder --linux --x64",
+    "dist:win": "npm run build:ui && node scripts/fetch-stockfish.js win-x64 && electron-builder --win --x64",
+    "dist:mac": "npm run build:ui && node scripts/fetch-stockfish.js mac && electron-builder --mac --arm64 --x64"
+  },
+  "dependencies": {
+    "chess.js": "1.4.0"
+  },
+  "devDependencies": {
+    "chessground": "9.2.1",
+    "electron": "44.10.0",
+    "electron-builder": "26.18.0",
+    "esbuild": "0.28.2"
+  },
+  "build": {
+    "appId": "fr.analyse-echecs.app",
+    "productName": "Analyse Echecs",
+    "copyright": "Licence GPL-3.0-or-later",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "dist-ui/**/*",
+      "data/openings.json",
+      "package.json",
+      "!src/ui/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "vendor/stockfish",
+        "to": "stockfish"
+      },
+      {
+        "from": "licences",
+        "to": "licences"
+      }
+    ],
+    "extraFiles": [
+      {
+        "from": "LISEZMOI-LICENCES.txt",
+        "to": "LISEZMOI-LICENCES.txt"
+      }
+    ],
+    "asar": true,
+    "electronLanguages": [
+      "fr",
+      "en-US"
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "zip"
+        },
+        {
+          "target": "dmg"
+        }
+      ],
+      "category": "public.app-category.games",
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "artifactName": "Analyse-Echecs-${version}-macOS-${arch}.${ext}"
+    },
+    "dmg": {
+      "artifactName": "Analyse-Echecs-${version}-macOS-${arch}.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Analyse-Echecs-${version}-Windows-x64.${ext}"
+    },
+    "portable": {
+      "artifactName": "Analyse-Echecs-${version}-Windows-x64-portable.exe"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Game",
+      "artifactName": "Analyse-Echecs-${version}-Linux-x64.${ext}"
+    },
+    "afterPack": "build/afterPack.js"
+  }
+}

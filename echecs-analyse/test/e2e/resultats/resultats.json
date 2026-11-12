@@ -1,0 +1,148 @@
+{
+  "platform": "linux-x64",
+  "executable": "dist/linux-unpacked/analyse-echecs",
+  "pseudo": "JokerSicilian",
+  "gameUrl": "https://www.chess.com/game/live/185803756742",
+  "dataDir": "/tmp/analyse-echecs-e2e-NLwwZr",
+  "steps": [
+    {
+      "name": "lancement de l’application et du moteur",
+      "ok": true,
+      "details": {
+        "badge": "Moteur : Stockfish 19 natif (version stable officielle sf_19) · 3 fil(s) · profondeur 22 · MultiPV 2"
+      }
+    },
+    {
+      "name": "import complet par l’API",
+      "ok": true,
+      "details": {
+        "mois": 38,
+        "parties": 13545,
+        "ecartees": 195,
+        "motifs": {
+          "variant": 195
+        },
+        "duree_s": 95
+      }
+    },
+    {
+      "name": "mise à jour : déduplication",
+      "ok": true,
+      "details": {
+        "moisRecuperes": 0,
+        "moisDejaAJour": 38,
+        "ajoutees": 0,
+        "total": 13545
+      }
+    },
+    {
+      "name": "analyse native profondeur 22",
+      "ok": true,
+      "details": {
+        "demiCoups": 23,
+        "duree_s": 49,
+        "moteur": {
+          "name": "Stockfish 19",
+          "threads": 3,
+          "hash": 256
+        },
+        "rechercheSearchmoves": 11,
+        "ouverture": {
+          "eco": "B10",
+          "name": "Caro-Kann Defense: Two Knights Attack",
+          "ply": 5
+        }
+      }
+    },
+    {
+      "name": "classement et précisions",
+      "ok": true,
+      "details": {
+        "dernierCoup": {
+          "san": "Bxf7+",
+          "categorie": "Très bon",
+          "perte": 0,
+          "raisons": [
+            "Seul bon coup : le 2e choix du moteur perd 35.0 points"
+          ]
+        },
+        "precisionBlancs": 95.55,
+        "coupsBlancs": 12,
+        "eloEstimeBlancs": {
+          "elo": 2070,
+          "margin": 250,
+          "tooShort": false,
+          "count": 12,
+          "raw": 2646
+        },
+        "precisionNoirs": 67.4,
+        "coupsNoirs": 11,
+        "eloEstimeNoirs": {
+          "elo": 1380,
+          "margin": 250,
+          "tooShort": false,
+          "count": 11,
+          "raw": 1259
+        }
+      }
+    },
+    {
+      "name": "navigation du résumé",
+      "ok": true,
+      "details": {
+        "bouton": "Gaffe · 1",
+        "premier": 22,
+        "parcours": {
+          "bouton": "Meilleur · 3",
+          "camp": "w",
+          "coupsVisites": [
+            7,
+            11,
+            19
+          ]
+        }
+      }
+    },
+    {
+      "name": "Demander à Claude (presse-papiers)",
+      "ok": true,
+      "details": {
+        "coup": "22 Re8",
+        "categorie": "Gaffe",
+        "confirmation": "Question copiée dans le presse-papiers. Collez-la sur claude.ai (rien n’a été envoyé).",
+        "longueur": 1344,
+        "explication": "présente"
+      }
+    },
+    {
+      "name": "coup exploratoire noté par Stockfish puis retour à la partie",
+      "ok": true,
+      "details": {
+        "depuis": 21,
+        "coup": "a7a5",
+        "titre": "11... a5 ★ Meilleur",
+        "bandeau": "Variante explorée après 11. De2 : 11... a5",
+        "autreCoup": {
+          "uci": "a8b8",
+          "san": "Rb8",
+          "categorie": "Bon",
+          "perte": 5.88,
+          "source": "recherche complémentaire searchmoves",
+          "profondeur": 22
+        }
+      }
+    },
+    {
+      "name": "réouverture après redémarrage, hors ligne, sans recalcul",
+      "ok": true,
+      "details": {
+        "reouverture_ms": 97,
+        "precisions": [
+          95.54632140175504,
+          67.39907371521349
+        ]
+      }
+    }
+  ],
+  "ok": true
+}

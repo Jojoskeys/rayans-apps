@@ -1,0 +1,232 @@
+[
+  {
+    "ply": 1,
+    "san": "e4",
+    "cat": "theorie",
+    "perte": 1.01,
+    "best": "g1f3",
+    "joue": "e2e4",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": true
+  },
+  {
+    "ply": 2,
+    "san": "c6",
+    "cat": "theorie",
+    "perte": 0.18,
+    "best": "e7e5",
+    "joue": "c7c6",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": true
+  },
+  {
+    "ply": 3,
+    "san": "Nc3",
+    "cat": "theorie",
+    "perte": 0,
+    "best": "c2c3",
+    "joue": "b1c3",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": true
+  },
+  {
+    "ply": 4,
+    "san": "d5",
+    "cat": "theorie",
+    "perte": 0,
+    "best": "d7d5",
+    "joue": "d7d5",
+    "src": "ligne 1 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 5,
+    "san": "Nf3",
+    "cat": "theorie",
+    "perte": 1.65,
+    "best": "d2d4",
+    "joue": "g1f3",
+    "src": "ligne 2 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 6,
+    "san": "g6",
+    "cat": "bon",
+    "perte": 2.66,
+    "best": "d5e4",
+    "joue": "g7g6",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": true
+  },
+  {
+    "ply": 7,
+    "san": "d4",
+    "cat": "meilleur",
+    "perte": 0,
+    "best": "d2d4",
+    "joue": "d2d4",
+    "src": "ligne 1 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 8,
+    "san": "Bg7",
+    "cat": "excellent",
+    "perte": 0.55,
+    "best": "d5e4",
+    "joue": "f8g7",
+    "src": "ligne 2 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 9,
+    "san": "h3",
+    "cat": "excellent",
+    "perte": 0.64,
+    "best": "f1d3",
+    "joue": "h2h3",
+    "src": "ligne 2 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 10,
+    "san": "dxe4",
+    "cat": "meilleur",
+    "perte": 0,
+    "best": "d5e4",
+    "joue": "d5e4",
+    "src": "ligne 1 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 11,
+    "san": "Nxe4",
+    "cat": "meilleur",
+    "perte": 0,
+    "best": "c3e4",
+    "joue": "c3e4",
+    "src": "ligne 1 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 12,
+    "san": "Nf6",
+    "cat": "meilleur",
+    "perte": 0,
+    "best": "g8f6",
+    "joue": "g8f6",
+    "src": "ligne 1 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 13,
+    "san": "Ng3",
+    "cat": "bon",
+    "perte": 4.41,
+    "best": "e4f6",
+    "joue": "e4g3",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": true
+  },
+  {
+    "ply": 14,
+    "san": "O-O",
+    "cat": "excellent",
+    "perte": 0.28,
+    "best": "c6c5",
+    "joue": "e8g8",
+    "src": "ligne 2 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 15,
+    "san": "Bc4",
+    "cat": "excellent",
+    "perte": 0.46,
+    "best": "f1e2",
+    "joue": "f1c4",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": true
+  },
+  {
+    "ply": 16,
+    "san": "b5",
+    "cat": "excellent",
+    "perte": 0.83,
+    "best": "c6c5",
+    "joue": "b7b5",
+    "src": "ligne 2 (MultiPV)",
+    "cloud": true
+  },
+  {
+    "ply": 17,
+    "san": "Bb3",
+    "cat": "bon",
+    "perte": 2.85,
+    "best": "c4d3",
+    "joue": "c4b3",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": true
+  },
+  {
+    "ply": 18,
+    "san": "Bb7",
+    "cat": "excellent",
+    "perte": 2.11,
+    "best": "a7a5",
+    "joue": "c8b7",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": true
+  },
+  {
+    "ply": 19,
+    "san": "O-O",
+    "cat": "meilleur",
+    "perte": 0,
+    "best": "e1g1",
+    "joue": "e1g1",
+    "src": "ligne 1 (MultiPV)",
+    "cloud": false
+  },
+  {
+    "ply": 20,
+    "san": "Nbd7",
+    "cat": "excellent",
+    "perte": 0.74,
+    "best": "c6c5",
+    "joue": "b8d7",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": false
+  },
+  {
+    "ply": 21,
+    "san": "Qe2",
+    "cat": "excellent",
+    "perte": 0.92,
+    "best": "c2c4",
+    "joue": "d1e2",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": false
+  },
+  {
+    "ply": 22,
+    "san": "Re8",
+    "cat": "gaffe",
+    "perte": 44.58,
+    "best": "a7a5",
+    "joue": "f8e8",
+    "src": "recherche complémentaire searchmoves",
+    "cloud": false
+  },
+  {
+    "ply": 23,
+    "san": "Bxf7+",
+    "cat": "tres_bon",
+    "perte": 0,
+    "best": "b3f7",
+    "joue": "b3f7",
+    "src": "ligne 1 (MultiPV)",
+    "cloud": false
+  }
+]
