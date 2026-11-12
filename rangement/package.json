@@ -1,0 +1,31 @@
+{
+  "name": "rayans-rangement",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Rayan's Rangement : rangement des Téléchargements et du Bureau (Tauri + React + TypeScript), avec aperçu obligatoire et historique annulable",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tauri dev",
+    "dev:ui": "vite",
+    "build:ui": "tsc --noEmit && vite build",
+    "build:windows": "tauri build",
+    "tauri": "tauri",
+    "test": "cargo test -p rangement-core",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.12.4",
+    "@tauri-apps/plugin-dialog": "2.8.4",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.4",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "@vitejs/plugin-react": "5.0.2",
+    "typescript": "5.9.2",
+    "vite": "7.3.8"
+  }
+}

@@ -1,0 +1,75 @@
+# Rayan's Rangement (rangement) : tests du moteur (règles, aperçu, conflits, doublons, annulation) sur des
+# dossiers temporaires, construction Windows, test de lancement, puis ZIP pour Rayan's Launcher en « Artifact ».
+name: Rayan's Rangement
+
+on:
+  push:
+    paths:
+      - 'rangement/**'
+      - '.github/workflows/rangement.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows (tests, application, paquet launcher)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+        working-directory: rangement
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Tests du moteur (dossiers temporaires uniquement)
+        run: cargo test -p rangement-core
+      # Version : majeur.mineur de package.json, correctif = numéro d'exécution + 100 (convention des apps du launcher).
+      - name: Version de construction
+        id: version
+        shell: pwsh
+        run: |
+          $pkg = Get-Content package.json -Raw | ConvertFrom-Json
+          $p = $pkg.version.Split('.')
+          $v = "$($p[0]).$($p[1]).$([int]$env:GITHUB_RUN_NUMBER + 100)"
+          "version=$v" >> $env:GITHUB_OUTPUT
+          @{ version = $v } | ConvertTo-Json | Set-Content -Encoding utf8 ../out-tauri-ci.json
+      - name: Construction (exécutable et installateur NSIS)
+        run: npx tauri build --config ../out-tauri-ci.json
+      - name: Test de lancement (interface affichée, dossier de données temporaire)
+        run: node scripts/smoke.mjs "target/release/Rayans Rangement.exe"
+      - name: Paquet pour Rayan's Launcher
+        shell: pwsh
+        run: |
+          $v = '${{ steps.version.outputs.version }}'
+          $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $stage = Join-Path $env:RUNNER_TEMP 'paquet'
+          New-Item -ItemType Directory -Force $stage | Out-Null
+          Copy-Item 'target/release/Rayans Rangement.exe' $stage
+          $fiche = [ordered]@{
+            id = 'rayans-rangement'
+            name = "Rayan's Rangement"
+            description = "Range les Téléchargements et le Bureau selon vos règles, avec aperçu, quarantaine des doublons et annulation."
+            version = $v
+            releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+            executable = 'Rayans Rangement.exe'
+          }
+          [IO.File]::WriteAllText("$stage/rayans-launcher.json", ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          New-Item -ItemType Directory -Force launcher | Out-Null
+          Compress-Archive -Path "$stage/*" -DestinationPath "launcher/Rayans-Rangement-$v.zip"
+          Get-ChildItem launcher
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Rayans-Rangement-pour-le-launcher
+          path: rangement/launcher/*.zip
+          compression-level: 0
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Rayans-Rangement-installateur
+          path: rangement/target/release/bundle/nsis/*.exe
+          compression-level: 0
