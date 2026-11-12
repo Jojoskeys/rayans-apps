@@ -1,0 +1,25 @@
+[package]
+name = "hangar"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+description = "Hangar : launcher de bureau pour distribuer, installer, mettre à jour et lancer vos applications"
+
+[lib]
+name = "hangar_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+hangar-core = { path = "../core" }
+tauri = { version = "2", features = [] }
+tauri-plugin-single-instance = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[features]
+# Autorise le mode développement (catalogue local, http://, non signé) dans un binaire release.
+# Ne jamais activer pour un installateur distribué.
+dev-mode = []

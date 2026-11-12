@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "title": "Mes applications",
+  "apps": [
+    {
+      "id": "horloge-demo",
+      "name": "Horloge Démo",
+      "description": "Une petite horloge qui compte ses lancements. Elle sert à tester Hangar de bout en bout.",
+      "icon": "img/horloge-demo-icon.svg",
+      "image": "img/horloge-demo-image.svg",
+      "version": "2.0.0",
+      "releaseNotes": "Les secondes sont affichées.\nLe compteur de lancements est conservé pendant la mise à jour.",
+      "releaseDate": "2026-11-12",
+      "downloadUrl": "https://telechargements.exemple.fr/hangar/zips/horloge-demo-2.0.0.zip",
+      "sha256": "a926cf1cabbb09ae3d1c4f44cb358ba34887aa25dc49c7c77beb8bda18674f72",
+      "size": 152340,
+      "executable": "HorlogeDemo.exe"
+    },
+    {
+      "id": "atelier-notes",
+      "name": "Atelier Notes",
+      "description": "Prise de notes rapide, hors ligne, avec export Markdown.",
+      "icon": "https://telechargements.exemple.fr/hangar/img/atelier-notes-icon.png",
+      "image": "https://telechargements.exemple.fr/hangar/img/atelier-notes-image.jpg",
+      "version": "0.4.2",
+      "releaseNotes": "Export Markdown.\nCorrection de la sauvegarde automatique.",
+      "downloadUrl": "zips/atelier-notes-0.4.2.zip",
+      "sha256": "5f0c6c3c0b8e4d8f9a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6071",
+      "executable": "bin/AtelierNotes.exe"
+    }
+  ]
+}

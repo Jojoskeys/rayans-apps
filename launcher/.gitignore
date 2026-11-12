@@ -1,0 +1,8 @@
+node_modules/
+dist/
+target/
+.keys/
+dev-catalog/
+.hangar-dev/
+src-tauri/gen/
+e2e-output/

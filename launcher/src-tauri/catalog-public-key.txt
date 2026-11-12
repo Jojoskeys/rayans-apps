@@ -1,0 +1,4 @@
+# Clé publique Ed25519 (base64) qui signe le catalogue distribué.
+# Remplacez cette ligne de commentaire par la clé générée avec :
+#   npm run keygen
+# Tant qu'aucune clé n'est présente, un launcher de distribution refuse tout catalogue.

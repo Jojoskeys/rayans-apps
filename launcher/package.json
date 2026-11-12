@@ -1,0 +1,35 @@
+{
+  "name": "hangar-launcher",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Hangar : launcher Windows (Tauri + React + TypeScript) pour distribuer, installer, mettre à jour et lancer vos applications",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tauri dev",
+    "dev:ui": "vite",
+    "build:ui": "tsc --noEmit && vite build",
+    "build:windows": "tauri build",
+    "build:windows:dev": "tauri build --features dev-mode",
+    "tauri": "tauri",
+    "serve": "node scripts/serve.mjs",
+    "demo": "node scripts/demo.mjs",
+    "keygen": "cargo run -q -p hangar-core --bin hangar-tools -- keygen --private .keys/catalog-private.key --public src-tauri/catalog-public-key.txt",
+    "tools": "cargo run -q -p hangar-core --bin hangar-tools --",
+    "test": "cargo build -p hangar-demo && cargo test -p hangar-core",
+    "e2e:ui": "node scripts/e2e-ui.mjs"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.12.4",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.4",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "@vitejs/plugin-react": "5.0.2",
+    "typescript": "5.9.2",
+    "vite": "7.3.8"
+  }
+}
