@@ -15,6 +15,12 @@ on:
       RAYANS_LAUNCHER_CATALOG_KEY:
         required: false
   workflow_dispatch:
+  # Le script ou ce workflow changent : catalogue reconstruit avec les releases existantes.
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rayans-launcher-catalogue.yml'
+      - '.github/publication/**'
 
 permissions:
   contents: read
