@@ -132,6 +132,22 @@ fn demo_zip(site: &Site, name: &str) -> String {
     zip_with(&site.dir.join("zips").join(name), &[(&format!("bin/{EXE}"), bin), ("LISEZMOI.txt", b"demo".to_vec())])
 }
 
+/// ZIP de démo alourdi de 4 Mo peu compressibles : en envoi lent, le téléchargement dure plus d'une seconde,
+/// ce qui laisse le temps de l'annuler sur toutes les machines.
+fn big_demo_zip(site: &Site, name: &str) -> String {
+    let bin = std::fs::read(demo_bin()).unwrap();
+    let mut x: u64 = 0x9E37_79B9_7F4A_7C15 ^ name.len() as u64;
+    let pad: Vec<u8> = (0..4 * 1024 * 1024)
+        .map(|_| {
+            x ^= x << 13;
+            x ^= x >> 7;
+            x ^= x << 17;
+            x as u8
+        })
+        .collect();
+    zip_with(&site.dir.join("zips").join(name), &[(&format!("bin/{EXE}"), bin), ("pad.bin", pad)])
+}
+
 fn entry(id: &str, version: &str, zip: &str, sha: &str) -> String {
     format!(
         r#"{{"id":"{id}","name":"Horloge {id}","description":"Démo","icon":"icon.png","image":"icon.png",
@@ -404,7 +420,7 @@ async fn signature_exigee_en_distribution() {
 #[tokio::test(flavor = "multi_thread")]
 async fn telechargement_annule_puis_repris() {
     let site = site();
-    let sha = demo_zip(&site, "dl-1.0.0.zip");
+    let sha = big_demo_zip(&site, "dl-1.0.0.zip");
     write_catalog(&site, &[entry("dl", "1.0.0", "dl-1.0.0.zip", &sha)], None);
     let core = open(&site, dev());
     core.refresh_catalog().await.unwrap();
@@ -442,7 +458,7 @@ async fn telechargement_annule_puis_repris() {
     assert_eq!(app.partial_bytes, None, "fichier partiel supprimé après installation");
 
     // 3. « Abandonner » supprime le début gardé.
-    let sha2 = demo_zip(&site, "dl-2.0.0.zip");
+    let sha2 = big_demo_zip(&site, "dl-2.0.0.zip");
     write_catalog(&site, &[entry("dl", "2.0.0", "dl-2.0.0.zip", &sha2)], None);
     core.refresh_catalog().await.unwrap();
     site.server.slow.store(true, Ordering::SeqCst);
