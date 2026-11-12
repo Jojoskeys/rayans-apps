@@ -21,8 +21,8 @@ jobs:
       run:
         working-directory: launcher
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - name: Dépendances système de Tauri et WebDriver
@@ -37,7 +37,7 @@ jobs:
       - run: cargo install tauri-driver --locked
       - name: Parcours de bout en bout dans l'application (clics réels)
         run: xvfb-run -a npm run e2e:ui
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: rayans-launcher-captures-linux
@@ -52,19 +52,21 @@ jobs:
         shell: bash
         working-directory: launcher
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - run: npm ci
       - name: Tests du coeur (dont les 5 parcours sur RayansChrono.exe)
         run: npm test
       - name: Parcours de bout en bout dans l'application (WebView2 + msedgedriver)
-        continue-on-error: true
         run: |
           npx tauri build --debug --no-bundle
           cargo install tauri-driver --locked
-          TAURI_NATIVE_DRIVER="$EDGEWEBDRIVER/msedgedriver.exe" npm run e2e:ui
+          # Pilote Edge de la même version que le WebView2 installé (outil recommandé par Tauri).
+          cargo install --git https://github.com/chippers/msedgedriver-tool
+          mkdir -p ../out/driver && (cd ../out/driver && msedgedriver-tool.exe)
+          TAURI_NATIVE_DRIVER="$(cd ../out/driver && pwd -W)/msedgedriver.exe" npm run e2e:ui
       - name: Paquets de démonstration Windows (v1 et v2) et catalogue local
         run: |
           node scripts/demo.mjs init
@@ -72,6 +74,7 @@ jobs:
       - name: Installateur de test (mode développement autorisé)
         run: |
           npx tauri build --features dev-mode
+          rm -rf ../out/driver
           mkdir -p ../out/developpement
           cp target/release/bundle/nsis/*.exe target/release/bundle/msi/*.msi ../out/developpement/
       - name: Installateur de distribution (HTTPS et signature obligatoires)
@@ -79,15 +82,15 @@ jobs:
           npx tauri build
           mkdir -p ../out/distribution
           cp target/release/bundle/nsis/*.exe target/release/bundle/msi/*.msi ../out/distribution/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: rayans-launcher-installateurs-windows
           path: out/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: rayans-launcher-catalogue-demo-windows
           path: launcher/dev-catalog/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: rayans-launcher-captures-windows
