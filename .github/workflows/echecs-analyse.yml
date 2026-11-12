@@ -73,6 +73,10 @@ jobs:
       - name: Lancement du paquet comme un double-clic
         run: |
           if [ "$RUNNER_OS" = "Linux" ]; then xvfb-run -a node scripts/test-lancement.js "${{ matrix.app }}"; else node scripts/test-lancement.js "${{ matrix.app }}"; fi
+      - name: Diagnostic du moteur embarqué (réglages de l'application)
+        run: |
+          if [ "$RUNNER_OS" = "macOS" ]; then SF="${{ matrix.app }}/Contents/Resources/stockfish/stockfish"; elif [ "$RUNNER_OS" = "Windows" ]; then SF="dist/win-unpacked/resources/stockfish/stockfish.exe"; else SF="dist/linux-unpacked/resources/stockfish/stockfish"; fi
+          node scripts/diag-moteur.js "$SF"
       - name: Test de bout en bout sur une vraie partie (paquet installé)
         run: |
           npm install --no-save playwright@1.63.0

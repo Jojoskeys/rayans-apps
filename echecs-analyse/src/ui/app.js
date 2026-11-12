@@ -438,8 +438,8 @@ function renderAnalysisCard(st) {
   prog.hidden = !(running || (a && !a.complete && a.analyzedPlies > 0));
   prog.firstElementChild.style.width = `${total ? (100 * done) / total : 0}%`;
   const eng = (a && a.engine && a.engine.name) || (S.etat && S.etat.engine && S.etat.engine.name) || 'Stockfish';
-  if (running) { status.className = 'status'; status.textContent = `Analyse en cours : ${done}/${total} demi-coups (${eng}, profondeur ${S.etat.settings.depth})…`; }
-  else if (a && a.complete) { status.className = 'status ok'; status.textContent = `Analyse complète enregistrée : ${a.engine.name}, profondeur ${a.settings.depth}, MultiPV ${a.settings.multipv}, ${a.engine.threads} fil(s).`; }
+  if (running) { status.className = st.warning ? 'status warn' : 'status'; status.textContent = `Analyse en cours : ${done}/${total} demi-coups (${eng}, profondeur ${S.etat.settings.depth})…${st.warning ? ` ${st.warning}` : ''}`; }
+  else if (a && a.complete) { status.className = 'status ok'; status.textContent = `Analyse complète enregistrée : ${a.engine.name}, profondeur ${a.settings.depth}, MultiPV ${a.settings.multipv}, ${a.engine.threads} fil(s).${a.engine.fallback ? ` ${a.engine.fallback}` : ''}`; }
   else if (a && a.analyzedPlies > 0) { status.className = 'status warn'; status.textContent = `Analyse partielle : ${a.analyzedPlies}/${total} demi-coups. Vous pouvez la reprendre.${st && st.status === 'error' && st.gameId === S.gameId ? ` Erreur : ${st.error}` : ''}`; }
   else if (total === 0) { status.className = 'status'; status.textContent = 'Partie sans coup : rien à analyser.'; $('btn-analyse').hidden = true; }
   else { status.className = 'status'; status.textContent = 'Partie non analysée.'; }

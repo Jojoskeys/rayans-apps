@@ -61,7 +61,8 @@ async function main() {
     `Code source correspondant : https://github.com/official-stockfish/Stockfish/tree/${TAG}`,
     '',
   ].join('\n'));
-  fs.writeFileSync(path.join(out, 'release.json'), JSON.stringify({ version: VERSION, tag: TAG, asset: asset.file, sha256: asset.sha256 }, null, 2));
+  const binSha = crypto.createHash('sha256').update(fs.readFileSync(path.join(out, binName))).digest('hex');
+  fs.writeFileSync(path.join(out, 'release.json'), JSON.stringify({ version: VERSION, tag: TAG, asset: asset.file, sha256: asset.sha256, binarySha256: binSha }, null, 2));
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log(`${VERSION} installé dans vendor/stockfish (${target})`);
 }

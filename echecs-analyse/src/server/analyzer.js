@@ -41,6 +41,22 @@ async function analyzePosition(engine, fen, uci, { depth, signal, priority, newG
   return { legalCount: legal.length, best, second, played };
 }
 
+/**
+ * Repli en cas de plantage du moteur : une relance avec les mêmes réglages, puis une relance en mode
+ * prudent (1 fil, 64 Mo). Un plantage persistant est remonté à l'interface avec le code de sortie.
+ */
+async function withRecovery(engine, fn, onFallback) {
+  try { return await fn(); } catch (e) {
+    if (!e.crashed) throw e;
+    try { return await fn(); } catch (e2) {
+      if (!e2.crashed) throw e2;
+      engine.reconfigure({ threads: 1, hash: 64 });
+      if (onFallback) onFallback(e2);
+      return fn();
+    }
+  }
+}
+
 function createAnalyzer({ store, engineRef, external, getSettings, openings }) {
   let job = { status: 'idle' };
   let controller = null;
@@ -99,12 +115,17 @@ function createAnalyzer({ store, engineRef, external, getSettings, openings }) {
       if (signal.aborted) throw new CancelledError();
       job.currentPly = p.ply;
       const [res, ext] = await Promise.all([
-        analyzePosition(engine, p.fenBefore, p.uci, { depth: s.depth, signal, newGame: first }),
+        withRecovery(engine, () => analyzePosition(engine, p.fenBefore, p.uci, { depth: s.depth, signal, newGame: first }), (err) => {
+          job.warning = `Le moteur s’est arrêté (${err.message}) : analyse poursuivie en mode prudent (1 fil, 64 Mo).`;
+          analysis.engine.fallback = job.warning;
+        }),
         enrich(p.fenBefore, p.uci, s, state, signal),
       ]);
       first = false;
       analysis.plies.push({ ply: p.ply, ...res, ...ext });
       analysis.plies.sort((a, b) => a.ply - b.ply);
+      analysis.engine.threads = engine.threads;
+      analysis.engine.hash = engine.hash;
       analysis.updatedAt = Date.now();
       store.saveAnalysis(gameId, analysis);
       job.done = analysis.plies.length;
@@ -146,7 +167,7 @@ function createAnalyzer({ store, engineRef, external, getSettings, openings }) {
       const engine = engineRef();
       await engine.start();
       const [res, ext] = await Promise.all([
-        analyzePosition(engine, fen, uci, { depth: s.depth, priority: true }),
+        withRecovery(engine, () => analyzePosition(engine, fen, uci, { depth: s.depth, priority: true })),
         enrich(fen, uci, s, null, null),
       ]);
       const raw = { ...res, ...ext, uci, san: mv.san, fenBefore: fen, book: false }; // les coups explorés ne sont jamais classés « théorie »
@@ -172,4 +193,4 @@ function createAnalyzer({ store, engineRef, external, getSettings, openings }) {
   };
 }
 
-module.exports = { createAnalyzer, analyzePosition, DEFAULT_SETTINGS };
+module.exports = { createAnalyzer, analyzePosition, withRecovery, DEFAULT_SETTINGS };

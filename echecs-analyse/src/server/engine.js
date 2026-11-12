@@ -58,14 +58,18 @@ class Engine {
       this.proc = proc;
       const rl = readline.createInterface({ input: proc.stdout });
       rl.on('line', (l) => { for (const f of this.listeners.slice()) f(l); });
-      proc.on('exit', () => {
-        const wasCurrent = this.current;
+      this.stderr = '';
+      proc.stderr.on('data', (d) => { this.stderr = (this.stderr + d.toString()).slice(-2000); });
+      proc.stdin.on('error', () => { /* le processus a pu se terminer : signalé par « exit » */ });
+      proc.on('exit', (code, signal) => {
         this.proc = null;
         this.multipvSet = null;
-        if (wasCurrent) wasCurrent.reject(new Error('Le moteur s’est arrêté de façon inattendue'));
-        this.current = null;
-        this.busy = false;
-        this._next();
+        this.lastExit = { code, signal, stderr: this.stderr.trim() };
+        // La recherche en cours (s'il y en a une) échoue proprement ; _next passe ensuite à la suivante.
+        const err = new Error(`Le moteur s’est arrêté de façon inattendue (code ${code}, signal ${signal || 'aucun'})${this.stderr.trim() ? ` : ${this.stderr.trim().slice(-300)}` : ''}`);
+        err.crashed = true;
+        if (this.readyFail) this.readyFail(err);
+        if (this.runFail) this.runFail(err);
       });
       const onLine = (l) => {
         if (l.startsWith('id name ')) this.name = l.slice(8).trim();
@@ -87,8 +91,9 @@ class Engine {
   _off(f) { this.listeners = this.listeners.filter((x) => x !== f); }
   _send(cmd) { if (this.proc) this.proc.stdin.write(cmd + '\n'); }
   _isReady() {
-    return new Promise((resolve) => {
-      const f = (l) => { if (l === 'readyok') { this._off(f); resolve(); } };
+    return new Promise((resolve, reject) => {
+      const f = (l) => { if (l === 'readyok') { this._off(f); this.readyFail = null; resolve(); } };
+      this.readyFail = (err) => { this._off(f); this.readyFail = null; reject(err); };
       this.listeners.push(f);
       this._send('isready');
     });
@@ -142,6 +147,7 @@ class Engine {
     if (this.multipvSet !== multipv) { this._send(`setoption name MultiPV value ${multipv}`); this.multipvSet = multipv; await this._isReady(); }
     return new Promise((resolve, reject) => {
       const lines = new Map();
+      this.runFail = (err) => { this._off(f); this.runFail = null; reject(err); };
       const f = (l) => {
         if (l.startsWith('info ') && l.includes(' pv ') && l.includes(' score ')) {
           const info = parseInfo(l);
@@ -152,6 +158,7 @@ class Engine {
           lines.set(1, { multipv: 1, depth: 0, score: info.score, pv: [] });
         } else if (l.startsWith('bestmove')) {
           this._off(f);
+          this.runFail = null;
           const bm = l.split(' ')[1];
           const arr = [...lines.values()].sort((a, b) => a.multipv - b.multipv);
           resolve({ lines: arr, bestmove: bm === '(none)' ? null : bm, depth: arr.length ? Math.min(...arr.map((x) => x.depth)) : 0 });
@@ -161,12 +168,19 @@ class Engine {
       this._send(`position fen ${o.fen}`);
       let go = `go depth ${o.depth}`;
       if (o.searchmoves && o.searchmoves.length) go += ` searchmoves ${o.searchmoves.join(' ')}`;
-      if (!this.proc) { this._off(f); reject(new Error('Moteur indisponible')); return; }
+      if (!this.proc) { this._off(f); this.runFail = null; reject(new Error('Moteur indisponible')); return; }
       this._send(go);
       job.searching = true;
       // Annulation demandée pendant la préparation : on arrête tout de suite la recherche lancée.
       if (job.cancelled) this._send('stop');
     });
+  }
+
+  /** Change les réglages (repli après plantage) : le moteur est relancé à la prochaine recherche. */
+  reconfigure({ threads, hash }) {
+    if (threads) this.threads = threads;
+    if (hash) this.hash = hash;
+    if (this.proc) { try { this._send('quit'); } catch (e) { /* */ } const p = this.proc; setTimeout(() => { try { p.kill(); } catch (e) { /* */ } }, 500); }
   }
 
   stop() {
