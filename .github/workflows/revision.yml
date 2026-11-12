@@ -1,0 +1,88 @@
+# Rayan's Révision (revision) : tests unitaires (planificateur FSRS, séances, statistiques, import/export),
+# construction Windows (Tauri), test de lancement de l'exe, puis ZIP pour Rayan's Launcher en « Artifact ».
+name: Rayan's Révision
+
+on:
+  push:
+    paths:
+      - 'revision/**'
+      - '.github/workflows/revision.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows (tests, exe, test de lancement, paquet launcher)
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+        working-directory: revision
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: revision/src-tauri
+      - run: npm ci
+      - name: Tests unitaires (TypeScript, dont le planificateur FSRS)
+        run: npm test
+      - name: Tests de la couche Tauri (Rust)
+        working-directory: revision/src-tauri
+        run: cargo test
+      # Version : majeur.mineur de package.json, correctif = numéro d'exécution de la CI + 100 (même règle que
+      # les autres applications du dépôt : chaque construction est une mise à jour pour le launcher).
+      - name: Version de la construction
+        id: version
+        shell: pwsh
+        run: |
+          $pkg = Get-Content package.json -Raw | ConvertFrom-Json
+          $p = $pkg.version.Split('.')
+          $v = "$($p[0]).$($p[1]).$([int]$env:GITHUB_RUN_NUMBER + 100)"
+          [IO.File]::WriteAllText("$PWD/out-ci.json", (@{ version = $v } | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          "version=$v" >> $env:GITHUB_OUTPUT
+          Write-Host "Version $v"
+      - name: Construction de l'exe (interface embarquée)
+        run: npx tauri build --no-bundle --config out-ci.json
+      - name: Test de lancement (premier démarrage, données dans un dossier vide)
+        run: node scripts/smoke.mjs "src-tauri/target/release/Rayans Revision.exe" 120
+      # Rayan's Launcher : fiche rayans-launcher.json à la racine du ZIP, lue quand le ZIP est déposé dans
+      # « Documents\Rayan's Launcher\À ajouter » ou choisi avec « Ajouter un ZIP ».
+      - name: Paquet pour Rayan's Launcher
+        shell: pwsh
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          $v = $env:VERSION
+          $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $dir = New-Item -ItemType Directory -Force out/paquet
+          Copy-Item "src-tauri/target/release/Rayans Revision.exe" $dir
+          $fiche = [ordered]@{
+            id = 'rayans-revision'
+            name = "Rayan's Révision"
+            description = 'Cartes de révision, QCM et textes à trous avec répétition espacée (FSRS).'
+            version = $v
+            releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+            executable = 'Rayans Revision.exe'
+          }
+          [IO.File]::WriteAllText("$dir/rayans-launcher.json", ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          Copy-Item LISEZMOI.txt $dir
+          New-Item -ItemType Directory -Force out/launcher | Out-Null
+          Compress-Archive -Path "$dir/*" -DestinationPath "out/launcher/Rayans-Revision-$v.zip"
+          Get-ChildItem out/launcher
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Rayans-Revision-pour-le-launcher
+          path: revision/out/launcher/*.zip
+          compression-level: 0
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: rayans-revision-test-lancement
+          path: revision/smoke-output/
+          if-no-files-found: ignore

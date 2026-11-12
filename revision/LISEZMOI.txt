@@ -1,0 +1,18 @@
+Rayan's Révision
+================
+
+Cartes de révision (question/réponse, QCM, textes à trous) avec répétition espacée (algorithme FSRS).
+
+Lancer : double-cliquer sur « Rayans Revision.exe » (ou passer par Rayan's Launcher).
+Nécessite Microsoft Edge WebView2, déjà présent sur Windows 10 et 11 à jour.
+
+Vos données restent sur ce PC, dans :
+  %APPDATA%\fr.rayan.revision\revision.json
+avec la version précédente (revision.bak.json) et une copie par jour (dossier « sauvegardes », 14 jours).
+Elles ne sont pas effacées quand l'application est mise à jour ou réinstallée.
+
+Import : CSV (« question;réponse » comme quiz-revision, ou avec en-tête type;question;reponse;choix;explication;paquet)
+et JSON. Export : CSV (Excel) ou sauvegarde JSON complète, depuis « Réglages et données ».
+
+Raccourcis pendant la révision : Entrée = valider / note proposée, Espace = afficher la réponse,
+1 à 4 = À revoir / Difficile / Bien / Facile, Ctrl+Z = annuler la dernière réponse, Échap = quitter.
