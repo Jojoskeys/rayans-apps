@@ -1,0 +1,80 @@
+# Rayan's Hifz (coran-memorisation) : tests unitaires, paquet Windows, lancement « double-clic » du paquet
+# (texte, traduction, police arabe, sens droite-à-gauche, captures d'écran), puis ZIP pour Rayan's Launcher.
+name: Rayan's Hifz
+
+on:
+  push:
+    paths:
+      - 'coran-memorisation/**'
+      - '.github/workflows/coran-memorisation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows 64 bits
+    runs-on: windows-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+        working-directory: coran-memorisation
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      ELECTRON_BUILDER_PUBLISH: never
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Vérification des types
+        run: npm run typecheck
+      - name: Tests unitaires (texte Tanzil, juz/hizb, répétition espacée, série)
+        run: npm test
+      # Version vue par le launcher : majeur.mineur de package.json, correctif = numéro d'exécution + 100.
+      - name: Version de construction
+        shell: pwsh
+        run: |
+          $pkg = Get-Content package.json -Raw | ConvertFrom-Json
+          $p = $pkg.version.Split('.')
+          $v = "$($p[0]).$($p[1]).$([int]$env:GITHUB_RUN_NUMBER + 100)"
+          "VERSION=$v" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+          Write-Host "Version $v"
+      - name: Construction du paquet
+        run: |
+          npm run build:ui
+          npx electron-builder --win --x64 --publish never -c.extraMetadata.version="$VERSION"
+      - name: Lancement du paquet comme un double-clic (avec captures d'écran)
+        run: CAPTURES_DIR=captures node scripts/test-lancement.js "dist/win-unpacked/Rayans Hifz.exe"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Rayans-Hifz-captures
+          path: coran-memorisation/captures/
+          if-no-files-found: ignore
+      - name: Paquet pour Rayan's Launcher
+        shell: pwsh
+        run: |
+          $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $fiche = [ordered]@{
+            id = 'rayans-hifz'
+            name = "Rayan's Hifz"
+            description = "Suivi de mémorisation du Coran : progression par verset, révisions espacées, mode révision mot par mot, audio d'Al-Husary."
+            version = $env:VERSION
+            releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+            executable = 'Rayans Hifz.exe'
+          }
+          [IO.File]::WriteAllText("$PWD/rayans-launcher.json", ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          $zip = Get-ChildItem "dist/Rayans-Hifz-$env:VERSION-Windows-x64.zip" | Select-Object -First 1
+          if (-not $zip) { throw "ZIP Windows introuvable dans dist/" }
+          Compress-Archive -Path rayans-launcher.json -DestinationPath $zip.FullName -Update
+          New-Item -ItemType Directory -Force launcher | Out-Null
+          Copy-Item $zip.FullName "launcher/Rayans-Hifz-$env:VERSION.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Rayans-Hifz-pour-le-launcher
+          path: coran-memorisation/launcher/*.zip
+          compression-level: 0
