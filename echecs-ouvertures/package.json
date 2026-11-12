@@ -1,0 +1,74 @@
+{
+  "name": "rayans-ouvertures",
+  "productName": "Rayans Ouvertures",
+  "version": "1.0.0",
+  "description": "Entraînement aux ouvertures d'échecs à partir de vos parties Chess.com, avec Stockfish et répétition espacée",
+  "main": "src/main/main.js",
+  "license": "GPL-3.0-or-later",
+  "author": "Rayan's Apps",
+  "private": true,
+  "scripts": {
+    "build:ui": "node scripts/build-ui.js",
+    "fetch:stockfish": "node scripts/fetch-stockfish.js",
+    "start": "npm run build:ui && electron .",
+    "test": "node --test test/unit/*.test.js",
+    "dist:win": "npm run build:ui && node scripts/fetch-stockfish.js win-x64 && electron-builder --win --x64"
+  },
+  "dependencies": {
+    "chess.js": "1.4.0"
+  },
+  "devDependencies": {
+    "chessground": "9.2.1",
+    "electron": "44.10.0",
+    "electron-builder": "26.18.0",
+    "esbuild": "0.28.2"
+  },
+  "build": {
+    "appId": "fr.rayans-apps.ouvertures",
+    "productName": "Rayans Ouvertures",
+    "copyright": "Licence GPL-3.0-or-later",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "dist-ui/**/*",
+      "data/openings.json",
+      "package.json",
+      "!src/ui/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "vendor/stockfish",
+        "to": "stockfish"
+      },
+      {
+        "from": "licences",
+        "to": "licences"
+      }
+    ],
+    "extraFiles": [
+      {
+        "from": "LISEZMOI-LICENCES.txt",
+        "to": "LISEZMOI-LICENCES.txt"
+      }
+    ],
+    "asar": true,
+    "electronLanguages": [
+      "fr",
+      "en-US"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Rayans-Ouvertures-${version}-Windows-x64.${ext}"
+    }
+  }
+}

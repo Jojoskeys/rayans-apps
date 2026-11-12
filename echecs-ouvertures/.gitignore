@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-ui/
+vendor/
+.cache/
+.donnees-dev/
+launcher/
+rayans-launcher.json

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rayan's Ouvertures</title>
+<link rel="stylesheet" href="chessground.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">♞ Rayan's Ouvertures</div>
+  <nav class="tabs" role="tablist" aria-label="Vue">
+    <button class="tab active" id="tab-rep" role="tab" aria-selected="true">Répertoire</button>
+    <button class="tab" id="tab-ex" role="tab" aria-selected="false">Entraînement</button>
+  </nav>
+  <div class="engine" id="engine-badge">Moteur : démarrage…</div>
+</header>
+<main class="layout">
+  <aside class="sidebar">
+    <form id="import-form" class="card">
+      <label for="pseudo">Pseudo Chess.com</label>
+      <div class="row">
+        <input id="pseudo" autocomplete="off" spellcheck="false" placeholder="ex. MagnusCarlsen" required>
+        <button type="submit" id="btn-import">Importer</button>
+      </div>
+      <div id="import-status" class="status" aria-live="polite"></div>
+      <div class="progress" id="import-progress" hidden><div></div></div>
+      <div class="row" id="import-actions" hidden><button type="button" class="ghost" id="btn-import-cancel">Interrompre</button></div>
+    </form>
+    <div class="card">
+      <div class="card-title">Analyse des ouvertures</div>
+      <p class="muted small">Stockfish évalue vos coups joués hors théorie dans les 15 premiers coups, puis en tire des positions à travailler.</p>
+      <label class="field">Parties (les plus récentes)
+        <select id="an-nombre"><option>20</option><option selected>50</option><option>100</option><option>200</option><option>500</option></select>
+      </label>
+      <label class="field">Cadence
+        <select id="an-cadence"><option value="">Toutes</option><option value="bullet">Bullet</option><option value="blitz">Blitz</option><option value="rapid">Rapide</option><option value="daily">Par jour</option></select>
+      </label>
+      <label class="field">Profondeur <select id="an-depth"></select></label>
+      <div class="row"><button type="button" id="btn-analyse">Analyser mes ouvertures</button><button type="button" class="ghost" id="btn-analyse-cancel" hidden>Interrompre</button></div>
+      <div id="an-status" class="status" aria-live="polite"></div>
+      <div class="progress" id="an-progress" hidden><div></div></div>
+    </div>
+    <div class="muted small" id="data-dir"></div>
+  </aside>
+
+  <section id="view-rep" class="view">
+    <div class="card" id="rep-summary"></div>
+    <div class="rep-cols">
+      <div><h2>⚪ Avec les Blancs</h2><div id="rep-w" class="rep-list"></div></div>
+      <div><h2>⚫ Avec les Noirs</h2><div id="rep-b" class="rep-list"></div></div>
+    </div>
+  </section>
+
+  <section id="view-ex" class="view ex-view" hidden>
+    <div class="board-col">
+      <div class="player-line" id="ex-top"></div>
+      <div class="board-wrap"><div id="board"></div></div>
+      <div class="player-line" id="ex-bottom"></div>
+      <div id="ex-promo" class="promo" hidden></div>
+    </div>
+    <div class="ex-side">
+      <div class="card">
+        <div class="row">
+          <select id="ex-color" aria-label="Couleur"><option value="">Les deux couleurs</option><option value="w">Avec les Blancs</option><option value="b">Avec les Noirs</option></select>
+          <select id="ex-family" aria-label="Ouverture"><option value="">Toutes les ouvertures</option></select>
+          <label><input type="checkbox" id="ex-due" checked> À faire seulement</label>
+        </div>
+        <div id="ex-counts"></div>
+      </div>
+      <div class="card" id="ex-panel"></div>
+    </div>
+  </section>
+</main>
+<div id="toast" class="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+Rayan's Ouvertures — licences et éléments de redistribution
+=================================================================
+
+Cette application est un logiciel libre distribué sous licence GNU GPL version 3 ou ultérieure
+(fichier LICENSE dans le code source). Elle est gratuite et ne nécessite aucune clé d'API.
+
+Composants embarqués (textes complets dans le dossier « licences » des ressources de l'application) :
+
+- Stockfish 19 (binaire officiel « universal », tag sf_19) — GNU GPL v3.
+  Auteurs : voir Stockfish-AUTHORS.txt. Source correspondante :
+  https://github.com/official-stockfish/Stockfish/tree/sf_19
+  Le binaire est fourni inchangé, tel que publié sur
+  https://github.com/official-stockfish/Stockfish/releases/tag/sf_19 (empreintes SHA-256 dans
+  stockfish/SOURCE.txt). Le réseau neuronal NNUE est intégré au binaire officiel.
+- Base d'ouvertures lichess-org/chess-openings — CC0 1.0 (domaine public).
+  https://github.com/lichess-org/chess-openings
+- chessground 9.2.1 (échiquier, y compris le jeu de pièces « cburnett ») — GNU GPL v3 ou ultérieure.
+  https://github.com/lichess-org/chessground
+- chess.js 1.4.0 (règles du jeu) — licence BSD à 2 clauses. https://github.com/jhlywa/chess.js
+- Electron 44.10.0 (environnement d'exécution, inclut Node.js et Chromium) — licence MIT ;
+  licences de Chromium et de Node.js : fichiers LICENSE et LICENSES.chromium.html fournis avec l'application.
+
+Service consulté (sans compte ni clé) : API publique Chess.com (import de vos parties).
+Aucune donnée n'est envoyée ailleurs.
+Le code source complet de l'application est disponible avec cette distribution (dépôt Git).
