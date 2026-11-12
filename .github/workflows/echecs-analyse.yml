@@ -90,14 +90,14 @@ jobs:
       # Rayan's Launcher : fiche rayans-launcher.json ajoutée au ZIP Windows. Le launcher la lit quand le ZIP
       # est déposé dans « Documents\Rayan's Launcher\À ajouter » ou choisi avec « Ajouter un ZIP ».
       # Version vue par le launcher : majeur.mineur de package.json, correctif = numéro d'exécution de la CI
-      # (chaque construction est ainsi une mise à jour).
+      # + 100 (chaque construction est ainsi une mise à jour, au-delà des versions construites dans l'ancien dépôt).
       - name: Paquet pour Rayan's Launcher
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           $pkg = Get-Content package.json -Raw | ConvertFrom-Json
           $p = $pkg.version.Split('.')
-          $v = "$($p[0]).$($p[1]).$env:GITHUB_RUN_NUMBER"
+          $v = "$($p[0]).$($p[1]).$([int]$env:GITHUB_RUN_NUMBER + 100)"
           $sha = $env:GITHUB_SHA.Substring(0, 7)
           $fiche = [ordered]@{
             id = 'analyse-echecs'

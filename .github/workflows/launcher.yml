@@ -83,7 +83,7 @@ jobs:
         run: |
           node scripts/demo.mjs init
           node scripts/demo.mjs add
-      # Version 0.1.<numéro d'exécution> : chaque construction est une mise à jour pour le launcher installé.
+      # Version 0.1.<numéro d'exécution + 100> (au-delà des versions de l'ancien dépôt) : chaque construction est une mise à jour pour le launcher installé.
       # Signature Authenticode seulement si les secrets WINDOWS_CERTIFICATE (fichier .pfx en base64) et
       # WINDOWS_CERTIFICATE_PASSWORD existent ; sinon installateurs non signés, comme avant.
       - name: Réglages de construction (version, signature éventuelle)
@@ -92,7 +92,7 @@ jobs:
           CERT_B64: ${{ secrets.WINDOWS_CERTIFICATE }}
           CERT_PWD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
         run: |
-          $conf = [ordered]@{ version = "0.1.$env:GITHUB_RUN_NUMBER" }
+          $conf = [ordered]@{ version = "0.1.$([int]$env:GITHUB_RUN_NUMBER + 100)" }
           if ($env:CERT_B64) {
             $pfx = Join-Path $env:RUNNER_TEMP 'cert.pfx'
             [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:CERT_B64))
