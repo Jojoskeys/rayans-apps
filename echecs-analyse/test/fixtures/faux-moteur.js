@@ -1,8 +1,17 @@
 #!/usr/bin/env node
 // Faux moteur UCI pour les tests : plante (code 3) aux N premiers « go », N = FAUX_MOTEUR_PLANTAGES.
+// FAUX_MOTEUR_DELAI (ms) : délai avant la réponse à « go » (interrompu par « stop »).
 const fs = require('fs');
 const counter = process.env.FAUX_MOTEUR_COMPTEUR;
 const max = parseInt(process.env.FAUX_MOTEUR_PLANTAGES || '0', 10);
+const delay = parseInt(process.env.FAUX_MOTEUR_DELAI || '0', 10);
+let pending = null;
+function answer() {
+  pending = null;
+  console.log('info depth 22 multipv 1 score cp 30 nodes 1 pv e2e4 e7e5');
+  console.log('info depth 22 multipv 2 score cp 20 nodes 1 pv d2d4 d7d5');
+  console.log('bestmove e2e4');
+}
 require('readline').createInterface({ input: process.stdin }).on('line', (l) => {
   if (l === 'uci') console.log('id name Faux 1\nuciok');
   else if (l === 'isready') console.log('readyok');
@@ -10,8 +19,6 @@ require('readline').createInterface({ input: process.stdin }).on('line', (l) => 
     const n = counter && fs.existsSync(counter) ? +fs.readFileSync(counter, 'utf8') : 0;
     if (counter) fs.writeFileSync(counter, String(n + 1));
     if (n < max) { process.stderr.write('Illegal instruction (simulé)\n'); process.exit(3); }
-    console.log('info depth 22 multipv 1 score cp 30 nodes 1 pv e2e4 e7e5');
-    console.log('info depth 22 multipv 2 score cp 20 nodes 1 pv d2d4 d7d5');
-    console.log('bestmove e2e4');
-  } else if (l === 'quit') process.exit(0);
+    if (delay) pending = setTimeout(answer, delay); else answer();
+  } else if (l === 'stop') { if (pending) { clearTimeout(pending); answer(); } } else if (l === 'quit') process.exit(0);
 });

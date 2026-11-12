@@ -3,13 +3,13 @@ Bonjour Claude. Peux-tu m’expliquer de façon pédagogique, en français, ce c
 Partie : Hikaru (3465) – JokerSicilian (2867), 2026.10.23 — https://www.chess.com/game/live/185803756742
 Position avant le coup (FEN) : r2q1rk1/pb1nppbp/2p2np1/1p6/3P4/1B3NNP/PPP1QPP1/R1B2RK1 b - - 5 11
 Camp au trait : Noirs
-Coup joué : 11... Te8 (UCI f8e8) — classé « Gaffe », perte de 44,6 points de chances de gain
+Coup joué : 11... Te8 (UCI f8e8) — classé « Gaffe », perte de 45,4 points de chances de gain
 Meilleur coup selon Stockfish : 11... a5 (UCI a7a5)
-Scores (centipions, point de vue des Noirs) : meilleur coup +0.21 ; coup joué −6.88
+Scores (centipions, point de vue des Noirs) : meilleur coup +0.25 ; coup joué −7.06
 Notation algébrique française : R roi, D dame, T tour, F fou, C cavalier (les coups UCI sont aussi indiqués).
 Moteur : Stockfish 19, profondeur 22
-Variante Stockfish n° 1 (+0.21) : 11... a5 12. a4 bxa4 13. Fxa4 c5 14. Td1 Dc7 15. Fe3 Cd5 16. Fxd7 Cxe3 17. Dxe3
-Variante Stockfish n° 2 (+0.20) : 11... Dc7 12. a4 bxa4 13. Fxa4 c5 14. Td1 a5 15. Fe3 Cd5 16. Fxd7 Cxe3 17. Dxe3
-Variante après le coup joué (−6.88) : 11... Te8 12. Fxf7+ Rh8 13. Fxe8 Dxe8 14. Te1 c5 15. dxc5 Cxc5 16. Fe3 Ce6 17. Tad1
+Variante Stockfish n° 1 (+0.25) : 11... a5 12. a4 b4 13. Td1 e6 14. c3 c5 15. cxb4 cxb4 16. Fg5 h6 17. Ff4
+Variante Stockfish n° 2 (+0.23) : 11... Dc7 12. a4 bxa4 13. Txa4 c5 14. Fd2 cxd4 15. Txd4 Cc5 16. Fa2 a5 17. c3
+Variante après le coup joué (−7.06) : 11... Te8 12. Fxf7+ Rh8 13. Fxe8 Dxe8 14. Te1 c5 15. dxc5 Cxc5 16. Fe3 Ce6 17. Cd4
 
 Merci de t’appuyer uniquement sur ces données : vérifie que chaque coup que tu cites est légal dans la position donnée, et signale-le si une explication est incertaine.

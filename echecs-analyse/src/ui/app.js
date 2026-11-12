@@ -5,6 +5,7 @@ import scoring from '../core/scoring.js';
 import promptMod from '../core/prompt.js';
 import classifyMod from '../core/classify.js';
 import chessutil from '../core/chessutil.js';
+import { renderPerf, renderBilan, periodOptions, periodRange, TIME_CLASSES } from './bilan-view.js';
 
 const { formatScore, scoreWin } = scoring;
 const { buildClaudePrompt } = promptMod;
@@ -35,6 +36,7 @@ const S = {
   ply: 0, orientation: 'white', catNav: null,
   explore: null, // { basePly, moves:[{fenBefore,uci,san,fenAfter,result,pending,error}], index }
   analysisPoll: null, importPoll: null, lastAnalysisDone: -1,
+  view: 'partie', bilanSummaries: null, bilanFor: null, bilanLoading: false, lastProcessed: null,
 };
 
 // ---------- Échiquier ----------
@@ -422,27 +424,39 @@ function renderExploreBanner() {
   $('explore-text').textContent = `Variante explorée ${from} : ${line || '(aucun coup)'}`;
 }
 
+function settingsDepth() { return S.etat && S.etat.settings ? S.etat.settings.depth : 22; }
+
 function renderAnalysisCard(st) {
   const card = $('analysis-card');
   if (!S.report) { card.hidden = true; return; }
   card.hidden = false;
   const a = S.report.analysis;
   const running = st && st.status === 'running' && st.gameId === S.gameId;
+  const qItems = (st && st.queue && st.queue.items) || [];
+  const qPos = qItems.findIndex((i) => i.gameId === S.gameId);
+  const queued = !running && qPos >= 0;
   const total = S.report.plies.length;
   const done = running ? st.done : (a ? a.analyzedPlies : 0);
   const status = $('analysis-status');
-  $('btn-analyse-cancel').hidden = !running;
-  $('btn-analyse').hidden = running || (a && a.complete);
-  $('btn-analyse').textContent = a && a.analyzedPlies > 0 ? 'Reprendre l’analyse' : 'Analyser';
+  const depth = settingsDepth();
+  const otherDepth = a && a.settings && a.settings.depth !== depth;
+  $('btn-analyse-cancel').hidden = !(running || queued);
+  $('btn-analyse-cancel').textContent = running ? 'Annuler' : 'Retirer de la file';
+  $('btn-analyse').hidden = running || (a && a.complete && !otherDepth);
+  $('btn-analyse').textContent = queued ? 'Analyser maintenant'
+    : a && a.complete && otherDepth ? `Réanalyser à la profondeur ${depth}`
+      : a && a.analyzedPlies > 0 && !otherDepth ? 'Reprendre l’analyse' : 'Analyser';
   const prog = $('analysis-progress');
   prog.hidden = !(running || (a && !a.complete && a.analyzedPlies > 0));
   prog.firstElementChild.style.width = `${total ? (100 * done) / total : 0}%`;
   const eng = (a && a.engine && a.engine.name) || (S.etat && S.etat.engine && S.etat.engine.name) || 'Stockfish';
-  if (running) { status.className = st.warning ? 'status warn' : 'status'; status.textContent = `Analyse en cours : ${done}/${total} demi-coups (${eng}, profondeur ${S.etat.settings.depth})…${st.warning ? ` ${st.warning}` : ''}`; }
+  const err = st && st.errors && st.errors[S.gameId];
+  if (running) { status.className = st.warning ? 'status warn' : 'status'; status.textContent = `Analyse en cours : ${done}/${total} demi-coups (${eng}, profondeur ${st.depth})…${st.warning ? ` ${st.warning}` : ''}`; }
+  else if (queued) { status.className = 'status'; status.textContent = `En file d’attente (position ${qPos + 1} sur ${qItems.length}, profondeur ${qItems[qPos].depth})${st.queue.paused ? ' — file en pause' : ''}.${a && a.analyzedPlies ? ` Déjà fait : ${a.analyzedPlies}/${total} demi-coups.` : ''}`; }
   else if (a && a.complete) { status.className = 'status ok'; status.textContent = `Analyse complète enregistrée : ${a.engine.name}, profondeur ${a.settings.depth}, MultiPV ${a.settings.multipv}, ${a.engine.threads} fil(s).${a.engine.fallback ? ` ${a.engine.fallback}` : ''}`; }
-  else if (a && a.analyzedPlies > 0) { status.className = 'status warn'; status.textContent = `Analyse partielle : ${a.analyzedPlies}/${total} demi-coups. Vous pouvez la reprendre.${st && st.status === 'error' && st.gameId === S.gameId ? ` Erreur : ${st.error}` : ''}`; }
+  else if (a && a.analyzedPlies > 0) { status.className = 'status warn'; status.textContent = `Analyse partielle : ${a.analyzedPlies}/${total} demi-coups (profondeur ${a.settings.depth}). Vous pouvez la reprendre.${err ? ` Erreur : ${err}` : ''}`; }
   else if (total === 0) { status.className = 'status'; status.textContent = 'Partie sans coup : rien à analyser.'; $('btn-analyse').hidden = true; }
-  else { status.className = 'status'; status.textContent = 'Partie non analysée.'; }
+  else { status.className = err ? 'status bad' : 'status'; status.textContent = err ? `Échec de l’analyse : ${err}` : 'Partie non analysée.'; }
 }
 
 function renderHead() {
@@ -478,7 +492,7 @@ async function loadPlayers(select) {
   S.player = sel.value || null;
   await loadGames();
 }
-$('player-select').addEventListener('change', () => { S.player = $('player-select').value; loadGames(); });
+$('player-select').addEventListener('change', async () => { S.player = $('player-select').value; S.bilanSummaries = null; await loadGames(); renderBilanView(); });
 $('game-filter').addEventListener('input', renderGames);
 
 async function loadGames() {
@@ -499,14 +513,17 @@ function renderGames() {
     if (g.result === '0-1') { res = white ? 'loss' : 'win'; txt = white ? 'Perte' : 'Gain'; }
     if (g.result === '1/2-1/2') txt = 'Nulle';
     const d = g.endTime ? new Date(g.endTime * 1000).toLocaleDateString('fr-FR') : g.date;
-    const an = g.analysis ? (g.analysis.complete ? ' · ✓ analysée' : ' · analyse partielle') : '';
+    const queued = queuedIds().has(g.id);
+    const an = (g.analysis ? (g.analysis.complete ? ` · ✓ analysée${g.analysis.depth && g.analysis.depth !== settingsDepth() ? ` (prof. ${g.analysis.depth})` : ''}` : ' · analyse partielle') : '') + (queued ? ' · ⏳ en file' : '');
     return `<li data-id="${esc(g.id)}" class="${g.id === S.gameId ? 'active' : ''}"><span class="opp">${white ? '⚪' : '⚫'} vs ${esc(opp.username)} (${opp.rating || '?'})</span><span class="res ${res}">${txt}</span>
       <span class="meta">${esc(d)} · ${esc(g.timeClass || '')} · ${Math.ceil(g.plyCount / 2)} coups${an}</span></li>`;
   }).join('');
 }
 $('games').addEventListener('click', (e) => {
   const li = e.target.closest('li');
-  if (li) openGame(li.dataset.id);
+  if (!li) return;
+  if (S.view !== 'partie') setView('partie');
+  openGame(li.dataset.id);
 });
 
 async function openGame(id, keepPly) {
@@ -525,30 +542,183 @@ async function openGame(id, keepPly) {
 
 $('btn-analyse').addEventListener('click', async () => {
   if (!S.gameId) return;
-  try { lastStatus = await api(`/api/analyse/${encodeURIComponent(S.gameId)}/lancer`, {}); renderAnalysisCard(lastStatus); pollAnalysis(); } catch (e) { toast(e.message, true); }
+  try { lastStatus = await api(`/api/analyse/${encodeURIComponent(S.gameId)}/lancer`, { depth: settingsDepth() }); renderQueue(lastStatus); renderAnalysisCard(lastStatus); pollAnalysis(); } catch (e) { toast(e.message, true); }
 });
 $('btn-analyse-cancel').addEventListener('click', async () => {
-  lastStatus = await api('/api/analyse/annuler', {});
+  lastStatus = await api('/api/analyse/annuler', { gameId: S.gameId });
   if (S.gameId) await openGame(S.gameId, true);
+  renderQueue(lastStatus);
   loadGames();
 });
 
+function queuedIds() {
+  const items = (lastStatus && lastStatus.queue && lastStatus.queue.items) || [];
+  return new Set(items.map((i) => i.gameId));
+}
+
+/**
+ * Suivi permanent de la file : toutes les 0,8 s pendant un calcul, toutes les 5 s sinon.
+ * La partie affichée est rechargée à chaque demi-coup calculé ; l'historique et le bilan à chaque partie terminée.
+ */
 function pollAnalysis() {
   clearTimeout(S.analysisPoll);
   const tick = async () => {
+    let st = null;
     try {
-      const st = await api('/api/analyse');
+      st = await api('/api/analyse');
+      const prevQueued = queuedIds();
       lastStatus = st;
-      if (st.gameId === S.gameId && st.done !== S.lastAnalysisDone) {
+      if (st.gameId === S.gameId && st.status === 'running' && st.done !== S.lastAnalysisDone) {
         S.lastAnalysisDone = st.done;
         await openGame(S.gameId, true);
       } else renderAnalysisCard(st);
-      if (st.status === 'running') S.analysisPoll = setTimeout(tick, 800);
-      else { if (st.gameId === S.gameId) await openGame(S.gameId, true); loadGames(); }
-    } catch (e) { S.analysisPoll = setTimeout(tick, 2000); }
+      const processed = `${st.queue.processed}|${st.status}|${st.gameId}`;
+      if (S.lastProcessed !== null && processed !== S.lastProcessed) {
+        if (S.gameId && st.status !== 'running') await openGame(S.gameId, true);
+        S.bilanSummaries = null; S.bilanFor = null;
+        await loadGames();
+        if (S.view === 'bilan') renderBilanView();
+      } else if ([...prevQueued].join() !== [...queuedIds()].join()) renderGames();
+      S.lastProcessed = processed;
+      renderQueue(st);
+    } catch (e) { /* serveur momentanément indisponible : nouvel essai */ }
+    S.analysisPoll = setTimeout(tick, st && st.status === 'running' ? 800 : 5000);
   };
   tick();
 }
+
+function fmtDuration(ms) {
+  if (ms == null) return null;
+  const min = Math.round(ms / 60000);
+  if (min < 1) return 'moins d’une minute';
+  if (min < 60) return `${min} min`;
+  const h = Math.floor(min / 60); const m = min % 60;
+  return `${h} h${m ? ` ${String(m).padStart(2, '0')}` : ''}`;
+}
+
+function gameName(id) {
+  const g = S.games.find((x) => x.id === id);
+  if (!g) return 'une partie';
+  const me = (S.player || '').toLowerCase();
+  const opp = g.white.username.toLowerCase() === me ? g.black : g.white;
+  return `vs ${opp.username}`;
+}
+
+function renderQueue(st) {
+  if (!st || !st.queue) return;
+  const q = st.queue;
+  const s = $('queue-status');
+  const running = st.status === 'running';
+  const eta = fmtDuration(q.etaMs);
+  $('queue-actions').hidden = !(q.length || running);
+  $('q-pause').hidden = !(running && !q.paused);
+  $('q-resume').hidden = !(q.paused && q.length);
+  const prog = $('queue-progress');
+  const totalGames = q.processed + q.length;
+  prog.hidden = !(running || q.length);
+  prog.firstElementChild.style.width = `${totalGames ? (100 * (q.processed + (running && st.total ? st.done / st.total : 0))) / totalGames : 0}%`;
+  if (running) {
+    s.className = st.warning ? 'status warn' : 'status';
+    s.textContent = `En cours : ${gameName(st.gameId)} (${st.done}/${st.total || '?'} demi-coups, profondeur ${st.depth}). ${q.length - 1} autre(s) en attente · ${q.processed} terminée(s)${q.failed ? `, ${q.failed} en échec` : ''}${eta ? ` · reste ≈ ${eta}` : ' · durée estimée après quelques coups'}.`;
+  } else if (q.paused && q.length) {
+    s.className = 'status warn';
+    s.textContent = `${q.message ? `${q.message} ` : 'File en pause. '}${q.length} partie(s) en attente${eta ? ` (≈ ${eta})` : ''}.`;
+  } else if (q.processed) {
+    s.className = q.failed ? 'status warn' : 'status ok';
+    s.textContent = `File terminée : ${q.processed} partie(s) traitée(s)${q.failed ? `, dont ${q.failed} en échec` : ''}.`;
+  } else { s.className = 'status muted'; s.textContent = 'File vide. Les parties sont analysées une par une ; vous pouvez continuer à utiliser l’application.'; }
+  renderLotEstimate();
+}
+
+function renderLotEstimate() {
+  const d = +$('lot-depth').value;
+  const ms = lastStatus && lastStatus.queue && lastStatus.queue.msPerPly ? lastStatus.queue.msPerPly[d] : null;
+  const n = +$('lot-n').value;
+  $('lot-estim').textContent = ms
+    ? `Mesuré sur cet ordinateur : ≈ ${(ms / 1000).toFixed(1).replace('.', ',')} s par demi-coup à la profondeur ${d}, soit ≈ ${fmtDuration(ms * 80 * n)} pour ${n} parties de 40 coups.`
+    : 'Plus la profondeur est faible, plus c’est rapide (moins précis). Gardez la même profondeur pour comparer vos parties.';
+}
+
+$('lot-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!S.player) { toast('Importez d’abord vos parties.', true); return; }
+  try {
+    const r = await api('/api/analyse/lot', { joueur: S.player, nombre: +$('lot-n').value, cadence: $('lot-cadence').value || null, couleur: $('lot-couleur').value || null, depth: +$('lot-depth').value });
+    lastStatus = r.status;
+    toast(r.ajoutees ? `${r.ajoutees} partie(s) ajoutée(s) à la file (profondeur ${r.depth}).` : `Aucune partie à ajouter${r.dejaAnalysees ? ` (${r.dejaAnalysees} déjà analysée(s) à cette profondeur)` : ''}.`, !r.ajoutees);
+    renderQueue(lastStatus); renderGames(); pollAnalysis();
+  } catch (err) { toast(err.message, true); }
+});
+$('lot-n').addEventListener('change', renderLotEstimate);
+$('q-pause').addEventListener('click', async () => { lastStatus = await api('/api/analyse/pause', {}); renderQueue(lastStatus); renderAnalysisCard(lastStatus); });
+$('q-resume').addEventListener('click', async () => { lastStatus = await api('/api/analyse/reprendre', {}); renderQueue(lastStatus); pollAnalysis(); });
+$('q-clear').addEventListener('click', async () => {
+  const b = $('q-clear');
+  if (!b.dataset.confirm) { b.dataset.confirm = '1'; b.textContent = 'Confirmer : vider'; setTimeout(() => { delete b.dataset.confirm; b.textContent = 'Vider la file'; }, 4000); return; }
+  delete b.dataset.confirm; b.textContent = 'Vider la file';
+  lastStatus = await api('/api/analyse/vider', {});
+  renderQueue(lastStatus); renderGames(); renderAnalysisCard(lastStatus);
+});
+
+// ---------- Vue Bilan ----------
+function setView(v) {
+  S.view = v;
+  const bilan = v === 'bilan';
+  $('bilan').hidden = !bilan;
+  document.querySelector('.board-zone').hidden = bilan;
+  document.querySelector('.analysis').hidden = bilan;
+  document.querySelector('.layout').classList.toggle('mode-bilan', bilan);
+  for (const [id, on] of [['tab-partie', !bilan], ['tab-bilan', bilan]]) { $(id).classList.toggle('active', on); $(id).setAttribute('aria-selected', String(on)); }
+  if (bilan) renderBilanView(); else { cg.redrawAll(); renderAll(); }
+}
+$('tab-partie').addEventListener('click', () => setView('partie'));
+$('tab-bilan').addEventListener('click', () => setView('bilan'));
+
+function bilanFilters() {
+  return { timeClass: $('f-cadence').value || null, color: $('f-couleur').value || null, ...periodRange($('f-periode').value) };
+}
+function fillPeriodOptions() {
+  const sel = $('f-periode');
+  const cur = sel.value || 'tout';
+  const opts = periodOptions(S.games);
+  sel.innerHTML = opts.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join('');
+  sel.value = opts.some(([v]) => v === cur) ? cur : 'tout';
+}
+
+async function renderBilanView() {
+  if (S.view !== 'bilan') return;
+  const me = S.player;
+  const p = S.etat && S.etat.players.find((x) => x.key === me);
+  $('bilan-player').textContent = me ? `Joueur : ${p ? p.username : me}` : 'Aucun joueur importé';
+  fillPeriodOptions();
+  const f = bilanFilters();
+  const grain = $('f-grain').value;
+  renderPerf($('perf-card'), S.games, me || '', { ...f, ratedOnly: $('f-classees').checked }, grain);
+  const matching = S.games.filter((g) => {
+    const white = g.white.username.toLowerCase() === (me || '').toLowerCase();
+    return (!f.timeClass || g.timeClass === f.timeClass) && (!f.color || f.color === (white ? 'w' : 'b'))
+      && (!f.from || (g.endTime && g.endTime >= f.from)) && (!f.to || (g.endTime && g.endTime <= f.to));
+  }).length;
+  if (!me) { $('bilan-card').innerHTML = ''; return; }
+  if (S.bilanFor !== me || !S.bilanSummaries) {
+    renderBilan($('bilan-card'), null);
+    if (S.bilanLoading) return;
+    S.bilanLoading = true;
+    try {
+      const r = await api(`/api/bilan?joueur=${encodeURIComponent(me)}`);
+      S.bilanSummaries = r.summaries; S.bilanFor = me;
+    } catch (e) { $('bilan-card').innerHTML = `<div class="status bad">${esc(e.message)}</div>`; return; } finally { S.bilanLoading = false; }
+    return renderBilanView();
+  }
+  renderBilan($('bilan-card'), S.bilanSummaries, me, f, grain, matching);
+}
+for (const id of ['f-cadence', 'f-couleur', 'f-periode', 'f-grain', 'f-classees']) $(id).addEventListener('change', renderBilanView);
+$('bilan-card').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-open]');
+  if (!b) return;
+  setView('partie');
+  openGame(b.dataset.open);
+});
 
 // ---------- Import ----------
 $('import-form').addEventListener('submit', async (e) => {
@@ -588,28 +758,41 @@ function renderSettings() {
   $('set-leniency').value = Math.round(s.leniency * 100);
   $('set-leniency-val').textContent = `${Math.round(s.leniency * 100)} % (à 800 Elo et moins, progressif jusqu’à 1400)`;
   $('set-cloud').checked = s.useCloud; $('set-tb').checked = s.useTablebase;
-  $('set-depth').textContent = s.depth; $('set-multipv').textContent = s.multipv;
+  const depths = S.etat.depths || [12, 14, 16, 18, 20, 22, 24];
+  for (const id of ['set-depth', 'lot-depth']) {
+    $(id).innerHTML = depths.map((d) => `<option value="${d}">${d}${d === 22 ? ' (référence)' : ''}</option>`).join('');
+    $(id).value = String(s.depth);
+  }
+  $('set-multipv').textContent = s.multipv;
+  updateBadge();
+  renderLotEstimate();
   $('set-datadir').textContent = S.etat.dataDir;
 }
 async function saveSettings(patch) {
   S.etat.settings = await api('/api/reglages', patch);
   renderSettings();
+  if (patch.leniency !== undefined) { S.bilanSummaries = null; renderBilanView(); }
+  if (patch.depth !== undefined) renderGames();
   if (S.gameId) openGame(S.gameId, true);
 }
 $('set-leniency').addEventListener('change', (e) => saveSettings({ leniency: e.target.value / 100 }));
 $('set-cloud').addEventListener('change', (e) => saveSettings({ useCloud: e.target.checked }));
 $('set-tb').addEventListener('change', (e) => saveSettings({ useTablebase: e.target.checked }));
+for (const id of ['set-depth', 'lot-depth']) $(id).addEventListener('change', (e) => saveSettings({ depth: +e.target.value }));
+
+function updateBadge() {
+  const eng = S.etat.engine;
+  const rel = S.etat.stockfishRelease;
+  $('engine-badge').textContent = eng.available
+    ? `Moteur : ${eng.name} natif${rel ? ` (version stable officielle ${rel.tag})` : ''} · ${eng.threads} fil(s) · profondeur ${S.etat.settings.depth} · MultiPV ${S.etat.settings.multipv}`
+    : `Moteur indisponible : ${eng.error}`;
+}
 
 // ---------- Démarrage ----------
 async function init() {
   try {
     S.etat = await api('/api/etat');
   } catch (e) { $('engine-badge').textContent = `Erreur : ${e.message}`; return; }
-  const eng = S.etat.engine;
-  const rel = S.etat.stockfishRelease;
-  $('engine-badge').textContent = eng.available
-    ? `Moteur : ${eng.name} natif${rel ? ` (version stable officielle ${rel.tag})` : ''} · ${eng.threads} fil(s) · profondeur ${S.etat.settings.depth} · MultiPV ${S.etat.settings.multipv}`
-    : `Moteur indisponible : ${eng.error}`;
   renderSettings();
   const players = S.etat.players;
   if (players.length) { $('btn-import').textContent = 'Mettre à jour'; $('pseudo').value = players[0].username; }
@@ -618,7 +801,9 @@ async function init() {
   if (st.status === 'running') pollImport();
   const as = await api('/api/analyse');
   lastStatus = as;
-  if (as.status === 'running') { await openGame(as.gameId); pollAnalysis(); }
+  if (as.status === 'running') await openGame(as.gameId);
+  renderQueue(as);
   renderAll();
+  pollAnalysis();
 }
 init();

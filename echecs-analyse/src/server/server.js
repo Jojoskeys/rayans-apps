@@ -16,7 +16,8 @@ const { createStore } = require('./store');
 const { Engine } = require('./engine');
 const { createExternal } = require('./external');
 const { createImporter } = require('./importer');
-const { createAnalyzer, DEFAULT_SETTINGS } = require('./analyzer');
+const { createAnalyzer, DEFAULT_SETTINGS, DEPTHS } = require('./analyzer');
+const { createSummaries } = require('./summaries');
 const { createOpenings } = require('../core/openings');
 const { buildReport } = require('../core/report');
 
@@ -35,6 +36,7 @@ function startServer(opts) {
   const getSettings = () => ({ ...DEFAULT_SETTINGS, ...store.loadSettings() });
   const importer = createImporter({ store, fetchImpl });
   const analyzer = createAnalyzer({ store, engineRef: () => engine, external, getSettings, openings });
+  const summaries = createSummaries({ store, openings, getSettings });
   const token = crypto.randomBytes(24).toString('hex');
   let actualPort = null;
 
@@ -90,7 +92,7 @@ function startServer(opts) {
     if (m === 'GET' && p === '/api/etat') {
       let engineInfo = { name: engine.name, available: true, threads: engine.threads, hash: engine.hash };
       try { await engine.start(); engineInfo.name = engine.name; } catch (e) { engineInfo = { available: false, error: e.message }; }
-      return send(res, 200, { appVersion, engine: engineInfo, stockfishRelease, settings: getSettings(), dataDir, players: store.listPlayers() });
+      return send(res, 200, { appVersion, engine: engineInfo, stockfishRelease, settings: getSettings(), depths: DEPTHS, dataDir, players: store.listPlayers() });
     }
     if (m === 'GET' && p === '/api/reglages') return send(res, 200, getSettings());
     if (m === 'POST' && p === '/api/reglages') {
@@ -99,6 +101,7 @@ function startServer(opts) {
       if (typeof b.leniency === 'number' && b.leniency >= 0 && b.leniency <= 0.5) cur.leniency = b.leniency;
       if (typeof b.useCloud === 'boolean') cur.useCloud = b.useCloud;
       if (typeof b.useTablebase === 'boolean') cur.useTablebase = b.useTablebase;
+      if (DEPTHS.includes(b.depth)) cur.depth = b.depth;
       store.saveSettings(cur);
       return send(res, 200, getSettings());
     }
@@ -123,10 +126,48 @@ function startServer(opts) {
     mm = p.match(/^\/api\/analyse\/([A-Za-z0-9_.-]+)\/lancer$/);
     if (m === 'POST' && mm) {
       if (!store.findGame(mm[1])) return send(res, 404, { error: 'Partie introuvable' });
-      return send(res, 200, await analyzer.start(mm[1]));
+      const b = await readBody(req);
+      return send(res, 200, await analyzer.start(mm[1], typeof b.depth === 'number' ? b.depth : undefined));
     }
-    if (m === 'POST' && p === '/api/analyse/annuler') { await analyzer.cancel(); return send(res, 200, analyzer.status()); }
+    if (m === 'POST' && p === '/api/analyse/annuler') {
+      const b = await readBody(req);
+      if (typeof b.gameId === 'string') return send(res, 200, await analyzer.cancelGame(b.gameId));
+      return send(res, 200, await analyzer.pause());
+    }
+    if (m === 'POST' && p === '/api/analyse/pause') return send(res, 200, await analyzer.pause());
+    if (m === 'POST' && p === '/api/analyse/reprendre') return send(res, 200, analyzer.resume());
+    if (m === 'POST' && p === '/api/analyse/vider') return send(res, 200, await analyzer.clear());
+    if (m === 'POST' && p === '/api/analyse/lot') {
+      // Sélection des parties d'un lot : les plus récentes du joueur, filtrées par cadence et couleur,
+      // sans celles déjà analysées complètement à cette profondeur (ou plus) ni celles déjà en file.
+      const b = await readBody(req);
+      const joueur = String(b.joueur || '');
+      const nombre = Math.max(1, Math.min(1000, parseInt(b.nombre, 10) || 10));
+      const depth = DEPTHS.includes(b.depth) ? b.depth : getSettings().depth;
+      const me = joueur.toLowerCase();
+      const analyses = store.listAnalyses();
+      const chosen = [];
+      let already = 0;
+      for (const g of gameList(joueur)) {
+        if (chosen.length >= nombre) break;
+        if (b.cadence && g.timeClass !== b.cadence) continue;
+        const color = g.white.username.toLowerCase() === me ? 'w' : 'b';
+        if (b.couleur && b.couleur !== color) continue;
+        if (b.classees && !g.rated) continue;
+        if (!g.plyCount) continue;
+        const a = analyses[g.id];
+        if (a && a.complete && a.depth >= depth) { already++; continue; }
+        if (analyzer.isQueued(g.id)) continue;
+        chosen.push(g.id);
+      }
+      const r = analyzer.enqueue(chosen, depth);
+      return send(res, 200, { ajoutees: r.added, dejaAnalysees: already, depth, status: r.status });
+    }
     if (m === 'GET' && p === '/api/analyse') return send(res, 200, analyzer.status());
+    if (m === 'GET' && p === '/api/bilan') {
+      const u = String(url.searchParams.get('joueur') || '');
+      return send(res, 200, { summaries: await summaries.forPlayer(u), leniency: getSettings().leniency });
+    }
     if (m === 'POST' && p === '/api/explorer') {
       const b = await readBody(req);
       if (typeof b.fen !== 'string' || typeof b.uci !== 'string' || !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(b.uci)) return send(res, 400, { error: 'Paramètres invalides' });
@@ -180,7 +221,7 @@ function startServer(opts) {
         engine: () => engine,
         async close() {
           importer.cancel();
-          try { await Promise.race([analyzer.cancel(), new Promise((r) => setTimeout(r, 3000))]); } catch (e) { /* */ }
+          try { await Promise.race([analyzer.close(), new Promise((r) => setTimeout(r, 3000))]); } catch (e) { /* */ }
           engine.stop();
           const closed = new Promise((r) => server.close(() => r()));
           if (server.closeAllConnections) server.closeAllConnections();

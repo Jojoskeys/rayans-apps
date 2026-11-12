@@ -9,10 +9,12 @@ Guide utilisateur : [LISEZMOI.md](LISEZMOI.md). Règles de calcul : [REGLES-ANAL
   la vérification des en-têtes `Host`/`Origin` et l'absence de CORS, puis ouvre la fenêtre sur ce serveur.
   Fermer la fenêtre arrête le serveur et le moteur.
 - **Stockfish 19** natif (`vendor/stockfish/`, téléchargé et vérifié par SHA-256 par `scripts/fetch-stockfish.js`),
-  piloté en UCI par `src/server/engine.js` ; analyse en arrière-plan dans `src/server/analyzer.js`.
+  piloté en UCI par `src/server/engine.js` ; file d'attente d'analyses en arrière-plan dans `src/server/analyzer.js`
+  (enregistrée dans `file-attente.json`) ; résumés des parties pour le bilan, en cache, dans `src/server/summaries.js`.
 - Import Chess.com : `src/server/importer.js` ; validation des parties : `src/core/games.js`.
-- Calculs purs et testés : `src/core/` (scoring, classify, motifs, openings, prompt, report).
-- Interface : `src/ui/` (chessground + chess.js), regroupée par esbuild dans `dist-ui/`.
+- Calculs purs et testés : `src/core/` (scoring, classify, motifs, openings, prompt, report, phases, bilan,
+  performance).
+- Interface : `src/ui/` (chessground + chess.js ; vue Bilan et graphiques SVG dans `bilan-view.js`), regroupée par esbuild dans `dist-ui/`.
 - Données utilisateur : dossier `donnees` dans le dossier de l'application du système (`userData` d'Electron).
 
 ## Commandes

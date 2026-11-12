@@ -10,6 +10,10 @@
 <body>
 <header class="topbar">
   <div class="brand">♞ Analyse Échecs</div>
+  <nav class="tabs" role="tablist" aria-label="Vue">
+    <button class="tab active" id="tab-partie" role="tab" aria-selected="true">Partie</button>
+    <button class="tab" id="tab-bilan" role="tab" aria-selected="false">Bilan</button>
+  </nav>
   <div class="engine" id="engine-badge">Moteur : démarrage…</div>
   <button class="ghost" id="btn-settings" aria-expanded="false">Réglages</button>
 </header>
@@ -17,7 +21,8 @@
   <label>Assouplissement sous 1400 Elo : <input type="range" id="set-leniency" min="0" max="50" step="5"> <span id="set-leniency-val"></span></label>
   <label><input type="checkbox" id="set-cloud"> Consulter Lichess cloud-eval (positions connues)</label>
   <label><input type="checkbox" id="set-tb"> Consulter la table de finales Lichess (≤ 7 pièces)</label>
-  <p class="muted">Les réglages de classement s’appliquent immédiatement, sans recalcul. Profondeur : <b id="set-depth"></b>, MultiPV <b id="set-multipv"></b>. Données : <span id="set-datadir"></span></p>
+  <label>Profondeur d’analyse : <select id="set-depth" class="depth-select"></select> <span class="muted small">(nouvelles analyses et coups explorés ; une analyse déjà faite garde sa profondeur)</span></label>
+  <p class="muted">Les réglages de classement s’appliquent immédiatement, sans recalcul. MultiPV <b id="set-multipv"></b>. Données : <span id="set-datadir"></span></p>
 </section>
 <main class="layout">
   <aside class="sidebar">
@@ -33,6 +38,25 @@
         <button type="button" class="ghost" id="btn-import-cancel">Interrompre</button>
       </div>
     </form>
+    <div class="card" id="queue-card">
+      <div class="card-title">Analyse en arrière-plan</div>
+      <form id="lot-form" class="lot">
+        <div class="row">Les <select id="lot-n" aria-label="Nombre de parties"><option>5</option><option selected>10</option><option>25</option><option>50</option><option>100</option><option>250</option></select> dernières parties non analysées</div>
+        <div class="row">
+          <select id="lot-cadence" aria-label="Cadence du lot"><option value="">Toutes cadences</option><option value="bullet">Bullet</option><option value="blitz">Blitz</option><option value="rapid">Rapide</option><option value="daily">Quotidienne</option></select>
+          <select id="lot-couleur" aria-label="Couleur du lot"><option value="">Deux couleurs</option><option value="w">Blancs</option><option value="b">Noirs</option></select>
+        </div>
+        <div class="row">Profondeur <select id="lot-depth" class="depth-select" aria-label="Profondeur d’analyse"></select> <button type="submit" id="btn-lot">Ajouter à la file</button></div>
+        <div id="lot-estim" class="muted small"></div>
+      </form>
+      <div id="queue-status" class="status" aria-live="polite"></div>
+      <div class="progress" id="queue-progress" hidden><div></div></div>
+      <div class="row" id="queue-actions" hidden>
+        <button type="button" class="ghost" id="q-pause">Pause</button>
+        <button type="button" id="q-resume">Reprendre</button>
+        <button type="button" class="ghost" id="q-clear">Vider la file</button>
+      </div>
+    </div>
     <div class="card list-card">
       <div class="row between">
         <select id="player-select" aria-label="Joueur"></select>
@@ -42,6 +66,18 @@
       <ul id="games" class="games" aria-label="Historique des parties"></ul>
     </div>
   </aside>
+  <section class="bilan" id="bilan" hidden>
+    <div class="card row filters">
+      <b id="bilan-player"></b>
+      <select id="f-cadence" aria-label="Cadence"><option value="">Toutes cadences</option><option value="bullet">Bullet</option><option value="blitz">Blitz</option><option value="rapid">Rapide</option><option value="daily">Quotidienne</option></select>
+      <select id="f-couleur" aria-label="Couleur"><option value="">Deux couleurs</option><option value="w">Blancs</option><option value="b">Noirs</option></select>
+      <select id="f-periode" aria-label="Période"></select>
+      <select id="f-grain" aria-label="Regroupement"><option value="mois">Par mois</option><option value="trimestre">Par trimestre</option><option value="annee">Par année</option></select>
+      <label class="small"><input type="checkbox" id="f-classees" checked> Parties classées seulement</label>
+    </div>
+    <div class="card" id="perf-card"></div>
+    <div class="card" id="bilan-card"></div>
+  </section>
   <section class="board-zone">
     <div class="players-line" id="top-player"></div>
     <div class="board-wrap">

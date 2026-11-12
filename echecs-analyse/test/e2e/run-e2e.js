@@ -207,6 +207,39 @@ async function main() {
   assert.equal(fs.statSync(path.join(dataDir, 'analyses', file)).mtimeMs, mtime, 'fichier d’analyse inchangé');
   await page.screenshot({ path: path.join(OUT, '4-reouverture.png') });
   stepOk('réouverture après redémarrage, hors ligne, sans recalcul', { reouverture_ms: reopenMs, precisions: [r2.players.w.accuracy, r2.players.b.accuracy] });
+
+  // 7. Lot en arrière-plan (2 parties blitz, profondeur 12), puis vue Bilan et Elo de performance.
+  await page.selectOption('#lot-n', '5');
+  await page.evaluate(() => { const s = document.getElementById('lot-n'); s.add(new Option('2', '2')); s.value = '2'; });
+  await page.selectOption('#lot-cadence', 'blitz');
+  await page.selectOption('#lot-depth', '12');
+  await page.waitForTimeout(500);
+  await page.click('#btn-lot');
+  await page.waitForSelector('#games li:has-text("en file")', { timeout: 10000 });
+  const t3 = Date.now();
+  let q;
+  for (;;) {
+    q = await apiIn(page, '/api/analyse');
+    if (q.status !== 'running' && q.queue.length === 0) break;
+    if (Date.now() - t3 > 15 * 60 * 1000) throw new Error('lot trop long');
+    await page.waitForTimeout(1000);
+  }
+  assert.equal(q.status, 'done', JSON.stringify(q));
+  assert.equal(q.queue.processed, 2);
+  await page.waitForSelector('#queue-status.ok');
+  const lotDepths = (await apiIn(page, `/api/parties?joueur=${PSEUDO.toLowerCase()}`)).filter((g) => g.analysis && g.analysis.depth === 12 && g.analysis.complete);
+  assert.equal(lotDepths.length, 2);
+  await page.click('#tab-bilan');
+  await page.waitForSelector('#bilan-card .tiles', { timeout: 120000 });
+  const tiles = await page.textContent('#bilan-card .tiles');
+  assert.match(tiles, /parties analysées/);
+  const perfTxt = await page.textContent('#perf-card');
+  assert.match(perfTxt, /Blitz/);
+  assert.match(perfTxt, /IC 95 %/);
+  await page.screenshot({ path: path.join(OUT, '5-bilan.png') });
+  const bilan = await apiIn(page, `/api/bilan?joueur=${PSEUDO.toLowerCase()}`);
+  assert.ok(bilan.summaries.length >= 3, 'partie de test + lot');
+  stepOk('analyse en lot (profondeur 12) et bilan', { duree_s: Math.round((Date.now() - t3) / 1000), vitesse_ms_par_demi_coup: q.queue.msPerPly, partiesBilan: bilan.summaries.length, tuiles: tiles.replace(/\s+/g, ' ').trim() });
   await app.close();
   results.ok = true;
 }

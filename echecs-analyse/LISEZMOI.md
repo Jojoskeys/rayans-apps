@@ -46,6 +46,9 @@ Pour savoir quel Mac vous avez : menu  › « À propos de ce Mac » › ligne �
 
 ## 4. Analyser une partie
 
+La profondeur d'analyse (22 par défaut) se règle dans **Réglages** ou dans la carte « Analyse en arrière-plan ».
+
+
 1. Cliquez sur une partie dans l'historique, puis sur **Analyser** (environ 1 minute pour 25 coups ;
    annulable, et reprise possible là où elle s'était arrêtée).
 2. Vous obtenez : la précision et un Elo estimé pour chaque joueur, le nombre de coups par catégorie,
@@ -58,6 +61,29 @@ Pour savoir quel Mac vous avez : menu  › « À propos de ce Mac » › ligne �
 6. Jouez vous-même un coup sur l'échiquier pour explorer une variante : Stockfish le note. **Revenir à la partie**
    ramène à la partie originale.
 7. Clavier : ← → coup précédent/suivant, ↑ ↓ début/fin, F retourner l'échiquier, Échap quitter la variante.
+
+## 5. Analyser plusieurs parties en arrière-plan
+
+1. Dans la carte **Analyse en arrière-plan**, choisissez le nombre de parties (les plus récentes non encore
+   analysées), éventuellement une cadence et une couleur, puis la **profondeur** : 22 est la référence ; 16 ou 18
+   vont plusieurs fois plus vite mais trouvent un peu moins d'erreurs. Après quelques coups, l'application affiche
+   la vitesse mesurée sur votre ordinateur et le temps restant.
+2. Cliquez sur **Ajouter à la file**. Les parties sont analysées une par une ; vous pouvez continuer à utiliser
+   l'application. Dans l'historique, « ⏳ en file » marque les parties en attente.
+3. **Pause** arrête le calcul (rien n'est perdu), **Reprendre** le relance, **Vider la file** retire tout
+   (deux clics pour confirmer). Si vous fermez l'application, la file est gardée et revient en pause.
+4. **Analyser** sur une partie la fait passer en premier.
+
+## 6. Bilan
+
+Cliquez sur l'onglet **Bilan** (en haut). Filtres : cadence, couleur, période, regroupement par mois, trimestre ou année.
+
+- **Elo de performance** : calculé sur vos résultats (gains, nulles, pertes) contre le classement de vos
+  adversaires, pour toutes vos parties importées. Avec son intervalle de confiance à 95 % : plus il y a de parties,
+  plus l'intervalle est étroit. Comparé à votre Elo Chess.com en fin de période.
+- **Bilan des parties analysées** : précision moyenne, gaffes, erreurs et imprécisions par partie ; leur évolution
+  dans le temps ; par cadence, par couleur et par phase (ouverture, milieu de jeu, finale) ; les parties avec le plus
+  de gaffes (cliquez pour les ouvrir). Analysez vos parties à la même profondeur pour que les comparaisons aient un sens.
 
 Les analyses sont enregistrées sur votre ordinateur : une partie analysée se rouvre instantanément, même sans
 Internet. Les règles de calcul (catégories, précision, Elo estimé) sont détaillées dans `REGLES-ANALYSE.md` ;

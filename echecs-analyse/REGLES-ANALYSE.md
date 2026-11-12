@@ -8,6 +8,9 @@ inspirées de Chess.com et de Lichess, mais **indépendantes** de leurs résulta
 
 - Moteur : binaire natif officiel **Stockfish 19** (tag `sf_19`), piloté en UCI. Fils : nombre de cœurs − 1
   (au moins 1, au plus 16). Table de hachage : 256 Mo.
+- Profondeur : **22 par défaut**, réglable (12, 14, 16, 18, 20, 22 ou 24) ; ci-dessous, « 22 » désigne la profondeur
+  choisie. Chaque analyse enregistre sa profondeur et la garde ; changer le réglage ne modifie pas les analyses
+  existantes. Une analyse moins profonde est plus rapide mais détecte moins d'erreurs.
 - Pour chaque demi-coup, depuis la position **avant** le coup :
   1. recherche libre `go depth 22` avec `MultiPV 2` → meilleur coup (ligne 1) et deuxième coup (ligne 2) ;
   2. si le coup joué est le premier coup de la ligne 1 ou de la ligne 2, son score est réutilisé ;
@@ -105,3 +108,66 @@ variante rejouée se termine réellement par un mat), pièce laissée en prise (
 prend), fourchette (une pièce attaque au moins deux cibles et la variante gagne du matériel), prise gagnante,
 perte de matériel dans la variante. Sans motif fiable, l'application explique l'écart d'évaluation et montre la
 variante du meilleur coup.
+
+## 8. Bilan sur plusieurs parties
+
+### Analyse en arrière-plan
+
+- Les parties sont analysées **une par une**, dans l'ordre d'une file d'attente enregistrée sur disque
+  (`file-attente.json`), avec les règles de la section 1 et la profondeur choisie au moment de l'ajout.
+- Un **lot** ajoute les N parties les plus récentes du joueur (filtres : cadence, couleur) qui ne sont pas déjà
+  analysées complètement à cette profondeur ou plus, ni déjà dans la file.
+- **Analyser** sur une partie la place en tête : la partie en cours est interrompue et reprise plus tard au premier
+  demi-coup manquant (rien n'est perdu, sauf le demi-coup en cours de calcul).
+- Au redémarrage de l'application, une file non vide est **en pause** (reprise par l'utilisateur).
+- Deux échecs consécutifs mettent la file en pause, avec le message d'erreur.
+- Le temps restant est estimé à partir de la durée moyenne par demi-coup mesurée sur cet ordinateur, à cette
+  profondeur, pendant la session (aucune estimation avant 5 demi-coups mesurés).
+
+### Données prises en compte
+
+Seules les parties **analysées complètement** comptent, du point de vue du joueur choisi. Filtres : cadence
+(classement Chess.com `time_class`), couleur, période (date de fin de partie, UTC). Regroupement par mois,
+trimestre ou année (UTC). Si les parties ont été analysées à des profondeurs différentes, l'application le signale.
+
+### Indicateurs
+
+- **Précision moyenne** : moyenne arithmétique des précisions de partie (section 5) ; intervalle indicatif à 95 % :
+  ± 1,96 × écart type / √n (à partir de 2 parties).
+- **Gaffes, erreurs, imprécisions par partie** : nombre de coups de cette catégorie (section 4) divisé par le nombre
+  de parties. Les occasions manquées sont comptées à part.
+- **Score** : (gains + ½ nulles) / parties.
+
+### Phases de jeu
+
+Règle simplifiée inspirée du « Divider » de Lichess (sans son critère de mélange des pièces), évaluée sur la
+position **avant** chaque demi-coup ; une phase atteinte ne revient jamais en arrière :
+
+- **Finale** : au plus 6 pièces hors rois et pions sur l'échiquier (les deux camps ensemble) ;
+- **Milieu de jeu** : dès que l'un de ces critères est rempli : au plus 10 pièces hors rois et pions, un camp a moins
+  de 4 de ses pièces (pions compris) sur sa première rangée, ou le coup 16 est commencé ;
+- **Ouverture** : avant.
+
+Par phase : la précision est calculée sur **tous les coups de la phase**, toutes parties confondues, avec la
+formule de la section 5 (30 % arithmétique + 70 % harmonique, plancher 1). Gaffes, erreurs et imprécisions sont
+rapportées à 100 coups de la phase.
+
+## 9. Elo de performance (résultats)
+
+Distinct de l'« Elo estimé » de la section 6 (fondé sur la précision) : ici seuls comptent les **résultats**.
+
+- Données : toutes les parties importées (analysées ou non) correspondant aux filtres, avec le classement
+  Chess.com de l'adversaire **au moment de la partie**. Par défaut, parties classées seulement.
+- Modèle Elo logistique : score attendu `E(R) = 1 / (1 + 10^((Rᵢ − R) / 400))`, Rᵢ = classement de l'adversaire.
+  Gain = 1, nulle = ½, perte = 0.
+- **Estimation** : maximum de vraisemblance, `log L(R) = Σ sᵢ ln E(R) + (1 − sᵢ) ln(1 − E(R))`. Le maximum vérifie
+  `Σ E(R) = Σ sᵢ` : c'est le classement pour lequel le score attendu égale le score obtenu.
+- **Intervalle de confiance à 95 %** par rapport de vraisemblance : les R tels que
+  `log L(R) ≥ log L(R̂) − 1,920729` (moitié du quantile 0,95 de la loi du χ² à 1 degré de liberté). Il est
+  asymétrique quand le score est proche de 0 % ou de 100 %.
+- **Score de 100 % (ou 0 %)** : le maximum est à l'infini ; seule une borne est donnée (« > X » ou « < X »), par la
+  même règle avec un supremum égal à 0. Ces périodes ne sont pas tracées sur le graphique.
+- Calculé **par cadence** (et par période dans une cadence), jamais en mélangeant les cadences : Chess.com tient
+  un classement distinct pour chacune. À côté : le dernier classement Chess.com du joueur dans le groupe.
+- Limites : les classements adverses sont pris comme exacts (leur incertitude Glicko est ignorée) et les parties
+  supposées indépendantes ; sous 10 parties, le résultat est signalé comme peu fiable.

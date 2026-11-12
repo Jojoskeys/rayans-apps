@@ -20,6 +20,7 @@ function createStore(dataDir) {
 
   // Parties stockées par mois (un fichier par mois d'archive) ; index en mémoire invalidé à chaque écriture.
   const cache = new Map();
+  const analysisIndex = new Map();
   function monthFiles(u) {
     const d = playerDir(u);
     if (!fs.existsSync(d)) return [];
@@ -64,17 +65,35 @@ function createStore(dataDir) {
     },
     loadAnalysis(id) { return readJson(path.join(dataDir, 'analyses', `${safe(id)}.json`), null); },
     saveAnalysis(id, a) { writeJson(path.join(dataDir, 'analyses', `${safe(id)}.json`), a); },
+    /**
+     * Index léger des analyses { gameId: { complete, plies, depth, updatedAt } }.
+     * Chaque fichier n'est relu que si sa date de modification a changé.
+     */
     listAnalyses() {
       const d = path.join(dataDir, 'analyses');
       if (!fs.existsSync(d)) return {};
       const out = {};
+      const seen = new Set();
       for (const f of fs.readdirSync(d)) {
         if (!f.endsWith('.json')) continue;
-        const a = readJson(path.join(d, f), null);
-        if (a && a.gameId) out[a.gameId] = { complete: !!a.complete, plies: (a.plies || []).length };
+        seen.add(f);
+        let st;
+        try { st = fs.statSync(path.join(d, f)); } catch (e) { continue; }
+        let c = analysisIndex.get(f);
+        if (!c || c.mtimeMs !== st.mtimeMs || c.size !== st.size) {
+          const a = readJson(path.join(d, f), null);
+          c = { mtimeMs: st.mtimeMs, size: st.size, info: a && a.gameId ? { gameId: a.gameId, complete: !!a.complete, plies: (a.plies || []).length, depth: a.settings ? a.settings.depth : null, updatedAt: a.updatedAt || a.finishedAt || null } : null };
+          analysisIndex.set(f, c);
+        }
+        if (c.info) { const { gameId, ...rest } = c.info; out[gameId] = rest; }
       }
+      for (const k of [...analysisIndex.keys()]) if (!seen.has(k)) analysisIndex.delete(k);
       return out;
     },
+    loadQueue() { return readJson(path.join(dataDir, 'file-attente.json'), { items: [] }); },
+    saveQueue(q) { writeJson(path.join(dataDir, 'file-attente.json'), q); },
+    loadCache(name, fallback) { return readJson(path.join(dataDir, 'cache', `${name}.json`), fallback); },
+    saveCache(name, data) { writeJson(path.join(dataDir, 'cache', `${name}.json`), data); },
     loadSettings() { return readJson(path.join(dataDir, 'reglages.json'), {}); },
     saveSettings(s) { writeJson(path.join(dataDir, 'reglages.json'), s); },
   };

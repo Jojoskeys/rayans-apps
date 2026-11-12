@@ -1,9 +1,9 @@
 {
   "platform": "linux-x64",
-  "executable": "dist/linux-unpacked/analyse-echecs",
+  "executable": "electron (développement)",
   "pseudo": "JokerSicilian",
   "gameUrl": "https://www.chess.com/game/live/185803756742",
-  "dataDir": "/tmp/analyse-echecs-e2e-NLwwZr",
+  "dataDir": "/tmp/analyse-echecs-e2e-WngT1G",
   "steps": [
     {
       "name": "lancement de l’application et du moteur",
@@ -22,7 +22,7 @@
         "motifs": {
           "variant": 195
         },
-        "duree_s": 95
+        "duree_s": 98
       }
     },
     {
@@ -40,13 +40,13 @@
       "ok": true,
       "details": {
         "demiCoups": 23,
-        "duree_s": 49,
+        "duree_s": 56,
         "moteur": {
           "name": "Stockfish 19",
           "threads": 3,
           "hash": 256
         },
-        "rechercheSearchmoves": 11,
+        "rechercheSearchmoves": 8,
         "ouverture": {
           "eco": "B10",
           "name": "Caro-Kann Defense: Two Knights Attack",
@@ -63,26 +63,26 @@
           "categorie": "Très bon",
           "perte": 0,
           "raisons": [
-            "Seul bon coup : le 2e choix du moteur perd 35.0 points"
+            "Seul bon coup : le 2e choix du moteur perd 33.7 points"
           ]
         },
-        "precisionBlancs": 95.55,
+        "precisionBlancs": 96.58,
         "coupsBlancs": 12,
         "eloEstimeBlancs": {
-          "elo": 2070,
+          "elo": 2120,
           "margin": 250,
           "tooShort": false,
           "count": 12,
-          "raw": 2646
+          "raw": 2732
         },
-        "precisionNoirs": 67.4,
+        "precisionNoirs": 67.44,
         "coupsNoirs": 11,
         "eloEstimeNoirs": {
-          "elo": 1380,
+          "elo": 1390,
           "margin": 250,
           "tooShort": false,
           "count": 11,
-          "raw": 1259
+          "raw": 1261
         }
       }
     },
@@ -93,10 +93,11 @@
         "bouton": "Gaffe · 1",
         "premier": 22,
         "parcours": {
-          "bouton": "Meilleur · 3",
+          "bouton": "Meilleur · 4",
           "camp": "w",
           "coupsVisites": [
             7,
+            9,
             11,
             19
           ]
@@ -110,7 +111,7 @@
         "coup": "22 Re8",
         "categorie": "Gaffe",
         "confirmation": "Question copiée dans le presse-papiers. Collez-la sur claude.ai (rien n’a été envoyé).",
-        "longueur": 1344,
+        "longueur": 1334,
         "explication": "présente"
       }
     },
@@ -126,7 +127,7 @@
           "uci": "a8b8",
           "san": "Rb8",
           "categorie": "Bon",
-          "perte": 5.88,
+          "perte": 5.7,
           "source": "recherche complémentaire searchmoves",
           "profondeur": 22
         }
@@ -136,11 +137,23 @@
       "name": "réouverture après redémarrage, hors ligne, sans recalcul",
       "ok": true,
       "details": {
-        "reouverture_ms": 97,
+        "reouverture_ms": 9,
         "precisions": [
-          95.54632140175504,
-          67.39907371521349
+          96.57874500850602,
+          67.44479812848462
         ]
+      }
+    },
+    {
+      "name": "analyse en lot (profondeur 12) et bilan",
+      "ok": true,
+      "details": {
+        "duree_s": 23,
+        "vitesse_ms_par_demi_coup": {
+          "12": 78
+        },
+        "partiesBilan": 3,
+        "tuiles": "3parties analyséessur 13545 correspondantes 69,4 %précision moyenne± 20,8 (IC 95 %) 1,33gaffes par partie 1,67erreurs par partie 1,67imprécisions par partie"
       }
     }
   ],
