@@ -114,8 +114,8 @@ npm run build:windows
 
 Fichiers produits :
 
-- `target\release\bundle\nsis\Rayan's Launcher_0.1.0_x64-setup.exe` : installateur NSIS, par utilisateur, sans droits administrateur ;
-- `target\release\bundle\msi\Rayan's Launcher_0.1.0_x64_fr-FR.msi` : paquet MSI.
+- `target\release\bundle\nsis\Rayan’s Launcher_0.1.0_x64-setup.exe` : installateur NSIS, par utilisateur, sans droits administrateur ;
+- `target\release\bundle\msi\Rayan’s Launcher_0.1.0_x64_fr-FR.msi` : paquet MSI.
 
 Pour un installateur **de test** qui accepte aussi le catalogue local (http://, file://, non signé), utilisez la
 commande ci-dessous. Ne le distribuez pas.

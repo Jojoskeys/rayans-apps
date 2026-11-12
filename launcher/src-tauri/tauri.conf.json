@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Rayan's Launcher",
+  "productName": "Rayan’s Launcher",
   "version": "0.1.0",
   "identifier": "fr.rayan.launcher",
   "build": {
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Rayan's Launcher",
+        "title": "Rayan’s Launcher",
         "width": 1240,
         "height": 780,
         "minWidth": 960,
