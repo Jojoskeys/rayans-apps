@@ -202,7 +202,7 @@ export const mockBackend = {
       case "create_shortcut":
         return "C:\\Users\\vous\\Desktop\\app.lnk" as T;
       case "launcher_update":
-        return (scenario === "ajout" ? { version: "0.1.57", file: "Rayans-Launcher-mise-a-jour.zip" } : null) as T;
+        return (scenario === "ajout" ? { version: "0.1.57", file: "Rayans-Launcher-mise-a-jour.zip", fromCatalog: false } : null) as T;
       case "apply_launcher_update":
         throw { code: "other", message: "Aperçu navigateur : la mise à jour du launcher n'est disponible que sous Windows.", hint: "" };
       case "dismiss_notices":

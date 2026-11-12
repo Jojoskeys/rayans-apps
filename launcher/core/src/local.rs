@@ -532,6 +532,8 @@ pub struct LauncherUpdate {
     /// Chemin dans le ZIP, ou `None` si l'installateur a été déposé tel quel.
     #[serde(skip)]
     pub entry: Option<String>,
+    /// Version annoncée par le catalogue (entrée `rayans-launcher`) plutôt que déposée dans « À ajouter ».
+    pub from_catalog: bool,
 }
 
 fn is_launcher_setup(path: &str) -> bool {
@@ -569,7 +571,13 @@ pub fn find_launcher_update(catalog_path: &Path, current: &semver::Version, dev:
             let base = name.rsplit(['/', '\\']).next().unwrap_or(&name).to_string();
             let Some(v) = version_in_name(&base).and_then(|v| semver::Version::parse(&v).ok()) else { continue };
             if &v > current && best.as_ref().is_none_or(|(b, _)| &v > b) {
-                let u = LauncherUpdate { version: v.to_string(), file: file.clone(), source: path.clone(), entry };
+                let u = LauncherUpdate {
+                    version: v.to_string(),
+                    file: file.clone(),
+                    source: path.clone(),
+                    entry,
+                    from_catalog: false,
+                };
                 best = Some((v, u));
             }
         }

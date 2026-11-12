@@ -15,7 +15,8 @@
     "serve": "node scripts/serve.mjs",
     "demo": "node scripts/demo.mjs",
     "keygen": "cargo run -q -p hangar-core --bin hangar-tools -- keygen --private .keys/catalog-private.key --public src-tauri/catalog-public-key.txt",
-    "tools": "cargo run -q -p hangar-core --bin hangar-tools --",
+    "keygen:node": "node scripts/keygen.mjs",
+    "tools":"cargo run -q -p hangar-core --bin hangar-tools --",
     "test": "cargo build -p hangar-demo && cargo test -p hangar-core",
     "e2e:ui": "node scripts/e2e-ui.mjs"
   },

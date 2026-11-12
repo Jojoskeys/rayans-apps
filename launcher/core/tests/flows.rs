@@ -476,3 +476,50 @@ async fn telechargement_annule_puis_repris() {
     assert!(core.snapshot().apps[0].partial_bytes.is_none());
     assert_eq!(core.snapshot().apps[0].installed_version.as_deref(), Some("1.0.0"), "version en place intacte");
 }
+
+/// L'entrée « rayans-launcher » du catalogue publié par la CI : invisible dans la liste, mais téléchargée,
+/// vérifiée et extraite comme une application pour que le launcher récupère son propre installateur.
+#[tokio::test(flavor = "multi_thread")]
+async fn entree_du_launcher_lui_meme() {
+    let s = site();
+    let sha_app = demo_zip(&s, "app.zip");
+    let setup = s.dir.join("zips").join("launcher.zip");
+    let sha_l = zip_with(&setup, &[("Rayans-Launcher-setup.exe", b"MZ setup".to_vec())]);
+    let launcher = format!(
+        r#"{{"id":"{id}","name":"Rayan's Launcher","description":"Le launcher","icon":"icon.png","image":"icon.png",
+        "version":"0.1.300","releaseNotes":"Nouveau","downloadUrl":"zips/launcher.zip","sha256":"{sha_l}",
+        "executable":"Rayans-Launcher-setup.exe"}}"#,
+        id = hangar_core::LAUNCHER_ID
+    );
+    write_catalog(&s, &[entry("horloge", "1.0.0", "app.zip", &sha_app), launcher], None);
+    let core = open(&s, dev());
+    core.refresh_catalog().await.unwrap();
+    let snap = core.snapshot();
+    assert_eq!(snap.apps.len(), 1, "le launcher n'est pas une application du catalogue");
+    assert_eq!(snap.catalog.app_count, 1);
+    assert_eq!(core.catalog_version(hangar_core::LAUNCHER_ID).unwrap().to_string(), "0.1.300");
+
+    assert_eq!(core.install(hangar_core::LAUNCHER_ID).await.unwrap(), InstallOutcome::Activated);
+    let (_, exe) = core.installed_paths(hangar_core::LAUNCHER_ID).unwrap();
+    assert_eq!(std::fs::read(&exe).unwrap(), b"MZ setup");
+    assert_eq!(core.snapshot().apps.len(), 1, "toujours invisible une fois téléchargé");
+}
+
+/// Un installateur de distribution qui hérite de l'adresse file:// d'un installateur de test prend
+/// l'adresse par défaut (sinon chaque actualisation serait refusée).
+#[test]
+fn adresse_locale_remplacee_en_distribution() {
+    let tmp = tempfile::tempdir().unwrap();
+    let home = tmp.path().join("home");
+    let dev_core = Core::open(&home, dev(), None, Box::new(|_| {})).unwrap();
+    dev_core.set_catalog_url("file:///C:/Users/x/Documents/catalog.json").unwrap();
+    drop(dev_core);
+    let defaut = "https://exemple.fr/catalog.json".to_string();
+    let sk = SigningKey::from_bytes(&[3u8; 32]);
+    let policy = TrustPolicy::Distributed { public_key: Some(sk.verifying_key()) };
+    let core = Core::open(&home, policy, Some(defaut.clone()), Box::new(|_| {})).unwrap();
+    assert_eq!(core.snapshot().catalog_url, Some(defaut));
+    // En développement, l'adresse locale est conservée.
+    let core = Core::open(&home, dev(), Some("https://autre.fr/c.json".into()), Box::new(|_| {})).unwrap();
+    assert!(core.snapshot().catalog_url.unwrap().starts_with("file:"));
+}

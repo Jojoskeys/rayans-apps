@@ -68,6 +68,8 @@ export interface Snapshot {
 export interface LauncherUpdate {
   version: string;
   file: string;
+  /** Annoncée par le catalogue publié (sinon : installateur déposé dans « À ajouter »). */
+  fromCatalog: boolean;
 }
 
 export interface Features {

@@ -1,7 +1,7 @@
 //! Couche Tauri : expose le coeur (`hangar-core`) à l'interface. Toutes les opérations système
 //! (réseau, disque, processus) restent en Rust.
 
-use hangar_core::{catalog, local, Core, Event, Snapshot, TrustPolicy};
+use hangar_core::{catalog, local, Core, Event, Snapshot, TrustPolicy, LAUNCHER_ID};
 mod shortcut;
 
 use std::sync::Arc;
@@ -13,12 +13,24 @@ const PUBLIC_KEY: &str = include_str!("../catalog-public-key.txt");
 /// Mode développement : binaire de debug (`npm run dev`) ou compilé avec `--features dev-mode`.
 const DEV_MODE: bool = cfg!(debug_assertions) || cfg!(feature = "dev-mode");
 
-/// Adresse imposée à la compilation, ou serveur de démonstration pour `npm run dev` et les tests d'interface.
+/// Catalogue signé publié par la CI du dépôt (release GitHub « catalogue »), voir launcher/README.md.
+const PUBLISHED_CATALOG_URL: &str =
+    "https://github.com/Jojoskeys/rayans-apps/releases/download/catalogue/catalog.json";
+
+/// Adresse imposée à la compilation ; sinon serveur de démonstration pour `npm run dev` et les tests
+/// d'interface, et catalogue publié par la CI pour l'installateur de distribution.
 /// L'installateur « développement » n'en a pas : il crée un catalogue local au premier démarrage.
 fn default_catalog_url() -> Option<String> {
-    option_env!("HANGAR_DEFAULT_CATALOG_URL")
-        .map(str::to_string)
-        .or_else(|| cfg!(debug_assertions).then(|| "http://127.0.0.1:8787/catalog.json".to_string()))
+    if let Some(u) = option_env!("HANGAR_DEFAULT_CATALOG_URL") {
+        return Some(u.to_string());
+    }
+    if cfg!(debug_assertions) {
+        Some("http://127.0.0.1:8787/catalog.json".to_string())
+    } else if DEV_MODE {
+        None
+    } else {
+        Some(PUBLISHED_CATALOG_URL.to_string())
+    }
 }
 
 /// Premier démarrage sans adresse : crée « Documents\Rayan's Launcher\catalog.json » et l'utilise.
@@ -126,30 +138,56 @@ fn create_shortcut(app: tauri::AppHandle, core: State<CoreState>, id: String) ->
     Ok(lnk.display().to_string())
 }
 
+/// Nouvelle version du launcher : entrée `rayans-launcher` du catalogue (publiée par la CI) ou installateur
+/// déposé dans « À ajouter » (catalogue local). La plus récente l'emporte.
 fn find_launcher_update(app: &tauri::AppHandle, core: &Core) -> Option<local::LauncherUpdate> {
-    let cat = core.local_catalog_path()?;
     let current = semver::Version::parse(&app.package_info().version.to_string()).ok()?;
-    local::find_launcher_update(&cat, &current, DEV_MODE)
+    let dropped = core.local_catalog_path().and_then(|cat| local::find_launcher_update(&cat, &current, DEV_MODE));
+    let published = core.catalog_version(LAUNCHER_ID).filter(|v| v > &current).map(|v| local::LauncherUpdate {
+        version: v.to_string(),
+        file: "catalogue".into(),
+        source: Default::default(),
+        entry: None,
+        from_catalog: true,
+    });
+    match (dropped, published) {
+        (Some(d), Some(p)) => {
+            let newer = semver::Version::parse(&p.version).ok() > semver::Version::parse(&d.version).ok();
+            Some(if newer { p } else { d })
+        }
+        (d, p) => d.or(p),
+    }
 }
 
-/// Nouvel installateur du launcher déposé dans « À ajouter », s'il y en a un.
 #[tauri::command]
 fn launcher_update(app: tauri::AppHandle, core: State<CoreState>) -> Option<local::LauncherUpdate> {
     find_launcher_update(&app, &core)
 }
 
 /// Lance l'installateur de la nouvelle version puis ferme le launcher (l'installateur le remplace).
+/// Depuis le catalogue, l'installateur est d'abord téléchargé et vérifié (SHA-256) comme une application.
 #[tauri::command]
-fn apply_launcher_update(app: tauri::AppHandle, core: State<CoreState>) -> CmdResult<()> {
+async fn apply_launcher_update(app: tauri::AppHandle, core: State<'_, CoreState>) -> CmdResult<()> {
     if !cfg!(windows) {
         return Err(other("la mise à jour du launcher n'est disponible que sous Windows"));
     }
     if core.snapshot().apps.iter().any(|a| a.task.is_some()) {
         return Err(hangar_core::Error::Busy.info());
     }
-    let u = find_launcher_update(&app, &core).ok_or_else(|| other("aucune nouvelle version dans « À ajouter »"))?;
+    let u = find_launcher_update(&app, &core).ok_or_else(|| other("aucune nouvelle version du launcher"))?;
     let dir = std::env::temp_dir().join(format!("rayans-launcher-maj-{}", u.version));
-    let setup = local::take_launcher_setup(&u, &dir).map_err(|e| e.info())?;
+    let setup = if u.from_catalog {
+        let core = Arc::clone(&core);
+        core.install(LAUNCHER_ID).await.map_err(|e| e.info())?;
+        let (_, exe) = core.installed_paths(LAUNCHER_ID).map_err(|e| e.info())?;
+        // Copie hors du dossier de version : la prochaine mise à jour pourra le remplacer.
+        std::fs::create_dir_all(&dir).map_err(|e| other(e.to_string()))?;
+        let out = dir.join(exe.file_name().unwrap_or_default());
+        std::fs::copy(&exe, &out).map_err(|e| other(format!("installateur non copié ({e})")))?;
+        out
+    } else {
+        local::take_launcher_setup(&u, &dir).map_err(|e| e.info())?
+    };
     std::process::Command::new(&setup)
         .spawn()
         .map_err(|e| other(format!("installateur non lancé ({e})")))?;

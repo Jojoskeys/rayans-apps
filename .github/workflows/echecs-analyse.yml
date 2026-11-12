@@ -87,24 +87,30 @@ jobs:
         with:
           name: resultats-${{ matrix.os }}
           path: echecs-analyse/test/e2e/resultats/
-      # Rayan's Launcher : fiche rayans-launcher.json ajoutée au ZIP Windows. Le launcher la lit quand le ZIP
-      # est déposé dans « Documents\Rayan's Launcher\À ajouter » ou choisi avec « Ajouter un ZIP ».
+      # Rayan's Launcher : fiche rayans-launcher.json ajoutée au ZIP Windows. Sur main, le job « publier » met
+      # ce ZIP dans le catalogue publié (mise à jour automatique) ; ailleurs, l'artifact peut toujours être
+      # déposé dans « Documents\Rayan's Launcher\À ajouter » ou choisi avec « Ajouter un ZIP ».
       # Version vue par le launcher : majeur.mineur de package.json, correctif = numéro d'exécution de la CI
       # + 100 (chaque construction est ainsi une mise à jour, au-delà des versions construites dans l'ancien dépôt).
       - name: Paquet pour Rayan's Launcher
         if: runner.os == 'Windows'
         shell: pwsh
+        env:
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: |
           $pkg = Get-Content package.json -Raw | ConvertFrom-Json
           $p = $pkg.version.Split('.')
           $v = "$($p[0]).$($p[1]).$([int]$env:GITHUB_RUN_NUMBER + 100)"
           $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $titre = "$env:COMMIT_MSG".Split("`n")[0].Trim()
+          $notes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+          if ($titre) { $notes = "$titre`n$notes" }
           $fiche = [ordered]@{
             id = 'analyse-echecs'
             name = "Rayan's Échecs"
             description = "Analyse de parties d'échecs avec un moteur intégré."
             version = $v
-            releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+            releaseNotes = $notes
             executable = 'Analyse Echecs.exe'
           }
           [IO.File]::WriteAllText("$PWD/rayans-launcher.json", ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
@@ -129,3 +135,18 @@ jobs:
             echecs-analyse/dist/*.tar.gz
           if-no-files-found: ignore
           compression-level: 0
+
+  # Sur main seulement : le ZIP Windows devient une mise à jour dans Rayan's Launcher (release GitHub + catalogue
+  # signé). Lancé même si une construction macOS ou Linux a échoué : l'artifact Windows n'existe que si toute la
+  # construction Windows (tests compris) a réussi.
+  publier:
+    name: Publication dans Rayan's Launcher
+    needs: paquet
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: write
+    uses: ./.github/workflows/rayans-launcher-publier.yml
+    with:
+      artifact: Rayans-Echecs-pour-le-launcher
+      icon: echecs-analyse/build/icon.png
+    secrets: inherit

@@ -118,6 +118,38 @@ jobs:
           npx tauri build --config ../out-tauri-ci.json
           mkdir -p ../out/distribution
           cp target/release/bundle/nsis/*.exe target/release/bundle/msi/*.msi ../out/distribution/
+      # Entrée « rayans-launcher » du catalogue publié : ZIP avec l'installateur de distribution et sa fiche.
+      # Les launchers installés la voient comme une mise à jour d'eux-mêmes (bandeau « Nouvelle version »).
+      - name: Paquet de mise à jour pour le catalogue
+        shell: pwsh
+        env:
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+        run: |
+          $v = "0.1.$([int]$env:GITHUB_RUN_NUMBER + 100)"
+          $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $titre = "$env:COMMIT_MSG".Split("`n")[0].Trim()
+          $notes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+          if ($titre) { $notes = "$titre`n$notes" }
+          $dir = New-Item -ItemType Directory -Force ../out-catalogue/contenu
+          $setup = Get-ChildItem ../out/distribution/*-setup.exe | Select-Object -First 1
+          if (-not $setup) { throw "installateur de distribution introuvable" }
+          Copy-Item $setup.FullName (Join-Path $dir 'Rayans-Launcher-setup.exe')
+          $fiche = [ordered]@{
+            id = 'rayans-launcher'
+            name = "Rayan's Launcher"
+            description = "Le launcher lui-même : cette entrée sert à sa mise à jour automatique."
+            version = $v
+            releaseNotes = $notes
+            executable = 'Rayans-Launcher-setup.exe'
+          }
+          [IO.File]::WriteAllText((Join-Path $dir 'rayans-launcher.json'), ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          Compress-Archive -Path "$dir/*" -DestinationPath "../out-catalogue/Rayans-Launcher-$v.zip"
+          Remove-Item -Recurse $dir
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Rayans-Launcher-pour-le-catalogue
+          path: out-catalogue/*.zip
+          compression-level: 0
       - uses: actions/upload-artifact@v5
         with:
           name: rayans-launcher-installateurs-windows
@@ -137,3 +169,16 @@ jobs:
         with:
           name: rayans-launcher-captures-windows
           path: launcher/e2e-output/
+
+  # Sur main seulement, après les tests Linux et Windows : nouvelle version du launcher dans le catalogue publié.
+  publier:
+    name: Publication dans le catalogue
+    needs: [linux, windows]
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/rayans-launcher-publier.yml
+    with:
+      artifact: Rayans-Launcher-pour-le-catalogue
+      icon: launcher/src-tauri/icons/128x128@2x.png
+    secrets: inherit

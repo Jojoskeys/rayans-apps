@@ -11,6 +11,7 @@ système (réseau, disque, processus).
 - [Démarrer en local (mode développement)](#démarrer-en-local-mode-développement)
 - [Générer l'installateur Windows](#générer-linstallateur-windows)
 - [Mode distribution : HTTPS et catalogue signé](#mode-distribution--https-et-catalogue-signé)
+- [Publication automatique depuis GitHub](#publication-automatique-depuis-github)
 - [Format du catalogue](#format-du-catalogue)
 - [Ajouter une application](#ajouter-une-application)
 - [Publier une mise à jour](#publier-une-mise-à-jour)
@@ -169,11 +170,141 @@ npm run tools -- verify --public src-tauri/catalog-public-key.txt chemin/vers/ca
 En développement, `npm run demo` signe automatiquement le catalogue local si `.keys/catalog-private.key` existe.
 Vous pouvez ainsi tester la signature de bout en bout avant de passer en HTTPS.
 
-L'adresse du catalogue se règle dans **Paramètres**. Pour un installateur qui pointe d'emblée vers votre catalogue,
-définissez la variable `HANGAR_DEFAULT_CATALOG_URL` avant la compilation, par exemple dans Git Bash :
+L'adresse du catalogue se règle dans **Paramètres**. L'installateur de distribution pointe d'emblée vers le
+catalogue publié par la CI du dépôt (voir [Publication automatique](#publication-automatique-depuis-github)) :
+`https://github.com/Jojoskeys/rayans-apps/releases/download/catalogue/catalog.json`. Si les paramètres contiennent
+encore l'adresse `file://` d'un installateur de test, elle est remplacée par celle-ci. Pour pointer vers un autre
+catalogue, définissez la variable `HANGAR_DEFAULT_CATALOG_URL` avant la compilation, par exemple dans Git Bash :
 
 ```bash
 HANGAR_DEFAULT_CATALOG_URL=https://telechargements.exemple.fr/hangar/catalog.json npm run build:windows
+```
+
+## Publication automatique depuis GitHub
+
+Chaque push sur `main` qui touche une application publie sa nouvelle version : les launchers installés affichent
+**Mettre à jour** au démarrage suivant ou après **Actualiser**, sans aucun ZIP à télécharger à la main. Les
+constructions des autres branches ne publient rien (leurs *Artifacts* restent utilisables avec « À ajouter »).
+
+```text
+workflow de l'app (ex. echecs-analyse.yml)
+  job de construction Windows -> artifact : un ZIP avec rayans-launcher.json à sa racine
+  job « publier » (main seulement) -> .github/workflows/rayans-launcher-publier.yml
+      release      release GitHub <id>-v<version> : ZIP, icône, image, rayans-launcher-entree.json (SHA-256, taille)
+      catalogue    .github/workflows/rayans-launcher-catalogue.yml
+                   reconstruit catalog.json depuis toutes les releases (la plus récente valide par app),
+                   le valide (hangar-tools validate --strict), le signe avec le secret, le vérifie avec
+                   src-tauri/catalog-public-key.txt, puis le publie dans la release « catalogue »
+```
+
+- Adresse du catalogue : `https://github.com/Jojoskeys/rayans-apps/releases/download/catalogue/catalog.json`, et
+  sa signature à la même adresse suivie de `.sig`. Les ZIP et les visuels sont des fichiers de releases GitHub
+  (HTTPS, reprise des téléchargements acceptée).
+- Une seule mise à jour du catalogue tourne à la fois pour tout le dépôt (groupe de concurrence
+  `rayans-launcher-catalogue`). Si plusieurs apps publient ensemble, GitHub peut annuler un job « Catalogue » en
+  attente : c'est normal, le suivant reconstruit le catalogue avec toutes les releases.
+- Une release dont l'entrée est refusée par `hangar-tools validate --strict` est ignorée avec un avertissement :
+  la version précédente de l'app reste au catalogue.
+- Les 3 dernières releases de chaque app sont gardées (téléchargements en cours, retour en arrière) ; les plus
+  anciennes sont supprimées avec leur tag.
+- Relancer une exécution ne remplace pas une release déjà publiée (même numéro de version).
+- Pour reconstruire le catalogue à la main : onglet *Actions* → *Rayan's Launcher - catalogue* → *Run workflow*
+  sur `main`.
+
+### Mise en place, une seule fois
+
+1. **Créer la paire de clés** sur votre PC, depuis `launcher/`. Avec Rust fonctionnel (toolchain MSVC) :
+
+   ```bash
+   npm run keygen
+   ```
+
+   Sans Rust (même format, seulement Node.js) :
+
+   ```bash
+   npm run keygen:node
+   ```
+
+   La clé privée est écrite dans `launcher/.keys/catalog-private.key` (dossier ignoré par git) et la clé publique
+   dans `launcher/src-tauri/catalog-public-key.txt`. Sauvegardez la clé privée hors du dépôt (gestionnaire de mots
+   de passe) : la perdre oblige à redistribuer un launcher avec une nouvelle clé publique.
+
+2. **Ajouter la clé privée en secret GitHub** nommé `RAYANS_LAUNCHER_CATALOG_KEY`. Dans GitHub : *Settings* →
+   *Secrets and variables* → *Actions* → *New repository secret*, nom `RAYANS_LAUNCHER_CATALOG_KEY`, valeur : le
+   contenu du fichier `.keys/catalog-private.key` (une ligne). Ou avec GitHub CLI, depuis `launcher/` :
+
+   ```bash
+   gh secret set RAYANS_LAUNCHER_CATALOG_KEY --repo Jojoskeys/rayans-apps < .keys/catalog-private.key
+   ```
+
+3. **Commiter la clé publique** `launcher/src-tauri/catalog-public-key.txt` et pousser sur `main`. Ce push
+   reconstruit le launcher avec cette clé et publie sa première version dans le catalogue.
+
+4. **Installer une fois le launcher de distribution.** Sur la page *Releases* du dépôt, ouvrez la release
+   `rayans-launcher-v0.1.<n>`, téléchargez `rayans-launcher-0.1.<n>.zip`, extrayez-le et lancez
+   `Rayans-Launcher-setup.exe`. Vos applications installées et leurs données sont conservées. Ensuite, le launcher
+   se met à jour tout seul : un bandeau « Nouvelle version de Rayan's Launcher » propose de télécharger et
+   d'ouvrir le nouvel installateur.
+
+Rien d'autre à activer : pas de GitHub Pages, le jeton `GITHUB_TOKEN` de chaque exécution suffit pour créer les
+releases. Tant que le secret ou la clé publique manque, le job « Catalogue » échoue avec un message qui dit quoi
+faire ; les releases des apps sont quand même créées et entreront au catalogue à la première exécution réussie.
+
+### Brancher une nouvelle application
+
+1. **Le ZIP.** Dans la construction Windows de l'app, mettez à la racine du ZIP une fiche `rayans-launcher.json` :
+
+   ```json
+   { "id": "mon-app", "name": "Mon App", "description": "Ce que fait Mon App.", "version": "1.0.123",
+     "releaseNotes": "Ce qui change.", "executable": "Mon App.exe" }
+   ```
+
+   Tous les champs sont obligatoires. `id` est définitif (2 à 64 caractères `a-z 0-9 - _`). `version` doit
+   augmenter à chaque construction, par exemple `majeur.mineur.<numéro d'exécution + 100>` comme les autres apps.
+   `executable` est le chemin du `.exe` dans le ZIP. L'id `rayans-launcher` est réservé au launcher.
+
+2. **L'artifact.** Envoyez ce ZIP, seul, dans un artifact de l'exécution :
+
+   ```yaml
+         - uses: actions/upload-artifact@v5
+           with:
+             name: Mon-App-pour-le-launcher
+             path: mon-app/launcher/*.zip
+             compression-level: 0
+   ```
+
+3. **Le job de publication**, à la fin du workflow de l'app (`needs` : le job qui a envoyé l'artifact) :
+
+   ```yaml
+     publier:
+       name: Publication dans Rayan's Launcher
+       needs: windows
+       if: github.ref == 'refs/heads/main'
+       permissions:
+         contents: write
+       uses: ./.github/workflows/rayans-launcher-publier.yml
+       with:
+         artifact: Mon-App-pour-le-launcher
+         icon: mon-app/assets/icone.png
+         # image: mon-app/assets/banniere.png   (facultatif, l'icône par défaut)
+       secrets: inherit
+   ```
+
+   Gardez `permissions: contents: read` en tête du workflow : seul ce job a besoin d'écrire. L'icône et l'image
+   sont des fichiers du dépôt (PNG, JPEG, GIF, WebP ou SVG, 6 Mo maximum).
+
+Au prochain push sur `main` qui touche l'app, elle apparaît dans le catalogue de tous les launchers.
+
+Pour tester la fiche sans publier, depuis la racine du dépôt (Node.js seulement) :
+
+```bash
+node .github/publication/catalogue.mjs entree --manifest rayans-launcher.json --zip MonApp.zip --repo Jojoskeys/rayans-apps --icon mon-app/assets/icone.png --dest essai-release
+```
+
+Les tests du script de publication :
+
+```bash
+node --test .github/publication/catalogue.test.mjs
 ```
 
 ## Format du catalogue
@@ -271,9 +402,11 @@ Fiche `rayans-launcher.json` facultative, à la racine du ZIP :
 Le nom et la description déjà présents au catalogue sont toujours conservés. Un catalogue signé (`catalog.json.sig`)
 n'est jamais modifié par le launcher : utilisez `hangar-tools publish` puis re-signez.
 
-**Analyse Échecs.** Chaque construction Windows de la CI (*Analyse Echecs - paquets*) publie l'artifact
-`Rayans-Echecs-pour-le-launcher`. Téléchargez-le et déposez-le dans `À ajouter` : il apparaît sous le nom « Rayan's Échecs ».
-Sa version est `majeur.mineur.<numéro d'exécution CI>`, donc chaque nouvelle construction devient une mise à jour.
+**Analyse Échecs.** Sur `main`, chaque construction est publiée automatiquement dans le catalogue (voir
+[Publication automatique](#publication-automatique-depuis-github)). Sur les autres branches, la CI (*Analyse
+Echecs - paquets*) produit l'artifact `Rayans-Echecs-pour-le-launcher` : téléchargez-le et déposez-le dans
+`À ajouter`, il apparaît sous le nom « Rayan's Échecs ». Sa version est `majeur.mineur.<numéro d'exécution CI + 100>`,
+donc chaque nouvelle construction devient une mise à jour.
 
 ### À la main
 
@@ -331,11 +464,18 @@ reconstruire le launcher.
 
 ## Mettre à jour le launcher lui-même
 
-La CI numérote chaque construction `0.1.<numéro d'exécution>` et publie l'artifact `Rayans-Launcher-mise-a-jour`
-(l'installateur de test seul). Téléchargez-le et déposez le ZIP tel quel dans `À ajouter`. Un bandeau « Nouvelle
-version de Rayan's Launcher » apparaît : le bouton ferme le launcher et ouvre l'installateur. Les applications
-installées et leurs données ne bougent pas. L'artifact complet `rayans-launcher-installateurs-windows` marche aussi :
-le launcher y prend l'installateur du même mode (`developpement/` ou `distribution/`).
+La CI numérote chaque construction `0.1.<numéro d'exécution + 100>`.
+
+- **Automatiquement (catalogue publié)** : sur `main`, la CI publie l'installateur de distribution dans l'entrée
+  `rayans-launcher` du catalogue. Cette entrée n'apparaît pas parmi les applications : quand sa version dépasse
+  celle du launcher, un bandeau « Nouvelle version de Rayan's Launcher » apparaît. Le bouton télécharge
+  l'installateur, vérifie son SHA-256 comme pour une application, ferme le launcher et ouvre l'installateur.
+- **À la main (catalogue local)** : l'artifact `Rayans-Launcher-mise-a-jour` (l'installateur de test seul), déposé
+  tel quel dans `À ajouter`, fait apparaître le même bandeau. L'artifact complet
+  `rayans-launcher-installateurs-windows` marche aussi : le launcher y prend l'installateur du même mode
+  (`developpement/` ou `distribution/`).
+
+Dans les deux cas, les applications installées et leurs données ne bougent pas.
 
 ## Signature Authenticode
 
@@ -442,8 +582,11 @@ et construit les installateurs. Consultez son résultat pour l'état sous Window
 ## Hors périmètre et limites connues
 
 - Hors périmètre de cette version : comptes utilisateurs, installations silencieuses.
-- La mise à jour du launcher passe par le dossier « À ajouter » (installateur de test, catalogue local). Pour un
-  launcher distribué par HTTPS, il faudrait le module officiel de Tauri (serveur HTTPS + clé de signature des mises à jour).
+- La mise à jour du launcher passe par le catalogue signé (installateur vérifié par SHA-256) ou par « À ajouter ».
+  L'installateur lui-même n'est pas signé Authenticode tant qu'aucun certificat n'est fourni.
+- Publication automatique : le catalogue et sa signature sont remplacés l'un après l'autre dans la release
+  « catalogue ». Un launcher qui actualise exactement pendant ces quelques secondes voit une erreur de signature
+  et garde le catalogue précédent ; l'actualisation suivante réussit.
 - Une application est considérée « ouverte » seulement si ce launcher l'a lancée pendant la session en cours. Si vous
   fermez le launcher pendant qu'une application tourne, une mise à jour en attente est activée au redémarrage
   suivant  ; l'ancien dossier est supprimé au démarrage suivant.

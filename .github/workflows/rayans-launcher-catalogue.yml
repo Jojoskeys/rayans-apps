@@ -1,0 +1,118 @@
+# Catalogue signé de Rayan's Launcher, publié dans la release GitHub « catalogue » :
+#   https://github.com/<dépôt>/releases/download/catalogue/catalog.json (+ catalog.json.sig)
+#
+# Le catalogue est reconstruit en entier à partir des releases <id>-v<version> (la plus récente valide de chaque
+# application), puis signé avec le secret RAYANS_LAUNCHER_CATALOG_KEY et vérifié avec la clé publique intégrée au
+# launcher (launcher/src-tauri/catalog-public-key.txt). Comme il est reconstruit à chaque fois, peu importe
+# qu'une exécution en attente soit annulée par une plus récente : la dernière voit toutes les releases.
+#
+# Appelé par rayans-launcher-publier.yml ; se lance aussi à la main (Actions → Run workflow) depuis main.
+name: Rayan's Launcher - catalogue
+
+on:
+  workflow_call:
+    secrets:
+      RAYANS_LAUNCHER_CATALOG_KEY:
+        required: false
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  catalogue:
+    name: Catalogue signé
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    # Une seule mise à jour du catalogue à la fois, pour toutes les applications du dépôt.
+    concurrency:
+      group: rayans-launcher-catalogue
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      CATALOG_URL: https://github.com/${{ github.repository }}/releases/download/catalogue/catalog.json
+      PUBLIC_KEY: launcher/src-tauri/catalog-public-key.txt
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Clés de signature présentes
+        env:
+          CLE: ${{ secrets.RAYANS_LAUNCHER_CATALOG_KEY }}
+        run: |
+          ok=1
+          if [ -z "$CLE" ]; then
+            echo "::error title=Secret manquant::Ajoutez le secret RAYANS_LAUNCHER_CATALOG_KEY (clé privée créée par « npm run keygen » dans launcher/). Voir launcher/README.md, « Publication automatique »."
+            ok=0
+          fi
+          if ! grep -qv '^[[:space:]]*\(#\|$\)' "$PUBLIC_KEY"; then
+            echo "::error title=Clé publique manquante::$PUBLIC_KEY ne contient pas de clé : lancez « npm run keygen » dans launcher/ et commitez ce fichier."
+            ok=0
+          fi
+          [ "$ok" = 1 ]
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            launcher/target
+          key: hangar-tools-${{ runner.os }}-${{ hashFiles('launcher/Cargo.lock') }}
+      - name: Outil hangar-tools (validation et signature)
+        working-directory: launcher
+        run: |
+          dpkg -s libssl-dev > /dev/null 2>&1 || { sudo apt-get update && sudo apt-get install -y libssl-dev pkg-config; }
+          cargo build --locked -p hangar-core --bin hangar-tools
+      - name: Catalogue depuis les releases
+        run: |
+          node --test .github/publication/catalogue.test.mjs
+          node .github/publication/catalogue.mjs construire --repo "$GITHUB_REPOSITORY" \
+            --tools launcher/target/debug/hangar-tools --catalog-url "$CATALOG_URL" --out "$RUNNER_TEMP/cat" --keep 3
+          launcher/target/debug/hangar-tools validate "$RUNNER_TEMP/cat/catalog.json" --strict --base-url "$CATALOG_URL"
+      - name: Signature et vérification avec la clé du launcher
+        env:
+          CLE: ${{ secrets.RAYANS_LAUNCHER_CATALOG_KEY }}
+        run: |
+          umask 077
+          printf '%s\n' "$CLE" > "$RUNNER_TEMP/cle.key"
+          launcher/target/debug/hangar-tools sign --key "$RUNNER_TEMP/cle.key" "$RUNNER_TEMP/cat/catalog.json"
+          rm -f "$RUNNER_TEMP/cle.key"
+          if ! launcher/target/debug/hangar-tools verify --public "$PUBLIC_KEY" "$RUNNER_TEMP/cat/catalog.json"; then
+            echo "::error title=Clés différentes::Le secret RAYANS_LAUNCHER_CATALOG_KEY ne correspond pas à $PUBLIC_KEY. Le catalogue n'est pas publié."
+            exit 1
+          fi
+      - name: Publication du catalogue
+        run: |
+          cd "$RUNNER_TEMP/cat"
+          if ! gh release view catalogue > /dev/null 2>&1; then
+            gh release create catalogue --title "Catalogue de Rayan's Launcher" --target "$GITHUB_SHA" --latest=false \
+              --notes "Catalogue signé lu par Rayan's Launcher. Mis à jour automatiquement par la CI : ne pas modifier à la main."
+          fi
+          mkdir actuel
+          tools="$GITHUB_WORKSPACE/launcher/target/debug/hangar-tools"
+          if gh release download catalogue --pattern 'catalog.json*' --dir actuel 2> /dev/null \
+            && cmp -s actuel/catalog.json catalog.json \
+            && "$tools" verify --public "$GITHUB_WORKSPACE/$PUBLIC_KEY" actuel/catalog.json > /dev/null 2>&1; then
+            echo "Catalogue inchangé."
+          else
+            gh release upload catalogue catalog.json catalog.json.sig --clobber
+            echo "Catalogue publié."
+          fi
+          {
+            echo "### Catalogue de Rayan's Launcher"
+            echo "$CATALOG_URL"
+            echo
+            echo '| Application | Version |'
+            echo '|---|---|'
+            node -e 'for (const a of require(process.argv[1]).apps) console.log(`| ${a.name} (\`${a.id}\`) | ${a.version} |`)' "$PWD/catalog.json"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Suppression des anciennes releases (3 dernières gardées par application)
+        run: |
+          while read -r tag; do
+            [ -n "$tag" ] || continue
+            echo "Suppression de $tag"
+            gh release delete "$tag" --yes --cleanup-tag || echo "::warning::$tag non supprimée"
+          done < "$RUNNER_TEMP/cat/a-supprimer.txt"

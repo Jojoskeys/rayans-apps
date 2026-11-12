@@ -27,6 +27,10 @@ const MAX_CATALOG_BYTES: usize = 8 * 1024 * 1024;
 const MAX_IMAGE_BYTES: usize = 6 * 1024 * 1024;
 const VERSION_MARKER: &str = ".hangar-version.json";
 
+/// Entrée du catalogue réservée au launcher lui-même : son ZIP contient l'installateur de la nouvelle version.
+/// Elle n'apparaît pas dans la liste des applications ; la couche Tauri l'utilise pour se mettre à jour.
+pub const LAUNCHER_ID: &str = "rayans-launcher";
+
 // ---------------------------------------------------------------------------------------------
 // Vue exposée à l'interface
 
@@ -197,7 +201,11 @@ impl Core {
         let paths = Paths::new(root);
         std::fs::create_dir_all(&paths.root)?;
         let mut settings: Settings = load_json(&paths.settings())?;
-        if settings.catalog_url.is_none() {
+        // En distribution, une adresse non HTTPS (catalogue local d'un ancien installateur de test) serait
+        // refusée à chaque actualisation : l'adresse par défaut la remplace.
+        let unusable = !policy.is_dev()
+            && settings.catalog_url.as_deref().is_some_and(|u| !u.starts_with("https://"));
+        if settings.catalog_url.is_none() || unusable {
             settings.catalog_url = default_catalog_url.filter(|u| !u.trim().is_empty());
         }
         let installed: Installed = load_json(&paths.installed())?;
@@ -550,12 +558,12 @@ impl Core {
             }
         };
         if let Some(c) = &inner.catalog {
-            for ca in &c.catalog.apps {
+            for ca in c.catalog.apps.iter().filter(|a| a.id != LAUNCHER_ID) {
                 apps.push(view(&ca.id, Some(ca), inner.installed.apps.get(&ca.id)));
             }
         }
         for (id, ia) in &inner.installed.apps {
-            if !apps.iter().any(|a| &a.id == id) {
+            if id != LAUNCHER_ID && !apps.iter().any(|a| &a.id == id) {
                 apps.push(view(id, None, Some(ia)));
             }
         }
@@ -572,7 +580,10 @@ impl Core {
             refreshing: inner.refreshing,
             error: inner.catalog_error.clone(),
             warning: inner.catalog.as_ref().and_then(|c| c.warning.clone()),
-            app_count: inner.catalog.as_ref().map_or(0, |c| c.catalog.apps.len()),
+            app_count: inner
+                .catalog
+                .as_ref()
+                .map_or(0, |c| c.catalog.apps.iter().filter(|a| a.id != LAUNCHER_ID).count()),
         };
         Snapshot {
             mode: if self.policy.is_dev() { "development" } else { "distributed" }.into(),
@@ -588,6 +599,11 @@ impl Core {
             },
             notices: inner.notices.clone(),
         }
+    }
+
+    /// Version proposée par le catalogue chargé pour `id` (sert à la mise à jour du launcher lui-même).
+    pub fn catalog_version(&self, id: &str) -> Option<semver::Version> {
+        self.lock().catalog.as_ref()?.catalog.get(id).map(|a| a.version.clone())
     }
 
     pub fn clear_notices(&self) {

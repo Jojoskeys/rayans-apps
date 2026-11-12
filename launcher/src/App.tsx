@@ -121,11 +121,11 @@ function LauncherUpdateBanner({ upd }: { upd: LauncherUpdate }) {
         <div>
           <strong>Nouvelle version de Rayan's Launcher : {upd.version}</strong>
           <div className="muted">
-            Trouvée dans « À ajouter » ({upd.file}). Le launcher se ferme, l'installateur s'ouvre ; vos applications et leurs données sont conservées.
+            {upd.fromCatalog ? "Publiée dans le catalogue." : `Trouvée dans « À ajouter » (${upd.file}).`} Le launcher se ferme, l'installateur s'ouvre ; vos applications et leurs données sont conservées.
           </div>
           {err && <ErrorBox error={err} onClose={() => setErr(null)} />}
         </div>
-        <button className="btn primary small" onClick={apply} disabled={busy}>{busy ? "Ouverture…" : "Mettre à jour le launcher"}</button>
+        <button className="btn primary small" onClick={apply} disabled={busy}>{busy ? (upd.fromCatalog ? "Téléchargement…" : "Ouverture…") : "Mettre à jour le launcher"}</button>
       </div>
     </div>
   );

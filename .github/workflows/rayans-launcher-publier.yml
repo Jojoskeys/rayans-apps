@@ -1,0 +1,95 @@
+# Publication d'une application dans Rayan's Launcher (workflow réutilisable, appelé par le workflow de chaque app).
+#
+# 1. « release » : prend le ZIP Windows de l'artifact (avec sa fiche rayans-launcher.json à la racine), le publie
+#    dans une release GitHub <id>-v<version> avec ses visuels et son entrée de catalogue (SHA-256, taille).
+# 2. « catalogue » : régénère catalog.json depuis toutes les releases, le signe et le publie (voir
+#    rayans-launcher-catalogue.yml).
+#
+# Ne publie que depuis main. Mode d'emploi : launcher/README.md, « Publication automatique ».
+name: Rayan's Launcher - publier une application
+
+on:
+  workflow_call:
+    inputs:
+      artifact:
+        description: Nom de l'artifact de l'exécution qui contient exactement un ZIP avec rayans-launcher.json à sa racine.
+        required: true
+        type: string
+      icon:
+        description: Icône de l'application, chemin dans le dépôt (PNG, JPEG, GIF, WebP ou SVG, 6 Mo maximum).
+        required: true
+        type: string
+      image:
+        description: Grande image de la fiche, chemin dans le dépôt (par défaut, l'icône).
+        required: false
+        type: string
+        default: ''
+    secrets:
+      RAYANS_LAUNCHER_CATALOG_KEY:
+        description: Clé privée Ed25519 qui signe le catalogue (base64, fichier écrit par « npm run keygen »).
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: Release GitHub de l'application
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ inputs.artifact }}
+          path: ${{ runner.temp }}/paquet
+      - name: Fiche, empreinte et fichiers de la release
+        id: prep
+        env:
+          ICON: ${{ inputs.icon }}
+          IMAGE: ${{ inputs.image }}
+        run: |
+          shopt -s globstar nullglob
+          zips=("$RUNNER_TEMP"/paquet/**/*.zip)
+          if [ "${#zips[@]}" -ne 1 ]; then
+            echo "::error::L'artifact doit contenir exactement un ZIP (trouvés : ${#zips[@]})."
+            exit 1
+          fi
+          if ! unzip -p "${zips[0]}" rayans-launcher.json > "$RUNNER_TEMP/fiche.json" || [ ! -s "$RUNNER_TEMP/fiche.json" ]; then
+            echo "::error::rayans-launcher.json absent de la racine de ${zips[0]##*/}."
+            exit 1
+          fi
+          args=(entree --manifest "$RUNNER_TEMP/fiche.json" --zip "${zips[0]}" --repo "$GITHUB_REPOSITORY"
+                --icon "$ICON" --dest "$RUNNER_TEMP/release" --notes-out "$RUNNER_TEMP/notes.md")
+          if [ -n "$IMAGE" ]; then args+=(--image "$IMAGE"); fi
+          node .github/publication/catalogue.mjs "${args[@]}" >> "$GITHUB_OUTPUT"
+          ls -l "$RUNNER_TEMP/release"
+      - name: Publication de la release
+        env:
+          TAG: ${{ steps.prep.outputs.tag }}
+          TITRE: ${{ steps.prep.outputs.name }} ${{ steps.prep.outputs.version }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "::notice title=Déjà publiée::$TAG existe déjà (exécution relancée ?) : rien n'est remplacé."
+            exit 0
+          fi
+          gh release create "$TAG" "$RUNNER_TEMP"/release/* --title "$TITRE" \
+            --notes-file "$RUNNER_TEMP/notes.md" --target "$GITHUB_SHA" --latest=false
+          echo "### $TITRE publiée" >> "$GITHUB_STEP_SUMMARY"
+          echo "Release \`$TAG\` : https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
+
+  catalogue:
+    name: Catalogue
+    needs: release
+    permissions:
+      contents: write
+    uses: ./.github/workflows/rayans-launcher-catalogue.yml
+    secrets: inherit
