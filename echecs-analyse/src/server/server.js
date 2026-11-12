@@ -20,6 +20,9 @@ const { createAnalyzer, DEFAULT_SETTINGS, DEPTHS } = require('./analyzer');
 const { createSummaries } = require('./summaries');
 const { createOpenings } = require('../core/openings');
 const { buildReport } = require('../core/report');
+const { colorOf } = require('../core/bilan');
+const { exerciseId, quickCheck, acceptedByClassification, nextState } = require('../core/exercises');
+const { Chess } = require('../core/chessutil');
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json', '.woff2': 'font/woff2' };
 const CSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
@@ -74,6 +77,21 @@ function startServer(opts) {
     const t = req.headers['x-jeton'];
     if (typeof t !== 'string' || t.length !== token.length) return false;
     return crypto.timingSafeEqual(Buffer.from(t), Buffer.from(token));
+  }
+
+  /** Exercices du joueur : ses erreurs dans les parties analysées complètement (résumés en cache). */
+  async function exerciseItems(username) {
+    const out = [];
+    for (const sm of await summaries.forPlayer(username)) {
+      const c = colorOf(sm, username);
+      if (!c || !sm.mistakes) continue;
+      const me = c === 'w' ? sm.white : sm.black;
+      const opp = c === 'w' ? sm.black : sm.white;
+      for (const mk of sm.mistakes[c]) {
+        out.push({ ...mk, id: exerciseId(sm.id, mk.ply), gameId: sm.id, endTime: sm.endTime, timeClass: sm.timeClass, url: sm.url, elo: me.rating, opponent: opp, depth: sm.depth });
+      }
+    }
+    return out;
   }
 
   function gameList(username) {
@@ -166,7 +184,43 @@ function startServer(opts) {
     if (m === 'GET' && p === '/api/analyse') return send(res, 200, analyzer.status());
     if (m === 'GET' && p === '/api/bilan') {
       const u = String(url.searchParams.get('joueur') || '');
-      return send(res, 200, { summaries: await summaries.forPlayer(u), leniency: getSettings().leniency });
+      const list = (await summaries.forPlayer(u)).map(({ mistakes, ...rest }) => rest);
+      return send(res, 200, { summaries: list, leniency: getSettings().leniency });
+    }
+    if (m === 'GET' && p === '/api/exercices') {
+      const u = String(url.searchParams.get('joueur') || '');
+      return send(res, 200, { items: await exerciseItems(u), states: store.loadExerciseStates(u) });
+    }
+    if (m === 'POST' && p === '/api/exercices/reponse') {
+      const b = await readBody(req);
+      const u = String(b.joueur || '');
+      if (typeof b.id !== 'string' || typeof b.uci !== 'string' || !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(b.uci)) return send(res, 400, { error: 'Paramètres invalides' });
+      const ex = (await exerciseItems(u)).find((e) => e.id === b.id);
+      if (!ex) return send(res, 404, { error: 'Exercice introuvable' });
+      const chess = new Chess(ex.fen);
+      let mv = null;
+      try { mv = chess.move({ from: b.uci.slice(0, 2), to: b.uci.slice(2, 4), promotion: b.uci[4] }); } catch (e) { mv = null; }
+      if (!mv) return send(res, 400, { error: 'Coup illégal' });
+      let correct; let reason; let evaluation = null;
+      const quick = quickCheck(ex, b.uci);
+      if (quick) { correct = quick.accepted; reason = quick.reason; } else {
+        try {
+          evaluation = await analyzer.evaluateMove(ex.fen, b.uci, ex.elo);
+        } catch (e) { return send(res, 500, { error: `Évaluation impossible : ${e.message}` }); }
+        const cat = evaluation.classification && evaluation.classification.category;
+        correct = acceptedByClassification(cat);
+        reason = evaluation.classification ? `${evaluation.classification.label} selon Stockfish, perte ${evaluation.classification.loss.toFixed(1).replace('.', ',')} point(s)` : 'non évalué';
+      }
+      let state = null;
+      if (b.compter) {
+        const states = store.loadExerciseStates(u);
+        state = states[ex.id] = nextState(states[ex.id], correct);
+        store.saveExerciseStates(u, states);
+      }
+      return send(res, 200, {
+        correct, reason, san: mv.san, state,
+        evaluation: evaluation ? { score: evaluation.played && evaluation.played.score, pv: evaluation.played && evaluation.played.pv, classification: evaluation.classification, explanation: evaluation.explanation, depth: evaluation.engine && evaluation.engine.depth } : null,
+      });
     }
     if (m === 'POST' && p === '/api/explorer') {
       const b = await readBody(req);

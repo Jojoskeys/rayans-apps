@@ -5,6 +5,7 @@ import scoring from '../core/scoring.js';
 import promptMod from '../core/prompt.js';
 import classifyMod from '../core/classify.js';
 import chessutil from '../core/chessutil.js';
+import { createExercises } from './exercices-view.js';
 import { renderPerf, renderBilan, periodOptions, periodRange, TIME_CLASSES } from './bilan-view.js';
 
 const { formatScore, scoreWin } = scoring;
@@ -492,7 +493,7 @@ async function loadPlayers(select) {
   S.player = sel.value || null;
   await loadGames();
 }
-$('player-select').addEventListener('change', async () => { S.player = $('player-select').value; S.bilanSummaries = null; await loadGames(); renderBilanView(); });
+$('player-select').addEventListener('change', async () => { S.player = $('player-select').value; S.bilanSummaries = null; exercises.invalidate(); await loadGames(); renderBilanView(); });
 $('game-filter').addEventListener('input', renderGames);
 
 async function loadGames() {
@@ -575,7 +576,7 @@ function pollAnalysis() {
       const processed = `${st.queue.processed}|${st.status}|${st.gameId}`;
       if (S.lastProcessed !== null && processed !== S.lastProcessed) {
         if (S.gameId && st.status !== 'running') await openGame(S.gameId, true);
-        S.bilanSummaries = null; S.bilanFor = null;
+        S.bilanSummaries = null; S.bilanFor = null; exercises.invalidate();
         await loadGames();
         if (S.view === 'bilan') renderBilanView();
       } else if ([...prevQueued].join() !== [...queuedIds()].join()) renderGames();
@@ -663,14 +664,23 @@ $('q-clear').addEventListener('click', async () => {
 // ---------- Vue Bilan ----------
 function setView(v) {
   S.view = v;
-  const bilan = v === 'bilan';
-  $('bilan').hidden = !bilan;
-  document.querySelector('.board-zone').hidden = bilan;
-  document.querySelector('.analysis').hidden = bilan;
-  document.querySelector('.layout').classList.toggle('mode-bilan', bilan);
-  for (const [id, on] of [['tab-partie', !bilan], ['tab-bilan', bilan]]) { $(id).classList.toggle('active', on); $(id).setAttribute('aria-selected', String(on)); }
-  if (bilan) renderBilanView(); else { cg.redrawAll(); renderAll(); }
+    $('bilan').hidden = v !== 'bilan';
+  $('exos').hidden = v !== 'exos';
+  document.querySelector('.board-zone').hidden = v !== 'partie';
+  document.querySelector('.analysis').hidden = v !== 'partie';
+  document.querySelector('.layout').classList.toggle('mode-bilan', v === 'bilan');
+  document.querySelector('.layout').classList.toggle('mode-exos', v === 'exos');
+  for (const t of ['partie', 'bilan', 'exos']) { $(`tab-${t}`).classList.toggle('active', v === t); $(`tab-${t}`).setAttribute('aria-selected', String(v === t)); }
+  if (v === 'bilan') renderBilanView();
+  else if (v === 'exos') exercises.open();
+  else { cg.redrawAll(); renderAll(); }
 }
+const exercises = createExercises({
+  api, toast,
+  getPlayer: () => S.player,
+  openInGame: async (id, ply) => { setView('partie'); await openGame(id); goto(ply); },
+});
+$('tab-exos').addEventListener('click', () => setView('exos'));
 $('tab-partie').addEventListener('click', () => setView('partie'));
 $('tab-bilan').addEventListener('click', () => setView('bilan'));
 
@@ -771,7 +781,7 @@ function renderSettings() {
 async function saveSettings(patch) {
   S.etat.settings = await api('/api/reglages', patch);
   renderSettings();
-  if (patch.leniency !== undefined) { S.bilanSummaries = null; renderBilanView(); }
+  if (patch.leniency !== undefined) { S.bilanSummaries = null; exercises.invalidate(); renderBilanView(); }
   if (patch.depth !== undefined) renderGames();
   if (S.gameId) openGame(S.gameId, true);
 }

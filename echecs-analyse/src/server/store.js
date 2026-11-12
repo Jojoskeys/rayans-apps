@@ -90,6 +90,8 @@ function createStore(dataDir) {
       for (const k of [...analysisIndex.keys()]) if (!seen.has(k)) analysisIndex.delete(k);
       return out;
     },
+    loadExerciseStates(u) { return readJson(path.join(playerDir(u), 'exercices.json'), {}); },
+    saveExerciseStates(u, st) { writeJson(path.join(playerDir(u), 'exercices.json'), st); },
     loadQueue() { return readJson(path.join(dataDir, 'file-attente.json'), { items: [] }); },
     saveQueue(q) { writeJson(path.join(dataDir, 'file-attente.json'), q); },
     loadCache(name, fallback) { return readJson(path.join(dataDir, 'cache', `${name}.json`), fallback); },

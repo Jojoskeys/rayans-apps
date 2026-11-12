@@ -129,3 +129,14 @@ input, select { font: inherit; color: var(--text); background: var(--bg); border
 .linkish { background: none; color: var(--accent2); padding: 0; text-decoration: underline; }
 details summary { cursor: pointer; color: var(--muted); }
 @media (max-width: 1200px) { .layout.mode-bilan .bilan { grid-column: 2 / -1; } }
+.layout.mode-exos .exos { grid-column: 2 / -1; display: grid; grid-template-columns: minmax(320px, 1fr) minmax(320px, 440px); gap: 12px; min-height: 0; overflow: auto; }
+.ex-board-zone { display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.ex-board-zone .board-box { width: 100%; max-width: min(100%, calc(100vh - 170px)); flex: none; }
+.ex-board-zone .players-line { padding-left: 0; max-width: min(100%, calc(100vh - 170px)); }
+#ex-board { width: 100%; height: 100%; }
+.ex-side { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.ex-head { font-size: 14px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.ex-ask { font-size: 15px; margin: 10px 0 6px; }
+.ex-res { font-size: 14px; margin: 6px 0; }
+.ex-sol { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); display: grid; gap: 4px; }
+@media (max-width: 1200px) { .layout.mode-exos .exos { grid-template-columns: 1fr; } }

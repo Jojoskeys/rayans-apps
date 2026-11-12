@@ -3,7 +3,7 @@
   "executable": "electron (développement)",
   "pseudo": "JokerSicilian",
   "gameUrl": "https://www.chess.com/game/live/185803756742",
-  "dataDir": "/tmp/analyse-echecs-e2e-WngT1G",
+  "dataDir": "/tmp/analyse-echecs-e2e-QBcPn9",
   "steps": [
     {
       "name": "lancement de l’application et du moteur",
@@ -22,7 +22,7 @@
         "motifs": {
           "variant": 195
         },
-        "duree_s": 98
+        "duree_s": 102
       }
     },
     {
@@ -40,13 +40,13 @@
       "ok": true,
       "details": {
         "demiCoups": 23,
-        "duree_s": 56,
+        "duree_s": 40,
         "moteur": {
           "name": "Stockfish 19",
           "threads": 3,
           "hash": 256
         },
-        "rechercheSearchmoves": 8,
+        "rechercheSearchmoves": 7,
         "ouverture": {
           "eco": "B10",
           "name": "Caro-Kann Defense: Two Knights Attack",
@@ -63,26 +63,26 @@
           "categorie": "Très bon",
           "perte": 0,
           "raisons": [
-            "Seul bon coup : le 2e choix du moteur perd 33.7 points"
+            "Seul bon coup : le 2e choix du moteur perd 33.9 points"
           ]
         },
-        "precisionBlancs": 96.58,
+        "precisionBlancs": 96.07,
         "coupsBlancs": 12,
         "eloEstimeBlancs": {
-          "elo": 2120,
+          "elo": 2090,
           "margin": 250,
           "tooShort": false,
           "count": 12,
-          "raw": 2732
+          "raw": 2689
         },
-        "precisionNoirs": 67.44,
+        "precisionNoirs": 66.61,
         "coupsNoirs": 11,
         "eloEstimeNoirs": {
-          "elo": 1390,
+          "elo": 1370,
           "margin": 250,
           "tooShort": false,
           "count": 11,
-          "raw": 1261
+          "raw": 1231
         }
       }
     },
@@ -111,7 +111,7 @@
         "coup": "22 Re8",
         "categorie": "Gaffe",
         "confirmation": "Question copiée dans le presse-papiers. Collez-la sur claude.ai (rien n’a été envoyé).",
-        "longueur": 1334,
+        "longueur": 1338,
         "explication": "présente"
       }
     },
@@ -127,7 +127,7 @@
           "uci": "a8b8",
           "san": "Rb8",
           "categorie": "Bon",
-          "perte": 5.7,
+          "perte": 5.88,
           "source": "recherche complémentaire searchmoves",
           "profondeur": 22
         }
@@ -137,23 +137,37 @@
       "name": "réouverture après redémarrage, hors ligne, sans recalcul",
       "ok": true,
       "details": {
-        "reouverture_ms": 9,
+        "reouverture_ms": 124,
         "precisions": [
-          96.57874500850602,
-          67.44479812848462
+          96.07088533749948,
+          66.61182395621563
         ]
+      }
+    },
+    {
+      "name": "exercices tirés des erreurs",
+      "ok": true,
+      "details": {
+        "exercices": 16,
+        "premier": {
+          "categorie": "gaffe",
+          "coupJoue": "Qe3",
+          "solution": "c3c4"
+        },
+        "bonneReponse": "meilleur coup de Stockfish",
+        "mauvaiseReponse": "coup joué dans la partie"
       }
     },
     {
       "name": "analyse en lot (profondeur 12) et bilan",
       "ok": true,
       "details": {
-        "duree_s": 23,
+        "duree_s": 22,
         "vitesse_ms_par_demi_coup": {
-          "12": 78
+          "12": 73
         },
         "partiesBilan": 3,
-        "tuiles": "3parties analyséessur 13545 correspondantes 69,4 %précision moyenne± 20,8 (IC 95 %) 1,33gaffes par partie 1,67erreurs par partie 1,67imprécisions par partie"
+        "tuiles": "3parties analyséessur 13545 correspondantes 68,8 %précision moyenne± 20,8 (IC 95 %) 1,33gaffes par partie 1,33erreurs par partie 1,67imprécisions par partie"
       }
     }
   ],

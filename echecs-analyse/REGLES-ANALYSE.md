@@ -171,3 +171,22 @@ Distinct de l'« Elo estimé » de la section 6 (fondé sur la précision) : ici
   un classement distinct pour chacune. À côté : le dernier classement Chess.com du joueur dans le groupe.
 - Limites : les classements adverses sont pris comme exacts (leur incertitude Glicko est ignorée) et les parties
   supposées indépendantes ; sous 10 parties, le résultat est signalé comme peu fiable.
+
+## 10. Exercices tirés de vos erreurs
+
+- **Source** : les parties analysées complètement du joueur choisi. Un exercice = la position **avant** un de ses
+  coups classé gaffe, erreur ou occasion manquée (section 4 ; imprécisions en option), avec les données moteur
+  déjà enregistrées : aucun nouveau calcul pour préparer les exercices.
+- **Réponse acceptée sans recalcul** : le meilleur coup de Stockfish ; le 2e choix de Stockfish s'il perd au plus le
+  seuil « excellent » (2,5 points, assoupli selon l'Elo comme en section 4) par rapport au meilleur ; un coup que la
+  table de finales donne comme préservant le résultat. Le coup joué dans la partie est toujours refusé.
+- **Autre coup** : évalué par Stockfish local (profondeur du réglage, mêmes règles que les coups explorés) et accepté
+  s'il est classé meilleur, brillant, très bon ou excellent.
+- **Répétition espacée** (boîtes de Leitner) : seul le premier essai d'une séance compte. Réussite → boîte suivante,
+  prochaine révision après 1, 3, 7, 21 puis 60 jours. Échec (ou « Je ne sais pas ») → boîte 0, l'exercice revient
+  10 minutes plus tard. « Maîtrisé » = boîte 3 ou plus (3 réussites de suite). État enregistré par joueur
+  (`joueurs/<pseudo>/exercices.json`).
+- **Ordre** : d'abord les exercices déjà vus et à revoir, puis les nouveaux (gaffes, puis occasions manquées, puis
+  erreurs, puis imprécisions ; parties récentes d'abord), puis, si l'option « seulement ceux à faire » est décochée,
+  les autres par date de révision.
+- **Phase** : celle de la section 8.

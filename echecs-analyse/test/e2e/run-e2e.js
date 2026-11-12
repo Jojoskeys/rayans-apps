@@ -239,6 +239,21 @@ async function main() {
   await page.screenshot({ path: path.join(OUT, '5-bilan.png') });
   const bilan = await apiIn(page, `/api/bilan?joueur=${PSEUDO.toLowerCase()}`);
   assert.ok(bilan.summaries.length >= 3, 'partie de test + lot');
+  // 8. Exercices : la position avant une erreur du joueur ; meilleur coup accepté, coup de la partie refusé.
+  await page.click('#tab-exos');
+  await page.waitForSelector('#ex-panel .ex-ask, #ex-panel .status', { timeout: 120000 });
+  const exList = await apiIn(page, `/api/exercices?joueur=${PSEUDO.toLowerCase()}`);
+  assert.ok(exList.items.length >= 1, 'au moins un exercice');
+  const postIn = (p, body) => page.evaluate(async ([pp, b]) => (await fetch(pp, { method: 'POST', headers: { 'X-Jeton': sessionStorage.getItem('jeton'), 'Content-Type': 'application/json' }, body: JSON.stringify(b) })).json(), [p, body]);
+  const ex0 = exList.items[0];
+  const okRep = await postIn('/api/exercices/reponse', { joueur: PSEUDO.toLowerCase(), id: ex0.id, uci: ex0.best.uci, compter: false });
+  assert.equal(okRep.correct, true);
+  const koRep = await postIn('/api/exercices/reponse', { joueur: PSEUDO.toLowerCase(), id: ex0.id, uci: ex0.uci, compter: true });
+  assert.equal(koRep.correct, false);
+  assert.equal(koRep.state.box, 0);
+  await page.screenshot({ path: path.join(OUT, '6-exercices.png') });
+  stepOk('exercices tirés des erreurs', { exercices: exList.items.length, premier: { categorie: ex0.category, coupJoue: ex0.san, solution: ex0.best.uci }, bonneReponse: okRep.reason, mauvaiseReponse: koRep.reason });
+
   stepOk('analyse en lot (profondeur 12) et bilan', { duree_s: Math.round((Date.now() - t3) / 1000), vitesse_ms_par_demi_coup: q.queue.msPerPly, partiesBilan: bilan.summaries.length, tuiles: tiles.replace(/\s+/g, ' ').trim() });
   await app.close();
   results.ok = true;

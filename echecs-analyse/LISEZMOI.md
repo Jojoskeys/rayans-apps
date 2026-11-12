@@ -85,6 +85,17 @@ Cliquez sur l'onglet **Bilan** (en haut). Filtres : cadence, couleur, période, 
   dans le temps ; par cadence, par couleur et par phase (ouverture, milieu de jeu, finale) ; les parties avec le plus
   de gaffes (cliquez pour les ouvrir). Analysez vos parties à la même profondeur pour que les comparaisons aient un sens.
 
+## 7. Exercices tirés de vos erreurs
+
+Onglet **Exercices** : l'application vous replace juste avant une de vos gaffes ou erreurs (dans vos parties déjà
+analysées) ; trouvez un bon coup en le jouant sur l'échiquier.
+
+- Le meilleur coup de Stockfish est accepté, ainsi qu'un coup presque aussi bon (Stockfish vérifie en quelques secondes).
+- Après la réponse : la solution, la variante, ce que vous aviez joué et pourquoi c'était une erreur.
+  **Voir dans la partie** ouvre la partie à ce moment.
+- Seul le premier essai compte. Un exercice réussi revient après 1 jour, puis 3, 7, 21, 60 jours ; un exercice
+  manqué revient 10 minutes plus tard. Filtres : type d'erreur, cadence, phase de jeu.
+
 Les analyses sont enregistrées sur votre ordinateur : une partie analysée se rouvre instantanément, même sans
 Internet. Les règles de calcul (catégories, précision, Elo estimé) sont détaillées dans `REGLES-ANALYSE.md` ;
 ce sont des approximations, indépendantes des chiffres de Chess.com.

@@ -13,6 +13,7 @@
   <nav class="tabs" role="tablist" aria-label="Vue">
     <button class="tab active" id="tab-partie" role="tab" aria-selected="true">Partie</button>
     <button class="tab" id="tab-bilan" role="tab" aria-selected="false">Bilan</button>
+    <button class="tab" id="tab-exos" role="tab" aria-selected="false">Exercices</button>
   </nav>
   <div class="engine" id="engine-badge">Moteur : démarrage…</div>
   <button class="ghost" id="btn-settings" aria-expanded="false">Réglages</button>
@@ -77,6 +78,24 @@
     </div>
     <div class="card" id="perf-card"></div>
     <div class="card" id="bilan-card"></div>
+  </section>
+  <section class="exos" id="exos" hidden>
+    <div class="ex-board-zone">
+      <div class="players-line" id="ex-top"></div>
+      <div class="board-box"><div id="ex-board" class="cg-wrap-host"></div><div id="ex-promo" class="promo" hidden></div></div>
+      <div class="players-line" id="ex-bottom"></div>
+    </div>
+    <div class="ex-side">
+      <div class="card row filters">
+        <select id="ex-types" aria-label="Type d’erreur"><option value="gef">Gaffes, erreurs, occasions manquées</option><option value="g">Gaffes seulement</option><option value="tout">Avec les imprécisions</option></select>
+        <select id="ex-cadence" aria-label="Cadence"><option value="">Toutes cadences</option><option value="bullet">Bullet</option><option value="blitz">Blitz</option><option value="rapid">Rapide</option><option value="daily">Quotidienne</option></select>
+        <select id="ex-phase" aria-label="Phase"><option value="">Toutes phases</option><option value="ouverture">Ouverture</option><option value="milieu">Milieu de jeu</option><option value="finale">Finale</option></select>
+        <label class="small"><input type="checkbox" id="ex-due" checked> Seulement ceux à faire maintenant</label>
+      </div>
+      <div class="card" id="ex-counts"></div>
+      <div class="card" id="ex-panel"></div>
+      <p class="muted small">Les exercices viennent de vos parties analysées complètement : la position juste avant une de vos erreurs. Un coup est accepté s’il est aussi bon que celui de Stockfish à quelques points près (règles : REGLES-ANALYSE.md, section 10).</p>
+    </div>
   </section>
   <section class="board-zone">
     <div class="players-line" id="top-player"></div>

@@ -8,9 +8,10 @@
 const { moveAccuracy, HARMONIC_FLOOR } = require('./scoring');
 const { phasesOf, PHASES } = require('./phases');
 const { periodKey } = require('./performance');
+const { extractMistakes } = require('./exercises');
 
 const ERROR_KEYS = ['gaffe', 'erreur', 'imprecision', 'occasion_manquee'];
-const SUMMARY_VERSION = 1; // à incrémenter si les règles de classement ou de résumé changent
+const SUMMARY_VERSION = 2; // à incrémenter si les règles de classement ou de résumé changent
 
 function emptyStats() {
   return { n: 0, sumAcc: 0, sumInv: 0, gaffe: 0, erreur: 0, imprecision: 0, occasion_manquee: 0 };
@@ -49,6 +50,7 @@ function summarizeGame(game, report) {
     black: { username: game.black.username, rating: game.black.rating },
     depth: report.analysis && report.analysis.settings ? report.analysis.settings.depth : null,
     sides,
+    mistakes: { w: extractMistakes(report, 'w', phases), b: extractMistakes(report, 'b', phases) },
   };
 }
 
