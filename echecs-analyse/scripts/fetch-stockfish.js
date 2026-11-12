@@ -39,7 +39,9 @@ async function main() {
   fs.rmSync(tmp, { recursive: true, force: true });
   fs.mkdirSync(tmp, { recursive: true });
   // tar sait extraire .tar.gz partout, et .zip sous Windows (bsdtar) ; sinon unzip.
-  if (asset.file.endsWith('.zip') && process.platform !== 'win32') execFileSync('unzip', ['-q', archive, '-d', tmp]);
+  // (Sous Windows, on appelle explicitement le tar.exe du système : le « tar » GNU de Git Bash lit « D: » comme un hôte distant.)
+  if (process.platform === 'win32') execFileSync(path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe'), ['-xf', archive, '-C', tmp]);
+  else if (asset.file.endsWith('.zip')) execFileSync('unzip', ['-q', archive, '-d', tmp]);
   else execFileSync('tar', ['-xf', archive, '-C', tmp]);
   const src = path.join(tmp, 'stockfish');
   const out = path.join(root, 'vendor', 'stockfish');

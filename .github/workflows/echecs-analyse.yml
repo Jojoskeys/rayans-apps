@@ -24,7 +24,7 @@ jobs:
       matrix:
         include:
           - nom: macOS Apple Silicon
-            os: macos-14
+            os: macos-15
             dist: npx electron-builder --mac --arm64
             sf: mac
             app: "dist/mac-arm64/Analyse Echecs.app"
@@ -76,6 +76,7 @@ jobs:
       - name: Test de bout en bout sur une vraie partie (paquet installé)
         run: |
           npm install --no-save playwright@1.63.0
+          rm -rf test/e2e/resultats
           if [ "$RUNNER_OS" = "Linux" ]; then E2E_EXECUTABLE="${{ matrix.exe }}" xvfb-run -a node test/e2e/run-e2e.js; else E2E_EXECUTABLE="${{ matrix.exe }}" node test/e2e/run-e2e.js; fi
       - uses: actions/upload-artifact@v4
         if: always()
