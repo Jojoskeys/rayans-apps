@@ -32,6 +32,10 @@ fn env_once() {
 struct Server {
     base: String,
     online: Arc<AtomicBool>,
+    /// Envoi lent (64 Ko toutes les 20 ms) pour pouvoir annuler en plein téléchargement.
+    slow: Arc<AtomicBool>,
+    /// Nombre de requêtes de reprise (en-tête Range) servies.
+    ranges: Arc<std::sync::atomic::AtomicUsize>,
 }
 
 fn serve(dir: PathBuf) -> Server {
@@ -39,6 +43,9 @@ fn serve(dir: PathBuf) -> Server {
     let base = format!("http://{}", l.local_addr().unwrap());
     let online = Arc::new(AtomicBool::new(true));
     let on = online.clone();
+    let slow = Arc::new(AtomicBool::new(false));
+    let ranges = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let (sl, rg) = (slow.clone(), ranges.clone());
     std::thread::spawn(move || {
         for s in l.incoming().flatten() {
             if !on.load(Ordering::SeqCst) {
@@ -46,22 +53,40 @@ fn serve(dir: PathBuf) -> Server {
                 continue;
             }
             let dir = dir.clone();
+            let (sl, rg) = (sl.clone(), rg.clone());
             std::thread::spawn(move || {
                 let mut r = BufReader::new(s.try_clone().unwrap());
                 let mut line = String::new();
                 r.read_line(&mut line).ok();
+                let mut from: Option<usize> = None;
                 loop {
                     let mut h = String::new();
                     if r.read_line(&mut h).unwrap_or(0) <= 2 {
                         break;
+                    }
+                    if let Some(v) = h.to_ascii_lowercase().strip_prefix("range: bytes=") {
+                        from = v.trim().trim_end_matches('-').parse().ok();
                     }
                 }
                 let path = line.split_whitespace().nth(1).unwrap_or("/").trim_start_matches('/');
                 let mut s = s;
                 match std::fs::read(dir.join(path)) {
                     Ok(b) => {
-                        let _ = write!(s, "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n", b.len());
-                        let _ = s.write_all(&b);
+                        let start = from.filter(|f| *f < b.len()).unwrap_or(0);
+                        if start > 0 {
+                            rg.fetch_add(1, Ordering::SeqCst);
+                            let _ = write!(s, "HTTP/1.1 206 Partial Content\r\nContent-Range: bytes {start}-{}/{}\r\nContent-Length: {}\r\nConnection: close\r\n\r\n", b.len() - 1, b.len(), b.len() - start);
+                        } else {
+                            let _ = write!(s, "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n", b.len());
+                        }
+                        for c in b[start..].chunks(64 * 1024) {
+                            if s.write_all(c).is_err() {
+                                break;
+                            }
+                            if sl.load(Ordering::SeqCst) {
+                                std::thread::sleep(Duration::from_millis(20));
+                            }
+                        }
                     }
                     Err(_) => {
                         let _ = write!(s, "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n");
@@ -70,7 +95,7 @@ fn serve(dir: PathBuf) -> Server {
             });
         }
     });
-    Server { base, online }
+    Server { base, online, slow, ranges }
 }
 
 struct Site {
@@ -374,4 +399,64 @@ async fn signature_exigee_en_distribution() {
     let core = open(&s, dev());
     let err = core.refresh_catalog().await.unwrap_err();
     assert!(err.to_string().contains("name"), "{err}");
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn telechargement_annule_puis_repris() {
+    let site = site();
+    let sha = demo_zip(&site, "dl-1.0.0.zip");
+    write_catalog(&site, &[entry("dl", "1.0.0", "dl-1.0.0.zip", &sha)], None);
+    let core = open(&site, dev());
+    core.refresh_catalog().await.unwrap();
+    site.server.slow.store(true, Ordering::SeqCst);
+
+    // 1. Annulation en plein téléchargement : pas d'erreur affichée, début gardé.
+    let c2 = Arc::clone(&core);
+    let job = tokio::spawn(async move { c2.install("dl").await });
+    let mut cancelled = false;
+    for _ in 0..200 {
+        tokio::time::sleep(Duration::from_millis(10)).await;
+        let got = core.snapshot().apps[0].task.as_ref().map_or(0, |t| t.received);
+        if got > 0 && core.cancel_download("dl") {
+            cancelled = true;
+            break;
+        }
+    }
+    assert!(cancelled, "le téléchargement aurait dû être annulable");
+    assert!(matches!(job.await.unwrap(), Err(hangar_core::Error::Cancelled)));
+    let app = core.snapshot().apps.into_iter().find(|a| a.id == "dl").unwrap();
+    assert!(app.last_error.is_none(), "une annulation n'est pas une erreur");
+    assert!(app.installed_version.is_none());
+    let part = app.partial_bytes.expect("début de téléchargement gardé");
+    assert!(part > 0);
+
+    // 2. Reprise (même après redémarrage du launcher) : seule la suite est demandée, empreinte correcte.
+    drop(core);
+    let core = open(&site, dev());
+    assert_eq!(core.snapshot().apps.iter().find(|a| a.id == "dl").unwrap().partial_bytes, Some(part));
+    site.server.slow.store(false, Ordering::SeqCst);
+    core.install("dl").await.unwrap();
+    assert_eq!(site.server.ranges.load(Ordering::SeqCst), 1, "reprise par en-tête Range");
+    let app = core.snapshot().apps.into_iter().find(|a| a.id == "dl").unwrap();
+    assert_eq!(app.installed_version.as_deref(), Some("1.0.0"));
+    assert_eq!(app.partial_bytes, None, "fichier partiel supprimé après installation");
+
+    // 3. « Abandonner » supprime le début gardé.
+    let sha2 = demo_zip(&site, "dl-2.0.0.zip");
+    write_catalog(&site, &[entry("dl", "2.0.0", "dl-2.0.0.zip", &sha2)], None);
+    core.refresh_catalog().await.unwrap();
+    site.server.slow.store(true, Ordering::SeqCst);
+    let c2 = Arc::clone(&core);
+    let job = tokio::spawn(async move { c2.install("dl").await });
+    for _ in 0..200 {
+        tokio::time::sleep(Duration::from_millis(10)).await;
+        if core.snapshot().apps[0].task.as_ref().is_some_and(|t| t.received > 0) && core.cancel_download("dl") {
+            break;
+        }
+    }
+    let _ = job.await;
+    assert!(core.snapshot().apps[0].partial_bytes.is_some());
+    core.discard_download("dl");
+    assert!(core.snapshot().apps[0].partial_bytes.is_none());
+    assert_eq!(core.snapshot().apps[0].installed_version.as_deref(), Some("1.0.0"), "version en place intacte");
 }

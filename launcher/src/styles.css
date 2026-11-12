@@ -250,3 +250,12 @@ nav { display: flex; flex-direction: column; gap: 2px; }
 .form-grid .input { flex: none; font-size: 14px; color: var(--text); }
 .form-grid .wide { grid-column: 1 / -1; }
 .form-grid textarea.input { height: auto; padding-top: 8px; resize: vertical; font: inherit; }
+
+/* Outils d'une application installée, reprise de téléchargement, mise à jour du launcher */
+.tools { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 14px; }
+.tools .btn { justify-content: flex-start; }
+.progress .btn.ghost { align-self: flex-start; margin-top: 4px; }
+.actions .link.small { font-size: 12px; align-self: flex-start; }
+.launcher-upd { border-color: rgba(255, 178, 63, 0.45); }
+.launcher-upd .error-box { margin-top: 8px; }
+.partial-line { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); }

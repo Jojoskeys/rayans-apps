@@ -18,6 +18,7 @@ use state::*;
 use std::collections::HashMap;
 use std::fs::{File, OpenOptions};
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard};
 use std::time::{Duration, Instant};
 use url::Url;
@@ -57,6 +58,8 @@ pub struct AppView {
     pub update_available: bool,
     pub running: bool,
     pub task: Option<TaskView>,
+    /// Octets déjà reçus d'un téléchargement annulé ou coupé (reprise possible).
+    pub partial_bytes: Option<u64>,
     pub last_error: Option<ErrorInfo>,
     pub data_dir: String,
 }
@@ -133,6 +136,8 @@ struct Inner {
     /// Applications lancées par ce launcher (pid, 0 pendant la préparation du lancement).
     running: HashMap<String, u32>,
     notices: Vec<String>,
+    /// Drapeau d'annulation des téléchargements en cours.
+    cancels: HashMap<String, Arc<AtomicBool>>,
 }
 
 pub type Listener = Box<dyn Fn(Event) + Send + Sync>;
@@ -249,7 +254,15 @@ impl Core {
     /// Supprime les restes d'opérations interrompues (préparations, téléchargements, anciennes versions).
     fn cleanup_orphans(&self) {
         let inner = self.lock();
-        util::remove_dir_quiet(&self.paths.downloads());
+        // Les téléchargements partiels (.part) sont gardés pour une reprise ; le reste est supprimé.
+        if let Ok(rd) = std::fs::read_dir(self.paths.downloads()) {
+            for e in rd.flatten() {
+                if !e.file_name().to_string_lossy().ends_with(".part") {
+                    let _ = std::fs::remove_file(e.path());
+                    util::remove_dir_quiet(&e.path());
+                }
+            }
+        }
         let Ok(rd) = std::fs::read_dir(self.paths.root.join("apps")) else { return };
         for entry in rd.flatten() {
             let id = entry.file_name().to_string_lossy().to_string();
@@ -527,6 +540,11 @@ impl Core {
                 },
                 running: inner.running.contains_key(id),
                 task: inner.tasks.get(id).cloned(),
+                partial_bytes: if inner.tasks.contains_key(id) {
+                    None
+                } else {
+                    ca.and_then(|a| std::fs::metadata(self.partial_path(a)).ok()).map(|m| m.len()).filter(|n| *n > 0)
+                },
                 last_error: inner.errors.get(id).cloned(),
                 data_dir: self.paths.data_dir(id).display().to_string(),
             }
@@ -599,6 +617,7 @@ impl Core {
             }
             let kind = if inner.installed.apps.contains_key(id) { "update" } else { "install" };
             inner.errors.remove(id);
+            inner.cancels.insert(id.to_string(), Arc::new(AtomicBool::new(false)));
             inner.tasks.insert(
                 id.to_string(),
                 TaskView { kind: kind.into(), phase: "downloading".into(), received: 0, total: app.size },
@@ -613,12 +632,52 @@ impl Core {
         {
             let mut inner = self.lock();
             inner.tasks.remove(id);
-            if let Err(e) = &result {
-                inner.errors.insert(id.to_string(), e.info());
+            inner.cancels.remove(id);
+            match &result {
+                Err(Error::Cancelled) | Ok(_) => {}
+                Err(e) => {
+                    inner.errors.insert(id.to_string(), e.info());
+                }
             }
         }
         self.emit(Event::Changed);
         result
+    }
+
+    /// Fichier du téléchargement en cours ou interrompu : un par application et par contenu attendu.
+    fn partial_path(&self, app: &CatalogApp) -> PathBuf {
+        self.paths.downloads().join(format!("{}-{}.part", app.id, &app.sha256[..16]))
+    }
+
+    /// Arrête le téléchargement en cours. Ce qui est déjà reçu est gardé pour une reprise.
+    pub fn cancel_download(&self, id: &str) -> bool {
+        let inner = self.lock();
+        let downloading = inner.tasks.get(id).is_some_and(|t| t.phase == "downloading");
+        if let (true, Some(flag)) = (downloading, inner.cancels.get(id)) {
+            flag.store(true, Ordering::Relaxed);
+            return true;
+        }
+        false
+    }
+
+    /// Supprime le début de téléchargement gardé pour une application.
+    pub fn discard_download(&self, id: &str) {
+        if self.lock().tasks.contains_key(id) {
+            return;
+        }
+        self.remove_partials(id, None);
+        self.emit(Event::Changed);
+    }
+
+    fn remove_partials(&self, id: &str, keep: Option<&Path>) {
+        let Ok(rd) = std::fs::read_dir(self.paths.downloads()) else { return };
+        let prefix = format!("{id}-");
+        for e in rd.flatten() {
+            let n = e.file_name().to_string_lossy().to_string();
+            if n.starts_with(&prefix) && n.ends_with(".part") && Some(e.path().as_path()) != keep {
+                let _ = std::fs::remove_file(e.path());
+            }
+        }
     }
 
     fn set_phase(&self, id: &str, phase: &str, received: u64, total: Option<u64>) {
@@ -642,16 +701,27 @@ impl Core {
 
         // 1. Téléchargement dans un dossier temporaire, empreinte calculée au fil de l'eau.
         tokio::fs::create_dir_all(self.paths.downloads()).await?;
-        let zip_path = self.paths.downloads().join(format!("{id}-{nonce}.zip"));
-        let _zip_guard = Cleanup(Some(zip_path.clone()));
+        let zip_path = self.partial_path(app);
+        self.remove_partials(&id, Some(&zip_path)); // débuts d'anciennes versions
+        let cancel = self.lock().cancels.get(&id).cloned().unwrap_or_default();
         let mut last = Instant::now() - Duration::from_secs(1);
-        let actual = net::download_to(&self.http, &url, &zip_path, app.size, |rec, tot| {
+        let downloaded = net::download_to(&self.http, &url, &zip_path, app.size, &cancel, |rec, tot| {
             if last.elapsed() >= Duration::from_millis(80) {
                 last = Instant::now();
                 self.set_phase(&id, "downloading", rec, tot);
             }
         })
-        .await?;
+        .await;
+        let actual = match downloaded {
+            Ok(h) => h,
+            // Annulation ou coupure : le début reste pour la reprise.
+            Err(e @ (Error::Cancelled | Error::Network(_))) => return Err(e),
+            Err(e) => {
+                let _ = std::fs::remove_file(&zip_path);
+                return Err(e);
+            }
+        };
+        let _zip_guard = Cleanup(Some(zip_path.clone()));
 
         // 2. Vérification de l'empreinte.
         self.set_phase(&id, "verifying", 0, None);
@@ -805,6 +875,27 @@ impl Core {
         }
         self.emit(Event::Changed);
         result
+    }
+
+    /// Dossier de la version active et chemin de son exécutable.
+    pub fn installed_paths(&self, id: &str) -> Result<(PathBuf, PathBuf)> {
+        let inner = self.lock();
+        let app = inner.installed.apps.get(id).ok_or(Error::NotInstalled)?;
+        let dir = self.paths.versions_dir(id).join(&app.current.dir);
+        let exe = dir.join(&app.current.executable);
+        Ok((dir, exe))
+    }
+
+    /// Nom affiché d'une application installée.
+    pub fn installed_name(&self, id: &str) -> Option<String> {
+        self.lock().installed.apps.get(id).map(|a| a.name.clone())
+    }
+
+    /// Dossier de données de l'application (créé s'il n'existe pas encore).
+    pub fn data_dir(&self, id: &str) -> Result<PathBuf> {
+        let d = self.paths.data_dir(id);
+        std::fs::create_dir_all(&d)?;
+        Ok(d)
     }
 
     fn spawn_checked(self: &Arc<Self>, id: &str, dir: &Path, ver: &InstalledVersion) -> Result<u32> {

@@ -33,6 +33,8 @@ export interface AppView {
   updateAvailable: boolean;
   running: boolean;
   task: TaskView | null;
+  /** Octets déjà reçus d'un téléchargement annulé ou coupé. */
+  partialBytes: number | null;
   lastError: ErrorInfo | null;
   dataDir: string;
 }
@@ -61,6 +63,15 @@ export interface Snapshot {
   localCatalogPath: string | null;
   /** Résultat du dernier import du dossier « À ajouter ». */
   notices: string[];
+}
+
+export interface LauncherUpdate {
+  version: string;
+  file: string;
+}
+
+export interface Features {
+  shortcuts: boolean;
 }
 
 export interface ZipEntry {
@@ -102,6 +113,13 @@ export const api = {
   inspectZip: (path: string) => call<ZipProposal>("inspect_zip", { path }),
   addZip: (path: string, entry: ZipEntry) => call<string>("add_zip", { path, entry }),
   dismissNotices: () => call<void>("dismiss_notices"),
+  cancelDownload: (id: string) => call<boolean>("cancel_download", { id }),
+  discardDownload: (id: string) => call<void>("discard_download", { id }),
+  openFolder: (id: string, which: "install" | "data") => call<void>("open_folder", { id, which }),
+  features: () => call<Features>("features"),
+  createShortcut: (id: string) => call<string>("create_shortcut", { id }),
+  launcherUpdate: () => call<LauncherUpdate | null>("launcher_update"),
+  applyLauncherUpdate: () => call<void>("apply_launcher_update"),
   /** Fenêtre « Ouvrir » de Windows, filtrée sur les ZIP. */
   pickZip: async (): Promise<string | null> => {
     if (!inTauri) return "C:\\Users\\vous\\Downloads\\Analyse-Echecs-1.0.0-Windows-x64.zip";

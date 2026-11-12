@@ -32,6 +32,7 @@ function app(p: Partial<AppView> & { id: string; name: string }): AppView {
     updateAvailable: false,
     running: false,
     task: null,
+    partialBytes: null,
     lastError: null,
     dataDir: `C:\\Users\\vous\\AppData\\Local\\fr.rayan.launcher\\data\\${p.id}`,
     ...p,
@@ -120,14 +121,20 @@ const patch = (id: string, p: Partial<AppView>) => {
 };
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+const cancels = new Map<string, () => void>();
+
 async function fakeInstall(id: string) {
   const a = snap.apps.find((x) => x.id === id)!;
   const kind = a.installedVersion ? "update" : "install";
   const total = a.size ?? 1_000_000;
-  for (let r = 0; r <= total; r += total / 20) {
-    patch(id, { task: { kind, phase: "downloading", received: r, total }, lastError: null });
-    await wait(60);
+  const cancelled = new Set<string>();
+  cancels.set(id, () => cancelled.add(id));
+  for (let r = a.partialBytes ?? 0; r <= total; r += total / 40) {
+    if (cancelled.has(id)) return;
+    patch(id, { task: { kind, phase: "downloading", received: r, total }, lastError: null, partialBytes: null });
+    await wait(120);
   }
+  cancels.delete(id);
   for (const phase of ["verifying", "extracting", "finalizing"] as const) {
     patch(id, { task: { kind, phase, received: 0, total: null } });
     await wait(300);
@@ -179,6 +186,25 @@ export const mockBackend = {
       case "add_zip":
         await wait(600);
         return (args?.entry as { id: string }).id as T;
+      case "cancel_download": {
+        const t = snap.apps.find((x) => x.id === id)?.task;
+        cancels.get(id)?.();
+        patch(id, { task: null, partialBytes: t?.received || 512_000 });
+        return true as T;
+      }
+      case "discard_download":
+        patch(id, { partialBytes: null });
+        return undefined as T;
+      case "open_folder":
+        return undefined as T;
+      case "features":
+        return { shortcuts: true } as T;
+      case "create_shortcut":
+        return "C:\\Users\\vous\\Desktop\\app.lnk" as T;
+      case "launcher_update":
+        return (scenario === "ajout" ? { version: "0.1.57", file: "Rayans-Launcher-mise-a-jour.zip" } : null) as T;
+      case "apply_launcher_update":
+        throw { code: "other", message: "Aperçu navigateur : la mise à jour du launcher n'est disponible que sous Windows.", hint: "" };
       case "dismiss_notices":
         snap = { ...snap, notices: [] };
         emit();

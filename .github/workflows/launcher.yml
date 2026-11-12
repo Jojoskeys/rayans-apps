@@ -83,21 +83,51 @@ jobs:
         run: |
           node scripts/demo.mjs init
           node scripts/demo.mjs add
+      # Version 0.1.<numéro d'exécution> : chaque construction est une mise à jour pour le launcher installé.
+      # Signature Authenticode seulement si les secrets WINDOWS_CERTIFICATE (fichier .pfx en base64) et
+      # WINDOWS_CERTIFICATE_PASSWORD existent ; sinon installateurs non signés, comme avant.
+      - name: Réglages de construction (version, signature éventuelle)
+        shell: pwsh
+        env:
+          CERT_B64: ${{ secrets.WINDOWS_CERTIFICATE }}
+          CERT_PWD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+        run: |
+          $conf = [ordered]@{ version = "0.1.$env:GITHUB_RUN_NUMBER" }
+          if ($env:CERT_B64) {
+            $pfx = Join-Path $env:RUNNER_TEMP 'cert.pfx'
+            [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:CERT_B64))
+            $pass = ConvertTo-SecureString $env:CERT_PWD -AsPlainText -Force
+            $cert = Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $pass
+            Remove-Item $pfx
+            $conf.bundle = @{ windows = @{ certificateThumbprint = $cert.Thumbprint; digestAlgorithm = 'sha256'; timestampUrl = 'http://timestamp.digicert.com' } }
+            Write-Host "Signature Authenticode activée ($($cert.Subject))"
+          } else {
+            Write-Host "::notice title=Authenticode::Aucun certificat (secret WINDOWS_CERTIFICATE) : installateurs non signés."
+          }
+          $conf | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 ../out-tauri-ci.json
+          Get-Content ../out-tauri-ci.json
       - name: Installateur de test (mode développement autorisé)
         run: |
-          npx tauri build --features dev-mode
+          npx tauri build --features dev-mode --config ../out-tauri-ci.json
           rm -rf ../out/driver
           mkdir -p ../out/developpement
           cp target/release/bundle/nsis/*.exe target/release/bundle/msi/*.msi ../out/developpement/
+          mkdir -p ../out-maj && cp target/release/bundle/nsis/*-setup.exe ../out-maj/
       - name: Installateur de distribution (HTTPS et signature obligatoires)
         run: |
-          npx tauri build
+          npx tauri build --config ../out-tauri-ci.json
           mkdir -p ../out/distribution
           cp target/release/bundle/nsis/*.exe target/release/bundle/msi/*.msi ../out/distribution/
       - uses: actions/upload-artifact@v5
         with:
           name: rayans-launcher-installateurs-windows
           path: out/
+      # À déposer tel quel dans « À ajouter » : le launcher installé propose alors la mise à jour.
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Rayans-Launcher-mise-a-jour
+          path: out-maj/
+          compression-level: 0
       - uses: actions/upload-artifact@v5
         with:
           name: rayans-launcher-catalogue-demo-windows

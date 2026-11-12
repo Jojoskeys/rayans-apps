@@ -490,6 +490,9 @@ pub fn import_drop_folder(catalog_path: &Path) -> Vec<String> {
     let mut messages = Vec::new();
     for f in files {
         let name = f.file_name().unwrap().to_string_lossy().to_string();
+        if !launcher_setups_in_zip(&f).is_empty() {
+            continue; // installateur du launcher : traité par la mise à jour du launcher
+        }
         let r = inspect_zip(&f, catalog_path).and_then(|p| {
             if p.existing_version.as_deref() == Some(p.entry.version.as_str()) {
                 return Ok(None); // déjà au catalogue : rien à faire
@@ -513,6 +516,89 @@ pub fn import_drop_folder(catalog_path: &Path) -> Vec<String> {
         }
     }
     messages
+}
+
+// ----- Mise à jour du launcher lui-même ------------------------------------------------------------
+
+/// Installateur de Rayan's Launcher trouvé dans « À ajouter » (fichier .exe, ou dans un ZIP d'artifact).
+#[derive(Debug, Clone, Serialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct LauncherUpdate {
+    pub version: String,
+    /// Nom du fichier déposé.
+    pub file: String,
+    #[serde(skip)]
+    pub source: PathBuf,
+    /// Chemin dans le ZIP, ou `None` si l'installateur a été déposé tel quel.
+    #[serde(skip)]
+    pub entry: Option<String>,
+}
+
+fn is_launcher_setup(path: &str) -> bool {
+    let f = path.rsplit(['/', '\\']).next().unwrap_or(path).to_lowercase();
+    f.contains("launcher") && f.ends_with("setup.exe")
+}
+
+fn launcher_setups_in_zip(zip_path: &Path) -> Vec<String> {
+    let Ok(file) = std::fs::File::open(zip_path) else { return vec![] };
+    let Ok(zip) = zip::ZipArchive::new(file) else { return vec![] };
+    zip.file_names().filter(|n| is_launcher_setup(n)).map(str::to_string).collect()
+}
+
+/// Cherche dans « À ajouter » un installateur du launcher plus récent que `current`. Dans un ZIP qui contient
+/// les deux installateurs de la CI, prend celui du même mode (`developpement/` ou `distribution/`).
+pub fn find_launcher_update(catalog_path: &Path, current: &semver::Version, dev: bool) -> Option<LauncherUpdate> {
+    let drop = catalog_path.parent()?.join(DROP_DIR);
+    let mode = if dev { "developpement/" } else { "distribution/" };
+    let mut best: Option<(semver::Version, LauncherUpdate)> = None;
+    for e in std::fs::read_dir(drop).ok()?.flatten() {
+        let path = e.path();
+        let file = e.file_name().to_string_lossy().to_string();
+        let lower = file.to_lowercase();
+        let candidates: Vec<(Option<String>, String)> = if is_launcher_setup(&file) {
+            vec![(None, file.clone())]
+        } else if lower.ends_with(".zip") {
+            let all = launcher_setups_in_zip(&path);
+            let same_mode: Vec<String> = all.iter().filter(|n| n.replace('\\', "/").contains(mode)).cloned().collect();
+            let pick = if all.len() == 1 { all } else { same_mode };
+            pick.into_iter().map(|n| (Some(n.clone()), n)).collect()
+        } else {
+            vec![]
+        };
+        for (entry, name) in candidates {
+            let base = name.rsplit(['/', '\\']).next().unwrap_or(&name).to_string();
+            let Some(v) = version_in_name(&base).and_then(|v| semver::Version::parse(&v).ok()) else { continue };
+            if &v > current && best.as_ref().is_none_or(|(b, _)| &v > b) {
+                let u = LauncherUpdate { version: v.to_string(), file: file.clone(), source: path.clone(), entry };
+                best = Some((v, u));
+            }
+        }
+    }
+    best.map(|(_, u)| u)
+}
+
+/// Copie l'installateur dans `dest_dir`, puis retire le fichier déposé. Renvoie le chemin de l'installateur.
+pub fn take_launcher_setup(u: &LauncherUpdate, dest_dir: &Path) -> Result<PathBuf> {
+    std::fs::create_dir_all(dest_dir)?;
+    let out = match &u.entry {
+        None => {
+            let out = dest_dir.join(u.source.file_name().unwrap());
+            std::fs::copy(&u.source, &out)?;
+            out
+        }
+        Some(entry) => {
+            let file = std::fs::File::open(&u.source)?;
+            let mut zip = zip::ZipArchive::new(file).map_err(|e| Error::BadArchive(e.to_string()))?;
+            let mut src = zip.by_name(entry).map_err(|e| Error::BadArchive(e.to_string()))?;
+            let base = entry.rsplit(['/', '\\']).next().unwrap_or(entry);
+            let out = dest_dir.join(base);
+            let mut f = std::fs::File::create(&out)?;
+            std::io::copy(&mut src, &mut f)?;
+            out
+        }
+    };
+    let _ = std::fs::remove_file(&u.source);
+    Ok(out)
 }
 
 #[cfg(test)]
@@ -588,5 +674,31 @@ mod tests {
         assert_eq!(p.entry.id, "analyse-echecs");
         assert_eq!(p.entry.executable, "Analyse Echecs.exe");
         assert!(p.complete);
+    }
+
+    #[test]
+    fn mise_a_jour_du_launcher() {
+        let d = tempfile::tempdir().unwrap();
+        let cat = ensure_local_catalog(d.path()).unwrap();
+        let drop = d.path().join(DROP_DIR);
+        let cur = semver::Version::parse("0.1.40").unwrap();
+        assert!(find_launcher_update(&cat, &cur, true).is_none());
+        // Artifact de la CI : les deux installateurs, version 0.1.57.
+        let n = "Rayan\u{2019}s Launcher_0.1.57_x64-setup.exe";
+        make_zip(&drop.join("rayans-launcher-installateurs-windows.zip"), &[
+            (&format!("developpement/{n}"), b"DEV"), (&format!("distribution/{n}"), b"DIST"),
+            ("developpement/Rayan\u{2019}s Launcher_0.1.57_x64_fr-FR.msi", b"MSI"),
+        ]);
+        // Plus ancien, déposé tel quel : ignoré.
+        std::fs::write(drop.join("Rayan\u{2019}s Launcher_0.1.30_x64-setup.exe"), b"OLD").unwrap();
+        let u = find_launcher_update(&cat, &cur, true).unwrap();
+        assert_eq!(u.version, "0.1.57");
+        assert!(u.entry.as_deref().unwrap().starts_with("developpement/"));
+        // L'import d'applications ne touche pas à l'installateur du launcher.
+        assert!(import_drop_folder(&cat).is_empty());
+        let out = take_launcher_setup(&u, &d.path().join("tmp")).unwrap();
+        assert_eq!(std::fs::read(&out).unwrap(), b"DEV");
+        assert!(!u.source.exists());
+        assert!(find_launcher_update(&cat, &semver::Version::parse("0.1.30").unwrap(), true).is_none());
     }
 }

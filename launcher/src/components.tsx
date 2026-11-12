@@ -113,6 +113,11 @@ export function ProgressBlock({ app }: { app: AppView }) {
         <span>{detail}</span>
         <span>{pct != null ? `${Math.round(pct)} %` : ""}</span>
       </div>
+      {t.phase === "downloading" && (
+        <button className="btn small ghost" onClick={(e) => { e.stopPropagation(); void api.cancelDownload(app.id); }}>
+          <Icon name="close" size={14} /> Annuler le téléchargement
+        </button>
+      )}
     </div>
   );
 }
@@ -162,6 +167,15 @@ export function Actions({ app, compact = false }: { app: AppView; compact?: bool
   } else if (app.inCatalog) {
     primary = <button className="btn primary" onClick={install} disabled={busy}><Icon name="download" /> Installer</button>;
   }
+  // Téléchargement annulé ou coupé : le bouton reprend là où il s'était arrêté.
+  const partial = app.partialBytes && app.inCatalog && !app.running && (app.updateAvailable || !app.installedVersion);
+  if (partial) {
+    primary = (
+      <button className="btn primary" onClick={install} disabled={busy} title="Reprendre le téléchargement là où il s'était arrêté">
+        <Icon name="download" /> Reprendre
+      </button>
+    );
+  }
 
   const err = app.lastError;
   return (
@@ -181,6 +195,12 @@ export function Actions({ app, compact = false }: { app: AppView; compact?: bool
         {primary}
         {secondary}
       </div>
+      {partial && (
+        <div className="partial-line">
+          <span>{bytes(app.partialBytes!)}{app.size ? ` sur ${bytes(app.size)}` : ""} déjà reçus</span>
+          <button className="link small" onClick={run(() => api.discardDownload(app.id))}>Abandonner</button>
+        </div>
+      )}
     </div>
   );
 }

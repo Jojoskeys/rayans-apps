@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { api, subscribe, toErrorInfo, type AppView, type ErrorInfo, type Snapshot, type ZipEntry, type ZipProposal } from "./api";
+import { api, subscribe, toErrorInfo, type AppView, type ErrorInfo, type Features, type LauncherUpdate, type Snapshot, type ZipEntry, type ZipProposal } from "./api";
 import { Actions, AppIcon, ErrorBox, Icon, Logo, VersionLine, Visual } from "./components";
 import { bytes, date, dateTime } from "./format";
 
@@ -10,6 +10,8 @@ export default function App() {
   const [page, setPage] = useState<Page>("catalog");
   const [detail, setDetail] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [launcherUpd, setLauncherUpd] = useState<LauncherUpdate | null>(null);
+  const [features, setFeatures] = useState<Features>({ shortcuts: false });
   const pending = useRef(false);
 
   const reload = useCallback(async () => {
@@ -17,12 +19,14 @@ export default function App() {
     pending.current = true;
     try {
       setSnap(await api.snapshot());
+      setLauncherUpd(await api.launcherUpdate().catch(() => null));
     } finally {
       pending.current = false;
     }
   }, []);
 
   useEffect(() => {
+    api.features().then(setFeatures).catch(() => {});
     void reload();
     let off: (() => void) | undefined;
     subscribe((e) => {
@@ -83,8 +87,9 @@ export default function App() {
       </aside>
 
       <main className="main">
+        {launcherUpd && <LauncherUpdateBanner upd={launcherUpd} />}
         {current ? (
-          <Detail app={current} snap={snap} onBack={() => setDetail(null)} onToast={setToast} />
+          <Detail app={current} snap={snap} features={features} onBack={() => setDetail(null)} onToast={setToast} />
         ) : page === "settings" ? (
           <Settings snap={snap} onSaved={reload} />
         ) : (
@@ -92,6 +97,36 @@ export default function App() {
         )}
       </main>
       {toast && <div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+function LauncherUpdateBanner({ upd }: { upd: LauncherUpdate }) {
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<ErrorInfo | null>(null);
+  const apply = async () => {
+    setBusy(true);
+    setErr(null);
+    try {
+      await api.applyLauncherUpdate();
+    } catch (e) {
+      setErr(toErrorInfo(e));
+      setBusy(false);
+    }
+  };
+  return (
+    <div className="banners">
+      <div className="banner info launcher-upd">
+        <Icon name="update" />
+        <div>
+          <strong>Nouvelle version de Rayan's Launcher : {upd.version}</strong>
+          <div className="muted">
+            Trouvée dans « À ajouter » ({upd.file}). Le launcher se ferme, l'installateur s'ouvre ; vos applications et leurs données sont conservées.
+          </div>
+          {err && <ErrorBox error={err} onClose={() => setErr(null)} />}
+        </div>
+        <button className="btn primary small" onClick={apply} disabled={busy}>{busy ? "Ouverture…" : "Mettre à jour le launcher"}</button>
+      </div>
     </div>
   );
 }
@@ -425,11 +460,21 @@ function EmptyState({ icon, title, text, actions, error }: { icon: string; title
 
 // ----- Fiche d'une application -----------------------------------------------------------------
 
-function Detail({ app, snap, onBack, onToast }: { app: AppView; snap: Snapshot; onBack: () => void; onToast: (s: string) => void }) {
+function Detail({ app, snap, features, onBack, onToast }: { app: AppView; snap: Snapshot; features: Features; onBack: () => void; onToast: (s: string) => void }) {
   const [confirm, setConfirm] = useState(false);
   const [removeData, setRemoveData] = useState(false);
   const [err, setErr] = useState<ErrorInfo | null>(null);
   const refresh = snap.catalog.fetchedAt;
+
+  const tool = (f: () => Promise<unknown>, ok?: string) => async () => {
+    setErr(null);
+    try {
+      await f();
+      if (ok) onToast(ok);
+    } catch (e) {
+      setErr(toErrorInfo(e));
+    }
+  };
 
   const uninstall = async () => {
     try {
@@ -477,6 +522,18 @@ function Detail({ app, snap, onBack, onToast }: { app: AppView; snap: Snapshot; 
             <div><dt>Identifiant</dt><dd><code>{app.id}</code></dd></div>
             {app.installedVersion && <div><dt>Données utilisateur</dt><dd><code className="path">{app.dataDir}</code></dd></div>}
           </dl>
+          {app.installedVersion && (
+            <div className="tools">
+              <button className="btn small" onClick={tool(() => api.openFolder(app.id, "install"))}>Ouvrir le dossier de l'application</button>
+              <button className="btn small" onClick={tool(() => api.openFolder(app.id, "data"))}>Ouvrir le dossier des données</button>
+              {features.shortcuts && (
+                <button className="btn small" onClick={tool(() => api.createShortcut(app.id), `Raccourci « ${app.name} » créé sur le Bureau.`)}>
+                  Créer un raccourci sur le Bureau
+                </button>
+              )}
+            </div>
+          )}
+          {err && !confirm && <ErrorBox error={err} onClose={() => setErr(null)} />}
           {app.installedVersion && !app.task && (
             <div className="danger-zone">
               {!confirm ? (
@@ -497,7 +554,7 @@ function Detail({ app, snap, onBack, onToast }: { app: AppView; snap: Snapshot; 
                 </div>
               )}
               {app.running && <p className="muted small">Fermez l'application pour la désinstaller.</p>}
-              {err && <ErrorBox error={err} onClose={() => setErr(null)} />}
+              {err && confirm && <ErrorBox error={err} onClose={() => setErr(null)} />}
             </div>
           )}
         </aside>

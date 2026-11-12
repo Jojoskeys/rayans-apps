@@ -38,6 +38,8 @@ pub enum Error {
     Io(String),
     #[error("{0}")]
     Other(String),
+    #[error("téléchargement annulé")]
+    Cancelled,
 }
 
 impl Error {
@@ -60,6 +62,7 @@ impl Error {
             Error::Launch(_) => "launch",
             Error::Io(_) => "io",
             Error::Other(_) => "other",
+            Error::Cancelled => "cancelled",
         }
     }
 

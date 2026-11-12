@@ -2,8 +2,11 @@
 //! (réseau, disque, processus) restent en Rust.
 
 use hangar_core::{catalog, local, Core, Event, Snapshot, TrustPolicy};
+mod shortcut;
+
 use std::sync::Arc;
 use tauri::{Emitter, Manager, State};
+use tauri_plugin_opener::OpenerExt;
 
 const PUBLIC_KEY: &str = include_str!("../catalog-public-key.txt");
 
@@ -61,8 +64,105 @@ fn launch(core: State<CoreState>, id: String) -> CmdResult<u32> {
 }
 
 #[tauri::command]
-fn uninstall(core: State<CoreState>, id: String, remove_data: bool) -> CmdResult<()> {
-    core.uninstall(&id, remove_data).map_err(|e| e.info())
+fn uninstall(app: tauri::AppHandle, core: State<CoreState>, id: String, remove_data: bool) -> CmdResult<()> {
+    let name = core.installed_name(&id);
+    core.uninstall(&id, remove_data).map_err(|e| e.info())?;
+    // Le raccourci du Bureau créé par le launcher n'a plus de sens.
+    if let (Some(name), Ok(desk)) = (name, app.path().desktop_dir()) {
+        let _ = std::fs::remove_file(desk.join(shortcut::file_name(&name)));
+    }
+    Ok(())
+}
+
+#[tauri::command]
+fn cancel_download(core: State<CoreState>, id: String) -> bool {
+    core.cancel_download(&id)
+}
+
+#[tauri::command]
+fn discard_download(core: State<CoreState>, id: String) {
+    core.discard_download(&id)
+}
+
+fn other(msg: impl Into<String>) -> hangar_core::ErrorInfo {
+    hangar_core::Error::Other(msg.into()).info()
+}
+
+/// Ouvre dans l'Explorateur le dossier de la version installée (`which = "install"`) ou des données.
+#[tauri::command]
+fn open_folder(app: tauri::AppHandle, core: State<CoreState>, id: String, which: String) -> CmdResult<()> {
+    let dir = if which == "data" {
+        core.data_dir(&id).map_err(|e| e.info())?
+    } else {
+        core.installed_paths(&id).map_err(|e| e.info())?.0
+    };
+    app.opener()
+        .open_path(dir.to_string_lossy(), None::<&str>)
+        .map_err(|e| other(format!("ouverture du dossier impossible ({e})")))
+}
+
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Features {
+    shortcuts: bool,
+}
+
+#[tauri::command]
+fn features() -> Features {
+    Features { shortcuts: cfg!(windows) }
+}
+
+/// Crée (ou remplace) un raccourci sur le Bureau qui lance l'application via Rayan's Launcher.
+#[tauri::command]
+fn create_shortcut(app: tauri::AppHandle, core: State<CoreState>, id: String) -> CmdResult<String> {
+    let (_, exe) = core.installed_paths(&id).map_err(|e| e.info())?;
+    let name = core.installed_name(&id).unwrap_or_else(|| id.clone());
+    let desk = app.path().desktop_dir().map_err(|e| other(format!("Bureau introuvable ({e})")))?;
+    let lnk = desk.join(shortcut::file_name(&name));
+    let launcher = std::env::current_exe().map_err(|e| other(e.to_string()))?;
+    let ico = shortcut::icon_path(&core.paths().app_dir(&id));
+    shortcut::create(&lnk, &launcher, &id, &exe, &ico, &format!("Lancer {name} avec Rayan's Launcher"))
+        .map_err(|e| other(format!("raccourci non créé : {e}")))?;
+    Ok(lnk.display().to_string())
+}
+
+fn find_launcher_update(app: &tauri::AppHandle, core: &Core) -> Option<local::LauncherUpdate> {
+    let cat = core.local_catalog_path()?;
+    let current = semver::Version::parse(&app.package_info().version.to_string()).ok()?;
+    local::find_launcher_update(&cat, &current, DEV_MODE)
+}
+
+/// Nouvel installateur du launcher déposé dans « À ajouter », s'il y en a un.
+#[tauri::command]
+fn launcher_update(app: tauri::AppHandle, core: State<CoreState>) -> Option<local::LauncherUpdate> {
+    find_launcher_update(&app, &core)
+}
+
+/// Lance l'installateur de la nouvelle version puis ferme le launcher (l'installateur le remplace).
+#[tauri::command]
+fn apply_launcher_update(app: tauri::AppHandle, core: State<CoreState>) -> CmdResult<()> {
+    if !cfg!(windows) {
+        return Err(other("la mise à jour du launcher n'est disponible que sous Windows"));
+    }
+    if core.snapshot().apps.iter().any(|a| a.task.is_some()) {
+        return Err(hangar_core::Error::Busy.info());
+    }
+    let u = find_launcher_update(&app, &core).ok_or_else(|| other("aucune nouvelle version dans « À ajouter »"))?;
+    let dir = std::env::temp_dir().join(format!("rayans-launcher-maj-{}", u.version));
+    let setup = local::take_launcher_setup(&u, &dir).map_err(|e| e.info())?;
+    std::process::Command::new(&setup)
+        .spawn()
+        .map_err(|e| other(format!("installateur non lancé ({e})")))?;
+    app.exit(0);
+    Ok(())
+}
+
+/// `--launch <id>` (raccourci du Bureau) : lance l'application installée.
+fn launch_from_args(app: &tauri::AppHandle, args: &[String]) {
+    let Some(id) = shortcut::launch_arg(args) else { return };
+    if let Some(core) = app.try_state::<CoreState>() {
+        let _ = core.launch(&id);
+    }
 }
 
 #[tauri::command]
@@ -92,13 +192,19 @@ fn get_image(core: State<CoreState>, id: String, kind: String) -> Option<String>
 
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+        .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
+            // Raccourci ouvert alors que le launcher tourne déjà : on lance l'application sans autre fenêtre.
+            if shortcut::launch_arg(&args).is_some() {
+                launch_from_args(app, &args);
+                return;
+            }
             if let Some(w) = app.get_webview_window("main") {
                 let _ = w.unminimize();
                 let _ = w.set_focus();
             }
         }))
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             let key = catalog::parse_public_key(PUBLIC_KEY).expect("catalog-public-key.txt invalide");
             let policy = if DEV_MODE {
@@ -128,6 +234,7 @@ pub fn run() {
                 }
             }
             app.manage(Arc::clone(&core));
+            launch_from_args(app.handle(), &std::env::args().collect::<Vec<_>>());
             // Actualisation du catalogue au démarrage (le dernier catalogue valide est déjà chargé).
             tauri::async_runtime::spawn(async move {
                 let _ = core.refresh_catalog().await;
@@ -145,6 +252,13 @@ pub fn run() {
             inspect_zip,
             add_zip,
             dismiss_notices,
+            cancel_download,
+            discard_download,
+            open_folder,
+            features,
+            create_shortcut,
+            launcher_update,
+            apply_launcher_update,
             get_image
         ])
         .run(tauri::generate_context!())

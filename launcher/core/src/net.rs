@@ -7,7 +7,8 @@ use futures_util::StreamExt;
 use sha2::{Digest, Sha256};
 use std::path::Path;
 use std::time::Duration;
-use tokio::io::AsyncWriteExt;
+use std::sync::atomic::{AtomicBool, Ordering};
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use url::Url;
 
 pub fn client(policy: &TrustPolicy) -> reqwest::Client {
@@ -81,49 +82,103 @@ pub async fn fetch_bytes(
     Ok(Some(out))
 }
 
-/// Télécharge vers `dest` et renvoie l'empreinte SHA-256 du contenu reçu.
+/// Télécharge vers `dest` et renvoie l'empreinte SHA-256 du fichier complet.
+///
+/// Reprise : si `dest` contient déjà le début du fichier (téléchargement annulé ou coupé), seule la suite est
+/// demandée (en-tête Range). Un serveur qui ne sait pas reprendre renvoie tout : on repart de zéro.
+/// `cancel` arrête le téléchargement entre deux blocs : le début reste sur le disque pour une reprise.
 pub async fn download_to(
     http: &reqwest::Client,
     url: &Url,
     dest: &Path,
     expected_size: Option<u64>,
+    cancel: &AtomicBool,
     mut on_progress: impl FnMut(u64, Option<u64>),
 ) -> Result<String> {
-    let mut file = tokio::fs::File::create(dest).await?;
     let mut hasher = Sha256::new();
     let mut received: u64 = 0;
     if url.scheme() == "file" {
         let path = url
             .to_file_path()
             .map_err(|_| Error::Network(format!("chemin local invalide : {url}")))?;
-        let data = tokio::fs::read(&path)
+        let mut src = tokio::fs::File::open(&path)
             .await
             .map_err(|e| Error::Network(format!("{} : {e}", path.display())))?;
-        hasher.update(&data);
-        file.write_all(&data).await?;
-        received = data.len() as u64;
-        on_progress(received, Some(received));
-    } else {
-        let resp = http.get(url.clone()).send().await.map_err(net_err)?;
-        if !resp.status().is_success() {
-            return Err(Error::HttpStatus {
-                status: resp.status().as_u16(),
-                url: url.to_string(),
-            });
+        let total = src.metadata().await.ok().map(|m| m.len());
+        let mut file = tokio::fs::File::create(dest).await?;
+        let mut buf = vec![0u8; 1 << 20];
+        loop {
+            if cancel.load(Ordering::Relaxed) {
+                return Err(Error::Cancelled);
+            }
+            let n = src.read(&mut buf).await.map_err(|e| Error::Network(format!("{} : {e}", path.display())))?;
+            if n == 0 {
+                break;
+            }
+            hasher.update(&buf[..n]);
+            file.write_all(&buf[..n]).await?;
+            received += n as u64;
+            on_progress(received, total);
         }
-        let announced = resp.content_length();
-        let total = announced.or(expected_size);
-        let mut stream = resp.bytes_stream();
+        file.sync_all().await?;
+        return Ok(hex::encode(hasher.finalize()));
+    }
+
+    let already = tokio::fs::metadata(dest).await.map(|m| m.len()).unwrap_or(0);
+    let mut req = http.get(url.clone());
+    if already > 0 {
+        req = req.header(reqwest::header::RANGE, format!("bytes={already}-"));
+    }
+    let resp = req.send().await.map_err(net_err)?;
+    let status = resp.status();
+    let resuming = already > 0 && status == reqwest::StatusCode::PARTIAL_CONTENT;
+    if status == reqwest::StatusCode::RANGE_NOT_SATISFIABLE {
+        // Le morceau gardé ne correspond plus : on le jette et on recommence au prochain essai.
+        let _ = tokio::fs::remove_file(dest).await;
+        return Err(Error::Network("reprise impossible, le téléchargement repartira de zéro".into()));
+    }
+    if !status.is_success() {
+        return Err(Error::HttpStatus { status: status.as_u16(), url: url.to_string() });
+    }
+    let mut file = if resuming {
+        // L'empreinte couvre tout le fichier : on relit d'abord le début déjà reçu.
+        let mut f = tokio::fs::File::open(dest).await?;
+        let mut buf = vec![0u8; 1 << 20];
+        loop {
+            let n = f.read(&mut buf).await?;
+            if n == 0 {
+                break;
+            }
+            hasher.update(&buf[..n]);
+        }
+        received = already;
+        tokio::fs::OpenOptions::new().append(true).open(dest).await?
+    } else {
+        tokio::fs::File::create(dest).await?
+    };
+    let announced = resp.content_length().map(|l| l + received);
+    let total = announced.or(expected_size);
+    on_progress(received, total);
+    let mut stream = resp.bytes_stream();
+    let result: Result<()> = async {
         while let Some(chunk) = stream.next().await {
+            if cancel.load(Ordering::Relaxed) {
+                return Err(Error::Cancelled);
+            }
             let chunk = chunk.map_err(net_err)?;
             hasher.update(&chunk);
             file.write_all(&chunk).await?;
             received += chunk.len() as u64;
             on_progress(received, total);
         }
-        if let Some(t) = resp_len_mismatch(announced, received) {
-            return Err(Error::Network(t));
-        }
+        Ok(())
+    }
+    .await;
+    // Ce qui est reçu reste sur le disque, même en cas d'annulation ou de coupure.
+    file.flush().await?;
+    result?;
+    if let Some(t) = resp_len_mismatch(announced, received) {
+        return Err(Error::Network(t));
     }
     file.sync_all().await?;
     Ok(hex::encode(hasher.finalize()))

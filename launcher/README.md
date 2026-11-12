@@ -316,6 +316,40 @@ npm run tools -- sign --key .keys/catalog-private.key publication/catalog.json
 affichent la nouvelle application au démarrage suivant ou dès que l'utilisateur clique sur **Actualiser**, sans
 reconstruire le launcher.
 
+## Téléchargements, dossiers et raccourcis
+
+- **Annuler** : pendant le téléchargement, « Annuler le téléchargement ». Ce qui est reçu est gardé.
+- **Reprendre** : le bouton « Reprendre » repart là où le téléchargement s'était arrêté, même après une coupure
+  réseau ou un redémarrage du launcher (en-tête HTTP `Range`). L'empreinte SHA-256 porte toujours sur le fichier
+  entier. « Abandonner » supprime le début gardé.
+- **Ouvrir le dossier** : sur la fiche d'une application installée, « Ouvrir le dossier de l'application » (version
+  active) et « Ouvrir le dossier des données ».
+- **Raccourci sur le Bureau** (Windows) : « Créer un raccourci sur le Bureau ». Le raccourci ouvre Rayan's Launcher avec
+  `--launch <id>` : la version active est lancée et vérifiée, et le raccourci reste bon après une mise à jour. Si le
+  launcher est déjà ouvert, il lance l'application sans ouvrir de deuxième fenêtre. Le raccourci est supprimé à la
+  désinstallation.
+
+## Mettre à jour le launcher lui-même
+
+La CI numérote chaque construction `0.1.<numéro d'exécution>` et publie l'artifact `Rayans-Launcher-mise-a-jour`
+(l'installateur de test seul). Téléchargez-le et déposez le ZIP tel quel dans `À ajouter`. Un bandeau « Nouvelle
+version de Rayan's Launcher » apparaît : le bouton ferme le launcher et ouvre l'installateur. Les applications
+installées et leurs données ne bougent pas. L'artifact complet `rayans-launcher-installateurs-windows` marche aussi :
+le launcher y prend l'installateur du même mode (`developpement/` ou `distribution/`).
+
+## Signature Authenticode
+
+Un certificat de signature de code est **payant** (autorité de certification, ou service Azure Trusted Signing).
+Une fois le certificat obtenu au format `.pfx`, ajoutez deux secrets au dépôt GitHub (Settings → Secrets and
+variables → Actions) :
+
+- `WINDOWS_CERTIFICATE` : le fichier `.pfx` encodé en base64 (PowerShell :
+  `[Convert]::ToBase64String([IO.File]::ReadAllBytes("cert.pfx"))`) ;
+- `WINDOWS_CERTIFICATE_PASSWORD` : son mot de passe.
+
+La CI signe alors `hangar.exe` et les installateurs (SHA-256, horodatage DigiCert). Sans ces secrets, elle continue
+sans signer et le signale dans le résumé de l'exécution.
+
 ## Publier une mise à jour
 
 Publiez le nouveau ZIP **sous un nouveau nom**, sans écraser l'ancien, pour que les téléchargements en cours restent
@@ -407,11 +441,13 @@ et construit les installateurs. Consultez son résultat pour l'état sous Window
 
 ## Hors périmètre et limites connues
 
-- Hors périmètre de cette version : comptes utilisateurs, installations silencieuses, mise à jour du launcher
-  lui-même.
+- Hors périmètre de cette version : comptes utilisateurs, installations silencieuses.
+- La mise à jour du launcher passe par le dossier « À ajouter » (installateur de test, catalogue local). Pour un
+  launcher distribué par HTTPS, il faudrait le module officiel de Tauri (serveur HTTPS + clé de signature des mises à jour).
 - Une application est considérée « ouverte » seulement si ce launcher l'a lancée pendant la session en cours. Si vous
   fermez le launcher pendant qu'une application tourne, une mise à jour en attente est activée au redémarrage
   suivant  ; l'ancien dossier est supprimé au démarrage suivant.
-- Pas de reprise d'un téléchargement interrompu (il recommence) ni d'annulation en cours de route.
+- La reprise d'un téléchargement demande un serveur qui accepte l'en-tête `Range` ; sinon il recommence au début.
 - Une clé publique par launcher : changer de clé demande de distribuer un nouveau launcher.
-- Ni le launcher ni les installateurs ne sont signés Authenticode.
+- Signature Authenticode : prête dans la CI mais inactive tant qu'aucun certificat n'est fourni (voir
+  « Signature Authenticode »). Sans elle, Windows SmartScreen affiche un avertissement.
