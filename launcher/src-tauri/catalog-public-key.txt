@@ -1,4 +1,2 @@
-# Clé publique Ed25519 (base64) qui signe le catalogue distribué.
-# Remplacez cette ligne de commentaire par la clé générée avec :
-#   npm run keygen
-# Tant qu'aucune clé n'est présente, un launcher de distribution refuse tout catalogue.
+# Clé publique Ed25519 du catalogue Rayan's Launcher (base64). Générée par scripts/keygen.mjs.
++gujnWC3E9dmb7RDxviN0D4tJ0A6lhBX6ER1ewGwNmI=
