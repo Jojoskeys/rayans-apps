@@ -59,13 +59,20 @@ jobs:
       - run: npm ci
       - name: Tests du coeur (dont les 5 parcours sur RayansChrono.exe)
         run: npm test
+      - name: Pilote Edge assorti au WebView2 installé
+        shell: pwsh
+        timeout-minutes: 5
+        run: |
+          $v = (Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}').pv
+          Write-Host "WebView2 $v"
+          Invoke-WebRequest "https://msedgedriver.microsoft.com/$v/edgedriver_win64.zip" -OutFile edgedriver.zip
+          Expand-Archive edgedriver.zip -DestinationPath ..\out\driver -Force
+          Get-ChildItem ..\out\driver
       - name: Parcours de bout en bout dans l'application (WebView2 + msedgedriver)
+        timeout-minutes: 20
         run: |
           npx tauri build --debug --no-bundle
           cargo install tauri-driver --locked
-          # Pilote Edge de la même version que le WebView2 installé (outil recommandé par Tauri).
-          cargo install --git https://github.com/chippers/msedgedriver-tool
-          mkdir -p ../out/driver && (cd ../out/driver && msedgedriver-tool.exe)
           TAURI_NATIVE_DRIVER="$(cd ../out/driver && pwd -W)/msedgedriver.exe" npm run e2e:ui
       - name: Paquets de démonstration Windows (v1 et v2) et catalogue local
         run: |

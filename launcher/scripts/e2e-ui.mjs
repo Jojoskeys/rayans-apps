@@ -27,7 +27,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const demo = (step) => execFileSync("node", ["scripts/demo.mjs", step], { stdio: "inherit" });
 
 async function wd(method, path, body) {
-  const r = await fetch(DRIVER + path, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  const r = await fetch(DRIVER + path, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(60000) });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(`${method} ${path} : ${JSON.stringify(j.value ?? j)}`);
   return j.value;

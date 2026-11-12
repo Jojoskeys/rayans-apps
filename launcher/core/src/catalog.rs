@@ -193,6 +193,8 @@ fn req(field: &Option<String>, name: &str, ctx: &str) -> std::result::Result<Str
 
 /// Analyse et valide un catalogue. `base` sert à résoudre les URL relatives (au fichier catalogue).
 pub fn parse_and_validate(bytes: &[u8], base: &Url, policy: &TrustPolicy) -> Result<Catalog> {
+    // Le Bloc-notes de Windows peut ajouter une marque d'ordre des octets (BOM) en tête de fichier.
+    let bytes = bytes.strip_prefix(b"\xEF\xBB\xBF").unwrap_or(bytes);
     let raw: RawCatalog = serde_json::from_slice(bytes)
         .map_err(|e| Error::InvalidCatalog(format!("JSON mal formé ({e})")))?;
     match raw.schema_version {
@@ -328,6 +330,12 @@ mod tests {
             assert!(normalize_relative_path(bad).is_err(), "{bad}");
         }
         assert_eq!(normalize_relative_path("a\\b/./c.exe").unwrap(), "a/b/c.exe");
+    }
+
+    #[test]
+    fn accepte_un_fichier_avec_bom() {
+        let j = format!("\u{feff}{{\"schemaVersion\":1,\"apps\":[{}]}}", app_json("demo", ""));
+        assert_eq!(parse_and_validate(j.as_bytes(), &base(), &dev()).unwrap().apps.len(), 1);
     }
 
     #[test]
