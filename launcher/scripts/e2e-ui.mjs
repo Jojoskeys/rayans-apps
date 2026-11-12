@@ -26,8 +26,8 @@ mkdirSync(OUT, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const demo = (step) => execFileSync("node", ["scripts/demo.mjs", step], { stdio: "inherit" });
 
-async function wd(method, path, body) {
-  const r = await fetch(DRIVER + path, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(60000) });
+async function wd(method, path, body, timeout = 60000) {
+  const r = await fetch(DRIVER + path, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(timeout) });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(`${method} ${path} : ${JSON.stringify(j.value ?? j)}`);
   return j.value;
@@ -35,16 +35,22 @@ async function wd(method, path, body) {
 
 let sid;
 async function startApp() {
-  for (let i = 0; i < 50; i++) {
+  // Ne réessaie que tant que le pilote n'écoute pas encore : relancer pendant qu'une première
+  // fenêtre démarre la ferait fermer par la protection « une seule instance ».
+  for (let i = 0; i < 30; i++) {
     try {
-      const v = await wd("POST", "/session", {
-        capabilities: { alwaysMatch: { "tauri:options": { application: APP }, ...(win ? { browserName: "wry" } : {}) } },
-      });
+      const v = await wd(
+        "POST",
+        "/session",
+        { capabilities: { alwaysMatch: { "tauri:options": { application: APP }, ...(win ? { browserName: "wry" } : {}) } } },
+        240000,
+      );
       sid = v.sessionId;
       return;
     } catch (e) {
-      if (i === 49) throw e;
-      await sleep(300);
+      const refused = e?.cause?.code === "ECONNREFUSED" || String(e).includes("ECONNREFUSED");
+      if (!refused || i === 29) throw e;
+      await sleep(500);
     }
   }
 }
