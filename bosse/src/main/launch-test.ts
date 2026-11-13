@@ -65,7 +65,8 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     const d = h.getData();
     const dir = os.tmpdir();
     h.setData({ ...d, workspaces: d.workspaces.map((x) => ({ ...x, items: [...x.items, { id: "dossier1", kind: "dossier" as const, target: dir, label: "", args: "" }] })) });
-    await js(w, "location.reload()");
+    w.webContents.reload(); // (pas executeJavaScript : la page peut disparaître avant de répondre)
+    await waitFor("page rechargée", () => js<boolean>(w, `document.readyState === "complete" && !!document.querySelector('[data-testid="nom-espace"]')`), 10_000);
     await waitFor("deux éléments affichés", () => js<boolean>(w, `document.querySelectorAll('[data-testid="elements"] li').length === 2`), 8000);
     step("dossier ajouté, liste affichée après rechargement (données relues sur le disque)");
 
