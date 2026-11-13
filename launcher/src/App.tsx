@@ -4,6 +4,7 @@ import { Actions, AppIcon, ErrorBox, Icon, Logo, VersionLine, Visual } from "./c
 import { bytes, date, dateTime } from "./format";
 
 type Page = "catalog" | "installed" | "settings";
+const PAGES: Page[] = ["catalog", "installed", "settings"];
 
 export default function App() {
   const [snap, setSnap] = useState<Snapshot | null>(null);
@@ -55,11 +56,21 @@ export default function App() {
     api.refresh().catch(() => {}).finally(reload);
   }, [reload]);
 
-  if (!snap) return <div className="boot"><Logo /></div>;
+  if (!snap)
+    return (
+      <div className="boot">
+        <div className="boot-inner">
+          <div className="boot-mark"><Logo /></div>
+          <div className="boot-label">Rayan's Launcher</div>
+        </div>
+      </div>
+    );
 
   const installedCount = snap.apps.filter((a) => a.installedVersion).length;
   const updates = snap.apps.filter((a) => a.updateAvailable).length;
   const current = detail ? snap.apps.find((a) => a.id === detail) : undefined;
+
+  const viewKey = current ? `fiche:${current.id}` : page;
 
   const nav = (p: Page) => {
     setPage(p);
@@ -68,15 +79,17 @@ export default function App() {
 
   return (
     <div className="shell">
+      <div className="ambient" aria-hidden><i /><i /><i /></div>
       <aside className="sidebar">
         <div className="brand">
-          <Logo />
+          <div className="brand-logo"><Logo /></div>
           <div>
             <div className="brand-name">RAYAN'S</div>
             <div className="brand-sub">launcher</div>
           </div>
         </div>
         <nav>
+          <span className="nav-indicator" style={{ "--nav-i": PAGES.indexOf(page) } as React.CSSProperties} aria-hidden />
           <NavItem icon="catalog" label="Catalogue" active={page === "catalog"} onClick={() => nav("catalog")} badge={updates ? `${updates}` : undefined} badgeTitle="mises à jour disponibles" />
           <NavItem icon="installed" label="Installées" active={page === "installed"} onClick={() => nav("installed")} count={installedCount} />
           <NavItem icon="settings" label="Paramètres" active={page === "settings"} onClick={() => nav("settings")} />
@@ -88,15 +101,17 @@ export default function App() {
 
       <main className="main">
         {launcherUpd && <LauncherUpdateBanner upd={launcherUpd} />}
-        {current ? (
-          <Detail app={current} snap={snap} features={features} onBack={() => setDetail(null)} onToast={setToast} />
-        ) : page === "settings" ? (
-          <Settings snap={snap} onSaved={reload} />
-        ) : (
-          <Library snap={snap} page={page} onOpen={setDetail} onRefresh={refresh} goCatalog={() => nav("catalog")} goSettings={() => nav("settings")} />
-        )}
+        <div className="view" key={viewKey}>
+          {current ? (
+            <Detail app={current} snap={snap} features={features} onBack={() => setDetail(null)} onToast={setToast} />
+          ) : page === "settings" ? (
+            <Settings snap={snap} onSaved={reload} />
+          ) : (
+            <Library snap={snap} page={page} onOpen={setDetail} onRefresh={refresh} goCatalog={() => nav("catalog")} goSettings={() => nav("settings")} />
+          )}
+        </div>
       </main>
-      {toast && <div className="toast">{toast}</div>}
+      {toast && <div className="toast" key={toast} role="status"><Icon name="check" size={18} /> {toast}</div>}
     </div>
   );
 }
@@ -179,12 +194,32 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { sna
         ? `${c.appCount} application${c.appCount > 1 ? "s" : ""} disponible${c.appCount > 1 ? "s" : ""}`
         : "";
 
+  const installed = snap.apps.filter((a) => a.installedVersion).length;
+  const updates = snap.apps.filter((a) => a.updateAvailable).length;
+  const running = snap.apps.filter((a) => a.running).length;
+  const stats =
+    page === "catalog" && c.status === "ready" && apps.length > 0
+      ? [
+          <><span className="pip" /><b>{installed}</b> installée{installed > 1 ? "s" : ""}</>,
+          updates > 0 && <><span className="pip" /><b>{updates}</b> mise{updates > 1 ? "s" : ""} à jour disponible{updates > 1 ? "s" : ""}</>,
+          running > 0 && <><span className="pip" /><b>{running}</b> en cours d'exécution</>,
+          c.trust === "signed" && <><Icon name="shield" size={13} /> Catalogue signé</>,
+        ]
+      : [];
+  const statTone = ["good", "accent", "good", ""];
+
   return (
     <>
       <header className="page-head">
         <div>
+          <span className="eyebrow">{page === "installed" ? "Sur cet ordinateur" : "Rayan's Launcher"}</span>
           <h1>{title}</h1>
           {subtitle && <p className="muted">{subtitle}</p>}
+          {stats.some(Boolean) && (
+            <div className="stats">
+              {stats.map((el, k) => el && <span key={k} className={`stat ${statTone[k]}`} style={{ "--i": k } as React.CSSProperties}>{el}</span>)}
+            </div>
+          )}
         </div>
         <div className="row">
           {page === "catalog" && snap.localCatalogPath && (
@@ -251,8 +286,8 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { sna
 
       {apps.length > 0 && (
         <div className="grid">
-          {apps.map((a) => (
-            <AppCard key={a.id} app={a} refresh={c.fetchedAt} onOpen={() => onOpen(a.id)} />
+          {apps.map((a, i) => (
+            <AppCard key={a.id} index={i} app={a} refresh={c.fetchedAt} onOpen={() => onOpen(a.id)} />
           ))}
         </div>
       )}
@@ -403,14 +438,35 @@ function AddZip({ snap, onClose, onAdded }: { snap: Snapshot; onClose: () => voi
   );
 }
 
-function AppCard({ app, refresh, onOpen }: { app: AppView; refresh: string | null; onOpen: () => void }) {
+function AppCard({ app, index, refresh, onOpen }: { app: AppView; index: number; refresh: string | null; onOpen: () => void }) {
+  const done = useJustDone(app);
+  // Halo qui suit le curseur : seules deux variables CSS changent, le halo se déplace par transform.
+  const glow = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
   return (
-    <article className={`card ${app.updateAvailable ? "has-update" : ""}`} onClick={onOpen} tabIndex={0} onKeyDown={(e) => e.key === "Enter" && onOpen()} aria-label={app.name}>
+    <article
+      className={`card ${app.updateAvailable ? "has-update" : ""} ${done ? "just-done" : ""}`}
+      style={{ "--i": Math.min(index, 12) } as React.CSSProperties}
+      onClick={onOpen}
+      onMouseMove={glow}
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && onOpen()}
+      aria-label={app.name}
+    >
+      <span className="card-glow" aria-hidden />
       <Visual app={app} refresh={refresh} className="card-visual" />
       {app.updateAvailable && <span className="ribbon">Mise à jour {app.availableVersion}</span>}
+      {done && (
+        <span className="done-badge" role="status">
+          <Icon name="check" size={14} /> {done === "update" ? "Mise à jour terminée" : "Installation terminée"}
+        </span>
+      )}
       <div className="card-body">
         <div className="card-title">
-          <AppIcon app={app} refresh={refresh} size={40} />
+          <AppIcon app={app} refresh={refresh} size={48} />
           <div>
             <h2>{app.name}</h2>
             {!app.inCatalog && <span className="tag">retirée du catalogue</span>}
@@ -426,6 +482,23 @@ function AppCard({ app, refresh, onOpen }: { app: AppView; refresh: string | nul
       </div>
     </article>
   );
+}
+
+/** Une installation ou une mise à jour vient de réussir : renvoie son type pendant quelques secondes. */
+function useJustDone(app: AppView): "install" | "update" | null {
+  const prev = useRef(app.task);
+  const [done, setDone] = useState<"install" | "update" | null>(null);
+  useEffect(() => {
+    const was = prev.current;
+    prev.current = app.task;
+    if (was && !app.task && app.installedVersion && !app.updateAvailable && !app.partialBytes && !app.lastError) setDone(was.kind);
+  }, [app.task, app.installedVersion, app.updateAvailable, app.partialBytes, app.lastError]);
+  useEffect(() => {
+    if (!done) return;
+    const t = setTimeout(() => setDone(null), 2400);
+    return () => clearTimeout(t);
+  }, [done]);
+  return done;
 }
 
 function SkeletonGrid() {
@@ -444,7 +517,11 @@ function SkeletonGrid() {
 function EmptyState({ icon, title, text, actions, error }: { icon: string; title: string; text: string; actions?: React.ReactNode; error?: ErrorInfo | null }) {
   return (
     <section className="empty">
-      <div className="empty-icon"><Icon name={icon} size={34} /></div>
+      <div className={`empty-art ${icon === "offline" ? "bad" : ""}`} aria-hidden>
+        <span className="empty-orbit" />
+        <span className="empty-orbit inner" />
+        <div className="empty-icon"><Icon name={icon} size={32} /></div>
+      </div>
       <h2>{title}</h2>
       <p className="muted">{text}</p>
       {error && (
@@ -589,7 +666,7 @@ function Settings({ snap, onSaved }: { snap: Snapshot; onSaved: () => void }) {
   return (
     <>
       <header className="page-head"><div><h1>Paramètres</h1></div></header>
-      <section className="panel settings">
+      <section className="panel settings" style={{ "--i": 0 } as React.CSSProperties}>
         <form onSubmit={save}>
           <label htmlFor="url"><h3>Adresse du catalogue</h3></label>
           <p className="muted small">
@@ -607,7 +684,7 @@ function Settings({ snap, onSaved }: { snap: Snapshot; onSaved: () => void }) {
           {err && <ErrorBox error={err} onClose={() => setErr(null)} />}
         </form>
       </section>
-      <section className="panel settings">
+      <section className="panel settings" style={{ "--i": 1 } as React.CSSProperties}>
         <h3>Sécurité</h3>
         <dl className="facts">
           <div><dt>Mode</dt><dd>{dev ? "Développement" : "Distribution"}</dd></div>
@@ -616,7 +693,7 @@ function Settings({ snap, onSaved }: { snap: Snapshot; onSaved: () => void }) {
           <div><dt>Empreintes SHA-256</dt><dd>toujours vérifiées avant installation</dd></div>
         </dl>
       </section>
-      <section className="panel settings">
+      <section className="panel settings" style={{ "--i": 2 } as React.CSSProperties}>
         <h3>Stockage</h3>
         <dl className="facts">
           <div><dt>Dossier du launcher</dt><dd><code className="path">{snap.dataRoot}</code></dd></div>

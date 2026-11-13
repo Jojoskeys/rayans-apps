@@ -31,6 +31,8 @@ export function Icon({ name, size = 18 }: { name: string; size?: number }) {
       return (<svg {...p}><path d="M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6l-8-3Z" /><path d="m8.8 12 2.2 2.2 4.2-4.4" /></svg>);
     case "close":
       return (<svg {...p}><path d="M6 6l12 12M18 6 6 18" /></svg>);
+    case "check":
+      return (<svg {...p}><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>);
     case "box":
       return (<svg {...p}><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5v-9Z" /><path d="m3 7.5 9 4.5 9-4.5M12 12v9" /></svg>);
     default:
@@ -92,9 +94,17 @@ export function Visual({ app, refresh, className }: { app: AppView; refresh: str
 
 // ----- Actions ----------------------------------------------------------------------------------
 
+const STEPS: { phase: NonNullable<AppView["task"]>["phase"]; label: string }[] = [
+  { phase: "downloading", label: "Téléchargement" },
+  { phase: "verifying", label: "Vérification" },
+  { phase: "extracting", label: "Extraction" },
+  { phase: "finalizing", label: "Contrôle" },
+];
+
 export function ProgressBlock({ app }: { app: AppView }) {
   const t = app.task!;
   const pct = progressPercent(t);
+  const now = STEPS.findIndex((s) => s.phase === t.phase);
   const detail =
     t.phase === "downloading"
       ? t.total
@@ -105,14 +115,17 @@ export function ProgressBlock({ app }: { app: AppView }) {
     <div className="progress" role="status" aria-live="polite">
       <div className="progress-head">
         <span>{t.kind === "update" ? "Mise à jour" : "Installation"} · {phaseLabel(t)}</span>
+        {pct != null && <span className="pct">{Math.round(pct)}<small>%</small></span>}
       </div>
       <div className={`bar ${pct == null ? "indeterminate" : ""}`}>
-        <div style={{ width: pct == null ? "35%" : `${pct}%` }} />
+        <div style={{ "--p": pct == null ? 0 : pct / 100 } as React.CSSProperties} />
       </div>
-      <div className="progress-foot">
-        <span>{detail}</span>
-        <span>{pct != null ? `${Math.round(pct)} %` : ""}</span>
-      </div>
+      <ol className="steps" aria-hidden>
+        {STEPS.map((s, i) => (
+          <li key={s.phase} className={i < now ? "done" : i === now ? "now" : ""} title={s.label} />
+        ))}
+      </ol>
+      {detail && <div className="progress-foot"><span>{detail}</span></div>}
       {t.phase === "downloading" && (
         <button className="btn small ghost" onClick={(e) => { e.stopPropagation(); void api.cancelDownload(app.id); }}>
           <Icon name="close" size={14} /> Annuler le téléchargement
