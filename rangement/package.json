@@ -1,7 +1,7 @@
 {
   "name": "rayans-rangement",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "Rayan's Rangement : rangement des Téléchargements et du Bureau (Tauri + React + TypeScript), avec aperçu obligatoire et historique annulable",
   "license": "MIT",

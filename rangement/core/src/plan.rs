@@ -6,6 +6,7 @@ use crate::error::Result;
 use crate::fsops::{free_destination, hash_file, is_in_use, millis, path_key, same_path};
 use crate::rules::first_match;
 use crate::scan::{is_inside, scan, Candidate};
+use crate::themes::{classify, folder_name, OTHER};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::path::{Path, PathBuf};
@@ -36,6 +37,9 @@ pub struct PlanItem {
     pub modified_ms: i64,
     /// Pour un doublon : le fichier conservé.
     pub duplicate_of: Option<PathBuf>,
+    /// Thème choisi (destination avec {theme}) et pourquoi.
+    pub theme: Option<String>,
+    pub theme_reason: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -68,10 +72,15 @@ fn date_parts(t: SystemTime) -> (i32, u8, u8) {
     (local.year(), local.month() as u8, local.day())
 }
 
-/// Dossier de destination d'une règle pour un fichier donné.
-pub fn resolve_target(target: &str, folder: &Path, modified: SystemTime) -> PathBuf {
+/// Dossier de destination d'une règle pour un fichier donné (`theme` remplace le jeton {theme}).
+pub fn resolve_target(target: &str, folder: &Path, modified: SystemTime, theme: Option<&str>) -> PathBuf {
     let (y, m, _) = date_parts(modified);
-    let t = target.trim().replace("{annee}", &y.to_string()).replace("{mois}", &format!("{m:02}"));
+    let t = target
+        .trim()
+        .replace("{annee}", &y.to_string())
+        .replace("{mois}", &format!("{m:02}"))
+        .replace("{theme}", &folder_name(theme.unwrap_or(OTHER)))
+        .replace(['/', '\\'], std::path::MAIN_SEPARATOR_STR);
     let p = PathBuf::from(&t);
     if p.is_absolute() {
         p
@@ -149,6 +158,8 @@ pub fn build_plan(cfg: &Config, now: SystemTime) -> Result<Plan> {
                         size: dup.facts.size,
                         modified_ms: millis(dup.facts.modified),
                         duplicate_of: Some(keep.path.clone()),
+                        theme: None,
+                        theme_reason: None,
                     });
                 }
             }
@@ -161,7 +172,16 @@ pub fn build_plan(cfg: &Config, now: SystemTime) -> Result<Plan> {
             continue;
         }
         let Some(rule) = first_match(&cfg.rules, &c.facts, &c.folder, now) else { continue };
-        let dir = resolve_target(&rule.target, &c.folder, c.facts.modified);
+        let (theme, theme_reason) = if rule.target.contains("{theme}") {
+            match classify(&cfg.themes, &c.path, &c.facts.name, cfg.read_pdf_text) {
+                Some(m) => (m.theme.clone(), m.explain()),
+                None => (OTHER.to_string(), "aucun mot-clé de thème trouvé".to_string()),
+            }
+        } else {
+            (String::new(), String::new())
+        };
+        let theme = (!theme.is_empty()).then_some(theme);
+        let dir = resolve_target(&rule.target, &c.folder, c.facts.modified, theme.as_deref());
         if c.path.parent().is_some_and(|p| same_path(p, &dir)) {
             continue; // déjà au bon endroit
         }
@@ -177,6 +197,8 @@ pub fn build_plan(cfg: &Config, now: SystemTime) -> Result<Plan> {
             size: c.facts.size,
             modified_ms: millis(c.facts.modified),
             duplicate_of: None,
+            theme,
+            theme_reason: (!theme_reason.is_empty()).then_some(theme_reason),
         });
     }
 

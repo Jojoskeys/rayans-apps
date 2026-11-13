@@ -16,6 +16,12 @@ let config: Config = {
   quarantineDir: "C:\\Users\\vous\\Documents\\Rayan's Rangement\\Quarantaine",
   ignoreRecentMinutes: 2,
   auto: { enabled: false, mode: "surveillance", intervalMinutes: 60 },
+  themes: [
+    { name: "Factures", keywords: ["facture", "invoice"] },
+    { name: "Banque", keywords: ["releve", "rib"] },
+    { name: "Santé", keywords: ["ordonnance", "mutuelle"] },
+  ],
+  readPdfText: true,
 };
 
 const plan: Plan = {
@@ -23,11 +29,11 @@ const plan: Plan = {
   createdMs: Date.now(),
   scanned: 9,
   items: [
-    { id: 1, kind: "doublon", source: `${D}\\contrat (1).pdf`, destination: `${config.quarantineDir}\\2026-11-12\\contrat (1).pdf`, renamed: false, reason: `Doublon de « ${D}\\contrat.pdf »`, size: 182_000, modifiedMs: 0, duplicateOf: `${D}\\contrat.pdf` },
-    { id: 2, kind: "ranger", source: `${D}\\contrat.pdf`, destination: `${D}\\Documents\\contrat.pdf`, renamed: false, reason: "Règle « Documents »", size: 182_000, modifiedMs: 0, duplicateOf: null },
-    { id: 3, kind: "ranger", source: `${D}\\photo.jpg`, destination: `${D}\\Images\\photo (2).jpg`, renamed: true, reason: "Règle « Images »", size: 2_400_000, modifiedMs: 0, duplicateOf: null },
-    { id: 4, kind: "ranger", source: `${B}\\capture.png`, destination: `${B}\\Images\\capture.png`, renamed: false, reason: "Règle « Images »", size: 310_000, modifiedMs: 0, duplicateOf: null },
-    { id: 5, kind: "ranger", source: `${D}\\setup.exe`, destination: `${D}\\Installateurs\\setup.exe`, renamed: false, reason: "Règle « Installateurs »", size: 54_000_000, modifiedMs: 0, duplicateOf: null },
+    { id: 1, kind: "doublon", source: `${D}\\contrat (1).pdf`, destination: `${config.quarantineDir}\\2026-11-12\\contrat (1).pdf`, renamed: false, reason: `Doublon de « ${D}\\contrat.pdf »`, size: 182_000, modifiedMs: 0, duplicateOf: `${D}\\contrat.pdf`, theme: null, themeReason: null },
+    { id: 2, kind: "ranger", source: `${D}\\contrat.pdf`, destination: `${D}\\Documents\\PDF\\Factures\\contrat.pdf`, renamed: false, reason: "Règle « PDF »", size: 182_000, modifiedMs: 0, duplicateOf: null, theme: "Factures", themeReason: "mot « facture » dans la 1re page" },
+    { id: 3, kind: "ranger", source: `${D}\\photo.jpg`, destination: `${D}\\Images\\photo (2).jpg`, renamed: true, reason: "Règle « Images »", size: 2_400_000, modifiedMs: 0, duplicateOf: null, theme: "Autres", themeReason: "aucun mot-clé de thème trouvé" },
+    { id: 4, kind: "ranger", source: `${B}\\capture.png`, destination: `${B}\\Images\\capture.png`, renamed: false, reason: "Règle « Images »", size: 310_000, modifiedMs: 0, duplicateOf: null, theme: "Autres", themeReason: "aucun mot-clé de thème trouvé" },
+    { id: 5, kind: "ranger", source: `${D}\\setup.exe`, destination: `${D}\\Installateurs\\setup.exe`, renamed: false, reason: "Règle « Installateurs »", size: 54_000_000, modifiedMs: 0, duplicateOf: null, theme: "Autres", themeReason: "aucun mot-clé de thème trouvé" },
   ],
   skipped: [
     { path: `${D}\\rapport.docx`, reason: "en cours d'utilisation par un autre programme" },

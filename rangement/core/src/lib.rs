@@ -14,6 +14,7 @@ pub mod journal;
 pub mod plan;
 pub mod rules;
 pub mod scan;
+pub mod themes;
 
 pub use config::{AutoConfig, AutoMode, Config, Rule};
 pub use engine::{apply_plan, undo, ApplyReport, UndoReport};

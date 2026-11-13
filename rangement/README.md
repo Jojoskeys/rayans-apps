@@ -8,8 +8,14 @@ tout annuler. Tauri 2 + React + TypeScript ; toute la logique de fichiers est en
 
 - **Règles** dans l'ordre (la première qui correspond l'emporte) : extensions, modèle de nom (`*`, `?`,
   plusieurs modèles séparés par `;`), âge (« plus vieux que N jours »), taille min./max., dossiers concernés.
-  Destination relative (sous-dossier du dossier surveillé, ex. `Images`) ou absolue ; jetons `{annee}`, `{mois}`.
-  Règles par défaut : Images, Documents, Vidéos, Musique, Archives, Installateurs (Téléchargements seulement).
+  Destination relative (sous-dossier du dossier surveillé, ex. `Images`) ou absolue ; jetons `{theme}`,
+  `{annee}`, `{mois}`. Règles par défaut : un dossier par type puis un sous-dossier par thème
+  (`Documents\PDF\{theme}`, `Documents\Word\{theme}`, Excel, PowerPoint, Texte, Livres, `Images\{theme}`,
+  Vidéos, Musique, Archives ; Installateurs et « Autres fichiers » dans Téléchargements seulement).
+- **Thèmes** (jeton `{theme}`) : mots-clés cherchés au début des mots du nom du fichier, sans accents ni
+  majuscules (Factures, Banque, Impôts, Travail, Cours - École, Santé, Logement, Identité, Voyages, modifiables
+  dans l'onglet Règles). Si le nom d'un PDF ne suffit pas, le texte de sa première page est lu localement
+  (option). Sans mot-clé reconnu : « Autres ». L'aperçu indique le thème et le mot-clé trouvé. Aucun appel en ligne.
 - **Doublons** : même taille puis même empreinte SHA-256 ; le plus ancien reste en place, les copies vont en
   **quarantaine** (`Documents\Rayan's Rangement\Quarantaine\<date>`), jamais à la poubelle.
 - **Aperçu obligatoire** : l'analyse liste chaque déplacement ; rien ne bouge avant validation, et chaque

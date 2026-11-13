@@ -31,6 +31,13 @@ export interface Config {
   quarantineDir: string;
   ignoreRecentMinutes: number;
   auto: { enabled: boolean; mode: "surveillance" | "intervalle"; intervalMinutes: number };
+  themes: Theme[];
+  readPdfText: boolean;
+}
+
+export interface Theme {
+  name: string;
+  keywords: string[];
 }
 
 export type OpKind = "ranger" | "doublon";
@@ -45,6 +52,8 @@ export interface PlanItem {
   size: number;
   modifiedMs: number;
   duplicateOf: string | null;
+  theme: string | null;
+  themeReason: string | null;
 }
 
 export interface Plan {
@@ -104,6 +113,7 @@ export const api = {
   getState: () => invoke<StateView>("get_state"),
   saveConfig: (config: Config) => invoke<Config>("save_config", { config }),
   rulesByDefault: () => invoke<Rule[]>("rules_by_default"),
+  themesByDefault: () => invoke<Theme[]>("themes_by_default"),
   analyze: () => invoke<Plan>("analyze"),
   apply: (planId: string, ids: number[]) => invoke<ApplyReport>("apply", { planId, ids }),
   dismissAutoPlan: () => invoke<void>("dismiss_auto_plan"),

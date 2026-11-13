@@ -86,6 +86,11 @@ export function PlanView(p: { plan: Plan; onApplied: (r: ApplyReport) => void; o
                       <div className="item-main">
                         <div className="item-name">
                           {baseName(it.source)}
+                          {it.theme && (
+                            <span className={"tag" + (it.theme === "Autres" ? "" : " theme")} title={it.themeReason ?? ""}>
+                              thème : {it.theme}
+                            </span>
+                          )}
                           {it.renamed && (
                             <span className="tag warn" title="Un fichier du même nom existe déjà : rien n’est écrasé">
                               renommé en « {baseName(it.destination)} »
@@ -94,6 +99,7 @@ export function PlanView(p: { plan: Plan; onApplied: (r: ApplyReport) => void; o
                         </div>
                         <div className="muted small" title={it.source}>
                           depuis {shortDir(dirName(it.source))} · {it.reason}
+                          {it.themeReason && <> · {it.themeReason}</>}
                         </div>
                       </div>
                       <span className="muted small size">{formatSize(it.size)}</span>

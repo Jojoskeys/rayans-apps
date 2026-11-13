@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api, errorText, type Config, type Rule } from "./api";
 import { baseName, MB } from "./format";
+import { ThemesSection } from "./ThemesSection";
 
 function newId() {
   return "r" + Math.random().toString(36).slice(2, 9);
@@ -73,6 +74,7 @@ export function RulesView(p: { draft: Config; setDraft: (c: Config) => void }) {
         ))}
         {draft.rules.length === 0 && <div className="empty small-empty">Aucune règle : seuls les doublons seront proposés.</div>}
       </div>
+      <ThemesSection draft={draft} setDraft={setDraft} />
     </section>
   );
 }
@@ -148,7 +150,7 @@ function RuleCard(p: {
             />
           </Field>
           <Field label="Nom du fichier" hint="* = n’importe quoi, ? = un caractère ; plusieurs modèles séparés par ;">
-            <input value={r.namePattern} placeholder="ex. facture*; *capture*" onChange={(e) => p.onChange({ namePattern: e.target.value })} />
+            <input value={r.namePattern} placeholder="ex. facture*; *capture* ; * = tous les fichiers" onChange={(e) => p.onChange({ namePattern: e.target.value })} />
           </Field>
           <div className="grid3">
             <Field label="Plus vieux que (jours)">
@@ -161,7 +163,7 @@ function RuleCard(p: {
               <input inputMode="decimal" value={maxMb} onChange={(e) => { setMaxMb(e.target.value); const n = numOrNull(e.target.value); p.onChange({ maxSize: n == null ? null : Math.round(n * MB) }); }} />
             </Field>
           </div>
-          <Field label="Destination" hint="relative (« Images », « Factures\{annee} ») ou dossier complet ; jetons {annee} et {mois}">
+          <Field label="Destination" hint="relative (« Images », « Factures\{annee} ») ou dossier complet ; jetons {theme}, {annee} et {mois}">
             <div className="row">
               <input value={r.target} onChange={(e) => p.onChange({ target: e.target.value })} />
               <button className="btn ghost" onClick={browse}>Parcourir…</button>
