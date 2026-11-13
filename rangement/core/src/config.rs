@@ -1,6 +1,8 @@
 //! Réglages : dossiers surveillés, règles, doublons, mode automatique.
 
 use crate::error::{Error, Result};
+pub use crate::themes::Theme;
+use crate::themes::{default_themes, folder_name};
 use serde::{Deserialize, Serialize};
 use std::path::{Component, Path, PathBuf};
 
@@ -18,6 +20,10 @@ pub struct Config {
     /// Les fichiers modifiés depuis moins de N minutes sont laissés en place (téléchargement en cours…).
     pub ignore_recent_minutes: u32,
     pub auto: AutoConfig,
+    /// Thèmes (mots-clés) utilisés par le jeton {theme} des destinations.
+    pub themes: Vec<Theme>,
+    /// Si le nom d'un PDF ne donne aucun thème, lire le texte de sa première page (localement).
+    pub read_pdf_text: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -63,7 +69,7 @@ pub struct Rule {
     /// Dossiers surveillés où la règle s'applique. Vide = tous.
     pub folders: Vec<PathBuf>,
     /// Dossier de destination : relatif au dossier surveillé (« Images ») ou absolu.
-    /// Jetons possibles : {annee}, {mois}.
+    /// Jetons possibles : {annee}, {mois}, {theme} (thème trouvé, ou « Autres »).
     pub target: String,
 }
 
@@ -93,6 +99,8 @@ impl Default for Config {
             quarantine_dir: PathBuf::new(),
             ignore_recent_minutes: 2,
             auto: AutoConfig::default(),
+            themes: default_themes(),
+            read_pdf_text: true,
         }
     }
 }
@@ -119,6 +127,18 @@ impl Config {
         }
         if self.duplicates && !self.quarantine_dir.is_absolute() {
             return bad("Choisissez un dossier de quarantaine pour les doublons (chemin complet).".into());
+        }
+        let mut seen = std::collections::HashSet::new();
+        for t in &self.themes {
+            if t.name.trim().is_empty() {
+                return bad("Un thème n'a pas de nom.".into());
+            }
+            if !seen.insert(folder_name(&t.name).to_lowercase()) {
+                return bad(format!("Le thème « {} » existe deux fois.", t.name.trim()));
+            }
+            if t.keywords.iter().all(|k| k.trim().is_empty()) {
+                return bad(format!("Le thème « {} » n'a aucun mot-clé.", t.name.trim()));
+            }
         }
         for r in self.rules.iter().filter(|r| r.enabled) {
             let label = if r.name.trim().is_empty() { "sans nom" } else { r.name.trim() };
@@ -158,24 +178,31 @@ fn rule(id: &str, name: &str, exts: &[&str], target: &str) -> Rule {
     }
 }
 
-/// Règles proposées au premier démarrage (sous-dossiers du dossier surveillé).
-/// Les installateurs ne sont rangés que dans Téléchargements : sur le Bureau, un .exe est souvent un
-/// programme portable qu'il ne faut pas déplacer.
+/// Règles proposées au premier démarrage : un dossier par type, puis un sous-dossier par thème
+/// ({theme}, « Autres » si aucun thème ne correspond). Tout reste dans le dossier surveillé.
+/// Installateurs et « Autres fichiers » ne concernent que Téléchargements : sur le Bureau, un .exe ou un
+/// raccourci est souvent là exprès.
 pub fn default_rules(downloads: Option<&Path>) -> Vec<Rule> {
-    let mut installers = rule("installateurs", "Installateurs", &["exe", "msi", "msix", "appx"], "Installateurs");
-    installers.folders = downloads.map(|d| vec![d.to_path_buf()]).unwrap_or_default();
-    installers.enabled = downloads.is_some();
+    let only_downloads = |mut r: Rule| {
+        r.folders = downloads.map(|d| vec![d.to_path_buf()]).unwrap_or_default();
+        r.enabled = downloads.is_some();
+        r
+    };
+    let mut others = rule("autres", "Autres fichiers", &[], "Autres fichiers/{theme}");
+    others.name_pattern = "*".into();
     vec![
-        rule("images", "Images", &["jpg", "jpeg", "png", "gif", "webp", "bmp", "heic", "heif", "svg", "tif", "tiff", "avif"], "Images"),
-        rule(
-            "documents",
-            "Documents",
-            &["pdf", "doc", "docx", "odt", "rtf", "txt", "md", "xls", "xlsx", "ods", "csv", "ppt", "pptx", "odp", "epub"],
-            "Documents",
-        ),
-        rule("videos", "Vidéos", &["mp4", "mkv", "avi", "mov", "wmv", "webm", "m4v"], "Vidéos"),
-        rule("musique", "Musique", &["mp3", "wav", "flac", "aac", "ogg", "m4a", "wma", "opus"], "Musique"),
-        rule("archives", "Archives", &["zip", "rar", "7z", "tar", "gz", "bz2", "xz"], "Archives"),
-        installers,
+        rule("pdf", "PDF", &["pdf"], "Documents/PDF/{theme}"),
+        rule("word", "Word", &["doc", "docx", "odt", "rtf"], "Documents/Word/{theme}"),
+        rule("excel", "Excel", &["xls", "xlsx", "ods", "csv"], "Documents/Excel/{theme}"),
+        rule("powerpoint", "PowerPoint", &["ppt", "pptx", "odp"], "Documents/PowerPoint/{theme}"),
+        rule("texte", "Texte", &["txt", "md"], "Documents/Texte/{theme}"),
+        rule("livres", "Livres numériques", &["epub", "mobi"], "Documents/Livres/{theme}"),
+        rule("images", "Images", &["jpg", "jpeg", "png", "gif", "webp", "bmp", "heic", "heif", "svg", "tif", "tiff", "avif"], "Images/{theme}"),
+        rule("videos", "Vidéos", &["mp4", "mkv", "avi", "mov", "wmv", "webm", "m4v"], "Vidéos/{theme}"),
+        rule("musique", "Musique", &["mp3", "wav", "flac", "aac", "ogg", "m4a", "wma", "opus"], "Musique/{theme}"),
+        rule("archives", "Archives", &["zip", "rar", "7z", "tar", "gz", "bz2", "xz"], "Archives/{theme}"),
+        only_downloads(rule("installateurs", "Installateurs", &["exe", "msi", "msix", "appx"], "Installateurs/{theme}")),
+        // En dernier : tout fichier qu'aucune règle précédente n'a pris.
+        only_downloads(others),
     ]
 }

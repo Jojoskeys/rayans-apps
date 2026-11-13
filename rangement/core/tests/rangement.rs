@@ -138,7 +138,7 @@ fn regles_la_premiere_l_emporte() {
     let img = file(&b.dl, "vacances.png", "v", 1);
     let plan = build_plan(&cfg, now()).unwrap();
     assert_eq!(item(&plan, &cap).destination, b.dl.join("Captures").join("Capture 2026.png"));
-    assert_eq!(item(&plan, &img).destination, b.dl.join("Images").join("vacances.png"));
+    assert_eq!(item(&plan, &img).destination, b.dl.join("Images").join("Autres").join("vacances.png"));
 }
 
 #[test]
@@ -167,7 +167,7 @@ fn mode_automatique_desactive_par_defaut() {
 fn jetons_annee_mois() {
     let b = bac();
     let mut cfg = b.cfg();
-    cfg.rules[1].target = "Documents/{annee}/{mois}".into();
+    cfg.rules[0].target = "Documents/{annee}/{mois}".into();
     let p = file(&b.dl, "a.pdf", "a", 3);
     let plan = build_plan(&cfg, now()).unwrap();
     let dest = &item(&plan, &p).destination;
@@ -193,16 +193,17 @@ fn apercu_sans_effet_et_regles_par_defaut() {
     let avant = contents(&b.root);
 
     let plan = build_plan(&b.cfg(), now()).unwrap();
-    assert_eq!(item(&plan, &photo).destination, b.dl.join("Images").join("photo.JPG"));
-    assert_eq!(item(&plan, &rapport).destination, b.dl.join("Documents").join("rapport.pdf"));
-    assert_eq!(item(&plan, &setup).destination, b.dl.join("Installateurs").join("setup.exe"));
-    assert_eq!(item(&plan, &image).destination, b.bureau.join("Images").join("image.png"));
+    assert_eq!(item(&plan, &photo).destination, b.dl.join("Images").join("Autres").join("photo.JPG"));
+    assert_eq!(item(&plan, &rapport).destination, b.dl.join("Documents").join("PDF").join("Autres").join("rapport.pdf"));
+    assert_eq!(item(&plan, &setup).destination, b.dl.join("Installateurs").join("Autres").join("setup.exe"));
+    assert_eq!(item(&plan, &image).destination, b.bureau.join("Images").join("Autres").join("image.png"));
     assert!(plan.items.iter().all(|i| i.source != outil), "un .exe du Bureau n'est pas rangé");
-    assert!(plan.items.iter().all(|i| i.source != sans_ext && i.source != rangé));
+    assert_eq!(item(&plan, &sans_ext).destination, b.dl.join("Autres fichiers").join("Autres").join("notes"));
+    assert!(plan.items.iter().all(|i| i.source != rangé), "les sous-dossiers ne sont pas parcourus");
     assert!(plan.items.iter().all(|i| i.kind == OpKind::Ranger && !i.renamed));
     // L'aperçu ne touche à rien.
     assert_eq!(contents(&b.root), avant);
-    assert!(photo.exists() && !b.dl.join("Images").join("photo.JPG").exists());
+    assert!(photo.exists() && !b.dl.join("Images").join("Autres").join("photo.JPG").exists());
 }
 
 #[test]
@@ -236,12 +237,12 @@ fn dossier_surveille_introuvable_signale() {
 #[test]
 fn conflit_a_l_apercu_renomme() {
     let b = bac();
-    file(&b.dl.join("Images"), "photo.jpg", "ancienne", 5);
-    file(&b.dl.join("Images"), "photo (2).jpg", "ancienne 2", 5);
+    file(&b.dl.join("Images").join("Autres"), "photo.jpg", "ancienne", 5);
+    file(&b.dl.join("Images").join("Autres"), "photo (2).jpg", "ancienne 2", 5);
     let p = file(&b.dl, "photo.jpg", "nouvelle", 1);
     let plan = build_plan(&b.cfg(), now()).unwrap();
     let it = item(&plan, &p);
-    assert_eq!(it.destination, b.dl.join("Images").join("photo (3).jpg"));
+    assert_eq!(it.destination, b.dl.join("Images").join("Autres").join("photo (3).jpg"));
     assert!(it.renamed);
 }
 
@@ -271,13 +272,13 @@ fn conflit_apparu_apres_l_apercu_renomme_sans_ecraser() {
     let p = file(&b.dl, "photo.jpg", "à ranger", 1);
     let plan = build_plan(&b.cfg(), now()).unwrap();
     // Un autre fichier du même nom apparaît entre l'aperçu et la validation.
-    let intrus = file(&b.dl.join("Images"), "photo.jpg", "intrus", 1);
+    let intrus = file(&b.dl.join("Images").join("Autres"), "photo.jpg", "intrus", 1);
     let r = apply_plan(&plan, &all_ids(&plan), &b.journal, "manuel").unwrap();
     assert_eq!(r.moved.len(), 1);
     assert!(r.moved[0].renamed);
-    assert_eq!(r.moved[0].destination, b.dl.join("Images").join("photo (2).jpg"));
+    assert_eq!(r.moved[0].destination, b.dl.join("Images").join("Autres").join("photo (2).jpg"));
     assert_eq!(read(&intrus), "intrus", "le fichier existant n'est pas écrasé");
-    assert_eq!(read(&b.dl.join("Images").join("photo (2).jpg")), "à ranger");
+    assert_eq!(read(&b.dl.join("Images").join("Autres").join("photo (2).jpg")), "à ranger");
     assert!(!p.exists());
 }
 
@@ -371,7 +372,7 @@ fn doublons_en_quarantaine_jamais_supprimes() {
     let r = apply_plan(&plan, &all_ids(&plan), &b.journal, "manuel").unwrap();
     assert!(r.failed.is_empty(), "{:?}", r.failed);
     assert!(!copie.exists() && !copie_bureau.exists());
-    assert_eq!(read(&b.dl.join("Documents").join("contrat.pdf")), "même contenu", "l'original est rangé normalement");
+    assert_eq!(read(&b.dl.join("Documents").join("PDF").join("Travail").join("contrat.pdf")), "même contenu", "l'original est rangé normalement");
     assert_eq!(contents(&b.root), avant, "aucun fichier perdu");
 
     let u = undo(&b.journal, r.batch.as_deref().unwrap(), None).unwrap();
@@ -570,4 +571,134 @@ fn aucun_fichier_perdu_sur_un_gros_rangement() {
     assert_eq!(contents(&b.root), avant);
     // Après annulation, plus aucun fichier dans les sous-dossiers créés (hors ceux qui existaient).
     assert!(!b.quarantaine.exists() || std::fs::read_dir(b.quarantaine.read_dir().unwrap().next().unwrap().unwrap().path()).unwrap().next().is_none());
+}
+
+// ----- Thèmes ------------------------------------------------------------------------------------
+
+/// Crée un vrai PDF d'une page contenant `text` (pour tester la lecture de la 1re page).
+fn pdf(dir: &Path, name: &str, text: &str) -> PathBuf {
+    use lopdf::content::{Content, Operation};
+    use lopdf::{dictionary, Document, Object, Stream};
+    let mut doc = Document::with_version("1.5");
+    let pages_id = doc.new_object_id();
+    let font_id = doc.add_object(dictionary! { "Type" => "Font", "Subtype" => "Type1", "BaseFont" => "Helvetica" });
+    let resources_id = doc.add_object(dictionary! { "Font" => dictionary! { "F1" => font_id } });
+    let content = Content {
+        operations: vec![
+            Operation::new("BT", vec![]),
+            Operation::new("Tf", vec!["F1".into(), 18.into()]),
+            Operation::new("Td", vec![72.into(), 700.into()]),
+            Operation::new("Tj", vec![Object::string_literal(text)]),
+            Operation::new("ET", vec![]),
+        ],
+    };
+    let content_id = doc.add_object(Stream::new(dictionary! {}, content.encode().unwrap()));
+    let page_id = doc.add_object(dictionary! { "Type" => "Page", "Parent" => pages_id, "Contents" => content_id });
+    let pages = dictionary! {
+        "Type" => "Pages", "Kids" => vec![page_id.into()], "Count" => 1,
+        "Resources" => resources_id, "MediaBox" => vec![0.into(), 0.into(), 595.into(), 842.into()],
+    };
+    doc.objects.insert(pages_id, Object::Dictionary(pages));
+    let catalog_id = doc.add_object(dictionary! { "Type" => "Catalog", "Pages" => pages_id });
+    doc.trailer.set("Root", catalog_id);
+    std::fs::create_dir_all(dir).unwrap();
+    let p = dir.join(name);
+    doc.save(&p).unwrap();
+    let t = SystemTime::now() - Duration::from_secs(DAY);
+    std::fs::File::options().write(true).open(&p).unwrap().set_modified(t).unwrap();
+    p
+}
+
+#[test]
+fn themes_d_apres_le_nom_pour_tous_les_types() {
+    let b = bac();
+    let cas = [
+        (file(&b.dl, "Facture_EDF_mars.pdf", "1", 1), b.dl.join("Documents").join("PDF").join("Factures"), "facture"),
+        (file(&b.dl, "Relevé bancaire octobre.pdf", "2", 1), b.dl.join("Documents").join("PDF").join("Banque"), "releve"),
+        (file(&b.dl, "AVIS D'IMPÔT 2025.pdf", "3", 1), b.dl.join("Documents").join("PDF").join("Impôts"), "impot"),
+        (file(&b.dl, "RIB.docx", "4", 1), b.dl.join("Documents").join("Word").join("Banque"), "rib"),
+        (file(&b.dl, "bulletin-de-paie-oct.xlsx", "5", 1), b.dl.join("Documents").join("Excel").join("Travail"), "bulletin de paie"),
+        (file(&b.dl, "Ordonnance dr Martin.jpg", "6", 1), b.dl.join("Images").join("Santé"), "ordonnance"),
+        (file(&b.dl, "passeport scans.zip", "7", 1), b.dl.join("Archives").join("Identité"), "passeport"),
+        (file(&b.dl, "quittance_loyer.txt", "8", 1), b.dl.join("Documents").join("Texte").join("Logement"), "quittance"),
+        (file(&b.dl, "Billet-SNCF.pptx", "9", 1), b.dl.join("Documents").join("PowerPoint").join("Voyages"), "billet"),
+    ];
+    let inconnu = file(&b.dl, "truc sans theme.pdf", "10", 1);
+    let plan = build_plan(&b.cfg(), now()).unwrap();
+    for (src, dir, mot) in &cas {
+        let it = item(&plan, src);
+        assert_eq!(it.destination, dir.join(src.file_name().unwrap()), "{}", src.display());
+        assert_eq!(it.theme.as_deref(), Some(dir.file_name().unwrap().to_str().unwrap()));
+        let pourquoi = it.theme_reason.as_deref().unwrap();
+        assert!(pourquoi.contains(mot) && pourquoi.contains("dans le nom"), "{pourquoi}");
+    }
+    let it = item(&plan, &inconnu);
+    assert_eq!(it.destination, b.dl.join("Documents").join("PDF").join("Autres").join("truc sans theme.pdf"));
+    assert_eq!(it.theme.as_deref(), Some("Autres"));
+    assert!(it.theme_reason.as_deref().unwrap().contains("aucun mot-clé"));
+
+    // Application puis annulation à travers les sous-dossiers de thème : rien de perdu.
+    let avant = contents(&b.root);
+    let r = apply_plan(&plan, &all_ids(&plan), &b.journal, "manuel").unwrap();
+    assert!(r.failed.is_empty(), "{:?}", r.failed);
+    assert_eq!(contents(&b.root), avant);
+    undo(&b.journal, r.batch.as_deref().unwrap(), None).unwrap();
+    assert!(cas.iter().all(|(src, _, _)| src.exists()));
+    assert_eq!(contents(&b.root), avant);
+}
+
+#[test]
+fn themes_personnalises_et_ordre() {
+    let b = bac();
+    let mut cfg = b.cfg();
+    cfg.themes.insert(
+        0,
+        rangement_core::config::Theme { name: "Voiture".into(), keywords: vec!["carte grise".into(), "assurance auto".into()] },
+    );
+    let p = file(&b.dl, "Carte-Grise.pdf", "cg", 1);
+    let plan = build_plan(&cfg, now()).unwrap();
+    assert_eq!(item(&plan, &p).destination, b.dl.join("Documents").join("PDF").join("Voiture").join("Carte-Grise.pdf"));
+
+    // Thème sans mot-clé ou en double : refusé.
+    cfg.themes[0].keywords.clear();
+    assert!(build_plan(&cfg, now()).unwrap_err().to_string().contains("aucun mot-clé"));
+    cfg.themes[0] = rangement_core::config::Theme { name: "factures".into(), keywords: vec!["x".into()] };
+    assert!(build_plan(&cfg, now()).unwrap_err().to_string().contains("deux fois"));
+}
+
+#[test]
+fn theme_lu_dans_la_premiere_page_du_pdf() {
+    let b = bac();
+    let scan = pdf(&b.dl, "scan_0042.pdf", "FACTURE numero 2026-118 - Montant total a payer");
+    let nom_gagne = pdf(&b.dl, "ordonnance.pdf", "Facture de la pharmacie");
+    let sans_mot = pdf(&b.dl, "document.pdf", "Bonjour, voici le compte rendu de la reunion");
+    let abime = file(&b.dl, "abime.pdf", "%PDF-1.5 ceci n'est pas un vrai PDF", 1);
+
+    let plan = build_plan(&b.cfg(), now()).unwrap();
+    let it = item(&plan, &scan);
+    assert_eq!(it.theme.as_deref(), Some("Factures"));
+    assert!(it.theme_reason.as_deref().unwrap().contains("1re page"), "{:?}", it.theme_reason);
+    assert_eq!(item(&plan, &nom_gagne).theme.as_deref(), Some("Santé"), "le nom passe avant le contenu");
+    assert_eq!(item(&plan, &sans_mot).theme.as_deref(), Some("Autres"));
+    assert_eq!(item(&plan, &abime).theme.as_deref(), Some("Autres"), "PDF illisible : pas d'erreur, « Autres »");
+
+    // Lecture des PDF désactivée : seul le nom compte.
+    let mut cfg = b.cfg();
+    cfg.read_pdf_text = false;
+    let plan = build_plan(&cfg, now()).unwrap();
+    assert_eq!(item(&plan, &scan).theme.as_deref(), Some("Autres"));
+    // Lire le PDF ne le modifie pas.
+    assert!(scan.exists());
+}
+
+#[test]
+fn destination_sans_jeton_theme_inchangee() {
+    let b = bac();
+    let mut cfg = b.cfg();
+    cfg.rules[0].target = "Mes PDF".into();
+    let p = file(&b.dl, "facture.pdf", "f", 1);
+    let plan = build_plan(&cfg, now()).unwrap();
+    let it = item(&plan, &p);
+    assert_eq!(it.destination, b.dl.join("Mes PDF").join("facture.pdf"));
+    assert!(it.theme.is_none());
 }

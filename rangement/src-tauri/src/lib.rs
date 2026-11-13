@@ -4,7 +4,8 @@
 //! éléments cochés de cet aperçu. Le mode automatique (désactivé par défaut) ne fait que préparer un
 //! aperçu et prévenir l'utilisateur.
 
-use rangement_core::config::default_rules;
+use rangement_core::config::{default_rules, Theme};
+use rangement_core::themes::default_themes;
 use rangement_core::{
     apply_plan, build_plan, undo, ApplyReport, BatchView, Config, Journal, Plan, Rule, UndoReport,
 };
@@ -104,6 +105,11 @@ fn save_config(config: Config, state: State<AppState>) -> Result<Config, String>
 #[tauri::command]
 fn rules_by_default() -> Vec<Rule> {
     default_rules(dirs::download_dir().as_deref())
+}
+
+#[tauri::command]
+fn themes_by_default() -> Vec<Theme> {
+    default_themes()
 }
 
 #[tauri::command]
@@ -261,6 +267,7 @@ pub fn run() {
             get_state,
             save_config,
             rules_by_default,
+            themes_by_default,
             analyze,
             apply,
             dismiss_auto_plan,
