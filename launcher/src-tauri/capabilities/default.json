@@ -3,5 +3,5 @@
   "identifier": "default",
   "description": "Fenêtre principale : événements et choix d’un fichier ZIP (les commandes Rayan's Launcher sont déclarées dans lib.rs).",
   "windows": ["main"],
-  "permissions": ["core:event:default", "dialog:allow-open"]
+  "permissions": ["core:event:default", "dialog:allow-open", "dialog:allow-save"]
 }

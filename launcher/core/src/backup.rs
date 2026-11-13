@@ -173,13 +173,17 @@ pub fn delete(paths: &Paths, app_id: &str, backup_id: &str) -> Result<()> {
 /// renommage : en cas d'échec, les données en place ne sont pas touchées.
 pub fn restore(paths: &Paths, app_id: &str, backup_id: &str) -> Result<()> {
     let b = find(paths, app_id, backup_id)?;
-    let src = paths.backups_dir(app_id).join(&b.id).join("data");
+    replace_data(paths, app_id, &paths.backups_dir(app_id).join(&b.id).join("data"))
+}
+
+/// Remplace `data/<id>/` par une copie de `src` (préparée à côté, puis échange de dossiers).
+pub fn replace_data(paths: &Paths, app_id: &str, src: &Path) -> Result<()> {
     let data = paths.data_dir(app_id);
     let nonce = util::random_hex(4);
     let parent = data.parent().expect("data/<id> a un parent");
     std::fs::create_dir_all(parent)?;
     let fresh = parent.join(format!("{app_id}.restauration-{nonce}"));
-    if let Err(e) = copy_dir(&src, &fresh) {
+    if let Err(e) = copy_dir(src, &fresh) {
         util::remove_dir_quiet(&fresh);
         return Err(e);
     }

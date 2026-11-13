@@ -1,7 +1,7 @@
 // Pont vers la couche Rust. Hors de Tauri (simple `npm run dev:ui` dans un navigateur), un faux
 // backend en mémoire permet de voir tous les états de l'interface.
 import { invoke } from "@tauri-apps/api/core";
-import { open } from "@tauri-apps/plugin-dialog";
+import { open, save } from "@tauri-apps/plugin-dialog";
 import { listen } from "@tauri-apps/api/event";
 import { mockBackend } from "./mock";
 
@@ -43,6 +43,132 @@ export interface AppView {
   heldVersion: string | null;
   backupCount: number;
   lastBackupAt: string | null;
+  /** Règle de mise à jour effective. */
+  updateRule: "ask" | "auto";
+  /** La règle est une exception propre à cette application. */
+  updateRuleCustom: boolean;
+  lastExitCode: number | null;
+}
+
+export interface PersonalApp {
+  id: string;
+  name: string;
+  kind: "program" | "web" | "folder";
+  target: string;
+  args: string;
+  addedAt: string;
+}
+
+export interface WorkspaceItem {
+  kind: "app" | "personal" | "folder" | "url";
+  target: string;
+}
+
+export interface Workspace {
+  id: string;
+  name: string;
+  color: string;
+  items: WorkspaceItem[];
+}
+
+export interface UpdateRules {
+  defaultRule: "ask" | "auto";
+  perApp: Record<string, "ask" | "auto">;
+  paused: boolean;
+}
+
+export interface Profile {
+  personal: PersonalApp[];
+  workspaces: Workspace[];
+  updates: UpdateRules;
+}
+
+export interface HistoryEvent {
+  at: string;
+  appId: string | null;
+  kind: string;
+  version: string | null;
+  from: string | null;
+  detail: string | null;
+  code: number | null;
+  seconds: number | null;
+}
+
+export interface StorageItem {
+  kind: "version-active" | "version-previous" | "version-pending" | "data" | "backups-auto" | "backups-manual" | "partial";
+  label: string;
+  bytes: number;
+  files: number;
+  removable: boolean;
+  path: string;
+}
+
+export interface AppStorage {
+  id: string;
+  name: string;
+  total: number;
+  reclaimable: number;
+  items: StorageItem[];
+}
+
+export interface StorageReport {
+  apps: AppStorage[];
+  images: number;
+  total: number;
+  reclaimable: number;
+  root: string;
+}
+
+export interface FileChange {
+  path: string;
+  before: number | null;
+  after: number | null;
+}
+
+export interface WorkshopReport {
+  zipName: string;
+  zipBytes: number;
+  files: number;
+  unpackedBytes: number;
+  manifest: ZipEntry;
+  hasManifest: boolean;
+  executables: string[];
+  largest: FileChange[];
+  checks: { level: "ok" | "warn" | "error"; text: string }[];
+  comparison: {
+    version: string;
+    filesBefore: number;
+    bytesBefore: number;
+    added: FileChange[];
+    removed: FileChange[];
+    grown: FileChange[];
+    changed: number;
+  } | null;
+  ready: boolean;
+}
+
+export interface ExportManifest {
+  format: number;
+  exportedAt: string;
+  catalogUrl: string | null;
+  prefs: unknown;
+  profile: Profile;
+  apps: { id: string; name: string; version: string }[];
+  data: string[];
+}
+
+export interface ImportOptions {
+  settings: boolean;
+  profile: boolean;
+  data: string[];
+  installMissing: boolean;
+}
+
+export interface ImportResult {
+  prefs: unknown;
+  toInstall: string[];
+  restored: string[];
+  messages: string[];
 }
 
 export interface BackupInfo {
@@ -80,6 +206,7 @@ export interface Snapshot {
   localCatalogPath: string | null;
   /** Résultat du dernier import du dossier « À ajouter ». */
   notices: string[];
+  profile: Profile;
 }
 
 export interface LauncherUpdate {
@@ -156,7 +283,61 @@ export const api = {
   rollback: (id: string, restore: string | null) => call<void>("rollback", { id, restore }),
   setHold: (id: string, hold: boolean) => call<void>("set_hold", { id, hold }),
   openBackupsFolder: (id: string) => call<void>("open_backups_folder", { id }),
+  history: (appId: string | null, limit = 400) => call<HistoryEvent[]>("get_history", { appId, limit }),
+  saveProfile: (profile: Profile) => call<void>("save_profile", { profile }),
+  launchPersonal: (id: string) => call<void>("launch_personal", { id }),
+  launchWorkspace: (id: string) => call<{ opened: number; failures: string[] }>("launch_workspace", { id }),
+  openTarget: (kind: "folder" | "url", target: string) => call<void>("open_target", { kind, target }),
+  storageReport: () => call<StorageReport>("storage_report"),
+  cleanStorage: (id: string, kinds: string[]) => call<number>("clean_storage", { id, kinds }),
+  openPath: (path: string) => call<void>("open_path", { path }),
+  workshopAnalyze: (path: string) => call<WorkshopReport>("workshop_analyze", { path }),
+  exportProfile: (path: string, prefs: unknown, data: string[]) => call<number>("export_profile", { path, prefs, data }),
+  readImport: (path: string) => call<ExportManifest>("read_import", { path }),
+  importProfile: (path: string, options: ImportOptions) => call<ImportResult>("import_profile", { path, options }),
+  /** Fenêtre « Ouvrir » : un programme, un dossier ou un fichier filtré. */
+  pickPath: async (what: "program" | "folder" | "zip" | "profile"): Promise<string | null> => {
+    if (!inTauri) {
+      return {
+        program: "C:\\Program Files\\Microsoft VS Code\\Code.exe",
+        folder: "C:\\Users\\vous\\Documents\\Projets",
+        zip: "C:\\Users\\vous\\Downloads\\Rayans-Chrono-2.1.0-Windows-x64.zip",
+        profile: "C:\\Users\\vous\\Documents\\profil-rayans-launcher.zip",
+      }[what];
+    }
+    const filters =
+      what === "program"
+        ? [{ name: "Programme ou raccourci", extensions: ["exe", "lnk", "bat", "cmd", "url"] }]
+        : what === "zip" || what === "profile"
+          ? [{ name: "Archive ZIP", extensions: ["zip"] }]
+          : undefined;
+    const r = await open({ multiple: false, directory: what === "folder", filters });
+    return typeof r === "string" ? r : null;
+  },
+  /** Fenêtre « Enregistrer sous » pour l'export du profil. */
+  pickSave: async (name: string): Promise<string | null> => {
+    if (!inTauri) return `C:\\Users\\vous\\Documents\\${name}`;
+    return (await save({ defaultPath: name, filters: [{ name: "Archive ZIP", extensions: ["zip"] }] })) ?? null;
+  },
 };
+
+/** Copie dans le presse-papiers (avec repli pour les WebView sans API Clipboard). */
+export async function copyText(text: string): Promise<void> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return;
+  } catch {
+    const t = document.createElement("textarea");
+    t.value = text;
+    t.style.position = "fixed";
+    t.style.opacity = "0";
+    document.body.appendChild(t);
+    t.select();
+    const ok = document.execCommand("copy");
+    t.remove();
+    if (!ok) throw new Error("copie impossible");
+  }
+}
 
 /** Raccourci global (Ctrl + Alt + Espace) : le launcher passe au premier plan et demande la palette. */
 export async function onPaletteRequest(f: () => void): Promise<() => void> {

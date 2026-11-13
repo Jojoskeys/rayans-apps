@@ -16,6 +16,7 @@ système (réseau, disque, processus).
 - [Ajouter une application](#ajouter-une-application)
 - [Publier une mise à jour](#publier-une-mise-à-jour)
 - [Palette, sauvegardes et retour de version](#palette-sauvegardes-et-retour-de-version)
+- [Espaces, logiciels perso, historique, stockage, atelier et migration](#espaces-logiciels-perso-historique-stockage-atelier-et-migration)
 - [Ce que Rayan's Launcher garantit](#ce-que-rayans-launcher-garantit)
 - [Tests et parcours vérifiés](#tests-et-parcours-vérifiés)
 - [Hors périmètre et limites connues](#hors-périmètre-et-limites-connues)
@@ -481,6 +482,34 @@ reconstruire le launcher.
   récente ne sort pas (« Ne plus ignorer » annule). « Ignorer la x.y.z » fait de même sans changer de version, pour
   attendre un correctif.
 
+## Espaces, logiciels perso, historique, stockage, atelier et migration
+
+- **Mes logiciels** (page « Installées ») : ajoutez un programme Windows (`.exe` lancé directement, raccourci `.lnk`
+  ouvert par Windows), une application portable, un site web ou un dossier. Badge « ajouté à la main ». Rien n'est
+  copié : le launcher garde seulement le chemin.
+- **Espaces de travail** : un bouton « Dev », « Bureau » ou « Jeu » qui ouvre dans l'ordre des applications du
+  catalogue, des logiciels perso, des dossiers et des sites. Aussi dans la palette. Limite : la position des
+  fenêtres n'est pas mémorisée.
+- **Règles de mise à jour** (Paramètres, et fiche de chaque application) : règle générale « Demander » ou
+  « Automatique », exceptions par application, pause générale. En automatique, la mise à jour s'installe quand
+  l'application est fermée : au démarrage, toutes les heures, après une actualisation et à la fermeture de
+  l'application. La sauvegarde des données avant mise à jour s'applique toujours.
+- **Historique et diagnostic** : `history.jsonl` garde installations, mises à jour (de → vers), retours,
+  lancements, fermetures avec code de sortie et durée, sauvegardes, nettoyages et erreurs (3 000 derniers
+  événements). La fiche montre le dernier code de sortie (codes Windows `0xC…` traduits), la dernière version
+  installée et un bouton « Copier le diagnostic » pour un ticket.
+- **Stockage** : place prise par chaque application (version active, version précédente, données, sauvegardes,
+  téléchargements interrompus). Cochez ce qui est récupérable : le launcher liste exactement ce qui sera supprimé
+  et l'espace libéré avant de demander confirmation. La version active et les données ne sont jamais proposées.
+- **Atelier** : choisissez le ZIP d'une de vos applications. Il vérifie la fiche `rayans-launcher.json`,
+  l'exécutable, les chemins dangereux, la version (plus récente que l'installée), le compare à la version installée
+  (fichiers ajoutés, absents, qui ont beaucoup grossi), prévisualise la carte, prépare la fiche à copier et peut
+  l'ajouter au catalogue local.
+- **Export et migration** (Paramètres) : un ZIP avec l'adresse du catalogue, le profil (logiciels perso, espaces,
+  règles), la personnalisation, la liste des applications et, au choix, leurs données. À l'import, chaque partie
+  se coche ; les données présentes sont sauvegardées avant d'être remplacées et les applications manquantes du
+  catalogue sont installées d'un coup.
+
 ## Mettre à jour le launcher lui-même
 
 La CI numérote chaque construction `0.1.<numéro d'exécution + 100>`.
@@ -559,6 +588,7 @@ images/  downloads/  locks/
 apps/<id>/versions/<version>-<n>/   version active, version précédente (retour possible), version en attente
 data/<id>/                          données utilisateur
 backups/<id>/<date>/                sauvegardes des données (backup.json + data/)
+profile.json  history.jsonl         profil (logiciels perso, espaces, règles) et historique
 ```
 
 ## Tests et parcours vérifiés

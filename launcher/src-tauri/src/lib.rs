@@ -52,8 +52,10 @@ fn get_snapshot(core: State<CoreState>) -> Snapshot {
 }
 
 #[tauri::command]
-async fn refresh_catalog(core: State<'_, CoreState>) -> CmdResult<()> {
-    core.refresh_catalog().await.map_err(|e| e.info())
+async fn refresh_catalog(app: tauri::AppHandle, core: State<'_, CoreState>) -> CmdResult<()> {
+    let r = core.refresh_catalog().await.map_err(|e| e.info());
+    run_auto_updates(&app);
+    r
 }
 
 #[tauri::command]
@@ -299,6 +301,215 @@ fn get_image(core: State<CoreState>, id: String, kind: String) -> Option<String>
     core.image_data_url(&id, &kind)
 }
 
+
+// ----- Historique et diagnostic -----------------------------------------------------------------
+
+#[tauri::command]
+fn get_history(core: State<CoreState>, app_id: Option<String>, limit: Option<usize>) -> Vec<hangar_core::HistoryEvent> {
+    core.history(app_id.as_deref(), limit.unwrap_or(400))
+}
+
+// ----- Profil : logiciels perso, espaces de travail, règles de mise à jour ----------------------
+
+#[tauri::command]
+fn save_profile(app: tauri::AppHandle, core: State<CoreState>, profile: hangar_core::Profile) -> CmdResult<()> {
+    core.save_profile(profile).map_err(|e| e.info())?;
+    // Une règle passée en « automatique » s'applique tout de suite.
+    run_auto_updates(&app);
+    Ok(())
+}
+
+/// Découpe les arguments d'un logiciel perso (guillemets doubles pour les espaces).
+fn split_args(s: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    let mut cur = String::new();
+    let mut quoted = false;
+    for c in s.chars() {
+        match c {
+            '"' => quoted = !quoted,
+            c if c.is_whitespace() && !quoted => {
+                if !cur.is_empty() {
+                    out.push(std::mem::take(&mut cur));
+                }
+            }
+            c => cur.push(c),
+        }
+    }
+    if !cur.is_empty() {
+        out.push(cur);
+    }
+    out
+}
+
+fn open_kind(app: &tauri::AppHandle, kind: &str, target: &str, args: &str) -> Result<(), String> {
+    match kind {
+        "web" | "url" => {
+            let u = url::Url::parse(target).map_err(|_| format!("adresse invalide « {target} »"))?;
+            if !matches!(u.scheme(), "http" | "https") {
+                return Err("seules les adresses http:// et https:// sont ouvertes".into());
+            }
+            app.opener().open_url(u.as_str(), None::<&str>).map_err(|e| e.to_string())
+        }
+        "folder" => {
+            if !std::path::Path::new(target).is_dir() {
+                return Err(format!("dossier introuvable : {target}"));
+            }
+            app.opener().open_path(target, None::<&str>).map_err(|e| e.to_string())
+        }
+        "program" => {
+            let p = std::path::Path::new(target);
+            if !p.exists() {
+                return Err(format!("introuvable : {target} (déplacé ou désinstallé ?)"));
+            }
+            // Un .exe est lancé directement ; un raccourci (.lnk) ou un script passe par l'association Windows.
+            if p.extension().is_some_and(|x| x.eq_ignore_ascii_case("exe")) {
+                std::process::Command::new(p)
+                    .args(split_args(args))
+                    .current_dir(p.parent().unwrap_or(std::path::Path::new(".")))
+                    .spawn()
+                    .map(|_| ())
+                    .map_err(|e| e.to_string())
+            } else {
+                app.opener().open_path(target, None::<&str>).map_err(|e| e.to_string())
+            }
+        }
+        k => Err(format!("type inconnu « {k} »")),
+    }
+}
+
+#[tauri::command]
+fn launch_personal(app: tauri::AppHandle, core: State<CoreState>, id: String) -> CmdResult<()> {
+    let p = core.profile().personal.into_iter().find(|p| p.id == id).ok_or_else(|| other("logiciel introuvable"))?;
+    match open_kind(&app, &p.kind, &p.target, &p.args) {
+        Ok(()) => {
+            core.record(hangar_core::HistoryEvent::new("launch", Some(&id)).detail(p.name));
+            Ok(())
+        }
+        Err(e) => {
+            core.record(hangar_core::HistoryEvent::new("error", Some(&id)).detail(format!("{} : {e}", p.name)));
+            Err(other(format!("{} ne s'est pas ouvert : {e}", p.name)))
+        }
+    }
+}
+
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct WorkspaceResult {
+    opened: usize,
+    failures: Vec<String>,
+}
+
+/// Ouvre tout un espace de travail : applications, logiciels perso, dossiers et adresses.
+/// Une application déjà ouverte n'est pas comptée comme un échec.
+#[tauri::command]
+fn launch_workspace(app: tauri::AppHandle, core: State<CoreState>, id: String) -> CmdResult<WorkspaceResult> {
+    let profile = core.profile();
+    let w = profile.workspaces.iter().find(|w| w.id == id).ok_or_else(|| other("espace de travail introuvable"))?;
+    let mut res = WorkspaceResult { opened: 0, failures: Vec::new() };
+    for item in &w.items {
+        let r = match item.kind.as_str() {
+            "app" => match core.launch(&item.target) {
+                Ok(_) | Err(hangar_core::Error::Running) => Ok(()),
+                Err(e) => Err(format!("{} : {e}", core.installed_name(&item.target).unwrap_or(item.target.clone()))),
+            },
+            "personal" => match profile.personal.iter().find(|p| p.id == item.target) {
+                Some(p) => open_kind(&app, &p.kind, &p.target, &p.args).map_err(|e| format!("{} : {e}", p.name)),
+                None => Err("logiciel perso supprimé".into()),
+            },
+            k => open_kind(&app, k, &item.target, ""),
+        };
+        match r {
+            Ok(()) => res.opened += 1,
+            Err(e) => res.failures.push(e),
+        }
+    }
+    let ev = hangar_core::HistoryEvent::new("workspace", None).detail(format!(
+        "espace « {} » : {} ouvert(s){}",
+        w.name,
+        res.opened,
+        if res.failures.is_empty() { String::new() } else { format!(", échecs : {}", res.failures.join(" ; ")) }
+    ));
+    core.record(ev);
+    Ok(res)
+}
+
+#[tauri::command]
+fn open_target(app: tauri::AppHandle, kind: String, target: String) -> CmdResult<()> {
+    open_kind(&app, &kind, &target, "").map_err(other)
+}
+
+// ----- Mises à jour automatiques ----------------------------------------------------------------
+
+/// Installe les mises à jour des applications en règle « automatique » qui sont fermées.
+fn run_auto_updates(app: &tauri::AppHandle) {
+    let Some(core) = app.try_state::<CoreState>() else { return };
+    for id in core.auto_update_targets() {
+        core.mark_auto(&id);
+        let core = Arc::clone(&core);
+        tauri::async_runtime::spawn(async move {
+            let _ = core.install(&id).await;
+        });
+    }
+}
+
+// ----- Centre de stockage -----------------------------------------------------------------------
+
+#[tauri::command]
+fn storage_report(core: State<CoreState>) -> hangar_core::StorageReport {
+    core.storage_report()
+}
+
+#[tauri::command]
+fn clean_storage(core: State<CoreState>, id: String, kinds: Vec<String>) -> CmdResult<u64> {
+    core.clean(&id, &kinds).map_err(|e| e.info())
+}
+
+#[tauri::command]
+fn open_path(app: tauri::AppHandle, core: State<CoreState>, path: String) -> CmdResult<()> {
+    // Seulement les dossiers du launcher (le centre de stockage montre leurs chemins).
+    let p = std::path::PathBuf::from(&path);
+    if !p.starts_with(&core.paths().root) {
+        return Err(other("dossier hors du launcher"));
+    }
+    let dir = if p.is_dir() { p } else { p.parent().map(|x| x.to_path_buf()).unwrap_or(p) };
+    app.opener().open_path(dir.to_string_lossy(), None::<&str>).map_err(|e| other(e.to_string()))
+}
+
+// ----- Atelier de publication -------------------------------------------------------------------
+
+#[tauri::command]
+fn workshop_analyze(core: State<CoreState>, path: String) -> CmdResult<hangar_core::workshop::WorkshopReport> {
+    core.workshop_analyze(std::path::Path::new(&path)).map_err(|e| e.info())
+}
+
+// ----- Export et migration ----------------------------------------------------------------------
+
+#[tauri::command]
+fn export_profile(core: State<CoreState>, path: String, prefs: Option<serde_json::Value>, data: Vec<String>) -> CmdResult<u64> {
+    core.export_profile(std::path::Path::new(&path), prefs, &data).map_err(|e| e.info())
+}
+
+#[tauri::command]
+fn read_import(core: State<CoreState>, path: String) -> CmdResult<hangar_core::transfer::ExportManifest> {
+    core.read_import(std::path::Path::new(&path)).map_err(|e| e.info())
+}
+
+#[tauri::command]
+async fn import_profile(
+    core: State<'_, CoreState>,
+    path: String,
+    options: hangar_core::ImportOptions,
+) -> CmdResult<hangar_core::ImportResult> {
+    let res = core.import_profile(std::path::Path::new(&path), &options).await.map_err(|e| e.info())?;
+    for id in res.to_install.clone() {
+        let core = Arc::clone(&core);
+        tauri::async_runtime::spawn(async move {
+            let _ = core.install(&id).await;
+        });
+    }
+    Ok(res)
+}
+
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
@@ -351,6 +562,11 @@ pub fn run() {
                 policy,
                 default_catalog_url(),
                 Box::new(move |ev| {
+                    // Une application en règle « automatique » se met à jour dès qu'elle est fermée.
+                    if matches!(ev, Event::Exited { .. }) {
+                        let h = handle.clone();
+                        tauri::async_runtime::spawn(async move { run_auto_updates(&h) });
+                    }
                     let _ = match &ev {
                         Event::Progress { .. } => handle.emit("hangar://progress", &ev),
                         _ => handle.emit("hangar://changed", &ev),
@@ -364,9 +580,15 @@ pub fn run() {
             }
             app.manage(Arc::clone(&core));
             launch_from_args(app.handle(), &std::env::args().collect::<Vec<_>>());
-            // Actualisation du catalogue au démarrage (le dernier catalogue valide est déjà chargé).
+            // Actualisation du catalogue au démarrage (le dernier catalogue valide est déjà chargé), puis
+            // toutes les heures, chacune suivie des mises à jour automatiques.
+            let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
-                let _ = core.refresh_catalog().await;
+                loop {
+                    let _ = core.refresh_catalog().await;
+                    run_auto_updates(&handle);
+                    tokio::time::sleep(std::time::Duration::from_secs(3600)).await;
+                }
             });
             Ok(())
         })
@@ -396,7 +618,19 @@ pub fn run() {
             delete_backup,
             rollback,
             set_hold,
-            open_backups_folder
+            open_backups_folder,
+            get_history,
+            save_profile,
+            launch_personal,
+            launch_workspace,
+            open_target,
+            storage_report,
+            clean_storage,
+            open_path,
+            workshop_analyze,
+            export_profile,
+            read_import,
+            import_profile
         ])
         .run(tauri::generate_context!())
         .expect("erreur au démarrage de Rayan's Launcher");

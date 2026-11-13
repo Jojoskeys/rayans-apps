@@ -5,19 +5,25 @@ pub mod archive;
 pub mod backup;
 pub mod catalog;
 pub mod error;
+pub mod history;
 pub mod local;
 pub mod net;
+pub mod profile;
 pub mod state;
+pub mod transfer;
 pub mod util;
+pub mod workshop;
 
 pub use backup::BackupInfo;
+pub use history::HistoryEvent;
+pub use profile::{PersonalApp, Profile, UpdateRules, Workspace, WorkspaceItem};
 pub use catalog::{Catalog, CatalogApp, TrustPolicy};
 pub use error::{Error, ErrorInfo, Result};
 
 use base64::Engine;
 use serde::Serialize;
 use state::*;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fs::{File, OpenOptions};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -74,6 +80,12 @@ pub struct AppView {
     pub held_version: Option<String>,
     pub backup_count: usize,
     pub last_backup_at: Option<String>,
+    /// Règle de mise à jour effective : "ask" ou "auto".
+    pub update_rule: String,
+    /// La règle vient d'une exception propre à l'application.
+    pub update_rule_custom: bool,
+    /// Code de sortie du dernier lancement (None : jamais lancée, ou arrêtée sans code).
+    pub last_exit_code: Option<i32>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -106,6 +118,7 @@ pub struct Snapshot {
     pub local_catalog_path: Option<String>,
     /// Résultat du dernier import du dossier « À ajouter ».
     pub notices: Vec<String>,
+    pub profile: Profile,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -126,6 +139,61 @@ pub enum InstallOutcome {
 }
 
 // ---------------------------------------------------------------------------------------------
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct StorageItem {
+    /// version-active, version-previous, version-pending, data, backups-auto, backups-manual, partial
+    pub kind: String,
+    pub label: String,
+    pub bytes: u64,
+    pub files: u64,
+    pub removable: bool,
+    pub path: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AppStorage {
+    pub id: String,
+    pub name: String,
+    pub total: u64,
+    pub reclaimable: u64,
+    pub items: Vec<StorageItem>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct StorageReport {
+    pub apps: Vec<AppStorage>,
+    /// Visuels du catalogue en cache.
+    pub images: u64,
+    pub total: u64,
+    pub reclaimable: u64,
+    pub root: String,
+}
+
+#[derive(Debug, Clone, serde::Deserialize, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ImportOptions {
+    /// Adresse du catalogue.
+    pub settings: bool,
+    /// Logiciels perso, espaces de travail, règles de mise à jour.
+    pub profile: bool,
+    /// Applications dont les données doivent être restaurées.
+    pub data: Vec<String>,
+    pub install_missing: bool,
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImportResult {
+    /// Préférences d'affichage à appliquer par l'interface.
+    pub prefs: Option<serde_json::Value>,
+    pub to_install: Vec<String>,
+    pub restored: Vec<String>,
+    pub messages: Vec<String>,
+}
 
 struct LoadedCatalog {
     catalog: Catalog,
@@ -150,6 +218,11 @@ struct Inner {
     notices: Vec<String>,
     /// Drapeau d'annulation des téléchargements en cours.
     cancels: HashMap<String, Arc<AtomicBool>>,
+    profile: Profile,
+    launched_at: HashMap<String, Instant>,
+    last_exit: HashMap<String, Option<i32>>,
+    /// Installations lancées par la règle « automatique » (notées comme telles dans l'historique).
+    auto: HashSet<String>,
 }
 
 pub type Listener = Box<dyn Fn(Event) + Send + Sync>;
@@ -217,6 +290,14 @@ impl Core {
             settings.catalog_url = default_catalog_url.filter(|u| !u.trim().is_empty());
         }
         let installed: Installed = load_json(&paths.installed())?;
+        let profile: Profile = load_json(&paths.profile()).unwrap_or_default();
+        history::trim(&paths.history());
+        let mut last_exit = HashMap::new();
+        for e in history::read_all(&paths.history()).into_iter().filter(|e| e.kind == "exit") {
+            if let Some(id) = e.app_id {
+                last_exit.insert(id, e.code);
+            }
+        }
         let core = Arc::new(Core {
             http: net::client(&policy),
             paths,
@@ -224,6 +305,8 @@ impl Core {
             inner: Mutex::new(Inner {
                 settings,
                 installed,
+                profile,
+                last_exit,
                 ..Default::default()
             }),
             listener,
@@ -582,6 +665,9 @@ impl Core {
                 held_version: ia.and_then(|a| a.held_version.as_ref()).map(|v| v.to_string()),
                 backup_count: backups.len(),
                 last_backup_at: backups.first().map(|b| b.created_at.clone()),
+                update_rule: inner.profile.updates.rule_for(id).to_string(),
+                update_rule_custom: inner.profile.updates.per_app.contains_key(id),
+                last_exit_code: inner.last_exit.get(id).copied().flatten(),
             }
         };
         if let Some(c) = &inner.catalog {
@@ -625,6 +711,7 @@ impl Core {
                 None
             },
             notices: inner.notices.clone(),
+            profile: inner.profile.clone(),
         }
     }
 
@@ -648,8 +735,10 @@ impl Core {
     /// Installe la version du catalogue, ou met à jour. La version en place n'est jamais touchée
     /// tant que la nouvelle n'est pas complète et vérifiée.
     pub async fn install(self: &Arc<Self>, id: &str) -> Result<InstallOutcome> {
-        let (app, kind) = {
+        let (app, kind, from, auto) = {
             let mut inner = self.lock();
+            let from = inner.installed.apps.get(id).map(|a| a.current.version.to_string());
+            let auto = inner.auto.remove(id);
             let app = inner
                 .catalog
                 .as_ref()
@@ -665,7 +754,7 @@ impl Core {
                 id.to_string(),
                 TaskView { kind: kind.into(), phase: "downloading".into(), received: 0, total: app.size },
             );
-            (app, kind)
+            (app, kind, from, auto)
         };
         self.emit(Event::Changed);
         let result = match AppLock::acquire(&self.paths.root.join("locks").join(format!("{id}.lock"))) {
@@ -681,6 +770,29 @@ impl Core {
                 Err(e) => {
                     inner.errors.insert(id.to_string(), e.info());
                 }
+            }
+        }
+        if id != LAUNCHER_ID {
+            let ev = match &result {
+                Ok(outcome) => {
+                    let mut ev = HistoryEvent::new(if auto { "auto-update" } else { kind }, Some(id)).version(&app.version);
+                    if let Some(f) = &from {
+                        ev = ev.from(f);
+                    }
+                    if *outcome == InstallOutcome::Pending {
+                        ev = ev.detail("prête, activée à la fermeture de l'application");
+                    }
+                    Some(ev)
+                }
+                Err(Error::Cancelled) => None,
+                Err(e) => Some(
+                    HistoryEvent::new("error", Some(id))
+                        .version(&app.version)
+                        .detail(format!("{} : {e}", if kind == "update" { "mise à jour" } else { "installation" })),
+                ),
+            };
+            if let Some(ev) = ev {
+                self.record(ev);
             }
         }
         self.emit(Event::Changed);
@@ -928,11 +1040,14 @@ impl Core {
         };
         let result = self.spawn_checked(id, &dir, &ver);
         match &result {
-            Ok(_) => {}
+            Ok(_) => self.record(HistoryEvent::new("launch", Some(id)).version(&ver.version)),
             Err(e) => {
-                let mut inner = self.lock();
-                inner.running.remove(id);
-                inner.errors.insert(id.to_string(), e.info());
+                {
+                    let mut inner = self.lock();
+                    inner.running.remove(id);
+                    inner.errors.insert(id.to_string(), e.info());
+                }
+                self.record(HistoryEvent::new("error", Some(id)).version(&ver.version).detail(format!("lancement : {e}")));
             }
         }
         self.emit(Event::Changed);
@@ -978,7 +1093,11 @@ impl Core {
             .spawn()
             .map_err(|e| Error::Launch(e.to_string()))?;
         let pid = child.id();
-        self.lock().running.insert(id.to_string(), pid);
+        {
+            let mut inner = self.lock();
+            inner.running.insert(id.to_string(), pid);
+            inner.launched_at.insert(id.to_string(), Instant::now());
+        }
         let core = Arc::clone(self);
         let id = id.to_string();
         std::thread::spawn(move || {
@@ -989,13 +1108,22 @@ impl Core {
     }
 
     fn on_exit(&self, id: &str, code: Option<i32>) {
-        {
+        let (seconds, version) = {
             let mut inner = self.lock();
             inner.running.remove(id);
+            inner.last_exit.insert(id.to_string(), code);
+            let seconds = inner.launched_at.remove(id).map(|t| t.elapsed().as_secs());
+            let version = inner.installed.apps.get(id).map(|a| a.current.version.to_string());
             if let Err(e) = self.activate_pending_locked(&mut inner, id) {
                 inner.errors.insert(id.to_string(), e.info());
             }
-        }
+            (seconds, version)
+        };
+        let mut ev = HistoryEvent::new("exit", Some(id));
+        ev.version = version;
+        ev.code = code;
+        ev.seconds = seconds;
+        self.record(ev);
         self.emit(Event::Exited { app_id: id.to_string(), code });
         self.emit(Event::Changed);
     }
@@ -1022,6 +1150,9 @@ impl Core {
                 return Err(e);
             }
             inner.errors.remove(id);
+            let ev = HistoryEvent::new("uninstall", Some(id)).version(&removed.current.version);
+            drop(inner);
+            self.record(if remove_data { ev.detail("données supprimées") } else { ev.detail("données conservées") });
         }
         util::remove_dir_quiet(&self.paths.app_dir(id));
         if remove_data {
@@ -1061,6 +1192,7 @@ impl Core {
     pub fn backup(&self, id: &str) -> Result<BackupInfo> {
         let _lock = self.app_lock(id)?;
         let b = backup::create(&self.paths, id, self.current_version(id), "manual")?;
+        self.record(HistoryEvent::new("backup", Some(id)).detail(format!("sauvegarde manuelle ({} fichiers)", b.files)));
         self.emit(Event::Changed);
         Ok(b)
     }
@@ -1083,7 +1215,9 @@ impl Core {
     pub fn restore_backup(&self, id: &str, backup_id: &str) -> Result<()> {
         let _lock = self.app_lock(id)?;
         self.ensure_idle(id)?;
+        let b = backup::find(&self.paths, id, backup_id)?;
         self.restore_locked(id, backup_id, "restore")?;
+        self.record(HistoryEvent::new("restore", Some(id)).detail(format!("données du {}", b.created_at)));
         self.emit(Event::Changed);
         Ok(())
     }
@@ -1128,6 +1262,7 @@ impl Core {
                 .filter(|c| c.version == prev.version)
                 .map(|c| c.release_notes.clone());
             let entry = inner.installed.apps.get_mut(id).expect("présente");
+            let (to, from) = (prev.version.clone(), entry.current.version.clone());
             let left = std::mem::replace(&mut entry.current, prev);
             entry.held_version = Some(left.version.clone());
             entry.previous = Some(left);
@@ -1139,6 +1274,9 @@ impl Core {
                 return Err(e);
             }
             inner.errors.remove(id);
+            drop(inner);
+            let ev = HistoryEvent::new("rollback", Some(id)).version(to).from(from);
+            self.record(if restore.is_some() { ev.detail("avec les données d'avant la mise à jour") } else { ev });
         }
         let result = match restore {
             Some(b) => self.restore_locked(id, b, "rollback"),
@@ -1163,6 +1301,324 @@ impl Core {
         }
         self.emit(Event::Changed);
         Ok(())
+    }
+
+    // ----- Historique --------------------------------------------------------------------------
+
+    pub fn record(&self, e: HistoryEvent) {
+        history::append(&self.paths.history(), &e);
+    }
+
+    pub fn history(&self, app_id: Option<&str>, limit: usize) -> Vec<HistoryEvent> {
+        history::list(&self.paths.history(), app_id, limit.min(5000))
+    }
+
+    // ----- Profil : logiciels perso, espaces de travail, règles de mise à jour -----------------
+
+    pub fn profile(&self) -> Profile {
+        self.lock().profile.clone()
+    }
+
+    pub fn save_profile(&self, p: Profile) -> Result<()> {
+        profile::validate(&p)?;
+        {
+            let mut inner = self.lock();
+            save_json(&self.paths.profile(), &p)?;
+            inner.profile = p;
+        }
+        self.emit(Event::Changed);
+        Ok(())
+    }
+
+    /// Note que la prochaine installation de `id` est une mise à jour automatique.
+    pub fn mark_auto(&self, id: &str) {
+        self.lock().auto.insert(id.to_string());
+    }
+
+    /// Applications à mettre à jour seules : règle « auto », pas de pause, application fermée et inactive.
+    pub fn auto_update_targets(&self) -> Vec<String> {
+        let rules = self.lock().profile.updates.clone();
+        if rules.paused {
+            return Vec::new();
+        }
+        self.snapshot()
+            .apps
+            .into_iter()
+            .filter(|a| a.update_available && !a.running && a.task.is_none() && a.partial_bytes.is_none())
+            .filter(|a| rules.rule_for(&a.id) == "auto")
+            .map(|a| a.id)
+            .collect()
+    }
+
+    // ----- Centre de stockage ------------------------------------------------------------------
+
+    pub fn storage_report(&self) -> StorageReport {
+        let (installed, catalog_ids): (Vec<InstalledApp>, Vec<(String, String)>) = {
+            let inner = self.lock();
+            (
+                inner.installed.apps.values().cloned().collect(),
+                inner
+                    .catalog
+                    .as_ref()
+                    .map(|c| c.catalog.apps.iter().map(|a| (a.id.clone(), a.name.clone())).collect())
+                    .unwrap_or_default(),
+            )
+        };
+        let mut ids: Vec<(String, String)> = installed.iter().map(|a| (a.id.clone(), a.name.clone())).collect();
+        // Données ou sauvegardes d'applications désinstallées : elles occupent aussi de la place.
+        for dir in [self.paths.root.join("data"), self.paths.root.join("backups")] {
+            if let Ok(rd) = std::fs::read_dir(dir) {
+                for e in rd.flatten() {
+                    let id = e.file_name().to_string_lossy().to_string();
+                    if catalog::is_valid_id(&id) && !ids.iter().any(|(i, _)| i == &id) {
+                        let name = catalog_ids.iter().find(|(i, _)| i == &id).map(|x| x.1.clone()).unwrap_or(id.clone());
+                        ids.push((id, name));
+                    }
+                }
+            }
+        }
+        let item = |kind: &str, label: String, path: PathBuf, removable: bool| {
+            let (files, bytes) = if path.is_dir() {
+                backup::dir_stats(&path)
+            } else {
+                (1, std::fs::metadata(&path).map(|m| m.len()).unwrap_or(0))
+            };
+            StorageItem { kind: kind.into(), label, bytes, files, removable, path: path.display().to_string() }
+        };
+        let mut apps = Vec::new();
+        for (id, name) in ids {
+            let mut items = Vec::new();
+            if let Some(a) = installed.iter().find(|a| a.id == id) {
+                let vd = self.paths.versions_dir(&id);
+                items.push(item("version-active", format!("Version active {}", a.current.version), vd.join(&a.current.dir), false));
+                if let Some(p) = &a.previous {
+                    items.push(item("version-previous", format!("Version précédente {} (retour possible)", p.version), vd.join(&p.dir), true));
+                }
+                if let Some(p) = &a.pending {
+                    items.push(item("version-pending", format!("Version {} en attente", p.version), vd.join(&p.dir), false));
+                }
+            }
+            if self.paths.data_dir(&id).is_dir() {
+                items.push(item("data", "Données de l'application".into(), self.paths.data_dir(&id), false));
+            }
+            let list = backup::list(&self.paths, &id);
+            let (auto, manual): (Vec<_>, Vec<_>) = list.iter().partition(|b| b.automatic());
+            for (kind, group, label) in [("backups-auto", auto, "Sauvegardes automatiques"), ("backups-manual", manual, "Sauvegardes manuelles")] {
+                if !group.is_empty() {
+                    let bytes: u64 = group.iter().map(|b| b.size).sum();
+                    let files: u64 = group.iter().map(|b| b.files).sum();
+                    items.push(StorageItem {
+                        kind: kind.into(),
+                        label: format!("{label} ({})", group.len()),
+                        bytes,
+                        files,
+                        removable: true,
+                        path: self.paths.backups_dir(&id).display().to_string(),
+                    });
+                }
+            }
+            if let Ok(rd) = std::fs::read_dir(self.paths.downloads()) {
+                let prefix = format!("{id}-");
+                for e in rd.flatten() {
+                    let n = e.file_name().to_string_lossy().to_string();
+                    if n.starts_with(&prefix) && n.ends_with(".part") {
+                        items.push(item("partial", "Téléchargement interrompu".into(), e.path(), true));
+                    }
+                }
+            }
+            let total = items.iter().map(|i| i.bytes).sum();
+            let reclaimable = items.iter().filter(|i| i.removable).map(|i| i.bytes).sum();
+            if total > 0 {
+                apps.push(AppStorage { id, name, total, reclaimable, items });
+            }
+        }
+        apps.sort_by(|a, b| b.total.cmp(&a.total));
+        let images = backup::dir_stats(&self.paths.images()).1;
+        let total = apps.iter().map(|a| a.total).sum::<u64>() + images;
+        let reclaimable = apps.iter().map(|a| a.reclaimable).sum();
+        StorageReport { apps, images, total, reclaimable, root: self.paths.root.display().to_string() }
+    }
+
+    /// Supprime ce qui est demandé pour une application : "version-previous", "backups-auto",
+    /// "backups-manual", "partial". Renvoie l'espace libéré.
+    pub fn clean(&self, id: &str, kinds: &[String]) -> Result<u64> {
+        let _lock = self.app_lock(id)?;
+        if self.lock().tasks.contains_key(id) {
+            return Err(Error::Busy);
+        }
+        let before = self.storage_report().apps.into_iter().find(|a| a.id == id);
+        let mut freed = 0;
+        let mut done = Vec::new();
+        for k in kinds {
+            let size = before.as_ref().map_or(0, |a| a.items.iter().filter(|i| &i.kind == k).map(|i| i.bytes).sum());
+            match k.as_str() {
+                "version-previous" => {
+                    let mut inner = self.lock();
+                    let Some(app) = inner.installed.apps.get_mut(id) else { continue };
+                    let Some(prev) = app.previous.take() else { continue };
+                    if let Err(e) = self.save_installed(&inner) {
+                        inner.installed.apps.get_mut(id).expect("présente").previous = Some(prev);
+                        return Err(e);
+                    }
+                    drop(inner);
+                    util::remove_dir_quiet(&self.paths.versions_dir(id).join(prev.dir));
+                    done.push(format!("version {}", prev.version));
+                }
+                "backups-auto" | "backups-manual" => {
+                    let auto = k == "backups-auto";
+                    for b in backup::list(&self.paths, id).into_iter().filter(|b| b.automatic() == auto) {
+                        backup::delete(&self.paths, id, &b.id)?;
+                    }
+                    done.push(if auto { "sauvegardes automatiques" } else { "sauvegardes manuelles" }.to_string());
+                }
+                "partial" => {
+                    self.remove_partials(id, None);
+                    done.push("téléchargement interrompu".into());
+                }
+                other => return Err(Error::Other(format!("élément « {other} » non supprimable"))),
+            }
+            freed += size;
+        }
+        if !done.is_empty() {
+            self.record(HistoryEvent::new("clean", Some(id)).detail(format!("{} supprimé(s), {} octets libérés", done.join(", "), freed)));
+        }
+        self.emit(Event::Changed);
+        Ok(freed)
+    }
+
+    // ----- Atelier de publication --------------------------------------------------------------
+
+    pub fn workshop_analyze(&self, zip: &Path) -> Result<workshop::WorkshopReport> {
+        workshop::analyze(zip, |id| {
+            let inner = self.lock();
+            let a = inner.installed.apps.get(id)?;
+            Some((a.current.version.to_string(), self.paths.versions_dir(id).join(&a.current.dir)))
+        })
+    }
+
+    // ----- Export et migration -----------------------------------------------------------------
+
+    pub fn export_profile(&self, dest: &Path, prefs: Option<serde_json::Value>, data: &[String]) -> Result<u64> {
+        let (manifest, ids) = {
+            let inner = self.lock();
+            let apps: Vec<transfer::ExportedApp> = inner
+                .installed
+                .apps
+                .values()
+                .filter(|a| a.id != LAUNCHER_ID)
+                .map(|a| transfer::ExportedApp { id: a.id.clone(), name: a.name.clone(), version: a.current.version.to_string() })
+                .collect();
+            let m = transfer::ExportManifest {
+                format: 1,
+                exported_at: util::now_rfc3339(),
+                catalog_url: inner.settings.catalog_url.clone(),
+                prefs,
+                profile: inner.profile.clone(),
+                apps,
+                data: Vec::new(),
+            };
+            (m, data.to_vec())
+        };
+        let mut manifest = manifest;
+        for id in ids {
+            if !catalog::is_valid_id(&id) {
+                return Err(Error::UnknownApp(id));
+            }
+            if backup::has_data(&self.paths, &id) {
+                manifest.data.push(id);
+            }
+        }
+        let size = transfer::write(dest, &manifest, &self.paths)?;
+        self.record(HistoryEvent::new("export", None).detail(format!(
+            "profil exporté ({} applications, données de {})",
+            manifest.apps.len(),
+            manifest.data.len()
+        )));
+        Ok(size)
+    }
+
+    pub fn read_import(&self, zip: &Path) -> Result<transfer::ExportManifest> {
+        transfer::read_manifest(zip)
+    }
+
+    /// Applique un profil exporté. Les applications à installer sont renvoyées : la couche Tauri les lance.
+    pub async fn import_profile(&self, zip: &Path, opts: &ImportOptions) -> Result<ImportResult> {
+        let m = transfer::read_manifest(zip)?;
+        let mut messages = Vec::new();
+        let mut restored = Vec::new();
+        // Données d'abord : c'est la seule étape qui peut échouer pour de bon (application ouverte).
+        let wanted: Vec<&String> = m.data.iter().filter(|id| opts.data.contains(id)).collect();
+        if !wanted.is_empty() {
+            for id in &wanted {
+                if self.is_running(id) {
+                    return Err(Error::Other(format!("{id} est ouverte : fermez-la avant d'importer ses données.")));
+                }
+            }
+            let tmp = self.paths.root.join(format!("import-{}", util::random_hex(4)));
+            let _guard = Cleanup(Some(tmp.clone()));
+            transfer::extract(zip, &tmp)?;
+            for id in wanted {
+                let _lock = self.app_lock(id)?;
+                let src = tmp.join("data").join(id);
+                if !src.is_dir() {
+                    continue;
+                }
+                if backup::has_data(&self.paths, id) {
+                    backup::create(&self.paths, id, self.current_version(id), "restore")?;
+                }
+                backup::replace_data(&self.paths, id, &src)?;
+                restored.push(id.clone());
+            }
+            messages.push(format!("Données restaurées : {} (les données présentes ont été sauvegardées avant).", restored.join(", ")));
+        }
+        if opts.profile {
+            let mut p = self.profile();
+            for a in &m.profile.personal {
+                p.personal.retain(|x| x.id != a.id);
+                p.personal.push(a.clone());
+            }
+            for w in &m.profile.workspaces {
+                p.workspaces.retain(|x| x.id != w.id);
+                p.workspaces.push(w.clone());
+            }
+            p.updates = m.profile.updates.clone();
+            self.save_profile(p)?;
+            messages.push(format!(
+                "Profil importé : {} logiciel(s) perso, {} espace(s) de travail, règles de mise à jour.",
+                m.profile.personal.len(),
+                m.profile.workspaces.len()
+            ));
+        }
+        if opts.settings {
+            if let Some(url) = &m.catalog_url {
+                if self.lock().settings.catalog_url.as_deref() != Some(url.as_str()) {
+                    match self.set_catalog_url(url) {
+                        Ok(()) => messages.push(format!("Adresse du catalogue : {url}")),
+                        Err(e) => messages.push(format!("Adresse du catalogue non reprise : {e}")),
+                    }
+                }
+            }
+            if let Err(e) = self.refresh_catalog().await {
+                messages.push(format!("Catalogue non actualisé : {e}"));
+            }
+        }
+        let mut to_install = Vec::new();
+        if opts.install_missing {
+            let snap = self.snapshot();
+            for a in &m.apps {
+                match snap.apps.iter().find(|x| x.id == a.id) {
+                    Some(x) if x.installed_version.is_none() && x.in_catalog => to_install.push(a.id.clone()),
+                    None => messages.push(format!("{} n'est pas dans le catalogue actuel : non installée.", a.name)),
+                    _ => {}
+                }
+            }
+            if !to_install.is_empty() {
+                messages.push(format!("{} application(s) en cours d'installation.", to_install.len()));
+            }
+        }
+        self.record(HistoryEvent::new("import", None).detail(messages.join(" ")));
+        self.emit(Event::Changed);
+        Ok(ImportResult { prefs: m.prefs, to_install, restored, messages })
     }
 }
 

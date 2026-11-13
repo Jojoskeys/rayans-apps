@@ -19,6 +19,8 @@ use std::path::{Path, PathBuf};
 ///   apps/<id>/staging-<n>/              préparation d'une version (jamais lancée)
 ///   data/<id>/             données utilisateur, conservées entre versions
 ///   backups/<id>/<n>/      sauvegardes datées des données (backup.json + data/)
+///   profile.json           logiciels ajoutés à la main, espaces de travail, règles de mise à jour
+///   history.jsonl          historique (installations, lancements, codes de sortie, erreurs…)
 /// ```
 #[derive(Clone, Debug)]
 pub struct Paths {
@@ -58,6 +60,12 @@ impl Paths {
     }
     pub fn backups_dir(&self, id: &str) -> PathBuf {
         self.root.join("backups").join(id)
+    }
+    pub fn profile(&self) -> PathBuf {
+        self.root.join("profile.json")
+    }
+    pub fn history(&self) -> PathBuf {
+        self.root.join("history.jsonl")
     }
 }
 

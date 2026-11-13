@@ -4,10 +4,11 @@ import { Actions, AppIcon, ErrorBox, Icon, Logo, VersionLine, Visual } from "./c
 import { bytes, date, dateTime } from "./format";
 import { Palette, type PaletteHandlers } from "./palette";
 import { BackupsPanel, useBackups, VersionsPanel } from "./safety";
+import { AppDiagnostics, HistoryPage, MyApps, RecentHistory, StoragePage, TransferPanel, UpdateRulePicker, UpdateRulesPanel, WorkshopPage, WorkspacesPage } from "./pages";
 import { applyPrefs, DEFAULT_PREFS, loadPrefs, PrefsContext, savePrefs, THEMES, usePrefs, type Prefs, type ThemeId } from "./prefs";
 
-type Page = "catalog" | "installed" | "settings";
-const PAGES: Page[] = ["catalog", "installed", "settings"];
+type Page = "catalog" | "installed" | "workspaces" | "history" | "storage" | "workshop" | "settings";
+const PAGES: Page[] = ["catalog", "installed", "workspaces", "history", "storage", "workshop", "settings"];
 
 export default function App() {
   const [prefs, setPrefsState] = useState<Prefs>(loadPrefs);
@@ -169,7 +170,11 @@ function Launcher() {
         <nav>
           <span className="nav-indicator" style={{ "--nav-i": PAGES.indexOf(page) } as React.CSSProperties} aria-hidden />
           <NavItem icon="catalog" label="Catalogue" active={page === "catalog"} onClick={() => nav("catalog")} badge={updates ? `${updates}` : undefined} badgeTitle="mises à jour disponibles" />
-          <NavItem icon="installed" label="Installées" active={page === "installed"} onClick={() => nav("installed")} count={installedCount} />
+          <NavItem icon="installed" label="Installées" active={page === "installed"} onClick={() => nav("installed")} count={installedCount + snap.profile.personal.length} />
+          <NavItem icon="layers" label="Espaces" active={page === "workspaces"} onClick={() => nav("workspaces")} count={snap.profile.workspaces.length} />
+          <NavItem icon="history" label="Historique" active={page === "history"} onClick={() => nav("history")} />
+          <NavItem icon="disk" label="Stockage" active={page === "storage"} onClick={() => nav("storage")} />
+          <NavItem icon="tool" label="Atelier" active={page === "workshop"} onClick={() => nav("workshop")} />
           <NavItem icon="settings" label="Paramètres" active={page === "settings"} onClick={() => nav("settings")} />
         </nav>
         <button className="palette-open" onClick={() => setPalette({ external: false })} title={features.paletteShortcut ? `Aussi depuis n'importe quelle application : ${features.paletteShortcut}` : undefined}>
@@ -188,9 +193,17 @@ function Launcher() {
           {current ? (
             <Detail app={current} snap={snap} features={features} section={section} onBack={() => { setDetail(null); setSection(null); }} onToast={setToast} />
           ) : page === "settings" ? (
-            <Settings snap={snap} onSaved={reload} />
+            <Settings snap={snap} onSaved={reload} onToast={setToast} />
+          ) : page === "workspaces" ? (
+            <WorkspacesPage snap={snap} onToast={setToast} />
+          ) : page === "history" ? (
+            <HistoryPage snap={snap} onOpenApp={setDetail} />
+          ) : page === "storage" ? (
+            <StoragePage snap={snap} onToast={setToast} />
+          ) : page === "workshop" ? (
+            <WorkshopPage snap={snap} onToast={setToast} onOpenApp={setDetail} />
           ) : (
-            <Library snap={snap} page={page} onOpen={setDetail} onRefresh={refresh} goCatalog={() => nav("catalog")} goSettings={() => nav("settings")} />
+            <Library snap={snap} page={page} onOpen={setDetail} onRefresh={refresh} goCatalog={() => nav("catalog")} goSettings={() => nav("settings")} onToast={setToast} />
           )}
         </div>
       </main>
@@ -263,7 +276,7 @@ function CatalogStatus({ snap }: { snap: Snapshot }) {
 
 // ----- Bibliothèque (catalogue / installées) ----------------------------------------------------
 
-function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { snap: Snapshot; page: Page; onOpen: (id: string) => void; onRefresh: () => void; goCatalog: () => void; goSettings: () => void }) {
+function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings, onToast }: { snap: Snapshot; page: Page; onOpen: (id: string) => void; onRefresh: () => void; goCatalog: () => void; goSettings: () => void; onToast: (s: string) => void }) {
   const c = snap.catalog;
   const [adding, setAdding] = useState(false);
   const { prefs } = usePrefs();
@@ -381,6 +394,7 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { sna
           ))}
         </div>
       )}
+      {page === "installed" && <MyApps snap={snap} onToast={onToast} />}
     </>
   );
 }
@@ -560,6 +574,7 @@ function AppCard({ app, index, refresh, onOpen }: { app: AppView; index: number;
           <div>
             <h2>{app.name}</h2>
             {!app.inCatalog && <span className="tag">retirée du catalogue</span>}
+            {app.installedVersion && app.updateRule === "auto" && <span className="tag good" title="Mise à jour automatique quand elle est fermée">auto</span>}
           </div>
         </div>
         <p className="desc">{app.description}</p>
@@ -686,6 +701,8 @@ function Detail({ app, snap, features, section, onBack, onToast }: { app: AppVie
           <>
             <VersionsPanel app={app} backups={backups.list} focus={section === "versions"} onToast={onToast} />
             <BackupsPanel app={app} backups={backups.list} reload={backups.reload} focus={section === "backups"} onToast={onToast} />
+            <AppDiagnostics app={app} snap={snap} onToast={onToast} />
+            <RecentHistory app={app} snap={snap} />
           </>
         )}
         </div>
@@ -698,6 +715,7 @@ function Detail({ app, snap, features, section, onBack, onToast }: { app: AppVie
             <div><dt>Identifiant</dt><dd><code>{app.id}</code></dd></div>
             {app.installedVersion && <div><dt>Données utilisateur</dt><dd><code className="path">{app.dataDir}</code></dd></div>}
           </dl>
+          {app.installedVersion && app.inCatalog && <UpdateRulePicker app={app} snap={snap} onToast={onToast} />}
           {app.installedVersion && (
             <div className="tools">
               <button className="btn small" onClick={tool(() => api.openFolder(app.id, "install"))}>Ouvrir le dossier de l'application</button>
@@ -880,7 +898,7 @@ function Personalize() {
 
 // ----- Paramètres ------------------------------------------------------------------------------
 
-function Settings({ snap, onSaved }: { snap: Snapshot; onSaved: () => void }) {
+function Settings({ snap, onSaved, onToast }: { snap: Snapshot; onSaved: () => void; onToast: (s: string) => void }) {
   const [url, setUrl] = useState(snap.catalogUrl ?? "");
   const [state, setState] = useState<"idle" | "saving" | "ok">("idle");
   const [err, setErr] = useState<ErrorInfo | null>(null);
@@ -905,6 +923,8 @@ function Settings({ snap, onSaved }: { snap: Snapshot; onSaved: () => void }) {
     <>
       <header className="page-head"><div><span className="eyebrow">Rayan's Launcher</span><h1>Paramètres</h1></div></header>
       <Personalize />
+      <UpdateRulesPanel snap={snap} onToast={onToast} />
+      <TransferPanel snap={snap} onToast={onToast} />
       <section className="panel settings" style={{ "--i": 1 } as React.CSSProperties}>
         <form onSubmit={save}>
           <label htmlFor="url"><h3>Adresse du catalogue</h3></label>

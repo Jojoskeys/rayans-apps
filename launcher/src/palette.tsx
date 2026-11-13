@@ -5,7 +5,7 @@ import { api, toErrorInfo, type AppView, type ErrorInfo, type Snapshot } from ".
 import { AppIcon, Icon } from "./components";
 import { bytes } from "./format";
 
-export type PaletteNav = "catalog" | "installed" | "settings";
+export type PaletteNav = "catalog" | "installed" | "workspaces" | "history" | "storage" | "workshop" | "settings";
 
 export interface PaletteHandlers {
   openApp: (id: string, section?: "versions" | "backups") => void;
@@ -95,10 +95,40 @@ function commands(snap: Snapshot, h: PaletteHandlers): Command[] {
       }
     }
   }
+  for (const w of snap.profile.workspaces) {
+    out.push({
+      key: `ws:${w.id}`,
+      title: `Ouvrir l'espace ${w.name}`,
+      hint: `${w.items.length} élément${w.items.length > 1 ? "s" : ""}`,
+      words: "espace travail workspace tout ouvrir",
+      icon: "layers",
+      launches: true,
+      run: async () => {
+        const r = await api.launchWorkspace(w.id);
+        if (r.failures.length) throw { code: "other", message: r.failures.join(" ; "), hint: `${r.opened} élément(s) ouvert(s).` };
+        h.toast(`Espace « ${w.name} » ouvert.`);
+      },
+    });
+  }
+  for (const p of snap.profile.personal) {
+    out.push({
+      key: `perso:${p.id}`,
+      title: `${p.kind === "program" ? "Lancer" : "Ouvrir"} ${p.name}`,
+      hint: p.kind === "web" ? p.target.replace(/^https?:\/\//, "") : "ajouté à la main",
+      words: "logiciel perso",
+      icon: p.kind === "web" ? "globe" : p.kind === "folder" ? "folder" : "play",
+      launches: true,
+      run: () => api.launchPersonal(p.id),
+    });
+  }
   out.push(
+    { key: "nav:workspaces", title: "Gérer les espaces de travail", icon: "layers", run: () => h.navigate("workspaces") },
+    { key: "nav:history", title: "Historique et diagnostic", words: "journal erreurs code sortie chronologie", icon: "history", run: () => h.navigate("history") },
+    { key: "nav:storage", title: "Centre de stockage", words: "espace disque nettoyer place", icon: "disk", run: () => h.navigate("storage") },
+    { key: "nav:workshop", title: "Atelier de publication", words: "zip publier verifier ci", icon: "tool", run: () => h.navigate("workshop") },
     { key: "nav:catalog", title: "Aller au catalogue", icon: "catalog", run: () => h.navigate("catalog") },
     { key: "nav:installed", title: "Aller aux applications installées", icon: "installed", run: () => h.navigate("installed") },
-    { key: "nav:settings", title: "Ouvrir les paramètres", words: "personnalisation theme adresse", icon: "settings", run: () => h.navigate("settings") },
+    { key: "nav:settings", title: "Ouvrir les paramètres", words: "personnalisation theme adresse export import migration regles mises a jour", icon: "settings", run: () => h.navigate("settings") },
     { key: "refresh", title: "Actualiser le catalogue", words: "recharger", icon: "refresh", run: () => h.refresh() },
   );
   return out;

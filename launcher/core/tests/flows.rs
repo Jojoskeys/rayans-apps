@@ -629,3 +629,120 @@ fn sauvegardes_automatiques_limitees() {
     assert!(list.iter().any(|b| b.id == manual.id));
     assert!(!paths.backups_dir("app").join(".tmp-abandon").exists());
 }
+
+/// Règles de mise à jour, historique (code de sortie), centre de stockage, atelier et migration de profil.
+#[tokio::test(flavor = "multi_thread")]
+async fn regles_historique_stockage_atelier_et_migration() {
+    let s = site();
+    let sha1 = demo_zip(&s, "v1.zip");
+    write_catalog(&s, &[entry("horloge", "1.0.0", "v1.zip", &sha1)], None);
+    let core = open(&s, dev());
+    core.refresh_catalog().await.unwrap();
+    core.install("horloge").await.unwrap();
+    core.launch("horloge").unwrap();
+    wait_exit(&core, "horloge");
+
+    // Historique : installation, lancement, sortie avec son code.
+    let h = core.history(Some("horloge"), 10);
+    let kinds: Vec<&str> = h.iter().map(|e| e.kind.as_str()).collect();
+    assert_eq!(kinds, ["exit", "launch", "install"], "{kinds:?}");
+    assert_eq!(h[0].code, Some(0));
+    assert_eq!(core.snapshot().apps[0].last_exit_code, Some(0));
+
+    // Règles : « demander » par défaut, exception « auto », pause générale.
+    let sha2 = demo_zip(&s, "v2.zip");
+    write_catalog(&s, &[entry("horloge", "2.0.0", "v2.zip", &sha2)], None);
+    core.refresh_catalog().await.unwrap();
+    assert!(core.auto_update_targets().is_empty());
+    let mut p = core.profile();
+    p.updates.per_app.insert("horloge".into(), "auto".into());
+    p.updates.paused = true;
+    core.save_profile(p.clone()).unwrap();
+    assert!(core.auto_update_targets().is_empty(), "pause générale");
+    p.updates.paused = false;
+    p.personal.push(hangar_core::PersonalApp {
+        id: "p-notes".into(),
+        name: "Bloc-notes".into(),
+        kind: "program".into(),
+        target: if cfg!(windows) { r"C:\Windows\notepad.exe".into() } else { "/usr/bin/true".into() },
+        args: String::new(),
+        added_at: "2026-11-13T00:00:00Z".into(),
+    });
+    p.workspaces.push(hangar_core::Workspace {
+        id: "w-dev".into(),
+        name: "Dev".into(),
+        color: "#8b5cf6".into(),
+        items: vec![hangar_core::WorkspaceItem { kind: "app".into(), target: "horloge".into() }],
+    });
+    core.save_profile(p.clone()).unwrap();
+    assert_eq!(core.auto_update_targets(), ["horloge"]);
+    let mut bad = p.clone();
+    bad.personal[0].target = "relatif.exe".into();
+    assert!(core.save_profile(bad).is_err());
+    core.mark_auto("horloge");
+    core.install("horloge").await.unwrap();
+    let last = &core.history(Some("horloge"), 1)[0];
+    assert_eq!((last.kind.as_str(), last.from.as_deref(), last.version.as_deref()), ("auto-update", Some("1.0.0"), Some("2.0.0")));
+
+    // Stockage : version précédente et sauvegarde automatique récupérables, puis nettoyage.
+    let r = core.storage_report();
+    let a = r.apps.iter().find(|a| a.id == "horloge").unwrap();
+    let kinds: Vec<&str> = a.items.iter().map(|i| i.kind.as_str()).collect();
+    assert!(kinds.contains(&"version-previous") && kinds.contains(&"backups-auto") && kinds.contains(&"data"), "{kinds:?}");
+    assert!(a.reclaimable > 0 && a.reclaimable < a.total);
+    let freed = core.clean("horloge", &["version-previous".into(), "backups-auto".into()]).unwrap();
+    assert_eq!(freed, a.reclaimable);
+    let snap = core.snapshot();
+    assert_eq!(snap.apps[0].previous_version, None);
+    assert_eq!(snap.apps[0].backup_count, 0);
+    assert_eq!(std::fs::read_dir(core.paths().versions_dir("horloge")).unwrap().count(), 1);
+
+    // Atelier : ZIP sans fiche, puis ZIP complet comparé à la version installée.
+    let bin = std::fs::read(demo_bin()).unwrap();
+    let no_manifest = s.dir.join("atelier-1.zip");
+    zip_with(&no_manifest, &[(&format!("bin/{EXE}"), bin.clone())]);
+    let r = core.workshop_analyze(&no_manifest).unwrap();
+    assert!(!r.ready && !r.has_manifest);
+    let fiche = format!(
+        r#"{{"id":"horloge","name":"Horloge","description":"Démo","version":"2.1.0","releaseNotes":"Correctif","executable":"bin/{EXE}"}}"#
+    );
+    let full = s.dir.join("atelier-2.zip");
+    zip_with(&full, &[(&format!("bin/{EXE}"), bin.clone()), ("rayans-launcher.json", fiche.into_bytes()), ("nouveau.txt", b"x".to_vec())]);
+    let r = core.workshop_analyze(&full).unwrap();
+    assert!(r.ready, "{:?}", r.checks);
+    let c = r.comparison.unwrap();
+    assert_eq!(c.version, "2.0.0");
+    assert!(c.added.iter().any(|f| f.path == "nouveau.txt"));
+    assert!(c.removed.iter().any(|f| f.path == "LISEZMOI.txt"), "fichier oublié repéré");
+    let old = s.dir.join("atelier-3.zip");
+    zip_with(&old, &[(&format!("bin/{EXE}"), bin), ("rayans-launcher.json", br#"{"id":"horloge","name":"H","description":"D","version":"1.5.0","releaseNotes":"N","executable":"bin/x.exe"}"#.to_vec())]);
+    let r = core.workshop_analyze(&old).unwrap();
+    assert!(!r.ready);
+    assert!(r.checks.iter().filter(|c| c.level == "error").count() >= 2, "{:?}", r.checks);
+
+    // Export du profil avec les données, puis import sur un « autre PC ».
+    let export = s.dir.join("profil.zip");
+    core.export_profile(&export, Some(serde_json::json!({"theme": "ocean"})), &["horloge".into()]).unwrap();
+    let m = core.read_import(&export).unwrap();
+    assert_eq!((m.apps.len(), m.data.as_slice(), m.profile.workspaces.len()), (1, &["horloge".to_string()][..], 1));
+    let other_home = s.home.parent().unwrap().join("autre-pc");
+    let other = Core::open(&other_home, dev(), None, Box::new(|_| {})).unwrap();
+    let res = other
+        .import_profile(
+            &export,
+            &hangar_core::ImportOptions { settings: true, profile: true, data: vec!["horloge".into()], install_missing: true },
+        )
+        .await
+        .unwrap();
+    assert_eq!(res.prefs.unwrap()["theme"], "ocean");
+    assert_eq!(res.to_install, ["horloge"]);
+    assert_eq!(res.restored, ["horloge"]);
+    assert_eq!(other.profile().personal.len(), 1);
+    assert!(other.paths().data_dir("horloge").join("journal.txt").exists());
+    for id in res.to_install {
+        other.install(&id).await.unwrap();
+    }
+    other.launch("horloge").unwrap();
+    wait_exit(&other, "horloge");
+    assert!(journal(&other, "horloge").contains("lancement=2"), "le compteur continue sur le nouveau PC");
+}
