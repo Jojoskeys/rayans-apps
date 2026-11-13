@@ -4,7 +4,7 @@ import { Actions, AppIcon, ErrorBox, Icon, Logo, VersionLine, Visual } from "./c
 import { bytes, date, dateTime } from "./format";
 import { Palette, type PaletteHandlers } from "./palette";
 import { BackupsPanel, useBackups, VersionsPanel } from "./safety";
-import { AppDiagnostics, HistoryPage, MyApps, RecentHistory, StoragePage, TransferPanel, UpdateRulePicker, UpdateRulesPanel, WorkshopPage, WorkspacesPage } from "./pages";
+import { AppDiagnostics, HistoryPage, MyApps, PaletteShortcutPanel, RecentHistory, StoragePage, TransferPanel, UpdateRulePicker, UpdateRulesPanel, WorkshopPage, WorkspacesPage } from "./pages";
 import { applyPrefs, DEFAULT_PREFS, loadPrefs, PrefsContext, savePrefs, THEMES, usePrefs, type Prefs, type ThemeId } from "./prefs";
 
 type Page = "catalog" | "installed" | "workspaces" | "history" | "storage" | "workshop" | "settings";
@@ -39,7 +39,7 @@ function Launcher() {
   const [detail, setDetail] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [launcherUpd, setLauncherUpd] = useState<LauncherUpdate | null>(null);
-  const [features, setFeatures] = useState<Features>({ shortcuts: false, paletteShortcut: null });
+  const [features, setFeatures] = useState<Features>({ shortcuts: false, paletteShortcut: null, paletteChoice: "auto", paletteTaken: [], paletteOptions: [] });
   /** Palette ouverte ; `external` : appelée par le raccourci global depuis une autre application. */
   const [palette, setPalette] = useState<{ external: boolean } | null>(() => (new URLSearchParams(location.search).has("palette") ? { external: false } : null));
   const [section, setSection] = useState<"versions" | "backups" | null>(null);
@@ -193,7 +193,7 @@ function Launcher() {
           {current ? (
             <Detail app={current} snap={snap} features={features} section={section} onBack={() => { setDetail(null); setSection(null); }} onToast={setToast} />
           ) : page === "settings" ? (
-            <Settings snap={snap} onSaved={reload} onToast={setToast} />
+            <Settings snap={snap} onSaved={reload} onToast={setToast} features={features} onFeatures={setFeatures} />
           ) : page === "workspaces" ? (
             <WorkspacesPage snap={snap} onToast={setToast} />
           ) : page === "history" ? (
@@ -898,7 +898,7 @@ function Personalize() {
 
 // ----- Paramètres ------------------------------------------------------------------------------
 
-function Settings({ snap, onSaved, onToast }: { snap: Snapshot; onSaved: () => void; onToast: (s: string) => void }) {
+function Settings({ snap, onSaved, onToast, features, onFeatures }: { snap: Snapshot; onSaved: () => void; onToast: (s: string) => void; features: Features; onFeatures: (f: Features) => void }) {
   const [url, setUrl] = useState(snap.catalogUrl ?? "");
   const [state, setState] = useState<"idle" | "saving" | "ok">("idle");
   const [err, setErr] = useState<ErrorInfo | null>(null);
@@ -924,6 +924,7 @@ function Settings({ snap, onSaved, onToast }: { snap: Snapshot; onSaved: () => v
       <header className="page-head"><div><span className="eyebrow">Rayan's Launcher</span><h1>Paramètres</h1></div></header>
       <Personalize />
       <UpdateRulesPanel snap={snap} onToast={onToast} />
+      <PaletteShortcutPanel features={features} onChange={onFeatures} onToast={onToast} />
       <TransferPanel snap={snap} onToast={onToast} />
       <section className="panel settings" style={{ "--i": 1 } as React.CSSProperties}>
         <form onSubmit={save}>

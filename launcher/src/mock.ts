@@ -1,7 +1,7 @@
 // Faux backend pour concevoir l'interface dans un navigateur (`npm run dev:ui`).
 // Il n'est jamais utilisé dans l'application Tauri. Scénario choisi par `?scenario=` :
 // normal (défaut), vide, indisponible, horsligne, erreur, progression.
-import type { AppView, BackupInfo, CoreEvent, HistoryEvent, Profile, Snapshot, StorageReport, WorkshopReport } from "./api";
+import type { AppView, BackupInfo, CoreEvent, Features, HistoryEvent, Profile, Snapshot, StorageReport, WorkshopReport } from "./api";
 
 type Listener = (e: CoreEvent) => void;
 
@@ -281,6 +281,17 @@ async function fakeInstall(id: string) {
   patch(id, { task: null, installedVersion: a.availableVersion, previousVersion: a.installedVersion ?? a.previousVersion, heldVersion: null, updateAvailable: false, installedReleaseNotes: a.releaseNotes });
 }
 
+const shortcutOptions = [
+  { id: "ctrl-alt-space", label: "Ctrl + Alt + Espace" },
+  { id: "ctrl-shift-space", label: "Ctrl + Maj + Espace" },
+  { id: "ctrl-alt-l", label: "Ctrl + Alt + L" },
+  { id: "ctrl-shift-alt-space", label: "Ctrl + Maj + Alt + Espace" },
+];
+/** `?shortcutTaken` : Ctrl + Alt + Espace est déjà pris par un autre logiciel. */
+let mockFeatures: Features = new URLSearchParams(location.search).has("shortcutTaken")
+  ? { shortcuts: true, paletteShortcut: "Ctrl + Maj + Espace", paletteChoice: "auto", paletteTaken: ["Ctrl + Alt + Espace"], paletteOptions: shortcutOptions }
+  : { shortcuts: true, paletteShortcut: "Ctrl + Alt + Espace", paletteChoice: "auto", paletteTaken: [], paletteOptions: shortcutOptions };
+
 const busyError = { code: "running", message: "L'application est ouverte. Fermez-la d'abord.", hint: "Fermez l'application puis réessayez." };
 
 export const mockBackend = {
@@ -339,7 +350,15 @@ export const mockBackend = {
       case "open_folder":
         return undefined as T;
       case "features":
-        return { shortcuts: true, paletteShortcut: "Ctrl + Alt + Espace" } as T;
+        return mockFeatures as T;
+      case "set_palette_shortcut": {
+        const choice = (args as { choice: string }).choice;
+        const taken = new URLSearchParams(location.search).has("shortcutTaken") ? ["Ctrl + Alt + Espace"] : [];
+        const pick = choice === "off" ? null : choice === "auto" ? mockFeatures.paletteOptions.find((o) => !taken.includes(o.label)) : mockFeatures.paletteOptions.find((o) => o.id === choice);
+        if (pick && taken.includes(pick.label)) throw { code: "other", message: `${pick.label} est déjà pris par un autre logiciel. Choisissez-en un autre.`, hint: "" };
+        mockFeatures = { ...mockFeatures, paletteChoice: choice, paletteShortcut: pick?.label ?? null, paletteTaken: choice === "auto" ? taken : [] };
+        return mockFeatures as T;
+      }
       case "create_shortcut":
         return "C:\\Users\\vous\\Desktop\\app.lnk" as T;
       case "launcher_update":

@@ -746,3 +746,27 @@ async fn regles_historique_stockage_atelier_et_migration() {
     wait_exit(&other, "horloge");
     assert!(journal(&other, "horloge").contains("lancement=2"), "le compteur continue sur le nouveau PC");
 }
+
+/// Un profil illisible n'empêche pas de démarrer et n'est jamais écrasé : il est mis de côté et signalé.
+#[test]
+fn profil_illisible_mis_de_cote() {
+    let tmp = tempfile::tempdir().unwrap();
+    let home = tmp.path().join("home");
+    std::fs::create_dir_all(&home).unwrap();
+    std::fs::write(home.join("profile.json"), br#"{"personal":[{"id":"p-x","target":"C:\Windows"}]"#).unwrap();
+    let core = Core::open(&home, dev(), None, Box::new(|_| {})).unwrap();
+    assert!(core.profile().personal.is_empty());
+    let kept: Vec<_> = std::fs::read_dir(&home)
+        .unwrap()
+        .filter_map(|e| e.ok())
+        .filter(|e| e.file_name().to_string_lossy().starts_with("profile.illisible-"))
+        .collect();
+    assert_eq!(kept.len(), 1);
+    assert!(std::fs::read_to_string(kept[0].path()).unwrap().contains("p-x"));
+    assert!(!home.join("profile.json").exists());
+    let h = core.history(None, 5);
+    assert_eq!(h[0].kind, "error");
+    // La sauvegarde suivante crée un nouveau profil sans toucher à la copie.
+    core.save_profile(core.profile()).unwrap();
+    assert!(kept[0].path().exists());
+}

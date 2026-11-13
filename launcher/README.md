@@ -470,7 +470,10 @@ reconstruire le launcher.
   application (le launcher passe au premier plan). Tapez quelques lettres puis `Entrée` : lancer, installer, mettre à
   jour, reprendre un téléchargement, ouvrir la fiche (notes de version), le dossier de données ou de l'application,
   sauvegarder, restaurer, revenir à la version précédente. Après un lancement depuis le raccourci global, la fenêtre
-  du launcher se réduit. Si un autre logiciel utilise déjà `Ctrl + Alt + Espace`, seul `Ctrl + K` reste disponible.
+  du launcher se réduit. Si un autre logiciel utilise déjà `Ctrl + Alt + Espace` (assistant, overlay…), le
+  launcher prend le premier libre parmi `Ctrl + Maj + Espace`, `Ctrl + Alt + L` et `Ctrl + Maj + Alt + Espace`.
+  Paramètres → « Palette de commandes » montre le raccourci actif, ceux qui sont pris, et permet d'en choisir un
+  ou de le désactiver (choix gardé dans `palette-shortcut.txt`).
 - **Sauvegardes des données** : sur la fiche, « Sauvegarder maintenant » copie `data/<id>/` dans
   `backups/<id>/<date>/`. Une sauvegarde automatique est faite **avant chaque mise à jour** (si elle échoue, la mise
   à jour est annulée). Les 5 dernières sauvegardes automatiques sont gardées ; les manuelles ne sont jamais

@@ -8,6 +8,7 @@ import {
   type AppView,
   type ErrorInfo,
   type ExportManifest,
+  type Features,
   type HistoryEvent,
   type PersonalApp,
   type Profile,
@@ -636,6 +637,47 @@ export function UpdateRulesPanel({ snap, onToast }: { snap: Snapshot; onToast: T
   );
 }
 
+// ----- Raccourci global de la palette ------------------------------------------------------------
+
+export function PaletteShortcutPanel({ features, onChange, onToast }: { features: Features; onChange: (f: Features) => void; onToast: Toast }) {
+  const { busy, err, setErr, run } = useAction(onToast);
+  if (!features.shortcuts) return null;
+  const choose = async (choice: string) => {
+    const r = await run("set", () => api.setPaletteShortcut(choice));
+    if (r) {
+      const f = r as Features;
+      onChange(f);
+      onToast(f.paletteShortcut ? `Palette : ${f.paletteShortcut} depuis n'importe quelle application.` : "Raccourci global désactivé.");
+    } else {
+      api.features().then(onChange).catch(() => {});
+    }
+  };
+  const active = features.paletteShortcut;
+  return (
+    <section className="panel settings" style={{ "--i": 1 } as React.CSSProperties}>
+      <h3>Palette de commandes</h3>
+      <p className="muted small">Dans le launcher : <kbd>Ctrl</kbd> + <kbd>K</kbd>. Depuis n'importe quelle application : le raccourci ci-dessous ramène le launcher et ouvre la palette.</p>
+      <div className="pref-rows">
+        <div className="pref">
+          <span>
+            <b>Raccourci global</b>
+            <small>
+              {active ? <>Actif : <b>{active}</b></> : features.paletteChoice === "off" ? "Désactivé" : "Aucun raccourci actif"}
+              {features.paletteTaken.length > 0 && <> · déjà pris par un autre logiciel : {features.paletteTaken.join(", ")}</>}
+            </small>
+          </span>
+          <select className="input" value={features.paletteChoice} disabled={busy !== null} onChange={(e) => void choose(e.target.value)} aria-label="Raccourci global de la palette">
+            <option value="auto">Automatique (le premier libre)</option>
+            {features.paletteOptions.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+            <option value="off">Désactivé</option>
+          </select>
+        </div>
+      </div>
+      {err && <ErrorBox error={err} onClose={() => setErr(null)} />}
+    </section>
+  );
+}
+
 // ----- Export et migration -----------------------------------------------------------------------
 
 export function TransferPanel({ snap, onToast }: { snap: Snapshot; onToast: Toast }) {
@@ -682,17 +724,17 @@ export function TransferPanel({ snap, onToast }: { snap: Snapshot; onToast: Toas
       <div className="transfer-cols">
         <div>
           <h4>Exporter</h4>
-          <p className="small muted">Données à inclure :</p>
-          <div className="pick-list">
+          <p className="small muted">{installed.length ? "Données à inclure :" : "Aucune application installée : seuls les réglages et le profil seront exportés."}</p>
+          {installed.length > 0 && <div className="pick-list">
             {installed.map((a) => (
               <label key={a.id} className="pick">
                 <input type="checkbox" checked={data.includes(a.id)} onChange={(e) => setData((d) => (e.target.checked ? [...d, a.id] : d.filter((x) => x !== a.id)))} />
                 {a.name}
               </label>
             ))}
-          </div>
+          </div>}
           <div className="row">
-            <button className="btn small ghost" type="button" onClick={() => setData(data.length === installed.length ? [] : installed.map((a) => a.id))}>{data.length === installed.length ? "Aucune" : "Toutes"}</button>
+            {installed.length > 0 && <button className="btn small ghost" type="button" onClick={() => setData(data.length === installed.length ? [] : installed.map((a) => a.id))}>{data.length === installed.length ? "Aucune" : "Toutes"}</button>}
             <button className="btn primary" onClick={() => void doExport()} disabled={busy !== null}><Icon name="box" size={15} /> {busy === "export" ? "Export…" : "Exporter le profil…"}</button>
           </div>
         </div>

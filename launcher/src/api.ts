@@ -220,6 +220,11 @@ export interface Features {
   shortcuts: boolean;
   /** Raccourci global de la palette, ou null s'il n'a pas pu être enregistré. */
   paletteShortcut: string | null;
+  /** « auto », « off » ou l'identifiant d'un raccourci proposé. */
+  paletteChoice: string;
+  /** Raccourcis essayés mais déjà pris par un autre logiciel. */
+  paletteTaken: string[];
+  paletteOptions: { id: string; label: string }[];
 }
 
 export interface ZipEntry {
@@ -276,6 +281,7 @@ export const api = {
   },
   image: (id: string, kind: "icon" | "image") => call<string | null>("get_image", { id, kind }),
   minimizeWindow: () => call<void>("minimize_window"),
+  setPaletteShortcut: (choice: string) => call<Features>("set_palette_shortcut", { choice }),
   listBackups: (id: string) => call<BackupInfo[]>("list_backups", { id }),
   backup: (id: string) => call<BackupInfo>("backup_app", { id }),
   restoreBackup: (id: string, backupId: string) => call<void>("restore_backup", { id, backupId }),

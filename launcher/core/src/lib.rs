@@ -290,7 +290,23 @@ impl Core {
             settings.catalog_url = default_catalog_url.filter(|u| !u.trim().is_empty());
         }
         let installed: Installed = load_json(&paths.installed())?;
-        let profile: Profile = load_json(&paths.profile()).unwrap_or_default();
+        // Profil illisible (modifié à la main, disque plein…) : il est mis de côté plutôt qu'écrasé à la
+        // prochaine sauvegarde, pour que les logiciels perso et les espaces restent récupérables.
+        let profile: Profile = match load_json(&paths.profile()) {
+            Ok(p) => p,
+            Err(e) => {
+                let f = time::macros::format_description!("[year][month][day]-[hour][minute][second]");
+                let stamp = time::OffsetDateTime::now_utc().format(&f).unwrap_or_default();
+                let kept = paths.root.join(format!("profile.illisible-{stamp}.json"));
+                let _ = std::fs::rename(paths.profile(), &kept);
+                history::append(
+                    &paths.history(),
+                    &HistoryEvent::new("error", None)
+                        .detail(format!("{e} ; copie gardée dans {}", kept.display())),
+                );
+                Profile::default()
+            }
+        };
         history::trim(&paths.history());
         let mut last_exit = HashMap::new();
         for e in history::read_all(&paths.history()).into_iter().filter(|e| e.kind == "exit") {

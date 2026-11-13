@@ -172,9 +172,11 @@ pub fn analyze(zip_path: &Path, previous: impl FnOnce(&str) -> Option<(String, s
     if manifest.executable.is_empty() {
         manifest.executable = executables.first().cloned().unwrap_or_default();
     }
-    if executables.is_empty() {
+    // L'exécutable désigné par la fiche suffit (un programme sans extension sur Linux, par exemple) ;
+    // sans fiche, il faut au moins un .exe à proposer.
+    if manifest.executable.is_empty() {
         checks.push(check("error", "Aucun fichier .exe dans le ZIP."));
-    } else if !manifest.executable.is_empty() {
+    } else {
         match normalize_relative_path(&manifest.executable) {
             Ok(exe) if files.contains_key(&exe) => checks.push(check("ok", format!("Exécutable « {exe} » présent."))),
             _ => checks.push(check("error", format!("L'exécutable « {} » n'est pas dans le ZIP.", manifest.executable))),

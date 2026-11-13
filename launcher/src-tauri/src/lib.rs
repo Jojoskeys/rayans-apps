@@ -122,19 +122,110 @@ struct Features {
     shortcuts: bool,
     /// Raccourci global de la palette, s'il a pu être enregistré auprès du système.
     palette_shortcut: Option<String>,
+    /// Choix enregistré : `auto`, `off` ou l'identifiant d'un raccourci proposé.
+    palette_choice: String,
+    /// Raccourcis essayés sans succès, déjà pris par un autre logiciel.
+    palette_taken: Vec<String>,
+    palette_options: Vec<ShortcutOption>,
+}
+
+#[derive(serde::Serialize)]
+struct ShortcutOption {
+    id: &'static str,
+    label: &'static str,
 }
 
 #[tauri::command]
-fn features(palette: State<PaletteShortcut>) -> Features {
-    Features { shortcuts: cfg!(windows), palette_shortcut: palette.0.clone() }
+fn features(palette: State<PaletteState>) -> Features {
+    let p = palette.0.lock().unwrap();
+    Features {
+        shortcuts: cfg!(windows),
+        palette_shortcut: p.active.map(|i| PALETTE_SHORTCUTS[i].1.to_string()),
+        palette_choice: p.choice.clone(),
+        palette_taken: p.taken.clone(),
+        palette_options: PALETTE_SHORTCUTS.iter().map(|(id, label, _, _)| ShortcutOption { id, label }).collect(),
+    }
 }
 
 // ----- Palette de commandes globale -------------------------------------------------------------
 
-/// Libellé du raccourci global effectivement enregistré (`None` s'il est déjà pris par un autre logiciel).
-struct PaletteShortcut(Option<String>);
+/// Raccourcis proposés pour la palette, dans l'ordre d'essai du mode automatique : si une combinaison
+/// est déjà prise par un autre logiciel (assistant, overlay…), la suivante est essayée.
+const PALETTE_SHORTCUTS: [(&str, &str, Modifiers, Code); 4] = [
+    ("ctrl-alt-space", "Ctrl + Alt + Espace", Modifiers::CONTROL.union(Modifiers::ALT), Code::Space),
+    ("ctrl-shift-space", "Ctrl + Maj + Espace", Modifiers::CONTROL.union(Modifiers::SHIFT), Code::Space),
+    ("ctrl-alt-l", "Ctrl + Alt + L", Modifiers::CONTROL.union(Modifiers::ALT), Code::KeyL),
+    ("ctrl-shift-alt-space", "Ctrl + Maj + Alt + Espace", Modifiers::CONTROL.union(Modifiers::SHIFT).union(Modifiers::ALT), Code::Space),
+];
 
-const PALETTE_LABEL: &str = "Ctrl + Alt + Espace";
+#[derive(Default)]
+struct PaletteInner {
+    choice: String,
+    /// Indice dans `PALETTE_SHORTCUTS` du raccourci enregistré.
+    active: Option<usize>,
+    taken: Vec<String>,
+}
+
+struct PaletteState(std::sync::Mutex<PaletteInner>, std::path::PathBuf);
+
+fn palette_choice_file(root: &std::path::Path) -> std::path::PathBuf {
+    root.join("palette-shortcut.txt")
+}
+
+/// Enregistre le raccourci demandé (ou le premier libre en mode `auto`) à la place de l'actuel.
+fn apply_palette_choice(app: &tauri::AppHandle, inner: &mut PaletteInner, choice: &str) -> Result<(), String> {
+    let gs = app.global_shortcut();
+    if let Some(i) = inner.active.take() {
+        let (_, _, m, c) = PALETTE_SHORTCUTS[i];
+        let _ = gs.unregister(Shortcut::new(Some(m), c));
+    }
+    inner.taken.clear();
+    let candidates: Vec<usize> = match choice {
+        "off" => vec![],
+        "auto" => (0..PALETTE_SHORTCUTS.len()).collect(),
+        id => match PALETTE_SHORTCUTS.iter().position(|s| s.0 == id) {
+            Some(i) => vec![i],
+            None => return Err(format!("raccourci inconnu : {id}")),
+        },
+    };
+    for i in candidates {
+        let (_, label, m, c) = PALETTE_SHORTCUTS[i];
+        match gs.register(Shortcut::new(Some(m), c)) {
+            Ok(()) => {
+                inner.active = Some(i);
+                break;
+            }
+            Err(e) => {
+                eprintln!("raccourci global {label} indisponible : {e}");
+                inner.taken.push(label.to_string());
+            }
+        }
+    }
+    inner.choice = choice.to_string();
+    if choice != "off" && inner.active.is_none() {
+        return Err(if choice == "auto" {
+            "Aucun des raccourcis proposés n'est libre : ils sont tous pris par d'autres logiciels.".into()
+        } else {
+            format!("{} est déjà pris par un autre logiciel. Choisissez-en un autre.", inner.taken.join(", "))
+        });
+    }
+    Ok(())
+}
+
+#[tauri::command]
+fn set_palette_shortcut(app: tauri::AppHandle, palette: State<PaletteState>, choice: String) -> CmdResult<Features> {
+    {
+        let mut p = palette.0.lock().unwrap();
+        let previous = p.choice.clone();
+        if let Err(e) = apply_palette_choice(&app, &mut p, &choice) {
+            // Combinaison prise : le raccourci précédent reste en place.
+            let _ = apply_palette_choice(&app, &mut p, &previous);
+            return Err(other(e));
+        }
+        let _ = std::fs::write(&palette.1, &choice);
+    }
+    Ok(features(palette))
+}
 
 /// Ramène la fenêtre au premier plan et ouvre la palette.
 fn show_palette(app: &tauri::AppHandle) {
@@ -535,27 +626,27 @@ pub fn run() {
                 .build(),
         )
         .setup(|app| {
-            // Ctrl + Alt + Espace, depuis n'importe quelle application. S'il est déjà pris, la palette
-            // reste accessible avec Ctrl + K dans le launcher.
-            let palette = Shortcut::new(Some(Modifiers::CONTROL | Modifiers::ALT), Code::Space);
-            let registered = match app.global_shortcut().register(palette) {
-                Ok(()) => Some(PALETTE_LABEL.to_string()),
-                Err(e) => {
-                    eprintln!("raccourci global {PALETTE_LABEL} indisponible : {e}");
-                    None
-                }
-            };
-            app.manage(PaletteShortcut(registered));
             let key = catalog::parse_public_key(PUBLIC_KEY).expect("catalog-public-key.txt invalide");
             let policy = if DEV_MODE {
                 TrustPolicy::Development { public_key: key }
             } else {
                 TrustPolicy::Distributed { public_key: key }
             };
-            let root = match std::env::var_os("HANGAR_HOME") {
+            let root: std::path::PathBuf = match std::env::var_os("HANGAR_HOME") {
                 Some(p) => p.into(),
                 None => app.path().app_local_data_dir()?,
             };
+            // Raccourci global de la palette, depuis n'importe quelle application (choix dans les
+            // paramètres, par défaut le premier libre). Ctrl + K reste disponible dans le launcher.
+            let choice_file = palette_choice_file(&root);
+            let choice = std::fs::read_to_string(&choice_file)
+                .map(|s| s.trim().to_string())
+                .ok()
+                .filter(|s| s == "auto" || s == "off" || PALETTE_SHORTCUTS.iter().any(|p| p.0 == s))
+                .unwrap_or_else(|| "auto".into());
+            let mut inner = PaletteInner::default();
+            let _ = apply_palette_choice(app.handle(), &mut inner, &choice);
+            app.manage(PaletteState(std::sync::Mutex::new(inner), choice_file));
             let handle = app.handle().clone();
             let core = Core::open(
                 root,
@@ -612,6 +703,7 @@ pub fn run() {
             apply_launcher_update,
             get_image,
             minimize_window,
+            set_palette_shortcut,
             list_backups,
             backup_app,
             restore_backup,
