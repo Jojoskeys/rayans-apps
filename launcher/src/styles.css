@@ -181,7 +181,7 @@ nav { display: flex; flex-direction: column; gap: 4px; position: relative; }
 .tag.dev { border-color: rgba(255, 178, 63, 0.4); color: var(--accent); background: var(--accent-soft); }
 .tag.good { border-color: rgba(79, 214, 160, 0.4); color: var(--good); background: var(--good-soft); }
 
-.main { overflow-y: auto; overflow-x: hidden; padding: 30px 38px 56px; position: relative; scroll-behavior: smooth; }
+.main { overflow-y: auto; overflow-x: hidden; padding: 30px 38px 56px; position: relative; }
 
 /* Transition entre les vues : chaque vue entre en fondu, légèrement relevée. */
 .view { animation: view-in 0.5s var(--ease-out) backwards; }
