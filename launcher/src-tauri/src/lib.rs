@@ -6,6 +6,7 @@ mod shortcut;
 
 use std::sync::Arc;
 use tauri::{Emitter, Manager, State};
+use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 use tauri_plugin_opener::OpenerExt;
 
 const PUBLIC_KEY: &str = include_str!("../catalog-public-key.txt");
@@ -117,11 +118,81 @@ fn open_folder(app: tauri::AppHandle, core: State<CoreState>, id: String, which:
 #[serde(rename_all = "camelCase")]
 struct Features {
     shortcuts: bool,
+    /// Raccourci global de la palette, s'il a pu être enregistré auprès du système.
+    palette_shortcut: Option<String>,
 }
 
 #[tauri::command]
-fn features() -> Features {
-    Features { shortcuts: cfg!(windows) }
+fn features(palette: State<PaletteShortcut>) -> Features {
+    Features { shortcuts: cfg!(windows), palette_shortcut: palette.0.clone() }
+}
+
+// ----- Palette de commandes globale -------------------------------------------------------------
+
+/// Libellé du raccourci global effectivement enregistré (`None` s'il est déjà pris par un autre logiciel).
+struct PaletteShortcut(Option<String>);
+
+const PALETTE_LABEL: &str = "Ctrl + Alt + Espace";
+
+/// Ramène la fenêtre au premier plan et ouvre la palette.
+fn show_palette(app: &tauri::AppHandle) {
+    if let Some(w) = app.get_webview_window("main") {
+        let _ = w.show();
+        let _ = w.unminimize();
+        let _ = w.set_focus();
+    }
+    let _ = app.emit("hangar://palette", ());
+}
+
+/// Après un lancement depuis la palette globale : la fenêtre se range pour laisser la place à l'application.
+#[tauri::command]
+fn minimize_window(window: tauri::WebviewWindow) {
+    let _ = window.minimize();
+}
+
+// ----- Sauvegardes et versions ------------------------------------------------------------------
+
+#[tauri::command]
+fn list_backups(core: State<CoreState>, id: String) -> Vec<hangar_core::BackupInfo> {
+    core.list_backups(&id)
+}
+
+#[tauri::command]
+fn backup_app(core: State<CoreState>, id: String) -> CmdResult<hangar_core::BackupInfo> {
+    core.backup(&id).map_err(|e| e.info())
+}
+
+#[tauri::command]
+fn restore_backup(core: State<CoreState>, id: String, backup_id: String) -> CmdResult<()> {
+    core.restore_backup(&id, &backup_id).map_err(|e| e.info())
+}
+
+#[tauri::command]
+fn delete_backup(core: State<CoreState>, id: String, backup_id: String) -> CmdResult<()> {
+    core.delete_backup(&id, &backup_id).map_err(|e| e.info())
+}
+
+#[tauri::command]
+fn rollback(core: State<CoreState>, id: String, restore: Option<String>) -> CmdResult<()> {
+    core.rollback(&id, restore.as_deref()).map_err(|e| e.info())
+}
+
+#[tauri::command]
+fn set_hold(core: State<CoreState>, id: String, hold: bool) -> CmdResult<()> {
+    core.set_hold(&id, hold).map_err(|e| e.info())
+}
+
+/// Ouvre dans l'Explorateur le dossier des sauvegardes d'une application.
+#[tauri::command]
+fn open_backups_folder(app: tauri::AppHandle, core: State<CoreState>, id: String) -> CmdResult<()> {
+    if !catalog::is_valid_id(&id) {
+        return Err(other("application inconnue"));
+    }
+    let dir = core.paths().backups_dir(&id);
+    std::fs::create_dir_all(&dir).map_err(|e| other(e.to_string()))?;
+    app.opener()
+        .open_path(dir.to_string_lossy(), None::<&str>)
+        .map_err(|e| other(format!("ouverture du dossier impossible ({e})")))
 }
 
 /// Crée (ou remplace) un raccourci sur le Bureau qui lance l'application via Rayan's Launcher.
@@ -243,7 +314,27 @@ pub fn run() {
         }))
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
+        .plugin(
+            tauri_plugin_global_shortcut::Builder::new()
+                .with_handler(|app, _shortcut, event| {
+                    if event.state() == ShortcutState::Pressed {
+                        show_palette(app);
+                    }
+                })
+                .build(),
+        )
         .setup(|app| {
+            // Ctrl + Alt + Espace, depuis n'importe quelle application. S'il est déjà pris, la palette
+            // reste accessible avec Ctrl + K dans le launcher.
+            let palette = Shortcut::new(Some(Modifiers::CONTROL | Modifiers::ALT), Code::Space);
+            let registered = match app.global_shortcut().register(palette) {
+                Ok(()) => Some(PALETTE_LABEL.to_string()),
+                Err(e) => {
+                    eprintln!("raccourci global {PALETTE_LABEL} indisponible : {e}");
+                    None
+                }
+            };
+            app.manage(PaletteShortcut(registered));
             let key = catalog::parse_public_key(PUBLIC_KEY).expect("catalog-public-key.txt invalide");
             let policy = if DEV_MODE {
                 TrustPolicy::Development { public_key: key }
@@ -297,7 +388,15 @@ pub fn run() {
             create_shortcut,
             launcher_update,
             apply_launcher_update,
-            get_image
+            get_image,
+            minimize_window,
+            list_backups,
+            backup_app,
+            restore_backup,
+            delete_backup,
+            rollback,
+            set_hold,
+            open_backups_folder
         ])
         .run(tauri::generate_context!())
         .expect("erreur au démarrage de Rayan's Launcher");

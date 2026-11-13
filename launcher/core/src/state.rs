@@ -18,6 +18,7 @@ use std::path::{Path, PathBuf};
 ///   apps/<id>/versions/<version>-<n>/   fichiers d'une version (remplaçables)
 ///   apps/<id>/staging-<n>/              préparation d'une version (jamais lancée)
 ///   data/<id>/             données utilisateur, conservées entre versions
+///   backups/<id>/<n>/      sauvegardes datées des données (backup.json + data/)
 /// ```
 #[derive(Clone, Debug)]
 pub struct Paths {
@@ -55,6 +56,9 @@ impl Paths {
     pub fn data_dir(&self, id: &str) -> PathBuf {
         self.root.join("data").join(id)
     }
+    pub fn backups_dir(&self, id: &str) -> PathBuf {
+        self.root.join("backups").join(id)
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
@@ -87,6 +91,12 @@ pub struct InstalledApp {
     /// Mise à jour prête, activée à la fermeture de l'application.
     #[serde(default)]
     pub pending: Option<InstalledVersion>,
+    /// Version active juste avant, gardée sur le disque pour pouvoir y revenir.
+    #[serde(default)]
+    pub previous: Option<InstalledVersion>,
+    /// Versions du catalogue ignorées jusqu'à celle-ci incluse (version épinglée le temps d'un correctif).
+    #[serde(default)]
+    pub held_version: Option<semver::Version>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]

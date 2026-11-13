@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { api, subscribe, toErrorInfo, type AppView, type ErrorInfo, type Features, type LauncherUpdate, type Snapshot, type ZipEntry, type ZipProposal } from "./api";
+import { api, onPaletteRequest, subscribe, toErrorInfo, type AppView, type ErrorInfo, type Features, type LauncherUpdate, type Snapshot, type ZipEntry, type ZipProposal } from "./api";
 import { Actions, AppIcon, ErrorBox, Icon, Logo, VersionLine, Visual } from "./components";
 import { bytes, date, dateTime } from "./format";
+import { Palette, type PaletteHandlers } from "./palette";
+import { BackupsPanel, useBackups, VersionsPanel } from "./safety";
 import { applyPrefs, DEFAULT_PREFS, loadPrefs, PrefsContext, savePrefs, THEMES, usePrefs, type Prefs, type ThemeId } from "./prefs";
 
 type Page = "catalog" | "installed" | "settings";
@@ -36,15 +38,27 @@ function Launcher() {
   const [detail, setDetail] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [launcherUpd, setLauncherUpd] = useState<LauncherUpdate | null>(null);
-  const [features, setFeatures] = useState<Features>({ shortcuts: false });
+  const [features, setFeatures] = useState<Features>({ shortcuts: false, paletteShortcut: null });
+  /** Palette ouverte ; `external` : appelée par le raccourci global depuis une autre application. */
+  const [palette, setPalette] = useState<{ external: boolean } | null>(() => (new URLSearchParams(location.search).has("palette") ? { external: false } : null));
+  const [section, setSection] = useState<"versions" | "backups" | null>(null);
   const pending = useRef(false);
 
+  // Un changement signalé pendant un rechargement en relance un autre juste après (sinon il serait perdu
+  // jusqu'au filet de sécurité de 4 s).
+  const again = useRef(false);
   const reload = useCallback(async () => {
-    if (pending.current) return;
+    if (pending.current) {
+      again.current = true;
+      return;
+    }
     pending.current = true;
     try {
-      setSnap(await api.snapshot());
-      setLauncherUpd(await api.launcherUpdate().catch(() => null));
+      do {
+        again.current = false;
+        setSnap(await api.snapshot());
+        setLauncherUpd(await api.launcherUpdate().catch(() => null));
+      } while (again.current);
     } finally {
       pending.current = false;
     }
@@ -69,6 +83,45 @@ function Launcher() {
       clearInterval(t);
     };
   }, [reload]);
+
+  // Ctrl + K (et Ctrl + Alt + Espace quand le launcher a déjà le focus) ; le raccourci global arrive par événement.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && k === "k") {
+        e.preventDefault();
+        setPalette((p) => (p ? null : { external: false }));
+      } else if (e.ctrlKey && e.altKey && e.code === "Space") {
+        e.preventDefault();
+        setPalette({ external: false });
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    let off: (() => void) | undefined;
+    let gone = false;
+    onPaletteRequest(() => setPalette({ external: !document.hasFocus() })).then((f) => (gone ? f() : (off = f)));
+    return () => {
+      gone = true;
+      window.removeEventListener("keydown", onKey);
+      off?.();
+    };
+  }, []);
+
+  const paletteHandlers = useMemo<PaletteHandlers>(
+    () => ({
+      openApp: (id, sec) => {
+        setDetail(id);
+        setSection(sec ?? null);
+      },
+      navigate: (p) => {
+        setPage(p);
+        setDetail(null);
+      },
+      refresh: () => void api.refresh().catch(() => {}).finally(reload),
+      toast: setToast,
+    }),
+    [reload],
+  );
 
   useEffect(() => {
     if (!toast) return;
@@ -95,6 +148,7 @@ function Launcher() {
   const current = detail ? snap.apps.find((a) => a.id === detail) : undefined;
 
   const viewKey = current ? `fiche:${current.id}` : page;
+  const isMac = typeof navigator !== "undefined" && /Mac/.test(navigator.platform);
 
   const nav = (p: Page) => {
     setPage(p);
@@ -118,6 +172,11 @@ function Launcher() {
           <NavItem icon="installed" label="Installées" active={page === "installed"} onClick={() => nav("installed")} count={installedCount} />
           <NavItem icon="settings" label="Paramètres" active={page === "settings"} onClick={() => nav("settings")} />
         </nav>
+        <button className="palette-open" onClick={() => setPalette({ external: false })} title={features.paletteShortcut ? `Aussi depuis n'importe quelle application : ${features.paletteShortcut}` : undefined}>
+          <Icon name="search" size={15} />
+          <span>Rechercher…</span>
+          <kbd>{isMac ? "⌘" : "Ctrl"} K</kbd>
+        </button>
         <div className="sidebar-foot">
           <CatalogStatus snap={snap} />
         </div>
@@ -127,7 +186,7 @@ function Launcher() {
         {launcherUpd && <LauncherUpdateBanner upd={launcherUpd} />}
         <div className="view" key={viewKey}>
           {current ? (
-            <Detail app={current} snap={snap} features={features} onBack={() => setDetail(null)} onToast={setToast} />
+            <Detail app={current} snap={snap} features={features} section={section} onBack={() => { setDetail(null); setSection(null); }} onToast={setToast} />
           ) : page === "settings" ? (
             <Settings snap={snap} onSaved={reload} />
           ) : (
@@ -135,6 +194,7 @@ function Launcher() {
           )}
         </div>
       </main>
+      {palette && <Palette snap={snap} external={palette.external} onClose={() => setPalette(null)} handlers={paletteHandlers} />}
       {toast && <div className="toast" key={toast} role="status"><Icon name="check" size={18} /> {toast}</div>}
     </div>
   );
@@ -567,8 +627,9 @@ function EmptyState({ icon, title, text, actions, error }: { icon: string; title
 
 // ----- Fiche d'une application -----------------------------------------------------------------
 
-function Detail({ app, snap, features, onBack, onToast }: { app: AppView; snap: Snapshot; features: Features; onBack: () => void; onToast: (s: string) => void }) {
+function Detail({ app, snap, features, section, onBack, onToast }: { app: AppView; snap: Snapshot; features: Features; section: "versions" | "backups" | null; onBack: () => void; onToast: (s: string) => void }) {
   const [confirm, setConfirm] = useState(false);
+  const backups = useBackups(app);
   const [removeData, setRemoveData] = useState(false);
   const [err, setErr] = useState<ErrorInfo | null>(null);
   const refresh = snap.catalog.fetchedAt;
@@ -609,6 +670,7 @@ function Detail({ app, snap, features, onBack, onToast }: { app: AppView; snap: 
       </div>
 
       <div className="detail-cols">
+        <div className="detail-main">
         <section className="panel">
           <h3>Notes de version {app.availableVersion && <span className="muted">· {app.availableVersion}</span>}</h3>
           {app.releaseDate && <p className="muted small">Publiée le {date(app.releaseDate)}</p>}
@@ -620,6 +682,13 @@ function Detail({ app, snap, features, onBack, onToast }: { app: AppView; snap: 
             </>
           )}
         </section>
+        {app.installedVersion && (
+          <>
+            <VersionsPanel app={app} backups={backups.list} focus={section === "versions"} onToast={onToast} />
+            <BackupsPanel app={app} backups={backups.list} reload={backups.reload} focus={section === "backups"} onToast={onToast} />
+          </>
+        )}
+        </div>
 
         <aside className="panel side">
           <Actions app={app} />

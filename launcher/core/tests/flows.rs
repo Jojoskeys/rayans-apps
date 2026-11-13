@@ -315,8 +315,9 @@ async fn mise_a_jour_reportee_tant_que_l_application_est_ouverte() {
     let a = &core.snapshot().apps[0];
     assert_eq!(a.installed_version.as_deref(), Some("2.0.0"));
     assert_eq!(a.pending_version, None);
-    // Seule la version active reste sur le disque.
-    assert_eq!(std::fs::read_dir(core.paths().versions_dir("horloge")).unwrap().count(), 1);
+    // La version active et la précédente (pour un retour) restent sur le disque.
+    assert_eq!(std::fs::read_dir(core.paths().versions_dir("horloge")).unwrap().count(), 2);
+    assert_eq!(a.previous_version.as_deref(), Some("1.0.0"));
 }
 
 #[tokio::test(flavor = "multi_thread")]
@@ -522,4 +523,109 @@ fn adresse_locale_remplacee_en_distribution() {
     // En développement, l'adresse locale est conservée.
     let core = Core::open(&home, dev(), Some("https://autre.fr/c.json".into()), Box::new(|_| {})).unwrap();
     assert!(core.snapshot().catalog_url.unwrap().starts_with("file:"));
+}
+
+/// Mise à jour qui casse quelque chose : les données d'avant la mise à jour sont sauvegardées, la version
+/// précédente est gardée, et l'on revient aux deux en une fois. La version quittée est ignorée jusqu'au correctif.
+#[tokio::test(flavor = "multi_thread")]
+async fn sauvegardes_et_retour_a_la_version_precedente() {
+    let s = site();
+    let sha1 = demo_zip(&s, "v1.zip");
+    write_catalog(&s, &[entry("horloge", "1.0.0", "v1.zip", &sha1)], None);
+    let core = open(&s, dev());
+    core.refresh_catalog().await.unwrap();
+    core.install("horloge").await.unwrap();
+    assert!(core.backup("horloge").is_err(), "aucune donnée à sauvegarder");
+    assert!(core.rollback("horloge", None).is_err(), "aucune version précédente");
+    core.launch("horloge").unwrap();
+    wait_exit(&core, "horloge");
+    let manual = core.backup("horloge").unwrap();
+    assert_eq!((manual.version.as_deref(), manual.reason.as_str()), (Some("1.0.0"), "manual"));
+    assert!(manual.files >= 2 && manual.size > 0);
+
+    // Mise à jour : sauvegarde automatique des données de la 1.0.0, puis la 1.0.0 reste sur le disque.
+    let sha2 = demo_zip(&s, "v2.zip");
+    write_catalog(&s, &[entry("horloge", "2.0.0", "v2.zip", &sha2)], None);
+    core.refresh_catalog().await.unwrap();
+    core.install("horloge").await.unwrap();
+    let auto = core.list_backups("horloge").into_iter().find(|b| b.reason == "update").expect("sauvegarde avant mise à jour");
+    assert_eq!(auto.version.as_deref(), Some("1.0.0"));
+    let a = core.snapshot().apps.remove(0);
+    assert_eq!((a.installed_version.as_deref(), a.previous_version.as_deref()), (Some("2.0.0"), Some("1.0.0")));
+    assert_eq!(a.backup_count, 2);
+    core.launch("horloge").unwrap();
+    wait_exit(&core, "horloge");
+    assert!(journal(&core, "horloge").contains("lancement=2"));
+
+    // Impossible pendant que l'application est ouverte.
+    let hold = core.paths().data_dir("horloge").join("garder-ouvert");
+    std::fs::write(&hold, b"").unwrap();
+    core.launch("horloge").unwrap();
+    assert!(matches!(core.rollback("horloge", Some(&auto.id)), Err(Error::Running)));
+    assert!(matches!(core.restore_backup("horloge", &auto.id), Err(Error::Running)));
+    std::fs::remove_file(&hold).unwrap();
+    wait_exit(&core, "horloge");
+
+    // Retour à la 1.0.0 avec les données d'avant la mise à jour.
+    core.rollback("horloge", Some(&auto.id)).unwrap();
+    let a = core.snapshot().apps.remove(0);
+    assert_eq!(a.installed_version.as_deref(), Some("1.0.0"));
+    assert_eq!(a.previous_version.as_deref(), Some("2.0.0"), "la 2.0.0 reste gardée");
+    assert_eq!(a.held_version.as_deref(), Some("2.0.0"));
+    assert!(!a.update_available, "la 2.0.0 n'est plus proposée");
+    let j = journal(&core, "horloge");
+    assert!(j.contains("lancement=1") && !j.contains("lancement=2"), "{j}");
+    assert!(core.list_backups("horloge").iter().any(|b| b.reason == "rollback"), "les données quittées sont sauvegardées");
+    core.launch("horloge").unwrap();
+    wait_exit(&core, "horloge");
+
+    // Le correctif 2.0.1 est proposé ; l'installer lève l'épinglage.
+    let sha3 = demo_zip(&s, "v201.zip");
+    write_catalog(&s, &[entry("horloge", "2.0.1", "v201.zip", &sha3)], None);
+    core.refresh_catalog().await.unwrap();
+    assert!(core.snapshot().apps[0].update_available);
+    core.set_hold("horloge", true).unwrap();
+    assert!(!core.snapshot().apps[0].update_available, "version ignorée à la demande");
+    core.set_hold("horloge", false).unwrap();
+    core.install("horloge").await.unwrap();
+    let a = core.snapshot().apps.remove(0);
+    assert_eq!((a.installed_version.as_deref(), a.previous_version.as_deref(), a.held_version), (Some("2.0.1"), Some("1.0.0"), None));
+
+    // Restauration d'une sauvegarde manuelle, puis suppression.
+    core.restore_backup("horloge", &manual.id).unwrap();
+    let j = journal(&core, "horloge");
+    assert!(j.contains("lancement=1") && !j.contains("lancement=2"), "{j}");
+    assert!(matches!(core.restore_backup("horloge", "../x"), Err(Error::Other(_))));
+    core.delete_backup("horloge", &manual.id).unwrap();
+    assert!(core.list_backups("horloge").iter().all(|b| b.id != manual.id));
+
+    // Redémarrage : version précédente toujours sur le disque, le retour fonctionne encore.
+    drop(core);
+    let core = open(&s, dev());
+    assert_eq!(std::fs::read_dir(core.paths().versions_dir("horloge")).unwrap().count(), 2);
+    core.rollback("horloge", None).unwrap();
+    assert_eq!(core.snapshot().apps[0].installed_version.as_deref(), Some("1.0.0"));
+
+    // Désinstallation avec les données : les sauvegardes partent aussi.
+    core.uninstall("horloge", true).unwrap();
+    assert!(!core.paths().backups_dir("horloge").exists());
+}
+
+/// Les sauvegardes automatiques sont limitées ; les manuelles ne sont jamais supprimées seules.
+#[test]
+fn sauvegardes_automatiques_limitees() {
+    let tmp = tempfile::tempdir().unwrap();
+    let paths = hangar_core::state::Paths::new(tmp.path());
+    std::fs::create_dir_all(paths.data_dir("app")).unwrap();
+    std::fs::write(paths.data_dir("app").join("a.txt"), b"x").unwrap();
+    let manual = hangar_core::backup::create(&paths, "app", None, "manual").unwrap();
+    for _ in 0..8 {
+        hangar_core::backup::create(&paths, "app", Some("1.0.0".into()), "update").unwrap();
+    }
+    std::fs::create_dir_all(paths.backups_dir("app").join(".tmp-abandon")).unwrap();
+    hangar_core::backup::prune(&paths, "app", hangar_core::backup::KEEP_AUTOMATIC);
+    let list = hangar_core::backup::list(&paths, "app");
+    assert_eq!(list.iter().filter(|b| b.automatic()).count(), hangar_core::backup::KEEP_AUTOMATIC);
+    assert!(list.iter().any(|b| b.id == manual.id));
+    assert!(!paths.backups_dir("app").join(".tmp-abandon").exists());
 }

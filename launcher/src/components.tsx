@@ -35,6 +35,10 @@ export function Icon({ name, size = 18 }: { name: string; size?: number }) {
       return (<svg {...p}><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>);
     case "box":
       return (<svg {...p}><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5v-9Z" /><path d="m3 7.5 9 4.5 9-4.5M12 12v9" /></svg>);
+    case "search":
+      return (<svg {...p}><circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.2-4.2" /></svg>);
+    case "pin":
+      return (<svg {...p}><path d="M9 4h6l-1 6 3 3H7l3-3-1-6Z" /><path d="M12 13v7" /></svg>);
     default:
       return null;
   }

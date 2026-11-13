@@ -1,7 +1,7 @@
 // Faux backend pour concevoir l'interface dans un navigateur (`npm run dev:ui`).
 // Il n'est jamais utilisé dans l'application Tauri. Scénario choisi par `?scenario=` :
 // normal (défaut), vide, indisponible, horsligne, erreur, progression.
-import type { AppView, CoreEvent, Snapshot } from "./api";
+import type { AppView, BackupInfo, CoreEvent, Snapshot } from "./api";
 
 type Listener = (e: CoreEvent) => void;
 
@@ -35,6 +35,10 @@ function app(p: Partial<AppView> & { id: string; name: string }): AppView {
     partialBytes: null,
     lastError: null,
     dataDir: `C:\\Users\\vous\\AppData\\Local\\fr.rayan.launcher\\data\\${p.id}`,
+    previousVersion: null,
+    heldVersion: null,
+    backupCount: 0,
+    lastBackupAt: null,
     ...p,
   };
 }
@@ -57,8 +61,35 @@ const apps: AppView[] = [
     description: "Éditeur de sprites minimaliste.",
     availableVersion: "1.3.0",
     installedVersion: "1.3.0",
+    previousVersion: "1.2.4",
   }),
 ];
+
+const ago = (h: number) => new Date(Date.now() - h * 3_600_000).toISOString();
+const stampId = (iso: string) => iso.replace(/\D/g, "").slice(0, 17) + "-" + Math.random().toString(16).slice(2, 6);
+const backups = new Map<string, BackupInfo[]>([
+  [
+    "rayans-chrono",
+    [
+      { id: stampId(ago(2)), appId: "rayans-chrono", version: "1.0.0", createdAt: ago(2), reason: "manual", size: 48_200, files: 3 },
+      { id: stampId(ago(30)), appId: "rayans-chrono", version: "1.0.0", createdAt: ago(30), reason: "restore", size: 41_000, files: 3 },
+    ],
+  ],
+  ["rayans-pixel", [{ id: stampId(ago(5)), appId: "rayans-pixel", version: "1.2.4", createdAt: ago(5), reason: "update", size: 2_380_000, files: 41 }]],
+]);
+const syncBackups = (id: string) => {
+  const list = backups.get(id) ?? [];
+  const a = snap.apps.find((x) => x.id === id);
+  if (a) patch(id, { backupCount: list.length, lastBackupAt: list[0]?.createdAt ?? null });
+};
+const addBackup = (id: string, reason: BackupInfo["reason"]) => {
+  const a = snap.apps.find((x) => x.id === id)!;
+  const now = new Date().toISOString();
+  const b: BackupInfo = { id: stampId(now), appId: id, version: a.installedVersion, createdAt: now, reason, size: 50_000 + Math.round(Math.random() * 9000), files: 3 };
+  backups.set(id, [b, ...(backups.get(id) ?? [])]);
+  syncBackups(id);
+  return b;
+};
 
 let snap: Snapshot = {
   mode: "development",
@@ -113,6 +144,12 @@ if (scenario === "progression") {
   snap.apps[1] = { ...snap.apps[1], task: { kind: "install", phase: "extracting", received: 0, total: null } };
 }
 
+for (const a of apps) {
+  const list = backups.get(a.id) ?? [];
+  a.backupCount = list.length;
+  a.lastBackupAt = list[0]?.createdAt ?? null;
+}
+
 const listeners = new Set<Listener>();
 const emit = () => listeners.forEach((l) => l({ type: "changed" }));
 const patch = (id: string, p: Partial<AppView>) => {
@@ -139,8 +176,11 @@ async function fakeInstall(id: string) {
     patch(id, { task: { kind, phase, received: 0, total: null } });
     await wait(300);
   }
-  patch(id, { task: null, installedVersion: a.availableVersion, updateAvailable: false, installedReleaseNotes: a.releaseNotes });
+  if (a.installedVersion && (backups.get(id)?.length || a.backupCount)) addBackup(id, "update");
+  patch(id, { task: null, installedVersion: a.availableVersion, previousVersion: a.installedVersion ?? a.previousVersion, heldVersion: null, updateAvailable: false, installedReleaseNotes: a.releaseNotes });
 }
+
+const busyError = { code: "running", message: "L'application est ouverte. Fermez-la d'abord.", hint: "Fermez l'application puis réessayez." };
 
 export const mockBackend = {
   subscribe(l: Listener) {
@@ -198,7 +238,7 @@ export const mockBackend = {
       case "open_folder":
         return undefined as T;
       case "features":
-        return { shortcuts: true } as T;
+        return { shortcuts: true, paletteShortcut: "Ctrl + Alt + Espace" } as T;
       case "create_shortcut":
         return "C:\\Users\\vous\\Desktop\\app.lnk" as T;
       case "launcher_update":
@@ -208,6 +248,41 @@ export const mockBackend = {
       case "dismiss_notices":
         snap = { ...snap, notices: [] };
         emit();
+        return undefined as T;
+      case "minimize_window":
+        return undefined as T;
+      case "list_backups":
+        await wait(150);
+        return structuredClone(backups.get(id) ?? []) as T;
+      case "backup_app":
+        await wait(500);
+        return addBackup(id, "manual") as T;
+      case "restore_backup": {
+        if (snap.apps.find((x) => x.id === id)?.running) throw busyError;
+        await wait(500);
+        addBackup(id, "restore");
+        return undefined as T;
+      }
+      case "delete_backup":
+        backups.set(id, (backups.get(id) ?? []).filter((b) => b.id !== args?.backupId));
+        syncBackups(id);
+        return undefined as T;
+      case "rollback": {
+        const a = snap.apps.find((x) => x.id === id)!;
+        if (a.running) throw busyError;
+        await wait(600);
+        if (args?.restore) addBackup(id, "rollback");
+        patch(id, { installedVersion: a.previousVersion, previousVersion: a.installedVersion, heldVersion: a.installedVersion, updateAvailable: false, lastError: null });
+        return undefined as T;
+      }
+      case "set_hold": {
+        const a = snap.apps.find((x) => x.id === id)!;
+        const v = a.availableVersion ?? a.installedVersion;
+        const newer = (x: string | null, y: string | null) => !!x && !!y && x.localeCompare(y, undefined, { numeric: true }) > 0;
+        patch(id, args?.hold ? { heldVersion: v, updateAvailable: false } : { heldVersion: null, updateAvailable: newer(a.availableVersion, a.installedVersion) });
+        return undefined as T;
+      }
+      case "open_backups_folder":
         return undefined as T;
       case "dismiss_error":
         patch(id, { lastError: null });

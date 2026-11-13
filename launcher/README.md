@@ -15,6 +15,7 @@ système (réseau, disque, processus).
 - [Format du catalogue](#format-du-catalogue)
 - [Ajouter une application](#ajouter-une-application)
 - [Publier une mise à jour](#publier-une-mise-à-jour)
+- [Palette, sauvegardes et retour de version](#palette-sauvegardes-et-retour-de-version)
 - [Ce que Rayan's Launcher garantit](#ce-que-rayans-launcher-garantit)
 - [Tests et parcours vérifiés](#tests-et-parcours-vérifiés)
 - [Hors périmètre et limites connues](#hors-périmètre-et-limites-connues)
@@ -462,6 +463,24 @@ reconstruire le launcher.
   launcher est déjà ouvert, il lance l'application sans ouvrir de deuxième fenêtre. Le raccourci est supprimé à la
   désinstallation.
 
+## Palette, sauvegardes et retour de version
+
+- **Palette de commandes** : `Ctrl + K` dans le launcher, ou `Ctrl + Alt + Espace` depuis n'importe quelle
+  application (le launcher passe au premier plan). Tapez quelques lettres puis `Entrée` : lancer, installer, mettre à
+  jour, reprendre un téléchargement, ouvrir la fiche (notes de version), le dossier de données ou de l'application,
+  sauvegarder, restaurer, revenir à la version précédente. Après un lancement depuis le raccourci global, la fenêtre
+  du launcher se réduit. Si un autre logiciel utilise déjà `Ctrl + Alt + Espace`, seul `Ctrl + K` reste disponible.
+- **Sauvegardes des données** : sur la fiche, « Sauvegarder maintenant » copie `data/<id>/` dans
+  `backups/<id>/<date>/`. Une sauvegarde automatique est faite **avant chaque mise à jour** (si elle échoue, la mise
+  à jour est annulée). Les 5 dernières sauvegardes automatiques sont gardées ; les manuelles ne sont jamais
+  supprimées seules. « Restaurer » sauvegarde d'abord les données actuelles, puis les remplace par échange de
+  dossiers : un échec laisse les données en place. Application fermée obligatoire.
+- **Retour à la version précédente** : après une mise à jour, l'ancienne version reste sur le disque. « Revenir à la
+  x.y.z » la réactive (empreinte de l'exécutable revérifiée) et propose de remettre en même temps la sauvegarde faite
+  avant la mise à jour. La version quittée reste gardée et n'est plus proposée en mise à jour tant qu'une version plus
+  récente ne sort pas (« Ne plus ignorer » annule). « Ignorer la x.y.z » fait de même sans changer de version, pour
+  attendre un correctif.
+
 ## Mettre à jour le launcher lui-même
 
 La CI numérote chaque construction `0.1.<numéro d'exécution + 100>`.
@@ -521,7 +540,7 @@ désinstallables, avec la mention « retirée du catalogue ».
   jour de façon atomique. En cas d'échec à n'importe quelle étape, la version précédente n'est pas touchée et reste
   lançable.
 - **Application ouverte** : la mise à jour est préparée et vérifiée, puis activée automatiquement à la fermeture de
-  l'application. L'ancienne version n'est supprimée qu'à ce moment-là.
+  l'application. L'ancienne version devient alors la version de secours (une seule est gardée).
 - **Concurrence** : une seule installation à la fois par application, garantie par un verrou de fichier (inter-processus,
   libéré même après un plantage) et un contrôle en mémoire. Une seule instance du launcher.
 - **Lancement** : l'exécutable enregistré est lancé directement (`CreateProcess`, jamais via `cmd` ou un shell), après
@@ -537,8 +556,9 @@ Arborescence locale (`%LOCALAPPDATA%\fr.rayan.launcher\`) :
 ```text
 settings.json  installed.json  catalog-cache.json
 images/  downloads/  locks/
-apps/<id>/versions/<version>-<n>/   fichiers de la version active (et d'une version en attente)
+apps/<id>/versions/<version>-<n>/   version active, version précédente (retour possible), version en attente
 data/<id>/                          données utilisateur
+backups/<id>/<date>/                sauvegardes des données (backup.json + data/)
 ```
 
 ## Tests et parcours vérifiés

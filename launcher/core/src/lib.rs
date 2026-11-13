@@ -2,6 +2,7 @@
 //! commande l'utilisent tous les deux, et les tests de bout en bout le pilotent directement.
 
 pub mod archive;
+pub mod backup;
 pub mod catalog;
 pub mod error;
 pub mod local;
@@ -9,6 +10,7 @@ pub mod net;
 pub mod state;
 pub mod util;
 
+pub use backup::BackupInfo;
 pub use catalog::{Catalog, CatalogApp, TrustPolicy};
 pub use error::{Error, ErrorInfo, Result};
 
@@ -66,6 +68,12 @@ pub struct AppView {
     pub partial_bytes: Option<u64>,
     pub last_error: Option<ErrorInfo>,
     pub data_dir: String,
+    /// Version précédente gardée sur le disque (retour possible).
+    pub previous_version: Option<String>,
+    /// Versions du catalogue ignorées jusqu'à celle-ci incluse.
+    pub held_version: Option<String>,
+    pub backup_count: usize,
+    pub last_backup_at: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -262,6 +270,18 @@ impl Core {
     /// Supprime les restes d'opérations interrompues (préparations, téléchargements, anciennes versions).
     fn cleanup_orphans(&self) {
         let inner = self.lock();
+        // Restaurations interrompues : la copie préparée ou l'ancien dossier restent à côté de data/<id>.
+        if let Ok(rd) = std::fs::read_dir(self.paths.root.join("data")) {
+            for e in rd.flatten() {
+                let n = e.file_name().to_string_lossy().to_string();
+                if n.contains(".restauration-") || n.contains(".ancien-") {
+                    util::remove_dir_quiet(&e.path());
+                }
+            }
+        }
+        for id in inner.installed.apps.keys() {
+            backup::prune(&self.paths, id, backup::KEEP_AUTOMATIC);
+        }
         // Les téléchargements partiels (.part) sont gardés pour une reprise ; le reste est supprimé.
         if let Ok(rd) = std::fs::read_dir(self.paths.downloads()) {
             for e in rd.flatten() {
@@ -287,6 +307,7 @@ impl Core {
             }
             let keep: Vec<&str> = std::iter::once(app.current.dir.as_str())
                 .chain(app.pending.as_ref().map(|p| p.dir.as_str()))
+                .chain(app.previous.as_ref().map(|p| p.dir.as_str()))
                 .collect();
             if let Ok(rd) = std::fs::read_dir(self.paths.versions_dir(&id)) {
                 for e in rd.flatten() {
@@ -521,6 +542,7 @@ impl Core {
         let mut apps = Vec::new();
         let view = |id: &str, ca: Option<&CatalogApp>, ia: Option<&InstalledApp>| -> AppView {
             let installed_v = ia.map(|a| &a.current.version);
+            let backups = backup::list(&self.paths, id);
             AppView {
                 id: id.to_string(),
                 name: ca.map(|a| a.name.clone()).or(ia.map(|a| a.name.clone())).unwrap_or_default(),
@@ -543,6 +565,7 @@ impl Core {
                     (Some(c), Some(i)) => {
                         c.version > i.current.version
                             && i.pending.as_ref().is_none_or(|p| c.version > p.version)
+                            && i.held_version.as_ref().is_none_or(|h| c.version > *h)
                     }
                     _ => false,
                 },
@@ -555,6 +578,10 @@ impl Core {
                 },
                 last_error: inner.errors.get(id).cloned(),
                 data_dir: self.paths.data_dir(id).display().to_string(),
+                previous_version: ia.and_then(|a| a.previous.as_ref()).map(|p| p.version.to_string()),
+                held_version: ia.and_then(|a| a.held_version.as_ref()).map(|v| v.to_string()),
+                backup_count: backups.len(),
+                last_backup_at: backups.first().map(|b| b.created_at.clone()),
             }
         };
         if let Some(c) = &inner.catalog {
@@ -782,7 +809,16 @@ impl Core {
         staging_guard.keep();
         let mut version_guard = Cleanup(Some(version_dir.clone()));
 
-        // 6. Activation (ou report si l'application est ouverte), enregistrée de façon atomique.
+        // 6. Mise à jour : les données sont sauvegardées avant que la nouvelle version puisse les modifier.
+        let before = self.lock().installed.apps.get(&id).map(|a| a.current.version.to_string());
+        if let Some(v) = before.filter(|_| id != LAUNCHER_ID && backup::has_data(&self.paths, &id)) {
+            backup::create(&self.paths, &id, Some(v), "update").map_err(|e| {
+                Error::Io(format!("la sauvegarde des données avant la mise à jour a échoué, rien n'a été changé ({e})"))
+            })?;
+            backup::prune(&self.paths, &id, backup::KEEP_AUTOMATIC);
+        }
+
+        // 7. Activation (ou report si l'application est ouverte), enregistrée de façon atomique.
         let new = InstalledVersion {
             version: app.version.clone(),
             dir: dir_name,
@@ -804,11 +840,15 @@ impl Core {
                     }
                     outcome = InstallOutcome::Pending;
                 } else {
+                    // L'ancienne version active devient la version de secours ; la précédente part.
                     let old = std::mem::replace(&mut existing.current, new);
-                    to_delete.push(old.dir);
+                    if let Some(p) = existing.previous.replace(old) {
+                        to_delete.push(p.dir);
+                    }
                     if let Some(p) = existing.pending.take() {
                         to_delete.push(p.dir);
                     }
+                    existing.held_version = None;
                     outcome = InstallOutcome::Activated;
                 }
                 existing.name = app.name.clone();
@@ -827,6 +867,8 @@ impl Core {
                         release_notes: app.release_notes.clone(),
                         current: new,
                         pending: None,
+                        previous: None,
+                        held_version: None,
                     },
                 );
                 outcome = InstallOutcome::Activated;
@@ -851,18 +893,22 @@ impl Core {
     fn activate_pending_locked(&self, inner: &mut Inner, id: &str) -> Result<bool> {
         let Some(app) = inner.installed.apps.get_mut(id) else { return Ok(false) };
         let Some(pending) = app.pending.take() else { return Ok(false) };
-        let backup = app.clone();
+        let saved = app.clone();
         let old = std::mem::replace(&mut app.current, pending);
+        let dropped = app.previous.replace(old);
+        app.held_version = None;
         if let Some(c) = inner.catalog.as_ref().and_then(|c| c.catalog.get(id)) {
             if c.version == app.current.version {
                 app.release_notes = c.release_notes.clone();
             }
         }
         if let Err(e) = self.save_installed(inner) {
-            inner.installed.apps.insert(id.to_string(), backup);
+            inner.installed.apps.insert(id.to_string(), saved);
             return Err(e);
         }
-        util::remove_dir_quiet(&self.paths.versions_dir(id).join(old.dir));
+        if let Some(d) = dropped {
+            util::remove_dir_quiet(&self.paths.versions_dir(id).join(d.dir));
+        }
         Ok(true)
     }
 
@@ -980,11 +1026,146 @@ impl Core {
         util::remove_dir_quiet(&self.paths.app_dir(id));
         if remove_data {
             util::remove_dir_quiet(&self.paths.data_dir(id));
+            util::remove_dir_quiet(&self.paths.backups_dir(id));
+        }
+        self.emit(Event::Changed);
+        Ok(())
+    }
+
+    // ----- Sauvegardes des données -------------------------------------------------------------
+
+    fn app_lock(&self, id: &str) -> Result<AppLock> {
+        if !catalog::is_valid_id(id) {
+            return Err(Error::UnknownApp(id.to_string()));
+        }
+        AppLock::acquire(&self.paths.root.join("locks").join(format!("{id}.lock")))
+    }
+
+    /// Refuse pendant une installation ou tant que l'application est ouverte.
+    fn ensure_idle(&self, id: &str) -> Result<()> {
+        let inner = self.lock();
+        if inner.tasks.contains_key(id) {
+            return Err(Error::Busy);
+        }
+        if inner.running.contains_key(id) {
+            return Err(Error::Running);
+        }
+        Ok(())
+    }
+
+    fn current_version(&self, id: &str) -> Option<String> {
+        self.lock().installed.apps.get(id).map(|a| a.current.version.to_string())
+    }
+
+    /// Sauvegarde manuelle de `data/<id>/` (possible même application ouverte).
+    pub fn backup(&self, id: &str) -> Result<BackupInfo> {
+        let _lock = self.app_lock(id)?;
+        let b = backup::create(&self.paths, id, self.current_version(id), "manual")?;
+        self.emit(Event::Changed);
+        Ok(b)
+    }
+
+    pub fn list_backups(&self, id: &str) -> Vec<BackupInfo> {
+        if !catalog::is_valid_id(id) {
+            return Vec::new();
+        }
+        backup::list(&self.paths, id)
+    }
+
+    pub fn delete_backup(&self, id: &str, backup_id: &str) -> Result<()> {
+        let _lock = self.app_lock(id)?;
+        backup::delete(&self.paths, id, backup_id)?;
+        self.emit(Event::Changed);
+        Ok(())
+    }
+
+    /// Remet les données d'une sauvegarde. Les données actuelles sont d'abord sauvegardées à leur tour.
+    pub fn restore_backup(&self, id: &str, backup_id: &str) -> Result<()> {
+        let _lock = self.app_lock(id)?;
+        self.ensure_idle(id)?;
+        self.restore_locked(id, backup_id, "restore")?;
+        self.emit(Event::Changed);
+        Ok(())
+    }
+
+    fn restore_locked(&self, id: &str, backup_id: &str, reason: &str) -> Result<()> {
+        backup::find(&self.paths, id, backup_id)?;
+        if backup::has_data(&self.paths, id) {
+            backup::create(&self.paths, id, self.current_version(id), reason)?;
+        }
+        backup::restore(&self.paths, id, backup_id)?;
+        backup::prune(&self.paths, id, backup::KEEP_AUTOMATIC);
+        Ok(())
+    }
+
+    // ----- Retour à la version précédente ------------------------------------------------------
+
+    /// Réactive la version précédente. La version quittée reste gardée (on peut y revenir) et elle est
+    /// ignorée par les mises à jour jusqu'à la publication d'une version plus récente.
+    /// `restore` : sauvegarde de données à remettre en même temps (celle faite avant la mise à jour).
+    pub fn rollback(&self, id: &str, restore: Option<&str>) -> Result<()> {
+        let _lock = self.app_lock(id)?;
+        self.ensure_idle(id)?;
+        if let Some(b) = restore {
+            backup::find(&self.paths, id, b)?;
+        }
+        {
+            let mut inner = self.lock();
+            let app = inner.installed.apps.get(id).ok_or(Error::NotInstalled)?.clone();
+            let prev = app
+                .previous
+                .clone()
+                .ok_or_else(|| Error::Other("Aucune version précédente n'est gardée pour cette application.".into()))?;
+            let sha = verify_executable(&self.paths.versions_dir(id).join(&prev.dir), &prev.executable)
+                .map_err(|e| Error::Other(format!("la version {} gardée est incomplète ({e})", prev.version)))?;
+            if sha != prev.executable_sha256 {
+                return Err(Error::TamperedExecutable);
+            }
+            let notes = inner
+                .catalog
+                .as_ref()
+                .and_then(|c| c.catalog.get(id))
+                .filter(|c| c.version == prev.version)
+                .map(|c| c.release_notes.clone());
+            let entry = inner.installed.apps.get_mut(id).expect("présente");
+            let left = std::mem::replace(&mut entry.current, prev);
+            entry.held_version = Some(left.version.clone());
+            entry.previous = Some(left);
+            if let Some(n) = notes {
+                entry.release_notes = n;
+            }
+            if let Err(e) = self.save_installed(&inner) {
+                inner.installed.apps.insert(id.to_string(), app);
+                return Err(e);
+            }
+            inner.errors.remove(id);
+        }
+        let result = match restore {
+            Some(b) => self.restore_locked(id, b, "rollback"),
+            None => Ok(()),
+        };
+        self.emit(Event::Changed);
+        result
+    }
+
+    /// Ignore (ou plus) les versions du catalogue jusqu'à celle proposée actuellement.
+    pub fn set_hold(&self, id: &str, hold: bool) -> Result<()> {
+        {
+            let mut inner = self.lock();
+            let target = inner.catalog.as_ref().and_then(|c| c.catalog.get(id)).map(|c| c.version.clone());
+            let app = inner.installed.apps.get_mut(id).ok_or(Error::NotInstalled)?;
+            let saved = app.held_version.clone();
+            app.held_version = if hold { Some(target.unwrap_or_else(|| app.current.version.clone())) } else { None };
+            if let Err(e) = self.save_installed(&inner) {
+                inner.installed.apps.get_mut(id).expect("présente").held_version = saved;
+                return Err(e);
+            }
         }
         self.emit(Event::Changed);
         Ok(())
     }
 }
+
 
 /// Vérifie que l'exécutable existe, est un fichier, et reste dans `dir` une fois les liens résolus.
 /// Renvoie son empreinte SHA-256.

@@ -37,6 +37,23 @@ export interface AppView {
   partialBytes: number | null;
   lastError: ErrorInfo | null;
   dataDir: string;
+  /** Version précédente gardée sur le disque : retour possible. */
+  previousVersion: string | null;
+  /** Versions du catalogue ignorées jusqu'à celle-ci incluse. */
+  heldVersion: string | null;
+  backupCount: number;
+  lastBackupAt: string | null;
+}
+
+export interface BackupInfo {
+  id: string;
+  appId: string;
+  version: string | null;
+  createdAt: string;
+  /** manual, update (avant une mise à jour), restore (avant une restauration), rollback (avant un retour) */
+  reason: "manual" | "update" | "restore" | "rollback";
+  size: number;
+  files: number;
 }
 
 export interface CatalogView {
@@ -74,6 +91,8 @@ export interface LauncherUpdate {
 
 export interface Features {
   shortcuts: boolean;
+  /** Raccourci global de la palette, ou null s'il n'a pas pu être enregistré. */
+  paletteShortcut: string | null;
 }
 
 export interface ZipEntry {
@@ -129,7 +148,21 @@ export const api = {
     return typeof r === "string" ? r : null;
   },
   image: (id: string, kind: "icon" | "image") => call<string | null>("get_image", { id, kind }),
+  minimizeWindow: () => call<void>("minimize_window"),
+  listBackups: (id: string) => call<BackupInfo[]>("list_backups", { id }),
+  backup: (id: string) => call<BackupInfo>("backup_app", { id }),
+  restoreBackup: (id: string, backupId: string) => call<void>("restore_backup", { id, backupId }),
+  deleteBackup: (id: string, backupId: string) => call<void>("delete_backup", { id, backupId }),
+  rollback: (id: string, restore: string | null) => call<void>("rollback", { id, restore }),
+  setHold: (id: string, hold: boolean) => call<void>("set_hold", { id, hold }),
+  openBackupsFolder: (id: string) => call<void>("open_backups_folder", { id }),
 };
+
+/** Raccourci global (Ctrl + Alt + Espace) : le launcher passe au premier plan et demande la palette. */
+export async function onPaletteRequest(f: () => void): Promise<() => void> {
+  if (!inTauri) return () => {};
+  return listen("hangar://palette", () => f());
+}
 
 export async function subscribe(onEvent: (e: CoreEvent) => void): Promise<() => void> {
   if (!inTauri) return mockBackend.subscribe(onEvent);
