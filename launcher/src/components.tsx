@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { api, type AppView, type ErrorInfo } from "./api";
 import { bytes, phaseLabel, progressPercent } from "./format";
 
@@ -40,12 +40,21 @@ export function Icon({ name, size = 18 }: { name: string; size?: number }) {
   }
 }
 
+/** Monogramme « R » en dégradé du thème, avec l'étincelle du lancement. */
 export function Logo() {
+  const id = useId();
   return (
     <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden>
-      <path d="M8 54V26L32 10l24 16v28" fill="none" stroke="var(--accent)" strokeWidth="5" strokeLinejoin="round" />
-      <path d="M20 54V34h24v20" fill="none" stroke="var(--text)" strokeWidth="5" strokeLinejoin="round" />
-      <path d="M20 42h24" stroke="var(--text)" strokeWidth="3" opacity=".55" />
+      <defs>
+        <linearGradient id={id} x1="8" y1="8" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+          <stop offset="0" style={{ stopColor: "var(--a1)" }} />
+          <stop offset=".55" style={{ stopColor: "var(--a2)" }} />
+          <stop offset="1" style={{ stopColor: "var(--a3)" }} />
+        </linearGradient>
+      </defs>
+      <path d="M18 52V13h14a11 11 0 0 1 0 22H18" fill="none" stroke={`url(#${id})`} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M31 35l14 17" fill="none" stroke={`url(#${id})`} strokeWidth="7" strokeLinecap="round" />
+      <path d="M52 6l1.9 4.6L58.5 12.5l-4.6 1.9L52 19l-1.9-4.6-4.6-1.9 4.6-1.9z" fill={`url(#${id})`} />
     </svg>
   );
 }

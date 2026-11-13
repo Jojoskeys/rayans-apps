@@ -2,13 +2,37 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api, subscribe, toErrorInfo, type AppView, type ErrorInfo, type Features, type LauncherUpdate, type Snapshot, type ZipEntry, type ZipProposal } from "./api";
 import { Actions, AppIcon, ErrorBox, Icon, Logo, VersionLine, Visual } from "./components";
 import { bytes, date, dateTime } from "./format";
+import { applyPrefs, DEFAULT_PREFS, loadPrefs, PrefsContext, savePrefs, THEMES, usePrefs, type Prefs, type ThemeId } from "./prefs";
 
 type Page = "catalog" | "installed" | "settings";
 const PAGES: Page[] = ["catalog", "installed", "settings"];
 
 export default function App() {
+  const [prefs, setPrefsState] = useState<Prefs>(loadPrefs);
+  useEffect(() => {
+    applyPrefs(prefs);
+    savePrefs(prefs);
+  }, [prefs]);
+  const ctx = useMemo(
+    () => ({
+      prefs,
+      setPrefs: (p: Partial<Prefs>) => setPrefsState((x) => ({ ...x, ...p })),
+      resetPrefs: () => setPrefsState({ ...DEFAULT_PREFS }),
+    }),
+    [prefs],
+  );
+  return (
+    <PrefsContext.Provider value={ctx}>
+      <Launcher />
+    </PrefsContext.Provider>
+  );
+}
+
+function Launcher() {
+  const { prefs } = usePrefs();
   const [snap, setSnap] = useState<Snapshot | null>(null);
-  const [page, setPage] = useState<Page>("catalog");
+  // `?page=` sert seulement à l'aperçu navigateur (captures) ; l'application Tauri n'a pas de paramètres d'URL.
+  const [page, setPage] = useState<Page>(() => (new URLSearchParams(location.search).get("page") as Page | null) ?? prefs.startPage);
   const [detail, setDetail] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [launcherUpd, setLauncherUpd] = useState<LauncherUpdate | null>(null);
@@ -182,10 +206,16 @@ function CatalogStatus({ snap }: { snap: Snapshot }) {
 function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings }: { snap: Snapshot; page: Page; onOpen: (id: string) => void; onRefresh: () => void; goCatalog: () => void; goSettings: () => void }) {
   const c = snap.catalog;
   const [adding, setAdding] = useState(false);
-  const apps = useMemo(
-    () => (page === "installed" ? snap.apps.filter((a) => a.installedVersion) : snap.apps.filter((a) => a.inCatalog)),
-    [snap, page],
-  );
+  const { prefs } = usePrefs();
+  const apps = useMemo(() => {
+    const list = page === "installed" ? snap.apps.filter((a) => a.installedVersion) : snap.apps.filter((a) => a.inCatalog);
+    const byName = (a: AppView, b: AppView) => a.name.localeCompare(b.name, "fr");
+    const rank = (f: (a: AppView) => boolean) => (a: AppView, b: AppView) => Number(f(b)) - Number(f(a)) || byName(a, b);
+    if (prefs.sort === "nom") return [...list].sort(byName);
+    if (prefs.sort === "installees") return [...list].sort(rank((a) => !!a.installedVersion));
+    if (prefs.sort === "maj") return [...list].sort(rank((a) => a.updateAvailable));
+    return list;
+  }, [snap, page, prefs.sort]);
   const title = page === "installed" ? "Installées" : c.title ?? "Catalogue";
   const subtitle =
     page === "installed"
@@ -640,6 +670,145 @@ function Detail({ app, snap, features, onBack, onToast }: { app: AppView; snap: 
   );
 }
 
+// ----- Personnalisation ------------------------------------------------------------------------
+
+function Seg<T extends string>({ value, options, onChange, label }: { value: T; options: [T, string][]; onChange: (v: T) => void; label: string }) {
+  return (
+    <div className="seg" role="group" aria-label={label}>
+      {options.map(([v, l]) => (
+        <button key={v} type="button" aria-pressed={value === v} onClick={() => onChange(v)}>{l}</button>
+      ))}
+    </div>
+  );
+}
+
+function Switch({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
+  return (
+    <label className="switch">
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} aria-label={label} />
+      <i />
+    </label>
+  );
+}
+
+function Range({ value, min, max, step = 1, unit, onChange, label }: { value: number; min: number; max: number; step?: number; unit: string; onChange: (v: number) => void; label: string }) {
+  return (
+    <div className="range">
+      <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} aria-label={label} />
+      <output>{unit === "×" ? `${value.toFixed(1).replace(".", ",")}×` : `${value}${unit}`}</output>
+    </div>
+  );
+}
+
+function Pref({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
+  return (
+    <div className="pref">
+      <span><b>{title}</b>{hint && <small>{hint}</small>}</span>
+      {children}
+    </div>
+  );
+}
+
+function Personalize() {
+  const { prefs: p, setPrefs: set, resetPrefs } = usePrefs();
+  const themes = Object.entries(THEMES) as [Exclude<ThemeId, "perso">, (typeof THEMES)["aurore"]][];
+  return (
+    <section className="panel settings perso" style={{ "--i": 0 } as React.CSSProperties}>
+      <div className="perso-head">
+        <div>
+          <h3>Personnalisation</h3>
+          <p className="muted small">Les changements s'appliquent tout de suite et restent sur cet ordinateur.</p>
+        </div>
+        <button className="btn small" type="button" onClick={resetPrefs}><Icon name="refresh" size={14} /> Valeurs par défaut</button>
+      </div>
+
+      <div className="perso-group">
+        <h4>Couleurs</h4>
+        <div className="swatches">
+          {themes.map(([id, t]) => (
+            <button key={id} type="button" className="swatch" aria-pressed={p.theme === id} onClick={() => set({ theme: id })}>
+              <span className="swatch-chip" style={{ background: `linear-gradient(135deg, ${t.stops[0]}, ${t.stops[1]} 55%, ${t.stops[2]})` }} />
+              <span className="swatch-name">{t.name}{p.theme === id && <Icon name="check" size={14} />}</span>
+            </button>
+          ))}
+          <label className="swatch" aria-pressed={p.theme === "perso"}>
+            <span className="swatch-chip" style={{ background: p.theme === "perso" ? "var(--accent-grad)" : `conic-gradient(from 90deg, #f43f5e, #f59e0b, #84cc16, #06b6d4, #6366f1, #d946ef, #f43f5e)` }} />
+            <span className="swatch-name">Ma couleur{p.theme === "perso" && <Icon name="check" size={14} />}</span>
+            <input type="color" value={p.customColor} onChange={(e) => set({ theme: "perso", customColor: e.target.value })} aria-label="Choisir ma couleur" />
+          </label>
+        </div>
+        <div className="pref-rows">
+          <Pref title="Fond" hint="Teinté par le thème, graphite ou noir profond">
+            <Seg label="Fond" value={p.background} onChange={(v) => set({ background: v })} options={[["colore", "Coloré"], ["neutre", "Neutre"], ["noir", "Noir"]]} />
+          </Pref>
+          <Pref title="Barre latérale en verre dépoli">
+            <Switch label="Verre dépoli" checked={p.glass} onChange={(v) => set({ glass: v })} />
+          </Pref>
+        </div>
+      </div>
+
+      <div className="perso-group">
+        <h4>Ambiance et animations</h4>
+        <div className="pref-rows">
+          <Pref title="Animations" hint="Réduites : sans les boucles décoratives">
+            <Seg label="Animations" value={p.motion} onChange={(v) => set({ motion: v })} options={[["completes", "Complètes"], ["reduites", "Réduites"], ["aucune", "Aucune"]]} />
+          </Pref>
+          <Pref title="Fond lumineux animé">
+            <Switch label="Fond lumineux animé" checked={p.ambient} onChange={(v) => set({ ambient: v })} />
+          </Pref>
+          <Pref title="Intensité des lueurs">
+            <Range label="Intensité des lueurs" value={p.ambientLevel} min={0.2} max={1.6} step={0.1} unit="×" onChange={(v) => set({ ambientLevel: v, ambient: true })} />
+          </Pref>
+          <Pref title="Halo qui suit la souris" hint="Sur les cartes d'applications">
+            <Switch label="Halo qui suit la souris" checked={p.glow} onChange={(v) => set({ glow: v })} />
+          </Pref>
+        </div>
+      </div>
+
+      <div className="perso-group">
+        <h4>Disposition</h4>
+        <div className="pref-rows">
+          <Pref title="Taille des cartes">
+            <Range label="Taille des cartes" value={p.cardSize} min={230} max={420} step={10} unit=" px" onChange={(v) => set({ cardSize: v })} />
+          </Pref>
+          <Pref title="Arrondis">
+            <Range label="Arrondis" value={p.radius} min={4} max={24} unit=" px" onChange={(v) => set({ radius: v })} />
+          </Pref>
+          <Pref title="Taille du texte">
+            <Range label="Taille du texte" value={p.textScale} min={85} max={120} step={5} unit=" %" onChange={(v) => set({ textScale: v })} />
+          </Pref>
+          <Pref title="Densité">
+            <Seg label="Densité" value={p.density} onChange={(v) => set({ density: v })} options={[["confortable", "Confortable"], ["compacte", "Compacte"]]} />
+          </Pref>
+          <Pref title="Notes de version sur les cartes">
+            <Switch label="Notes de version sur les cartes" checked={p.showNotes} onChange={(v) => set({ showNotes: v })} />
+          </Pref>
+          <Pref title="Compteurs sous le titre">
+            <Switch label="Compteurs sous le titre" checked={p.showStats} onChange={(v) => set({ showStats: v })} />
+          </Pref>
+        </div>
+      </div>
+
+      <div className="perso-group">
+        <h4>Comportement</h4>
+        <div className="pref-rows">
+          <Pref title="Ordre des applications">
+            <select className="input" value={p.sort} onChange={(e) => set({ sort: e.target.value as Prefs["sort"] })} aria-label="Ordre des applications">
+              <option value="catalogue">Ordre du catalogue</option>
+              <option value="nom">Par nom</option>
+              <option value="installees">Installées d'abord</option>
+              <option value="maj">Mises à jour d'abord</option>
+            </select>
+          </Pref>
+          <Pref title="Page à l'ouverture">
+            <Seg label="Page à l'ouverture" value={p.startPage} onChange={(v) => set({ startPage: v })} options={[["catalog", "Catalogue"], ["installed", "Installées"]]} />
+          </Pref>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ----- Paramètres ------------------------------------------------------------------------------
 
 function Settings({ snap, onSaved }: { snap: Snapshot; onSaved: () => void }) {
@@ -665,8 +834,9 @@ function Settings({ snap, onSaved }: { snap: Snapshot; onSaved: () => void }) {
 
   return (
     <>
-      <header className="page-head"><div><h1>Paramètres</h1></div></header>
-      <section className="panel settings" style={{ "--i": 0 } as React.CSSProperties}>
+      <header className="page-head"><div><span className="eyebrow">Rayan's Launcher</span><h1>Paramètres</h1></div></header>
+      <Personalize />
+      <section className="panel settings" style={{ "--i": 1 } as React.CSSProperties}>
         <form onSubmit={save}>
           <label htmlFor="url"><h3>Adresse du catalogue</h3></label>
           <p className="muted small">
