@@ -1,17 +1,30 @@
 // Barre de commande : ce que l'on tape (« img 1mo », « eteins 45 », « son casque »…) devient une action.
 
-export type ToolId = "pdf" | "img" | "tel" | "wifi" | "son" | "texte" | "eteins";
+export type ToolId = "pdf" | "img" | "tel" | "wifi" | "son" | "texte" | "eteins"
+  | "echeance" | "garde" | "fait" | "recent" | "colle"
+  | "bosse" | "aujourdhui" | "sauve";
 
-export interface Tool { id: ToolId; command: string; title: string; hint: string; aliases: string[] }
+/** outil : un panneau de Rayan's Outils ; suivi : une liste (échéances, liens…) ; app : ouvre une autre application. */
+export type ToolGroup = "outil" | "suivi" | "app";
+
+export interface Tool { id: ToolId; command: string; title: string; hint: string; aliases: string[]; group: ToolGroup }
 
 export const TOOLS: Tool[] = [
-  { id: "pdf", command: "pdf", title: "Fusionner en PDF", hint: "Photos et PDF → un seul PDF léger", aliases: ["fusion", "fusionner", "scan"] },
-  { id: "img", command: "img 1mo", title: "Alléger une image", hint: "Sous une taille donnée : img 500ko, img 2mo", aliases: ["image", "photo", "compresser", "reduire"] },
-  { id: "tel", command: "tel", title: "Échanger avec le téléphone", hint: "QR code : envoyer un fichier, un lien, ou recevoir des photos", aliases: ["telephone", "phone", "envoyer", "qr", "partage"] },
-  { id: "wifi", command: "wifi", title: "Mot de passe Wi-Fi", hint: "Réseau connecté, clé et QR code pour un invité", aliases: ["wi-fi", "wlan", "reseau"] },
-  { id: "son", command: "son", title: "Sortie audio", hint: "son : sortie suivante · son casque : par son nom", aliases: ["audio", "casque", "enceintes", "hautparleurs"] },
-  { id: "texte", command: "texte", title: "Copier le texte de l'écran", hint: "Sélectionnez une zone, le texte est copié", aliases: ["ocr", "copier", "lire"] },
-  { id: "eteins", command: "eteins 45", title: "Éteindre plus tard", hint: "eteins 45 · eteins 1h30 · veille 20 · redemarre 10 · eteins annuler", aliases: ["eteindre", "arret", "veille", "redemarre", "redemarrer", "shutdown"] },
+  { id: "pdf", command: "pdf", title: "Fusionner en PDF", hint: "Photos et PDF → un seul PDF léger", aliases: ["fusion", "fusionner", "scan"], group: "outil" },
+  { id: "img", command: "img 1mo", title: "Alléger une image", hint: "Sous une taille donnée : img 500ko, img 2mo", aliases: ["image", "photo", "compresser", "reduire"], group: "outil" },
+  { id: "tel", command: "tel", title: "Échanger avec le téléphone", hint: "QR code : envoyer un fichier, un lien, ou recevoir des photos", aliases: ["telephone", "phone", "envoyer", "qr", "partage"], group: "outil" },
+  { id: "wifi", command: "wifi", title: "Mot de passe Wi-Fi", hint: "Réseau connecté, clé et QR code pour un invité", aliases: ["wi-fi", "wlan", "reseau"], group: "outil" },
+  { id: "son", command: "son", title: "Sortie audio", hint: "son : sortie suivante · son casque : par son nom", aliases: ["audio", "casque", "enceintes", "hautparleurs"], group: "outil" },
+  { id: "texte", command: "texte", title: "Copier le texte de l'écran", hint: "Sélectionnez une zone, le texte est copié", aliases: ["ocr", "copier", "lire"], group: "outil" },
+  { id: "eteins", command: "eteins 45", title: "Éteindre plus tard", hint: "eteins 45 · eteins 1h30 · veille 20 · redemarre 10 · eteins annuler", aliases: ["eteindre", "arret", "veille", "redemarre", "redemarrer", "shutdown"], group: "outil" },
+  { id: "echeance", command: "echeance", title: "Échéances et abonnements", hint: "echeance Netflix 15/12 · rappel 3 jours avant, export pour l'agenda", aliases: ["echeances", "abonnement", "abonnements", "deadline", "resilier"], group: "suivi" },
+  { id: "garde", command: "garde", title: "À lire plus tard", hint: "garde exemple.fr/article pour le mémoire · effacé après 30 jours", aliases: ["lire", "lien", "liens", "plustard"], group: "suivi" },
+  { id: "fait", command: "fait", title: "Entretien", hint: "fait vidange · depuis combien de temps, en rouge quand c'est trop", aliases: ["entretien", "taches", "corvee"], group: "suivi" },
+  { id: "recent", command: "recent", title: "Fichiers récents", hint: "Les 20 derniers fichiers de Téléchargements, Bureau, Documents, Captures", aliases: ["recents", "derniers", "telechargements"], group: "suivi" },
+  { id: "colle", command: "colle", title: "Textes à coller", hint: "colle iban · copie le texte enregistré sous ce nom", aliases: ["coller", "texte-type", "snippet", "modele"], group: "suivi" },
+  { id: "bosse", command: "bosse", title: "Rayan's Bosse", hint: "bosse <projet> : ouvre l'espace de travail du projet", aliases: ["projet", "travail", "workspace"], group: "app" },
+  { id: "aujourdhui", command: "aujourdhui", title: "Rayan's Aujourd'hui", hint: "Ce qu'il reste à réviser aujourd'hui", aliases: ["aujourd'hui", "jour", "reviser"], group: "app" },
+  { id: "sauve", command: "sauve", title: "Rayan's Sauve", hint: "Sauvegarde vers un disque externe ou OneDrive", aliases: ["sauvegarde", "sauver", "backup"], group: "app" },
 ];
 
 export type PowerMode = "eteindre" | "redemarrer" | "veille";
@@ -23,7 +36,15 @@ export type Parsed =
   | { tool: "wifi" }
   | { tool: "son"; query: string | null }
   | { tool: "texte" }
-  | { tool: "eteins"; mode: PowerMode; minutes: number | null; cancel: boolean };
+  | { tool: "eteins"; mode: PowerMode; minutes: number | null; cancel: boolean }
+  | { tool: "echeance"; text: string }
+  | { tool: "garde"; text: string }
+  | { tool: "fait"; text: string }
+  | { tool: "recent" }
+  | { tool: "colle"; text: string }
+  | { tool: "bosse"; text: string }
+  | { tool: "aujourdhui" }
+  | { tool: "sauve" };
 
 export const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 
@@ -79,6 +100,9 @@ export function parse(input: string): Parsed | null {
       if (["annuler", "annule", "stop", "non"].includes(a)) return { tool: "eteins", mode, minutes: null, cancel: true };
       return { tool: "eteins", mode, minutes: a ? parseDuration(a) : null, cancel: false };
     }
+    // Le texte qui suit est interprété dans core/suivi.ts (dates, liens) ou par l'application ouverte.
+    case "echeance": case "garde": case "fait": case "colle": case "bosse": return { tool: t.id, text: arg };
+    case "recent": case "aujourdhui": case "sauve": return { tool: t.id };
   }
 }
 
@@ -87,8 +111,10 @@ export function suggest(input: string): Tool[] {
   const w = fold(input.split(/\s+/)[0] ?? "");
   if (!w) return TOOLS;
   const exact = toolOf(w);
-  const starts = TOOLS.filter((t) => t !== exact && (t.id.startsWith(w) || t.aliases.some((a) => a.startsWith(w)) || fold(t.title).includes(w)));
-  return exact ? [exact, ...starts] : starts;
+  // D'abord les commandes qui commencent par ce qui est tapé, puis celles dont le titre le contient.
+  const starts = TOOLS.filter((t) => t !== exact && (t.id.startsWith(w) || t.aliases.some((a) => a.startsWith(w))));
+  const inTitle = TOOLS.filter((t) => t !== exact && !starts.includes(t) && fold(t.title).includes(w));
+  return [...(exact ? [exact] : []), ...starts, ...inTitle];
 }
 
 export function formatDuration(min: number) {

@@ -6,12 +6,15 @@ import os from "node:os";
 import path from "node:path";
 import QRCode from "qrcode";
 import { formatDuration, parse, pickOutput, wifiQrText, type PowerMode, type ToolId } from "../core/commands.ts";
+import { byName, choreStatus, dueAlerts, formatDay, hostOf, inDays, iso, normalizeSuivi, normalizeUrl, parseBookmark, purgeBookmarks, reduceSuivi, rollDeadline, sinceText, splitNameDate, daysBetween, toIcs, type Suivi, type SuiviAction } from "../core/suivi.ts";
 import type { Goto, PdfQuality, Power, RunResult, Settings, State } from "../renderer/api-types.ts";
 import { compressImage } from "./image.ts";
 import { IMAGE_EXT, mergeToPdf, PDF_EXT, suggestPdfName } from "./pdf.ts";
 import { ShareServer } from "./share.ts";
 import { cancelShutdown, listOutputs, ocr, readWifi, scheduleShutdown, setOutput, sleepNow } from "./windows.ts";
 import { runLaunchTest } from "./launch-test.ts";
+import { launchById, launcherRoot } from "./launcher.ts";
+import { recentFiles, type RecentRoot } from "./recent.ts";
 
 const APP_NAME = "Rayan's Outils";
 const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3) ?? null;
@@ -23,6 +26,7 @@ const dataDir = testReport
   : arg("donnees") || process.env.HANGAR_APP_DATA || path.join(app.getPath("appData"), "Rayans Outils");
 if (testReport) app.setPath("userData", path.join(dataDir, "electron"));
 const dataFile = path.join(dataDir, "outils.json");
+const suiviFile = path.join(dataDir, "suivi.json");
 
 const assets = path.join(__dirname, "..", "assets");
 const rendererHtml = path.join(__dirname, "renderer", "index.html");
@@ -40,6 +44,15 @@ let palette: BrowserWindow | null = null;
 let capture: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let quitting = false;
+let suivi: Suivi = normalizeSuivi(null);
+/** Pour le test : horloge, dossiers des fichiers récents et presse-papiers remplaçables, launcher factice. */
+export const testHooks = {
+  clock: () => Date.now(),
+  recentRoots: null as RecentRoot[] | null,
+  copied: [] as string[],
+  notified: [] as string[],
+  launcher: testReport ? path.join(dataDir, "launcher") : null as string | null,
+};
 
 const inbox = testReport ? path.join(dataDir, "recus") : path.join(app.getPath("downloads"), "Depuis le téléphone");
 const share = new ShareServer(inbox, () => {
@@ -82,8 +95,52 @@ function save() {
   fs.renameSync(tmp, dataFile);
 }
 
+function loadSuivi() {
+  for (const f of [suiviFile, `${suiviFile}.bak`]) {
+    try { suivi = normalizeSuivi(JSON.parse(fs.readFileSync(f, "utf8"))); return; } catch { /* suivant */ }
+  }
+}
+
+function saveSuivi() {
+  fs.mkdirSync(dataDir, { recursive: true });
+  const tmp = `${suiviFile}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify(suivi, null, 1));
+  if (fs.existsSync(suiviFile)) fs.copyFileSync(suiviFile, `${suiviFile}.bak`);
+  fs.renameSync(tmp, suiviFile);
+}
+
+export function suiviAction(a: SuiviAction) {
+  suivi = reduceSuivi(suivi, a, testHooks.clock());
+  try { saveSuivi(); } catch (e) { console.error(e); }
+  checkSuivi();
+  broadcast();
+  return state();
+}
+
+/** Abonnements renouvelés, liens de plus de 30 jours effacés, rappels d'échéances (3 jours avant). */
+export function checkSuivi() {
+  const now = testHooks.clock();
+  const today = iso(now);
+  const rolled = suivi.deadlines.map((d) => rollDeadline(d, today));
+  const kept = purgeBookmarks(suivi.bookmarks, now);
+  let changed = kept.length !== suivi.bookmarks.length || rolled.some((d, i) => d !== suivi.deadlines[i]);
+  suivi = { ...suivi, deadlines: rolled, bookmarks: kept };
+  for (const a of dueAlerts(suivi.deadlines, now)) {
+    notify(a.title, a.body, () => showMain({ tool: "echeance" }));
+    suivi = { ...suivi, deadlines: suivi.deadlines.map((d) => (d.id === a.deadlineId ? { ...d, notified: [...d.notified, a.key] } : d)) };
+    changed = true;
+  }
+  if (changed) { try { saveSuivi(); } catch (e) { console.error(e); } broadcast(); }
+}
+
+function copyText(t: string) {
+  if (testReport) testHooks.copied.push(t); else clipboard.writeText(t);
+}
+
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+
 export function state(): State {
-  return { settings, power, lastText, share: share.info && shareQr ? { ...share.info, qr: shareQr } : null, version: app.getVersion(), dataDir, shortcutOk };
+  return { settings, power, lastText, share: share.info && shareQr ? { ...share.info, qr: shareQr } : null, version: app.getVersion(), dataDir, shortcutOk, suivi, now: testHooks.clock() };
 }
 
 function broadcast() {
@@ -92,6 +149,7 @@ function broadcast() {
 }
 
 function notify(title: string, body: string, onClick?: () => void) {
+  testHooks.notified.push(`${title} : ${body}`);
   if (!Notification.isSupported() || testReport) return;
   const n = new Notification({ title, body, icon: path.join(assets, "icon.png"), silent: true });
   n.on("click", () => (onClick ? onClick() : showMain()));
@@ -104,6 +162,7 @@ function start() {
   app.setAppUserModelId("fr.rayan.outils");
   Menu.setApplicationMenu(null);
   load();
+  loadSuivi();
   if (power?.mode === "veille") armSleep();
 
   ipcMain.handle("etat", () => state());
@@ -131,7 +190,11 @@ function start() {
   ipcMain.handle("alim-annuler", () => cancelPower());
   ipcMain.on("montrer", (_e, p: string) => shell.showItemInFolder(p));
   ipcMain.on("ouvrir", (_e, p: string) => { void shell.openPath(p); });
-  ipcMain.on("copier", (_e, t: string) => clipboard.writeText(t));
+  ipcMain.on("copier", (_e, t: string) => copyText(t));
+  ipcMain.handle("suivi", (_e, a: SuiviAction) => suiviAction(a));
+  ipcMain.handle("recents", () => recentFiles(testHooks.recentRoots ?? undefined));
+  ipcMain.handle("ics", (e) => exportIcs(BrowserWindow.fromWebContents(e.sender)));
+  ipcMain.handle("ouvrir-lien", (_e, url: string) => { const u = normalizeUrl(url); if (u) void shell.openExternal(u); });
   ipcMain.on("quitter", () => { quitting = true; app.quit(); });
   ipcMain.on("capture-fin", (_e, rect) => void finishCapture(rect));
 
@@ -139,12 +202,14 @@ function start() {
   createMain(!atLogin);
   registerShortcut();
   applyLoginItem();
+  checkSuivi();
+  setInterval(checkSuivi, 15 * 60_000);
 
   app.on("before-quit", () => { quitting = true; void share.stop(); });
   app.on("will-quit", () => globalShortcut.unregisterAll());
   app.on("window-all-closed", () => { /* l'application vit dans la zone de notification */ });
 
-  if (testReport) runLaunchTest(testReport, { getMain: () => win, getPalette: () => palette, getTray: () => tray, state, runCommand, share, dataDir, openPalette });
+  if (testReport) runLaunchTest(testReport, { getMain: () => win, getPalette: () => palette, getTray: () => tray, state, runCommand, share, dataDir, openPalette, suiviAction, checkSuivi, testHooks, suiviFile });
 }
 
 export function updateSettings(patch: Partial<Settings>): State {
@@ -218,7 +283,7 @@ export function openPalette() {
 
 export async function runCommand(text: string): Promise<RunResult> {
   const c = parse(text);
-  if (!c) return { ok: false, message: "Commande inconnue. Essayez : pdf, img 1mo, tel, wifi, son, texte, eteins 45." };
+  if (!c) return { ok: false, message: "Commande inconnue. Essayez : pdf, img 1mo, tel, son, eteins 45, echeance, garde, fait, colle, bosse…" };
   const go = (g: Goto): RunResult => { palette?.hide(); showMain(g); return { ok: true, close: true }; };
   switch (c.tool) {
     case "pdf": return go({ tool: "pdf" });
@@ -241,7 +306,69 @@ export async function runCommand(text: string): Promise<RunResult> {
       await schedulePower(c.mode, c.minutes);
       return { ok: true, close: true };
     }
+    case "echeance": return commandDeadline(c.text, go);
+    case "garde": return commandBookmark(c.text, go);
+    case "fait": return commandChore(c.text, go);
+    case "recent": return go({ tool: "recent" });
+    case "colle": {
+      if (!c.text.trim()) return go({ tool: "colle" });
+      const sn = byName(suivi.snippets, c.text);
+      if (!sn) {
+        const names = suivi.snippets.map((x) => x.name).join(", ");
+        return { ok: false, message: names ? `Aucun texte « ${c.text.trim()} ». Textes : ${names}.` : "Aucun texte enregistré : tapez « colle » pour en créer." };
+      }
+      copyText(sn.text);
+      return { ok: true, close: true, message: `« ${sn.name} » copié.` };
+    }
+    case "bosse": return openApp("rayans-bosse", "Rayan's Bosse", c.text.trim() ? [`--projet=${c.text.trim()}`] : []);
+    case "aujourdhui": return openApp("rayans-aujourdhui", "Rayan's Aujourd'hui");
+    case "sauve": return openApp("rayans-sauve", "Rayan's Sauve");
   }
+}
+
+async function openApp(id: string, label: string, args: string[] = []): Promise<RunResult> {
+  try {
+    await launchById(id, args, label, testHooks.launcher ?? launcherRoot());
+    return { ok: true, close: true };
+  } catch (e) {
+    return { ok: false, message: String((e as Error).message ?? e) };
+  }
+}
+
+function commandDeadline(text: string, go: (g: Goto) => RunResult): RunResult {
+  if (!text.trim()) return go({ tool: "echeance" });
+  const now = testHooks.clock();
+  const { name, date } = splitNameDate(text, now);
+  if (!name || !date) return go({ tool: "echeance", text: name || text, message: date ? undefined : "Date non reconnue : choisissez-la ici (ou tapez par exemple « echeance Netflix 15/12 »)." });
+  suiviAction({ type: "deadline-save", deadline: { id: uid(), name, date, cancelBy: null, recurrence: "aucune", amount: "", note: "" } });
+  return { ok: true, message: `${name} : ${formatDay(date, now)} (${inDays(daysBetween(iso(now), date))}). Rappel 3 jours avant.` };
+}
+
+async function commandBookmark(text: string, go: (g: Goto) => RunResult): Promise<RunResult> {
+  let { url, reason } = parseBookmark(text);
+  // « garde pour le mémoire » avec un lien copié : on prend le lien du presse-papiers.
+  if (!url && !testReport) url = normalizeUrl(String(await clipboard.readText()).trim());
+  if (!url) return go({ tool: "garde", message: text.trim() ? "Pas de lien reconnu : copiez-le puis tapez « garde » suivi de la raison." : undefined });
+  suiviAction({ type: "bookmark-add", id: uid(), url, reason });
+  return { ok: true, message: `Gardé : ${hostOf(url)}${reason ? ` (${reason})` : ""}. Effacé dans 30 jours.` };
+}
+
+function commandChore(text: string, go: (g: Goto) => RunResult): RunResult {
+  if (!text.trim()) return go({ tool: "fait" });
+  const before = byName(suivi.chores, text);
+  const prev = before ? choreStatus(before, testHooks.clock()) : null;
+  suiviAction({ type: "chore-done", id: uid(), name: text.trim() });
+  if (!before) return { ok: true, message: `« ${text.trim()} » noté aujourd'hui. Nouvelle tâche : à refaire tous les 30 jours (modifiable dans Entretien).` };
+  return { ok: true, message: `${before.name} : noté aujourd'hui${prev?.days !== null && prev?.days !== undefined ? ` (la fois d'avant : ${sinceText(prev.days)})` : ""}.` };
+}
+
+async function exportIcs(parent: BrowserWindow | null) {
+  if (!suivi.deadlines.length) throw new Error("Aucune échéance à exporter.");
+  const opts = { title: "Exporter les échéances pour l'agenda", defaultPath: path.join(app.getPath("downloads"), "echeances.ics"), filters: [{ name: "Calendrier", extensions: ["ics"] }] };
+  const r = parent ? await dialog.showSaveDialog(parent, opts) : await dialog.showSaveDialog(opts);
+  if (r.canceled || !r.filePath) return null;
+  fs.writeFileSync(r.filePath, toIcs(suivi.deadlines, testHooks.clock()));
+  return r.filePath;
 }
 
 // ----- Outils -----------------------------------------------------------------------------------

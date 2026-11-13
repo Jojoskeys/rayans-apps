@@ -1,7 +1,7 @@
 // Barre de commande : un champ, les outils qui correspondent, Entrée pour lancer, Échap pour fermer.
 import { useEffect, useRef, useState } from "react";
-import { suggest, toolOf } from "../core/commands.ts";
-import { api, errText } from "./shared.tsx";
+import { fold, suggest, toolOf } from "../core/commands.ts";
+import { api, errText, useOutils } from "./shared.tsx";
 
 export function Palette() {
   const [text, setText] = useState("");
@@ -9,7 +9,12 @@ export function Palette() {
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
   const input = useRef<HTMLInputElement>(null);
-  const list = suggest(text);
+  const st = useOutils();
+  // « colle … » : les textes enregistrés dont le nom commence par ce qui est tapé.
+  const m = /^\s*(colle|coller)\s+(.*)$/i.exec(text);
+  const list = m && st
+    ? st.suivi.snippets.filter((x) => fold(x.name).startsWith(fold(m[2]))).map((x) => ({ id: `colle-${x.id}`, command: `colle ${x.name}`, title: x.name, hint: x.text.replace(/\s+/g, " ").slice(0, 70) }))
+    : suggest(text);
 
   useEffect(() => {
     const reset = () => { setText(""); setSel(0); setMsg(null); setBusy(false); setTimeout(() => input.current?.focus(), 0); };
@@ -24,7 +29,7 @@ export function Palette() {
     try {
       const r = await api.run(cmd);
       if (r.ok && r.close) api.hidePalette();
-      else if (r.message) setMsg({ text: r.message, ok: r.ok });
+      else if (r.message) { setMsg({ text: r.message, ok: r.ok }); if (r.ok) setText(""); }
     } catch (e) { setMsg({ text: errText(e), ok: false }); }
     finally { setBusy(false); }
   };
@@ -32,8 +37,9 @@ export function Palette() {
   const submit = () => {
     const first = text.trim().split(/\s+/)[0] ?? "";
     // Mot tapé reconnu : on lance tel quel (avec ses arguments) ; sinon la suggestion sélectionnée.
-    if (toolOf(first)) return run(text);
     const t = list[sel];
+    if (m && t) return run(t.command);
+    if (toolOf(first)) return run(text);
     if (t) return run(t.id === "img" || t.id === "eteins" ? t.id : t.command);
     setMsg({ text: "Commande inconnue.", ok: false });
   };
@@ -44,7 +50,7 @@ export function Palette() {
       else if (e.key === "ArrowDown") { e.preventDefault(); setSel((sel + 1) % Math.max(1, list.length)); }
       else if (e.key === "ArrowUp") { e.preventDefault(); setSel((sel - 1 + list.length) % Math.max(1, list.length)); }
     }}>
-      <input ref={input} data-testid="palette-champ" value={text} disabled={busy} placeholder="Tapez une commande : pdf, img 1mo, tel, wifi, son, texte, eteins 45…"
+      <input ref={input} data-testid="palette-champ" value={text} disabled={busy} placeholder="pdf, img 1mo, tel, son, eteins 45, echeance, garde, fait, colle, bosse…"
         onChange={(e) => { setText(e.target.value); setSel(0); setMsg(null); }}
         onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void submit(); } }} />
       {msg && <p className={`palette-message ${msg.ok ? "" : "erreur"}`}>{msg.text}</p>}

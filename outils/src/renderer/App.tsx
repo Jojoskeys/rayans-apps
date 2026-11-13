@@ -1,14 +1,19 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { choreStatus, daysBetween, iso, nextDate } from "../core/suivi.ts";
 import { TOOLS, type ToolId } from "../core/commands.ts";
 import type { Goto, State } from "./api-types.ts";
 import { api, IconClose, IconGear, IconImage, IconPdf, IconPhone, IconPower, IconSound, IconText, IconWifi, useOutils } from "./shared.tsx";
 import { OutilEteins, OutilImage, OutilPdf, OutilSon, OutilTel, OutilTexte, OutilWifi } from "./Tools.tsx";
+import { IconBookmark, IconBroom, IconCalendar, IconClipboard, IconClock, OutilColle, OutilEcheance, OutilFait, OutilGarde, OutilRecent } from "./Suivi.tsx";
 
 type Onglet = ToolId | "reglages";
-const ICONS: Record<ToolId, () => React.ReactElement> = {
+const ICONS: Partial<Record<ToolId, () => React.ReactElement>> = {
   pdf: () => <IconPdf />, img: () => <IconImage />, tel: () => <IconPhone />, wifi: () => <IconWifi />,
   son: () => <IconSound />, texte: () => <IconText />, eteins: () => <IconPower />,
+  echeance: () => <IconCalendar />, garde: () => <IconBookmark />, fait: () => <IconBroom />, recent: () => <IconClock />, colle: () => <IconClipboard />,
 };
+/** Les commandes qui ouvrent une autre application n'ont pas de panneau. */
+const PANELS = TOOLS.filter((t) => t.group !== "app");
 
 export const accelLabel = (a: string) => a.replace(/Control/g, "Ctrl").replace(/Space/g, "Espace").replace(/\+/g, " + ");
 
@@ -18,6 +23,8 @@ export function App() {
   const [goto, setGoto] = useState<Goto | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   useEffect(() => api.onGoto((g) => { setGoto({ ...g }); setOnglet(g.tool); }), []);
+  // Retards visibles dans la navigation : échéance dans 3 jours, tâche d'entretien en retard.
+  const today = s ? iso(s.now) : "";
   useEffect(() => { if (!toast) return; const id = setTimeout(() => setToast(null), 6000); return () => clearTimeout(id); }, [toast]);
   if (!s) return <div className="chargement">Chargement…</div>;
   const props = { s, goto, notify: setToast };
@@ -26,12 +33,17 @@ export function App() {
     <div className="app">
       <nav className="navigation-principale">
         <div className="marque"><img src="../../assets/icon.png" alt="" width={28} height={28} /><span>Rayan's Outils</span></div>
-        {TOOLS.map((t) => (
-          <button key={t.id} className={onglet === t.id ? "actif" : ""} onClick={() => { setGoto(null); setOnglet(t.id); }} aria-current={onglet === t.id ? "page" : undefined}>
-            {ICONS[t.id]()}<span>{t.title}</span>
+        {PANELS.map((t, i) => (
+          <Fragment key={t.id}>
+          {i > 0 && PANELS[i - 1].group !== t.group && <div className="separateur" />}
+          <button className={onglet === t.id ? "actif" : ""} onClick={() => { setGoto(null); setOnglet(t.id); }} aria-current={onglet === t.id ? "page" : undefined}>
+            {ICONS[t.id]?.()}<span>{t.title}</span>
+            {t.id === "echeance" && s.suivi.deadlines.some((d) => daysBetween(today, nextDate(d, today)) <= 3) && <i className="pastille" />}
+            {t.id === "fait" && s.suivi.chores.some((c) => choreStatus(c, s.now).late && c.done.length > 0) && <i className="pastille rouge" />}
             {t.id === "eteins" && s.power && <i className="pastille" />}
             {t.id === "tel" && s.share && <i className="pastille" />}
           </button>
+          </Fragment>
         ))}
         <div className="espace" />
         <button className={onglet === "reglages" ? "actif" : ""} onClick={() => setOnglet("reglages")}><IconGear /><span>Réglages</span></button>
@@ -45,6 +57,11 @@ export function App() {
         {onglet === "son" && <OutilSon {...props} />}
         {onglet === "texte" && <OutilTexte {...props} />}
         {onglet === "eteins" && <OutilEteins {...props} />}
+        {onglet === "echeance" && <OutilEcheance {...props} />}
+        {onglet === "garde" && <OutilGarde {...props} />}
+        {onglet === "fait" && <OutilFait {...props} />}
+        {onglet === "recent" && <OutilRecent {...props} />}
+        {onglet === "colle" && <OutilColle {...props} />}
         {onglet === "reglages" && <Reglages s={s} notify={setToast} />}
       </main>
       {toast && (

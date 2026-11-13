@@ -17,6 +17,15 @@ test("commandes tapées", () => {
   assert.deepEqual(parse("veille 20"), { tool: "eteins", mode: "veille", minutes: 20, cancel: false });
   assert.deepEqual(parse("redemarre 10"), { tool: "eteins", mode: "redemarrer", minutes: 10, cancel: false });
   assert.deepEqual(parse("eteins annuler"), { tool: "eteins", mode: "eteindre", minutes: null, cancel: true });
+  assert.deepEqual(parse("echeance Netflix 15/12"), { tool: "echeance", text: "Netflix 15/12" });
+  assert.deepEqual(parse("Échéance"), { tool: "echeance", text: "" });
+  assert.deepEqual(parse("garde exemple.fr pour plus tard"), { tool: "garde", text: "exemple.fr pour plus tard" });
+  assert.deepEqual(parse("fait vidange voiture"), { tool: "fait", text: "vidange voiture" });
+  assert.deepEqual(parse("recent"), { tool: "recent" });
+  assert.deepEqual(parse("colle iban"), { tool: "colle", text: "iban" });
+  assert.deepEqual(parse("bosse Mémoire de master"), { tool: "bosse", text: "Mémoire de master" });
+  assert.deepEqual(parse("aujourdhui"), { tool: "aujourdhui" });
+  assert.deepEqual(parse("sauvegarde"), { tool: "sauve" });
   assert.equal(parse("bonjour"), null);
   assert.equal(parse(""), null);
 });
@@ -36,7 +45,10 @@ test("tailles et durées", () => {
 });
 
 test("suggestions", () => {
-  assert.equal(suggest("").length, 7);
+  assert.equal(suggest("").length, 15);
+  assert.equal(suggest("ech")[0].id, "echeance");
+  assert.equal(suggest("abonnement")[0].id, "echeance");
+  assert.equal(suggest("sauvegarde")[0].id, "sauve");
   assert.equal(suggest("im")[0].id, "img");
   assert.equal(suggest("ete")[0].id, "eteins");
   assert.equal(suggest("veille")[0].id, "eteins");

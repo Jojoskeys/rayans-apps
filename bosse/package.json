@@ -1,0 +1,61 @@
+{
+  "name": "rayans-bosse",
+  "productName": "Rayans Bosse",
+  "version": "1.0.0",
+  "description": "Rayan's Bosse : un espace de travail par projet (applications, dossiers, sites) ouvert en un clic, avec Rayan's Chrono",
+  "main": "dist-app/main.cjs",
+  "license": "MIT",
+  "author": "Rayan",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "start": "npm run build && electron .",
+    "test": "node --test test/*.test.ts",
+    "icons": "node scripts/make-icons.mjs",
+    "dist:win": "npm run build && electron-builder --win --x64 --publish never",
+    "test:lancement": "node scripts/test-lancement.mjs"
+  },
+  "build": {
+    "appId": "fr.rayan.bosse",
+    "productName": "Rayans Bosse",
+    "copyright": "Licence MIT",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist-app/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "electronLanguages": [
+      "fr",
+      "en-US"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Rayans-Bosse-${version}-Windows-x64.${ext}"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "electron": "44.10.0",
+    "electron-builder": "26.18.0",
+    "esbuild": "0.28.2",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "typescript": "5.9.2"
+  }
+}

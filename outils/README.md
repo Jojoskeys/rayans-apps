@@ -1,6 +1,6 @@
 # Rayan's Outils
 
-Sept petits outils derrière une barre de commande. **Ctrl + Alt + Espace** (modifiable) ouvre la barre de
+Sept petits outils, cinq petites listes et trois raccourcis vers d'autres apps, derrière une barre de commande. **Ctrl + Alt + Espace** (modifiable) ouvre la barre de
 commande. Vous tapez la commande, Entrée lance l'outil, Échap ferme la barre. Un clic sur l'icône de la zone de
 notification ouvre aussi la barre de commande. Electron + React + TypeScript.
 
@@ -13,6 +13,27 @@ notification ouvre aussi la barre de commande. Electron + React + TypeScript.
 | `son`, `son casque`, `casque` | Sortie audio | `son` passe à la sortie suivante, `son <nom>` choisit par le nom (« casque », « enceintes » ou un morceau du nom). |
 | `texte` | Copier le texte de l'écran | Vous tracez un rectangle sur l'écran, Windows reconnaît le texte (OCR intégré, langues du profil) et le copie. |
 | `eteins 45`, `eteins 1h30`, `veille 20`, `redemarre 10`, `eteins annuler` | Éteindre plus tard | L'extinction et le redémarrage sont confiés à Windows (`shutdown /t`) : ils ont lieu même si l'application est fermée. La veille est déclenchée par l'application. |
+
+### Listes de suivi
+
+| Commande | Panneau | Ce qui se passe |
+| --- | --- | --- |
+| `echeance`, `echeance Netflix 15/12` | Échéances et abonnements | Nom, date, date limite de résiliation, répétition (mois, an), montant, note. Dates comprises : `15/12`, `15/12/2027`, `15 décembre`, `demain`, `dans 10 jours`, `dans 3 mois`. Notification 3 jours avant la date de résiliation et 3 jours avant l'échéance, une seule fois. Un abonnement passé avance tout seul à la période suivante. **Exporter pour l'agenda** : fichier `.ics` (événements d'une journée, répétition, alarme 3 jours avant) à envoyer sur le téléphone avec `tel`. |
+| `garde exemple.fr/article pour le mémoire`, `garde` | À lire plus tard | Le lien et la raison. Sans lien tapé, `garde` prend le lien copié. Bouton « Lu ». Chaque lien est effacé 30 jours après avoir été gardé. |
+| `fait vidange`, `fait` | Entretien | Note la date du jour pour la tâche (créée si elle n'existe pas, à refaire tous les 30 jours par défaut). Affiche depuis combien de temps, passe en rouge au-delà de l'intervalle. « Annuler » retire la dernière date. |
+| `recent` | Fichiers récents | Les 20 derniers fichiers créés dans Téléchargements, Bureau, Documents (2 niveaux) et Images\Screenshots ; ouvrir le fichier ou son dossier. Les téléchargements en cours sont ignorés. |
+| `colle iban`, `colle` | Textes à coller | Copie le texte enregistré sous ce nom (nom entier ou début, sans accents ni majuscules) : il reste à faire Ctrl + V. En tapant `colle `, la barre propose les textes. Les textes sont en clair dans `suivi.json` : pas de mot de passe. |
+
+### Autres applications
+
+| Commande | Ce qui se passe |
+| --- | --- |
+| `bosse <projet>` | Ouvre l'espace de travail du projet dans Rayan's Bosse (applications, dossiers, sites, Chrono sur le projet). `bosse` seul ouvre Rayan's Bosse. |
+| `aujourdhui` | Ouvre Rayan's Aujourd'hui (ce qu'il reste à réviser). |
+| `sauve` | Ouvre Rayan's Sauve (sauvegarde). |
+
+Ces applications sont lancées comme le fait Rayan's Launcher (même dossier de données), d'après
+`%LOCALAPPDATA%\fr.rayan.launcher\installed.json`. Si l'une n'est pas installée, la barre le dit.
 
 ## Comment ça marche
 
@@ -29,8 +50,9 @@ notification ouvre aussi la barre de commande. Electron + React + TypeScript.
 
 ## Données
 
-`outils.json` (raccourci, réglages, minuterie en cours) dans le dossier fourni par Rayan's Launcher
-(`HANGAR_APP_DATA`), sinon `%APPDATA%\Rayans Outils`. « Démarrer avec Windows » est désactivé par défaut. Activez-le
+`outils.json` (raccourci, réglages, minuterie en cours) et `suivi.json` (+ `.bak` : échéances, liens, entretien,
+textes) dans le dossier fourni par Rayan's Launcher (`HANGAR_APP_DATA`), sinon `%APPDATA%\Rayans Outils`. Les
+rappels d'échéances sont vérifiés au démarrage puis toutes les 15 minutes, tant que l'application tourne. « Démarrer avec Windows » est désactivé par défaut. Activez-le
 pour que le raccourci marche dès l'ouverture de session.
 
 ## Développement
@@ -38,14 +60,16 @@ pour que le raccourci marche dès l'ouverture de session.
 ```bash
 npm install
 npm start               # construit et lance
-npm test                # commandes, compression, réseau
+npm test                # commandes, dates, échéances, .ics, liens, entretien, compression, réseau
 npm run typecheck
-npm run test:lancement  # barre de commande, PDF, image, partage HTTP, QR ; hors CI aussi son, Wi-Fi et OCR (lecture seule)
+npm run test:lancement  # barre de commande, echeance/garde/fait/colle/recent/bosse, PDF, image, partage HTTP, QR ;
+                        # hors CI aussi son, Wi-Fi et OCR (lecture seule)
 npm run dist:win        # ZIP Windows dans dist/
 npm run icons
 ```
 
-Le test de lancement ne déclenche jamais de minuterie d'arrêt et ne change pas la sortie audio. La sélection à la
+Le test de lancement ne déclenche jamais de minuterie d'arrêt, ne change pas la sortie audio, ne touche pas au
+presse-papiers et ne lance aucune autre application. La sélection à la
 souris de la zone à lire n'est pas automatisée. L'OCR, lui, est vérifié sur une image fabriquée.
 
 Le workflow `.github/workflows/outils.yml` vérifie, construit, lance le paquet comme un double-clic et publie le ZIP

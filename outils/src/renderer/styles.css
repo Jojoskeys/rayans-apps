@@ -133,6 +133,41 @@ body.vue-capture { background: #000; overflow: hidden; cursor: crosshair; }
 .capture-zone { position: absolute; border: 2px solid var(--accent); box-shadow: 0 0 0 9999px rgba(0, 0, 0, .35); background: transparent; }
 .capture-aide { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); background: var(--panneau); border: 1px solid var(--bord); border-radius: 10px; padding: 8px 14px; color: var(--texte); }
 
+/* ----- Listes de suivi : échéances, à lire, entretien, récents, textes ----- */
+.separateur { height: 1px; background: var(--bord); margin: 6px 10px; }
+.pastille.rouge { background: var(--rouge); }
+.outil > header.entete { flex-direction: row; justify-content: space-between; align-items: flex-start; }
+.formulaire { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.formulaire label { display: flex; flex-direction: column; gap: 5px; color: var(--texte-2); font-size: 13px; }
+.formulaire label small { color: var(--texte-3); }
+.formulaire .large { grid-column: span 2; }
+.actions-form { grid-column: 1 / -1; display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
+.flexible { flex: 1; min-width: 180px; }
+input[type="number"] { width: 72px; }
+input.mini { width: 56px; padding: 1px 4px; margin: 0 4px; font-size: 12px; }
+.liste-suivi { list-style: none; margin: 0; padding: 6px; display: flex; flex-direction: column; background: var(--panneau); border: 1px solid var(--bord); border-radius: var(--rayon); }
+.liste-suivi li { display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 10px; }
+.liste-suivi li + li { border-top: 1px solid color-mix(in srgb, var(--bord) 60%, transparent); }
+.liste-suivi li:hover { background: var(--panneau-2); }
+.liste-suivi .principal { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
+.liste-suivi .principal small { color: var(--texte-3); }
+.liste-suivi .quand { color: var(--texte-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.liste-suivi li.proche .quand { color: var(--orange); font-weight: 600; }
+.liste-suivi li.passee .quand, .liste-suivi li.en-retard .quand { color: var(--rouge); font-weight: 600; }
+.liste-suivi li.en-retard { box-shadow: inset 3px 0 0 var(--rouge); }
+.liste-suivi li.ok .quand { color: var(--vert); }
+.liste-suivi li.lu { opacity: .55; }
+.discret { color: var(--texte-3); }
+.badge { font-size: 11px; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); border-radius: 99px; padding: 0 7px; margin-left: 8px; }
+.lien-titre { color: var(--texte); font-weight: 600; text-align: left; padding: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lien-titre:hover { color: var(--accent); text-decoration: underline; }
+.lien-titre .discret { font-weight: 400; }
+.bouton.petit { padding: 5px 10px; font-size: 13px; }
+.textes li { align-items: flex-start; }
+.textes .principal { gap: 6px; align-items: stretch; }
+.nom-texte { font-weight: 600; width: 220px; }
+@media (max-width: 960px) { .formulaire { grid-template-columns: 1fr 1fr; } .navigation-principale .separateur { margin: 4px; } }
+
 @media (max-width: 960px) {
   .app { grid-template-columns: 64px 1fr; }
   .navigation-principale span, .raccourci { display: none; }

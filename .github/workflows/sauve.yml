@@ -1,0 +1,97 @@
+# Rayan's Sauve (sauve) : vérification du typage, tests unitaires, paquet Windows, lancement du paquet comme un double-clic
+# (vraie sauvegarde robocopy, deuxième passage, miroir, rappel des 7 jours),
+# puis ZIP prêt pour Rayan's Launcher (avec sa fiche rayans-launcher.json) dans les « Artifacts ».
+name: Rayan's Sauve
+
+on:
+  push:
+    paths:
+      - 'sauve/**'
+      - '.github/workflows/sauve.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows 64 bits
+    runs-on: windows-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+        working-directory: sauve
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      ELECTRON_BUILDER_PUBLISH: never
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm ci
+      - name: Typage TypeScript
+        run: npm run typecheck
+      - name: Tests unitaires (sources, robocopy, rappel)
+        run: npm test
+      # Version : majeur.mineur de package.json, correctif = numéro d'exécution de la CI. Chaque construction est
+      # ainsi une mise à jour pour Rayan's Launcher.
+      - name: Version de la construction
+        id: version
+        run: |
+          V=$(node -p "const [a,b]=require('./package.json').version.split('.'); a+'.'+b+'.'+process.env.GITHUB_RUN_NUMBER")
+          echo "Version : $V"
+          echo "v=$V" >> "$GITHUB_OUTPUT"
+      - name: Construction du paquet
+        run: |
+          npm run build
+          npx electron-builder --win --x64 --publish never -c.extraMetadata.version=${{ steps.version.outputs.v }}
+      - name: Lancement du paquet comme un double-clic
+        env:
+          SAUVE_CAPTURES: ${{ github.workspace }}/sauve/resultats/captures
+        run: node scripts/test-lancement.mjs "dist/win-unpacked/Rayans Sauve.exe"
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: rayans-sauve-captures
+          path: sauve/resultats/
+          if-no-files-found: ignore
+      # Rayan's Launcher : fiche rayans-launcher.json ajoutée à la racine du ZIP. Le launcher la lit quand le ZIP
+      # est déposé dans « Documents\Rayan's Launcher\À ajouter » ou choisi avec « Ajouter un ZIP ».
+      - name: Paquet pour Rayan's Launcher
+        shell: pwsh
+        run: |
+          $v = '${{ steps.version.outputs.v }}'
+          $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $fiche = [ordered]@{
+            id = 'rayans-sauve'
+            name = "Rayan's Sauve"
+            description = 'Sauvegarde des données des applications et des Documents vers un disque externe ou OneDrive, avec rappel au bout de 7 jours.'
+            version = $v
+            releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+            executable = 'Rayans Sauve.exe'
+          }
+          [IO.File]::WriteAllText("$PWD/rayans-launcher.json", ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          $zip = Get-Item "dist/Rayans-Sauve-$v-Windows-x64.zip"
+          Compress-Archive -Path rayans-launcher.json -DestinationPath $zip.FullName -Update
+          New-Item -ItemType Directory -Force launcher | Out-Null
+          Copy-Item $zip.FullName "launcher/Rayans-Sauve-$v.zip"
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Rayans-Sauve-pour-le-launcher
+          path: sauve/launcher/*.zip
+          compression-level: 0
+
+  # Sur main seulement : release GitHub + catalogue signé de Rayan's Launcher (voir launcher/README.md).
+  publier:
+    name: Publication dans Rayan's Launcher
+    needs: windows
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/rayans-launcher-publier.yml
+    with:
+      artifact: Rayans-Sauve-pour-le-launcher
+      icon: sauve/build/icon.png
+    secrets: inherit

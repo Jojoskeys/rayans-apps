@@ -1,4 +1,5 @@
 import type { PowerMode, ToolId } from "../core/commands.ts";
+import type { RecentFile, Suivi, SuiviAction } from "../core/suivi.ts";
 
 export type PdfQuality = "legere" | "normale" | "originale";
 
@@ -23,6 +24,9 @@ export interface State {
   version: string;
   dataDir: string;
   shortcutOk: boolean;
+  /** Échéances, liens à lire, entretien, textes à coller. */
+  suivi: Suivi;
+  now: number;
 }
 
 export interface Goto { tool: ToolId; targetKo?: number | null; text?: string | null; message?: string }
@@ -56,6 +60,10 @@ export interface OutilsApi {
   openPath(p: string): void;
   copy(text: string): void;
   quit(): void;
+  suivi(a: SuiviAction): Promise<State>;
+  recents(): Promise<RecentFile[]>;
+  exportIcs(): Promise<string | null>;
+  openUrl(url: string): void;
   // Fenêtre de sélection (capture d'écran pour l'OCR)
   onCaptureImage(cb: (dataUrl: string) => void): () => void;
   captureDone(rect: { x: number; y: number; width: number; height: number } | null): void;

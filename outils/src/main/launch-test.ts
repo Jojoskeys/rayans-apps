@@ -7,6 +7,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 import type { RunResult, State } from "../renderer/api-types.ts";
+import { addDays, iso, type SuiviAction } from "../core/suivi.ts";
+import type { RecentRoot } from "./recent.ts";
 import { compressImage } from "./image.ts";
 import { mergeToPdf } from "./pdf.ts";
 import type { ShareServer } from "./share.ts";
@@ -21,6 +23,10 @@ interface Hooks {
   share: ShareServer;
   dataDir: string;
   openPalette(): void;
+  suiviAction(a: SuiviAction): State;
+  checkSuivi(): void;
+  testHooks: { clock: () => number; recentRoots: RecentRoot[] | null; copied: string[]; notified: string[] };
+  suiviFile: string;
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -66,9 +72,9 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
 
   (async () => {
     const w = (await waitFor("fenêtre principale", () => h.getMain()))!;
-    await waitFor("interface chargée", async () => (await js<number>(w, `document.querySelectorAll('.navigation-principale button').length`)) === 8);
+    await waitFor("interface chargée", async () => (await js<number>(w, `document.querySelectorAll('.navigation-principale button').length`)) === 13);
     report.uiLoaded = true;
-    step("interface affichée : 7 outils + réglages");
+    step("interface affichée : 7 outils, 5 listes de suivi + réglages");
 
     // Barre de commande
     h.openPalette();
@@ -83,6 +89,84 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     if (!img.ok) throw new Error("img 500ko refusé");
     await waitFor("outil image ouvert avec 500 Ko", () => js<boolean>(w, `document.querySelector('[data-testid="cible"]')?.value === "500 Ko"`), 5000);
     step("« img 500ko » ouvre l'outil image réglé sur 500 Ko ; « bonjour » est refusé");
+
+    // ----- Suivi : echeance, garde, fait, colle, recent, bosse -----
+    const DAY = 86_400_000;
+    const now = Date.now();
+    const in2 = iso(now + 2 * DAY);
+    const typed = `${in2.slice(8)}/${in2.slice(5, 7)}`;
+    h.testHooks.notified.length = 0;
+    const e1 = await h.runCommand(`echeance Essai gratuit Canal+ ${typed}`);
+    const ech = h.state().suivi.deadlines[0];
+    if (!e1.ok || ech?.name !== "Essai gratuit Canal+" || ech.date !== in2) throw new Error(`echeance : ${JSON.stringify(e1)} ${JSON.stringify(ech)}`);
+    // Le rappel part dès l'ajout (l'échéance est dans 2 jours), puis plus jamais.
+    h.checkSuivi();
+    h.checkSuivi();
+    if (h.testHooks.notified.length !== 1 || !h.testHooks.notified[0].includes("Essai gratuit Canal+")) throw new Error(`rappel d'échéance : ${h.testHooks.notified.join(" / ")}`);
+    step(`« echeance Essai gratuit Canal+ ${typed} » : ajoutée (« ${e1.message} »), rappel envoyé une fois : « ${h.testHooks.notified[0]} »`);
+    const e2 = await h.runCommand("echeance Assurance");
+    if (!e2.ok) throw new Error("echeance sans date");
+    await waitFor("formulaire prérempli", () => js<boolean>(w, `document.querySelector('[data-testid="echeance-nom"]')?.value === "Assurance"`), 5000);
+    await typeInto(w, '[data-testid="echeance-date"]', addDays(iso(now), 40));
+    await js(w, `document.querySelector('[data-testid="echeance-ajouter"]').click()`);
+    await waitFor("échéance ajoutée depuis le panneau", () => h.state().suivi.deadlines.length === 2, 5000);
+    await waitFor("liste des échéances", () => js<boolean>(w, `document.querySelectorAll('[data-testid="echeances"] li').length === 2`), 5000);
+    step("« echeance Assurance » (sans date) ouvre le panneau prérempli ; date choisie, ajoutée : 2 échéances, la plus proche en premier");
+
+    const g = await h.runCommand("garde exemple.fr/article?id=3 pour le mémoire");
+    const bm = h.state().suivi.bookmarks[0];
+    if (!g.ok || bm?.url !== "https://exemple.fr/article?id=3" || bm.reason !== "le mémoire") throw new Error(`garde : ${JSON.stringify(bm)}`);
+    h.suiviAction({ type: "bookmark-read", id: bm.id, read: true });
+    if (!h.state().suivi.bookmarks[0].readAt) throw new Error("marquer comme lu");
+    h.testHooks.clock = () => now + 31 * DAY;
+    h.checkSuivi();
+    if (h.state().suivi.bookmarks.length !== 0) throw new Error("lien non effacé après 30 jours");
+    h.testHooks.clock = () => Date.now();
+    step(`« garde exemple.fr/article?id=3 pour le mémoire » : https:// ajouté, raison « ${bm.reason} », marqué lu, effacé au bout de 30 jours`);
+
+    const f1 = await h.runCommand("fait vidange");
+    h.testHooks.clock = () => now + 45 * DAY;
+    const f2 = await h.runCommand("fait Vidange");
+    const ch = h.state().suivi.chores;
+    if (ch.length !== 1 || ch[0].done.length !== 2 || !f2.message?.includes("45 jours")) throw new Error(`fait : ${JSON.stringify(ch)} ${f2.message}`);
+    h.testHooks.clock = () => now + 100 * DAY;
+    h.suiviAction({ type: "chore-save", chore: { ...ch[0], intervalDays: 30 } });
+    await tab(w, "Entretien");
+    await waitFor("tâche en retard", () => js<boolean>(w, `document.querySelector('[data-testid="taches"] li')?.classList.contains("en-retard")`), 5000);
+    h.testHooks.clock = () => Date.now();
+    step(`« fait vidange » : ${f1.message} Puis 45 jours plus tard : « ${f2.message} » ; en rouge après 30 jours`);
+
+    h.suiviAction({ type: "snippet-save", snippet: { id: "s1", name: "IBAN", text: "FR76 3000 6000 0112 3456 7890 189" } });
+    h.suiviAction({ type: "snippet-save", snippet: { id: "s2", name: "Adresse", text: "12 rue des Lilas\n75020 Paris" } });
+    const c1 = await h.runCommand("colle iban");
+    if (!c1.ok || h.testHooks.copied.at(-1) !== "FR76 3000 6000 0112 3456 7890 189") throw new Error("colle iban");
+    const c2 = await h.runCommand("colle adr");
+    if (!c2.ok || !h.testHooks.copied.at(-1)?.startsWith("12 rue")) throw new Error("colle adr (début du nom)");
+    const c3 = await h.runCommand("colle rib");
+    if (c3.ok || !c3.message?.includes("IBAN")) throw new Error("colle inconnu");
+    step(`« colle iban » et « colle adr » copient le texte ; « colle rib » : « ${c3.message} »`);
+
+    const recentDir = path.join(h.dataDir, "telechargements");
+    fs.mkdirSync(path.join(recentDir, "sous-dossier"), { recursive: true });
+    for (const [i, n] of ["ancien.pdf", "facture.pdf", "sous-dossier/photo.jpg", "en-cours.crdownload"].entries()) {
+      fs.writeFileSync(path.join(recentDir, n), "x".repeat(100 * (i + 1)));
+      await sleep(30);
+    }
+    h.testHooks.recentRoots = [{ label: "Téléchargements", path: recentDir, depth: 1 }];
+    const rc = await h.runCommand("recent");
+    if (!rc.ok) throw new Error("recent");
+    await waitFor("fichiers récents", () => js<number>(w, `document.querySelectorAll('[data-testid="recents"] li').length`).then((n) => n === 3), 8000);
+    const first = await js<string>(w, `document.querySelector('[data-testid="recents"] li .lien-titre').textContent`);
+    if (first !== "photo.jpg") throw new Error(`fichier le plus récent : ${first}`);
+    step("« recent » : 3 fichiers (téléchargement en cours ignoré), le plus récent en premier, sous-dossier compris");
+
+    const b = await h.runCommand("bosse mémoire");
+    if (b.ok || !b.message?.includes("Rayan's Bosse n'est pas installée")) throw new Error(`bosse : ${JSON.stringify(b)}`);
+    step(`« bosse mémoire » sans Rayan's Bosse installée : « ${b.message} »`);
+
+    const saved = JSON.parse(fs.readFileSync(h.suiviFile, "utf8"));
+    if (saved.deadlines?.length !== 2 || saved.snippets?.length !== 2) throw new Error("suivi.json non enregistré");
+    step(`listes enregistrées dans ${h.suiviFile}`);
 
     // Fichiers d'essai
     const dir = path.join(h.dataDir, "essais");
@@ -161,10 +245,10 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
       fs.mkdirSync(captures, { recursive: true });
       w.setSize(1060, 720);
       w.show();
-      for (const [i, label] of ["Fusionner en PDF", "Alléger une image", "Échanger avec le téléphone", "Éteindre plus tard", "Réglages"].entries()) {
+      for (const [i, label] of ["Fusionner en PDF", "Alléger une image", "Échanger avec le téléphone", "Éteindre plus tard", "Réglages", "Échéances et abonnements", "Entretien", "Textes à coller"].entries()) {
         await tab(w, label);
         await sleep(500);
-        try { fs.writeFileSync(path.join(captures, `${i + 1}.png`), (await w.webContents.capturePage()).toPNG()); } catch { /* bonus */ }
+        try { fs.writeFileSync(path.join(captures, `${i < 5 ? i + 1 : i + 2}.png`), (await w.webContents.capturePage()).toPNG()); } catch { /* bonus */ }
       }
       h.openPalette();
       await typeInto(p, '[data-testid="palette-champ"]', "");

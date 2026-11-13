@@ -12,6 +12,9 @@ Minuteur Pomodoro et suivi du temps par projet, pour Windows (Electron + React +
 - **Mini-fenêtre** compacte toujours au-dessus des autres, et **icône dans la zone de notification** (rouge : travail,
   verte : pause, grise : arrêté ; clic droit pour démarrer, passer, ouvrir la mini-fenêtre ou quitter).
   Fermer la fenêtre garde le minuteur actif (réglable).
+- **`--projet=<nom>`** (utilisé par Rayan's Bosse) : sélectionne ce projet (créé ou désarchivé au besoin, nom sans
+  tenir compte des accents ni des majuscules), saute une pause Pomodoro à l'arrêt et démarre le minuteur. Si Chrono
+  tourne déjà, il change simplement de projet ; lancé ainsi, il reste discret dans la zone de notification.
 
 ## Données
 

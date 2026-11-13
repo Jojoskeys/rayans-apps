@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createData, normalizeData, reduce, remaining, phaseMs, liveEntry } from "../src/core/engine.ts";
+import { createData, normalizeData, reduce, remaining, phaseMs, liveEntry, workOn, projectByName } from "../src/core/engine.ts";
 import type { Action, AppData, ChronoEvent } from "../src/core/types.ts";
 
 const MIN = 60_000;
@@ -210,4 +210,33 @@ test("lecture d'un fichier abîmé : données invalides écartées, reste conser
   assert.equal(d.timer.status, "arret", "chrono « en marche » sans début : arrêté");
   assert.equal(d.selection.projectId, "p1");
   assert.equal(normalizeData(null, ctx).projects[0].name, "Général");
+});
+
+test("--projet : crée ou retrouve le projet, le sélectionne et démarre", () => {
+  let n = 0;
+  const ctx = { now: T0, newId: () => `w${++n}` };
+  let d = createData(ctx);
+  let r = workOn(d, "Mémoire", ctx);
+  d = r.data;
+  const p = projectByName(d, "memoire")!;
+  assert.ok(p, "projet créé, retrouvé sans accent ni majuscule");
+  assert.equal(d.selection.projectId, p.id);
+  assert.equal(d.timer.status, "marche");
+  assert.equal(d.timer.phase, "travail");
+  // Déjà en marche sur ce projet : rien ne change, pas de doublon.
+  r = workOn(d, "MÉMOIRE", { ...ctx, now: T0 + MIN });
+  assert.equal(r.data.projects.filter((x) => x.name === "Mémoire").length, 1);
+  // Pause Pomodoro à l'arrêt : sautée pour travailler tout de suite.
+  d = reduce(d, { type: "pause" }, ctx).data;
+  d = reduce(d, { type: "skip" }, ctx).data;
+  assert.deepEqual([d.timer.phase, d.timer.status], ["pause", "arret"]);
+  d = workOn(d, "Mémoire", ctx).data;
+  assert.equal(d.timer.phase, "travail");
+  assert.equal(d.timer.status, "marche");
+  // Projet archivé : désarchivé.
+  const id = projectByName(d, "Mémoire")!.id;
+  d = reduce(d, { type: "updateProject", id, archived: true }, ctx).data;
+  d = workOn(d, "mémoire", ctx).data;
+  assert.equal(d.projects.find((x) => x.id === id)!.archived, false);
+  assert.equal(workOn(d, "  ", ctx).changed, false);
 });

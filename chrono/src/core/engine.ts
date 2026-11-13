@@ -404,3 +404,36 @@ function reselect(d: AppData, ctx: Ctx, events: ChronoEvent[]) {
   d.selection = { projectId: p.id, taskId: null };
   if (running) d.timer.segmentStart = ctx.now;
 }
+
+// ----- Travailler sur un projet nommé (--projet=<nom>, envoyé par Rayan's Bosse) ----------------
+
+const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+
+/** Projet dont le nom est `name` (sans tenir compte des accents ni des majuscules), archivés compris. */
+export function projectByName(d: AppData, name: string): Project | null {
+  const n = fold(name);
+  if (!n) return null;
+  const all = d.projects.filter((p) => fold(p.name) === n);
+  return all.find((p) => !p.archived) ?? all[0] ?? null;
+}
+
+/**
+ * Sélectionne le projet nommé (créé s'il n'existe pas, désarchivé s'il l'était) et démarre le minuteur.
+ * En Pomodoro, une pause à l'arrêt est sautée pour démarrer directement une phase de travail.
+ */
+export function workOn(data: AppData, name: string, ctx: Ctx): Result {
+  if (!name.trim()) return { data, events: [], changed: false };
+  let r: Result = { data, events: [], changed: false };
+  const step = (a: Action) => {
+    const x = reduce(r.data, a, ctx);
+    r = { data: x.data, events: [...r.events, ...x.events], changed: r.changed || x.changed };
+  };
+  let p = projectByName(r.data, name);
+  if (!p) { step({ type: "addProject", name: name.trim() }); p = projectByName(r.data, name)!; }
+  if (p.archived) step({ type: "updateProject", id: p.id, archived: false });
+  step({ type: "select", projectId: p.id, taskId: null });
+  const t = r.data.timer;
+  if (t.mode === "pomodoro" && t.status !== "marche" && t.phase !== "travail") step({ type: "skip" });
+  step({ type: "start" });
+  return r;
+}

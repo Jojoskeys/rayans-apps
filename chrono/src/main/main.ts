@@ -4,7 +4,7 @@ import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Notification, s
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { PHASE_LABEL, reduce, remaining, segmentElapsed } from "../core/engine.ts";
+import { PHASE_LABEL, reduce, remaining, segmentElapsed, workOn } from "../core/engine.ts";
 import { entriesCsv } from "../core/csv.ts";
 import { formatClock } from "../core/summary.ts";
 import type { Action, AppData, ChronoEvent } from "../core/types.ts";
@@ -38,13 +38,39 @@ let trayHintShown = false;
 if (!testReport && !app.requestSingleInstanceLock()) {
   app.quit();
 } else {
-  app.on("second-instance", () => showMain());
+  // Rayan's Bosse relance Chrono avec --projet=<nom> : si Chrono tourne déjà, l'argument arrive ici.
+  app.on("second-instance", (_e, argv) => {
+    const projet = projectArg(argv);
+    if (projet === null) showMain();
+    else onProject(projet);
+  });
   app.whenReady().then(start);
 }
 
 // ----- État -------------------------------------------------------------------------------------
 
 export function getData() { return data; }
+
+/** Valeur de --projet=<nom> dans une ligne de commande, ou null. */
+function projectArg(argv: string[]) {
+  const a = argv.find((x) => x.startsWith("--projet="));
+  return a ? a.slice("--projet=".length) : null;
+}
+
+/** Démarre le minuteur sur le projet nommé (créé au besoin) et le signale sans voler le premier plan. */
+export function onProject(name: string) {
+  const r = workOn(data, name, { now: Date.now(), newId });
+  if (r.changed) {
+    data = r.data;
+    for (const e of r.events) onEvent(e);
+    broadcast();
+    scheduleSave();
+  }
+  const p = data.projects.find((x) => x.id === data.selection.projectId);
+  if (p && Notification.isSupported() && !testReport) {
+    new Notification({ title: APP_NAME, body: `Chrono démarré sur « ${p.name} ».`, silent: true, icon: path.join(assets, "icon.png") }).show();
+  }
+}
 
 export function dispatch(action: Action) {
   const r = reduce(data, action, { now: Date.now(), newId });
@@ -110,7 +136,10 @@ function start() {
   ipcMain.handle("commande", (_e, cmd: Command) => command(cmd));
 
   createTray();
-  createMain(true);
+  const projet = projectArg(process.argv);
+  // Lancé par Rayan's Bosse : le chrono démarre sur le projet, la fenêtre reste discrète dans la zone de notification.
+  createMain(projet === null);
+  if (projet !== null) onProject(projet);
   setInterval(() => { dispatch({ type: "tick" }); updateTrayTooltip(); }, 250);
 
   app.on("before-quit", () => { quitting = true; saveNow(); });

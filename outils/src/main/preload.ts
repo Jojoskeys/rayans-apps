@@ -32,6 +32,10 @@ const api: OutilsApi = {
   openPath: (p) => ipcRenderer.send("ouvrir", p),
   copy: (t) => ipcRenderer.send("copier", t),
   quit: () => ipcRenderer.send("quitter"),
+  suivi: (a) => ipcRenderer.invoke("suivi", a),
+  recents: () => ipcRenderer.invoke("recents"),
+  exportIcs: () => ipcRenderer.invoke("ics"),
+  openUrl: (u) => ipcRenderer.invoke("ouvrir-lien", u),
   onCaptureImage: on("capture-image"),
   captureDone: (r) => ipcRenderer.send("capture-fin", r),
 };
