@@ -170,6 +170,25 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     step("fenêtre ouverte : ADE retéléchargé seulement après 15 minutes");
     if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "4-fac-ade-a-jour.png"), (await w.webContents.capturePage()).toPNG()); }
 
+    // ----- Routine : tâche ajoutée depuis la fenêtre, rappel à l'heure une seule fois, case cochée -----
+    await js(w, `document.querySelector('[data-testid="gerer-routine"]').click()`);
+    await waitFor("édition de la routine", () => js<boolean>(w, `!!document.querySelector('[data-testid="routine-edition"]')`), 5000);
+    await js(w, `window.aujourdhui.routine.add("30 min de sport", "08:30", [0,1,2,3,4,5,6])`);
+    await js(w, `window.aujourdhui.routine.add("Lire 20 pages", "", [0,1,2,3,4,5,6])`);
+    if (!fs.readFileSync(path.join(path.dirname(h.dataFile), "routine.json"), "utf8").includes("30 min de sport")) throw new Error("routine non enregistrée");
+    const avant = h.testHooks.sent.length;
+    h.testHooks.clock = () => at(8, 31);
+    h.refresh();
+    h.refresh();
+    const rappels = h.testHooks.sent.slice(avant);
+    if (rappels.length !== 1 || !rappels[0].includes("Rappel : 30 min de sport")) throw new Error(`rappels : ${JSON.stringify(rappels)}`);
+    await js(w, `document.querySelector('[data-testid="gerer-routine"]').click()`);
+    await waitFor("tâches du jour", async () => (await js<number>(w, `document.querySelectorAll('[data-testid="tache"]').length`)) === 2, 5000);
+    await js(w, `document.querySelector('[data-testid="tache"] input').click()`);
+    await waitFor("tâche cochée", () => js<boolean>(w, `document.querySelector('[data-testid="tache"]').classList.contains("fait")`), 5000);
+    step(`routine : 2 tâches, rappel « ${rappels[0]} » envoyé une fois, case cochée`);
+    if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6-routine.png"), (await w.webContents.capturePage()).toPNG()); }
+
     await js(w, `document.querySelector('[data-testid="bouton-reglages"]').click()`);
     await waitFor("réglages", () => js<boolean>(w, `!!document.querySelector('[data-testid="reglages"]')`), 5000);
     const reglagesFac = await text(w, '[data-testid="reglages-fac"]');

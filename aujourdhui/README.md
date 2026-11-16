@@ -18,6 +18,14 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 - **Zone de notification** : l'infobulle donne le détail ; le menu ouvre chaque application.
 - **Démarrer avec Windows** (réglages) : nécessaire pour que le rappel arrive sans ouvrir l'application.
 
+## Ma journée (routine)
+
+- Ce qu'on veut faire chaque jour, ou certains jours (L M M J V S D) : une case à cocher dans la vue du jour.
+- Avec une heure : **rappel Windows** à cette heure tant que ce n'est pas coché, une fois par jour (encore envoyé
+  jusqu'à 2 h après si l'ordinateur était éteint). Sans heure : juste la case.
+- Série : nombre de jours d'affilée où tout ce qui était prévu a été fait.
+- « Gérer » : ajouter, renommer, changer l'heure ou les jours, supprimer. Données : `routine.json`.
+
 ## Fac : Université de Rennes
 
 - **Emploi du temps ADE** : dans ADE (depuis l'ENT), cocher ses groupes, Partager → **Agenda**, date de fin = fin du
@@ -67,7 +75,7 @@ npm install
 npm start               # construit et lance
 npm test                # comptes de Révision, Hifz, Ouvertures ; rappel du soir ; ADE et mails
 npm run typecheck
-npm run test:lancement  # fausses données, nombres affichés, rappel envoyé une fois, changement de salle par mail, réglages
+npm run test:lancement  # fausses données, nombres affichés, rappel envoyé une fois, changement de salle par mail, routine, réglages
 npm run dist:win        # ZIP Windows dans dist/
 npm run icons           # redessine les icônes
 ```

@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { NAMES, totalLeft, type SourceCount, type SourceId } from "../core/counts.ts";
 import type { State } from "./api-types.ts";
 import { FacSettings, FacToday } from "./Fac.tsx";
+import { RoutineToday } from "./Routine.tsx";
 
 const api = window.aujourdhui;
 const errText = (e: unknown) => String((e as Error)?.message ?? e).replace(/^Error invoking remote method '[^']+': (Error: )?/, "");
@@ -48,6 +49,7 @@ export function App() {
 
       {!reglages ? (
         <>
+          <RoutineToday r={s.routine} now={s.updatedAt} notify={setToast} />
           <FacToday f={s.fac} now={s.updatedAt} notify={setToast} onSettings={() => setReglages(true)} />
           <h2 className="intertitre">Révisions</h2>
           <ul className="sources" data-testid="sources">

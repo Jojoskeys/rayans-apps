@@ -133,3 +133,25 @@ blockquote { margin: 0; border-left: 3px solid var(--accent); padding: 6px 12px;
 .fac-vide .bouton { margin-top: 2px; }
 .groupes { list-style: none; margin: 0; padding: 4px 0; width: 100%; max-height: 240px; overflow: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 14px; border-top: 1px solid var(--bord); border-bottom: 1px solid var(--bord); }
 .groupes .case span { flex-direction: row; gap: 6px; align-items: baseline; }
+
+/* ----- Routine ----- */
+.routine { width: 100%; }
+.routine .titre-ligne h2 .aide { font-weight: 400; }
+.routine-liste { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column; }
+.routine-liste li { padding: 8px 0; border-top: 1px solid var(--bord); }
+.routine-liste li:first-child { border-top: 0; }
+.routine-liste .case { align-items: center; gap: 12px; }
+.routine-heure { font-variant-numeric: tabular-nums; color: var(--texte-2); width: 44px; flex: none; }
+.routine-titre { flex: 1; }
+.routine-liste li.fait .routine-titre { text-decoration: line-through; color: var(--texte-3); }
+.routine-liste li.en-retard .routine-heure { color: var(--orange); }
+.routine-edition { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.ajout-tache { gap: 8px; }
+.jours { display: flex; gap: 4px; }
+.jours button { width: 30px; height: 30px; border-radius: 99px; border: 1px solid var(--bord); color: var(--texte-2); font-size: 12px; }
+.jours button.on { background: var(--accent); border-color: var(--accent); color: white; }
+.jours.petits button { width: 24px; height: 24px; font-size: 11px; }
+.routine-gestion { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.routine-gestion li { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; background: var(--panneau-2); border-radius: 10px; padding: 8px 10px; }
+.routine-gestion li .aide { grid-column: 1 / 3; font-size: 12px; }
+.lien.actif { color: var(--texte); }

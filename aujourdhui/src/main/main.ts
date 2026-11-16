@@ -10,6 +10,7 @@ import { launchById } from "./launcher.ts";
 import { readCounts, sourcePaths } from "./sources.ts";
 import { runLaunchTest } from "./launch-test.ts";
 import { defaultFetch, facView, fetchAde, setupFac } from "./fac.ts";
+import { checkRoutine, routineView, setupRoutine } from "./routine.ts";
 
 const APP_NAME = "Rayan's Aujourd'hui";
 const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3) ?? null;
@@ -73,7 +74,7 @@ function save() {
 }
 
 export function state(): State {
-  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView() };
+  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView(), routine: routineView() };
 }
 
 function broadcast() {
@@ -107,6 +108,7 @@ function start() {
   });
   ipcMain.on("ouvrir-dossier", (_e, p: string) => void shell.openPath(p));
   ipcMain.on("quitter", () => { quitting = true; app.quit(); });
+  setupRoutine({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast() });
   setupFac({ dataDir, clock: () => testHooks.clock(), fetchText: (u) => testHooks.fetchText(u), changed: () => broadcast() });
 
   createTray();
@@ -133,6 +135,7 @@ export function refresh() {
   const now = testHooks.clock();
   counts = readCounts(now, testHooks.paths);
   updatedAt = now;
+  checkRoutine();
   if (settings.reminder && reminderDue(now, settings.reminderHour, settings.reminderMinute, lastSentDay)) {
     lastSentDay = todayISO(now);
     try { save(); } catch (e) { console.error(e); }

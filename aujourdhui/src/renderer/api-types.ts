@@ -1,6 +1,15 @@
 import type { SourceCount, SourceId } from "../core/counts.ts";
 import type { CourseChange } from "../core/ics.ts";
 import type { Deadline, DisplayCourse, SharedMail } from "../core/fac.ts";
+import type { RoutineItem } from "../core/routine.ts";
+
+/** Routine : tâches de chaque jour, à cocher, avec rappel. */
+export interface RoutineView {
+  items: RoutineItem[];
+  today: (RoutineItem & { done: boolean })[];
+  streak: number;
+  day: string;
+}
 
 /** Fac : emploi du temps ADE et mails partagés, tels qu'affichés. */
 export interface FacView {
@@ -37,6 +46,7 @@ export interface State {
   paths: Record<SourceId, string>;
   today: string;
   fac: FacView;
+  routine: RoutineView;
 }
 
 export interface AujourdhuiApi {
@@ -48,6 +58,12 @@ export interface AujourdhuiApi {
   testNotification(): Promise<boolean>;
   openFolder(p: string): void;
   quit(): void;
+  routine: {
+    add(title: string, time: string, days: number[]): Promise<RoutineView>;
+    update(id: string, patch: { title?: string; time?: string; days?: number[] }): Promise<RoutineView>;
+    remove(id: string): Promise<RoutineView>;
+    toggle(id: string): Promise<RoutineView>;
+  };
   fac: {
     setUrl(url: string): Promise<FacView>;
     refresh(): Promise<FacView>;

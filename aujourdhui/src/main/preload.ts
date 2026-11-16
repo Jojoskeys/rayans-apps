@@ -15,6 +15,12 @@ const api: AujourdhuiApi = {
   testNotification: () => ipcRenderer.invoke("tester-notification"),
   openFolder: (p) => ipcRenderer.send("ouvrir-dossier", p),
   quit: () => ipcRenderer.send("quitter"),
+  routine: {
+    add: (t, h, d) => ipcRenderer.invoke("routine-ajouter", t, h, d),
+    update: (id, p) => ipcRenderer.invoke("routine-modifier", id, p),
+    remove: (id) => ipcRenderer.invoke("routine-supprimer", id),
+    toggle: (id) => ipcRenderer.invoke("routine-cocher", id),
+  },
   fac: {
     setUrl: (u) => ipcRenderer.invoke("fac-url", u),
     refresh: () => ipcRenderer.invoke("fac-actualiser"),
