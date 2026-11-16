@@ -1,6 +1,6 @@
 # Rayan's Aujourd'hui
 
-Le tableau du jour : ce qu'il reste à réviser dans Rayan's Révision, Rayan's Hifz et Rayan's Ouvertures, un bouton
+Le tableau du jour : les cours de la fac (emploi du temps ADE de l'Université de Rennes), ce qu'il reste à réviser dans Rayan's Révision, Rayan's Hifz et Rayan's Ouvertures, un bouton
 pour ouvrir chaque application, et une notification le soir s'il reste quelque chose. Electron + React + TypeScript.
 
 ## Ce qu'elle fait
@@ -18,6 +18,29 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 - **Zone de notification** : l'infobulle donne le détail ; le menu ouvre chaque application.
 - **Démarrer avec Windows** (réglages) : nécessaire pour que le rappel arrive sans ouvrir l'application.
 
+## Fac : Université de Rennes
+
+- **Emploi du temps ADE** : dans ADE (depuis l'ENT), cocher ses groupes, Partager → **Agenda**, date de fin = fin du
+  semestre, copier l'URL iCalendar et la coller dans Réglages → Fac. Aucun mot de passe.
+  - Téléchargé à l'ouverture de la fenêtre (au plus une fois toutes les 15 minutes) et avec le bouton ↻ ; rien
+    ne tourne quand la fenêtre est fermée.
+  - Un cours est reconnu par son identifiant ADE (`UID`) : une mise à jour remplace l'ancienne version, sans doublon.
+    La ligne « Exporté le » d'ADE est ignorée.
+  - Les changements depuis le téléchargement précédent (salle, horaire, cours ajouté ou retiré) sont signalés.
+- **Mails** : la messagerie Partage n'offre aux étudiants qu'IMAP avec le mot de passe Sésame (pas d'accès en lecture
+  seule ni d'OAuth), donc l'application ne se connecte pas à la boîte. On **partage un mail à la main** : texte collé
+  depuis le webmail ou fichier `.eml` déposé. L'analyse (salle, annulation, report, examen, devoir) se fait sur le PC
+  avec des règles simples (`src/core/mail.ts`).
+  - Chaque information devient une **proposition à valider** : rien ne change avant « Appliquer ».
+  - Une correction validée s'affiche avec la valeur d'ADE (« Salle corrigée d'après un mail · ADE : B12 »). Elle
+    disparaît quand ADE donne la même valeur ; si ADE passe à une troisième valeur, le conflit est signalé.
+  - Examens et devoirs validés vont dans « Échéances ».
+  - Un expéditeur absent de la liste (Réglages → Fac) est signalé.
+- **Données gardées** (`fac.json`, sur le PC) : l'URL ADE (jamais affichée en entier), les cours à venir, les
+  changements, et pour chaque mail l'expéditeur, l'objet, la date et un extrait d'une phrase ou deux, 30 jours.
+  Le webmail ne permet pas de lien direct vers un message : « Ouvrir le webmail » copie l'objet pour la recherche.
+- **iPhone** : ajouter la même URL ADE dans Calendrier (abonnement) ; les corrections et échéances restent sur le PC.
+
 ## Données lues
 
 Les fichiers des autres applications sont seulement lus, jamais modifiés :
@@ -31,7 +54,7 @@ Les fichiers des autres applications sont seulement lus, jamais modifiés :
 Les règles de calcul reprennent celles de chaque application (voir `src/core/counts.ts`). Si l'une change sa
 façon de compter, il faut mettre ce fichier à jour.
 
-Réglages : `aujourdhui.json` dans le dossier fourni par Rayan's Launcher (`HANGAR_APP_DATA`), sinon
+Réglages : `aujourdhui.json` (et `fac.json` pour la fac) dans le dossier fourni par Rayan's Launcher (`HANGAR_APP_DATA`), sinon
 `%APPDATA%\Rayans Aujourdhui`.
 
 ## Développement
@@ -39,9 +62,9 @@ Réglages : `aujourdhui.json` dans le dossier fourni par Rayan's Launcher (`HANG
 ```bash
 npm install
 npm start               # construit et lance
-npm test                # comptes de Révision, Hifz, Ouvertures ; rappel du soir
+npm test                # comptes de Révision, Hifz, Ouvertures ; rappel du soir ; ADE et mails
 npm run typecheck
-npm run test:lancement  # fausses données, nombres affichés, rappel envoyé une fois, réglages
+npm run test:lancement  # fausses données, nombres affichés, rappel envoyé une fois, changement de salle par mail, réglages
 npm run dist:win        # ZIP Windows dans dist/
 npm run icons           # redessine les icônes
 ```

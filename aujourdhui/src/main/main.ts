@@ -9,6 +9,7 @@ import type { Settings, State } from "../renderer/api-types.ts";
 import { launchById } from "./launcher.ts";
 import { readCounts, sourcePaths } from "./sources.ts";
 import { runLaunchTest } from "./launch-test.ts";
+import { defaultFetch, facView, fetchAde, setupFac } from "./fac.ts";
 
 const APP_NAME = "Rayan's Aujourd'hui";
 const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3) ?? null;
@@ -35,7 +36,9 @@ let win: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let quitting = false;
 /** Pour le test : horloge et emplacements des données remplaçables, notifications notées au lieu d'être affichées. */
-export const testHooks = { clock: () => Date.now(), paths: sourcePaths(), sent: [] as string[] };
+export const testHooks = { clock: () => Date.now(), paths: sourcePaths(), sent: [] as string[], fetchText: defaultFetch };
+// En test, l'horloge est fixée à 15 h dès le démarrage : sinon, lancé après 19 h, le rappel partirait avec la vraie heure.
+if (testReport) testHooks.clock = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 15).getTime(); };
 
 if (!testReport && !app.requestSingleInstanceLock()) {
   app.quit();
@@ -70,7 +73,7 @@ function save() {
 }
 
 export function state(): State {
-  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()) };
+  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView() };
 }
 
 function broadcast() {
@@ -104,12 +107,15 @@ function start() {
   });
   ipcMain.on("ouvrir-dossier", (_e, p: string) => void shell.openPath(p));
   ipcMain.on("quitter", () => { quitting = true; app.quit(); });
+  setupFac({ dataDir, clock: () => testHooks.clock(), fetchText: (u) => testHooks.fetchText(u), changed: () => broadcast() });
 
   createTray();
   createMain(!atLogin);
   applyLoginItem();
   refresh();
   setInterval(refresh, 60_000);
+  // Emploi du temps : à l'ouverture seulement (pas de téléchargement en arrière-plan quand la fenêtre est cachée).
+  if (!atLogin) void fetchAde();
 
   app.on("before-quit", () => { quitting = true; });
   app.on("window-all-closed", () => { /* l'application vit dans la zone de notification */ });
@@ -160,7 +166,7 @@ function createMain(show: boolean) {
   });
   win.loadFile(rendererHtml);
   win.once("ready-to-show", () => { if (show) win?.show(); });
-  win.on("focus", () => refresh());
+  win.on("focus", () => { refresh(); void fetchAde(); });
   win.on("close", (e) => {
     if (quitting) return;
     if (settings.closeToTray) { e.preventDefault(); win?.hide(); } else { quitting = true; app.quit(); }

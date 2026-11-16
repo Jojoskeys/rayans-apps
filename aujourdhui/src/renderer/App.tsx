@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { NAMES, totalLeft, type SourceCount, type SourceId } from "../core/counts.ts";
 import type { State } from "./api-types.ts";
+import { FacSettings, FacToday } from "./Fac.tsx";
 
 const api = window.aujourdhui;
 const errText = (e: unknown) => String((e as Error)?.message ?? e).replace(/^Error invoking remote method '[^']+': (Error: )?/, "");
@@ -43,6 +44,8 @@ export function App() {
 
       {!reglages ? (
         <>
+          <FacToday f={s.fac} now={s.updatedAt} notify={setToast} onSettings={() => setReglages(true)} />
+          <h2 className="intertitre">Révisions</h2>
           <ul className="sources" data-testid="sources">
             {s.counts.map((c) => <Source key={c.id} c={c} onOpen={() => api.openApp(c.id).then(() => setToast(`Rayan's ${NAMES[c.id]} s'ouvre…`)).catch((e) => setToast(errText(e)))} />)}
           </ul>
@@ -79,6 +82,7 @@ function Reglages({ s, notify }: { s: State; notify: (t: string) => void }) {
   const set = (p: Partial<State["settings"]>) => api.updateSettings(p);
   return (
     <section className="reglages" data-testid="reglages">
+      <FacSettings f={s.fac} notify={notify} />
       <div className="carte">
         <h2>Rappel du soir</h2>
         <label className="case"><input type="checkbox" checked={s.settings.reminder} onChange={(e) => set({ reminder: e.target.checked })} />

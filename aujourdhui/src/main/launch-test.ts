@@ -13,7 +13,7 @@ interface Hooks {
   state(): State;
   refresh(): void;
   updateSettings(p: Partial<Settings>): unknown;
-  testHooks: { clock: () => number; paths: Record<SourceId, string>; sent: string[] };
+  testHooks: { clock: () => number; paths: Record<SourceId, string>; sent: string[]; fetchText: (url: string) => Promise<string> };
   dataFile: string;
 }
 
@@ -55,6 +55,13 @@ function writeFixtures(dir: string, now: number) {
   return { revision: path.join(dir, "revision", "revision.json"), hifz: path.join(dir, "hifz", "hifz-donnees.json"), ouvertures: path.join(dir, "ouvertures", "joueurs") };
 }
 
+/** Faux flux ADE du jour : TD Analyse 10 h 15 dans `room`, CM 14 h, et un TD demain. */
+function adeFixture(day: Date, room: string) {
+  const z = (dd: number, h: number, m = 0) => new Date(day.getFullYear(), day.getMonth(), day.getDate() + dd, h, m).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const ev = (uid: string, a: string, b: string, t: string, l: string) => `BEGIN:VEVENT\r\nDTSTART:${a}\r\nDTEND:${b}\r\nSUMMARY:${t}\r\nLOCATION:${l}\r\nDESCRIPTION:\\nL3 Info TD2\\nDUPONT Marie\\n(Exporté le:${a})\r\nUID:${uid}\r\nEND:VEVENT\r\n`;
+  return `BEGIN:VCALENDAR\r\nVERSION:2.0\r\n${ev("ADE-1", z(0, 10, 15), z(0, 12, 15), "TD Analyse", room)}${ev("ADE-2", z(0, 14), z(0, 16), "CM Programmation fonctionnelle", "Amphi B")}${ev("ADE-3", z(1, 9), z(1, 11), "TD Anglais", "Salle 110")}END:VCALENDAR\r\n`;
+}
+
 export function runLaunchTest(reportPath: string, h: Hooks) {
   const report: Record<string, unknown> = {
     ok: false, uiLoaded: false, packaged: app.isPackaged, version: app.getVersion(),
@@ -68,6 +75,7 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
   const watchdog = setTimeout(() => { report.erreur = "délai global dépassé (90 s)"; finish(); }, 90_000);
 
   (async () => {
+    const dir = process.env.AUJOURDHUI_CAPTURES;
     // Fausses données, puis horloge à 15 h aujourd'hui (avant le rappel).
     const d = new Date();
     const at = (hh: number, mm = 0) => new Date(d.getFullYear(), d.getMonth(), d.getDate(), hh, mm).getTime();
@@ -103,6 +111,65 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     await waitFor("tout est fait", async () => (await text(w, '[data-testid="resume"]')) === "Tout est fait pour aujourd'hui", 5000);
     step("applications sans données : « Tout est fait pour aujourd'hui », pas de rappel");
 
+    // ----- Fac : l'exemple validé avec Rayan (changement de salle annoncé par mail) -----
+    h.testHooks.clock = () => at(8, 2);
+    let room = "B12";
+    const fetched: string[] = [];
+    h.testHooks.fetchText = async (u) => { fetched.push(u); return adeFixture(d, room); };
+    h.refresh();
+    await waitFor("invitation à relier ADE", () => js<boolean>(w, `!!document.querySelector('[data-testid="fac-a-configurer"]')`), 5000);
+    await js(w, `window.aujourdhui.fac.setUrl("https://planning.univ-rennes1.fr/jsp/custom/modules/plannings/test.shu")`);
+    await waitFor("cours affichés", async () => (await js<number>(w, `document.querySelectorAll('[data-testid="cours"]').length`)) === 2, 5000);
+    const salle = () => js<string>(w, `document.querySelector('[data-uid="ADE-1"] [data-testid="salle"]').textContent`);
+    if ((await salle()) !== "B12") throw new Error(`salle affichée : ${await salle()}`);
+    const facFile = path.join(path.dirname(h.dataFile), "fac.json");
+    if (!fs.readFileSync(facFile, "utf8").includes("test.shu")) throw new Error("adresse ADE non enregistrée");
+    if ((await js<string>(w, "document.body.innerText")).includes("test.shu")) throw new Error("adresse ADE affichée en entier");
+    step(`ADE relié : 2 cours aujourd'hui, TD Analyse en B12 (« ${await text(w, '[data-testid="fac-statut"]')} »)`);
+
+    await js(w, `document.querySelector('[data-testid="bouton-ajouter-mail"]').click()`);
+    const mail = "De : Secrétariat L3 Informatique <secretariat-l3info@univ-rennes.fr>\nObjet : TD Analyse - changement de salle\n\nBonjour,\n\nLe TD d'analyse de ce matin à 10h15 aura lieu en salle 004 du bâtiment 14 au lieu de la salle B12.\n\nCordialement";
+    await js(w, `window.aujourdhui.fac.addMail(${JSON.stringify(mail)})`);
+    await waitFor("proposition affichée", () => js<boolean>(w, `!!document.querySelector('[data-testid="proposition"][data-kind="salle"]')`), 5000);
+    if ((await salle()) !== "B12") throw new Error("salle changée avant validation");
+    const prop = await text(w, '[data-testid="proposition"]');
+    if (!prop.includes("B12") || !prop.includes("Salle 004 (bât. 14)")) throw new Error(`proposition : ${prop}`);
+    step(`mail partagé → proposition à valider, rien n'est encore modifié : « ${prop.slice(0, 140)} »`);
+    if (dir) { fs.mkdirSync(dir, { recursive: true }); w.show(); await sleep(600); fs.writeFileSync(path.join(dir, "2-fac-a-valider.png"), (await w.webContents.capturePage()).toPNG()); }
+
+    await js(w, `document.querySelector('[data-testid="appliquer"]').click()`);
+    await waitFor("salle corrigée", async () => (await salle()) === "Salle 004 (bât. 14)", 5000);
+    const badge = await text(w, '[data-uid="ADE-1"] [data-testid="correction"]');
+    if (!badge.includes("ADE : B12")) throw new Error(`badge : ${badge}`);
+    step(`validé → « Salle 004 (bât. 14) », badge « ${badge.trim()} »`);
+    await js(w, `[...document.querySelectorAll('[data-uid="ADE-1"] button.lien')].find(b => b.textContent === "Voir le mail").click()`);
+    await waitFor("source du mail", () => js<boolean>(w, `!!document.querySelector('[data-testid="source-mail"]')`), 5000);
+    const extrait = await text(w, '[data-testid="extrait"]');
+    if (!extrait.includes("salle 004")) throw new Error(`extrait : ${extrait}`);
+    if (fs.readFileSync(facFile, "utf8").includes("Cordialement")) throw new Error("texte complet du mail gardé");
+    step(`source : extrait « ${extrait} » ; le texte complet n'est pas gardé`);
+    if (dir) { await sleep(300); fs.writeFileSync(path.join(dir, "3-fac-source.png"), (await w.webContents.capturePage()).toPNG()); }
+    await js(w, `document.querySelector('.voile').click()`);
+
+    // ADE se met à jour (avec sa propre écriture de la salle) : la correction disparaît, le changement est signalé.
+    room = "B14-004";
+    await js(w, `window.aujourdhui.fac.refresh()`);
+    await waitFor("ADE à jour", async () => (await salle()) === "B14-004", 5000);
+    if (await js<boolean>(w, `!!document.querySelector('[data-uid="ADE-1"] [data-testid="correction"]')`)) throw new Error("correction restée après la mise à jour d'ADE");
+    const chg = await text(w, '[data-uid="ADE-1"] [data-testid="changement"]');
+    if (!chg.includes("B12 → B14-004")) throw new Error(`changement : ${chg}`);
+    step(`ADE mis à jour → correction retirée d'elle-même, badge « ${chg} »`);
+    // À l'ouverture de la fenêtre : pas plus d'un téléchargement toutes les 15 minutes.
+    const n = fetched.length;
+    w.emit("focus");
+    await sleep(300);
+    if (fetched.length !== n) throw new Error("ADE retéléchargé moins de 15 minutes après");
+    h.testHooks.clock = () => at(8, 20);
+    w.emit("focus");
+    await waitFor("téléchargement à l'ouverture", () => fetched.length === n + 1, 5000);
+    step("fenêtre ouverte : ADE retéléchargé seulement après 15 minutes");
+    if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "4-fac-ade-a-jour.png"), (await w.webContents.capturePage()).toPNG()); }
+
     await js(w, `document.querySelector('[data-testid="bouton-reglages"]').click()`);
     await waitFor("réglages", () => js<boolean>(w, `!!document.querySelector('[data-testid="reglages"]')`), 5000);
     h.updateSettings({ reminderHour: 20, reminderMinute: 30 });
@@ -115,7 +182,6 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     if (!tray || tray.isDestroyed()) throw new Error("icône de la zone de notification absente");
     step("icône de la zone de notification présente");
 
-    const dir = process.env.AUJOURDHUI_CAPTURES;
     if (dir) {
       fs.mkdirSync(dir, { recursive: true });
       h.testHooks.clock = () => at(15);

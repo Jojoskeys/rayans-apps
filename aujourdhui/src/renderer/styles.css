@@ -76,3 +76,58 @@ dt { color: var(--texte-2); }
 dd { margin: 0; }
 .ligne { display: flex; gap: 16px; align-items: center; width: 100%; }
 .toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); max-width: min(620px, 90vw); display: flex; gap: 10px; align-items: center; background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 12px; padding: 8px 8px 8px 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, .4); }
+
+/* ----- Fac ----- */
+textarea { font: inherit; color: inherit; width: 100%; background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 8px; padding: 8px 10px; resize: vertical; user-select: text; }
+textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); border-color: transparent; }
+input.large { flex: 1; min-width: 0; }
+h3 { font-size: 14px; margin: 6px 0 0; font-weight: 600; }
+.intertitre { color: var(--texte-2); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; margin: 4px 0 -8px; }
+.titre-ligne { display: flex; align-items: center; gap: 10px; width: 100%; }
+.titre-ligne h2 { flex: 1; }
+.titre-ligne h2::first-letter { text-transform: uppercase; }
+.statut { color: var(--texte-3); font-size: 12px; }
+.statut .erreur { font-size: 12px; }
+.icone.petit { width: 28px; height: 28px; }
+.fac, .fac .cours { width: 100%; }
+.cours { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.cours-ligne { display: grid; grid-template-columns: 56px 1fr; gap: 14px; padding: 10px 0; border-top: 1px solid var(--bord); }
+.cours-ligne:first-child { border-top: 0; padding-top: 2px; }
+.cours-ligne.passe { opacity: .5; }
+.cours-ligne.en-cours .heure { color: var(--accent); }
+.cours-ligne.annule b, .cours-ligne.annule .cours-titre, .cours-ligne.annule .salle { text-decoration: line-through; color: var(--texte-3); }
+.heure { font-variant-numeric: tabular-nums; font-weight: 600; display: flex; flex-direction: column; }
+.heure small { color: var(--texte-3); font-weight: 400; }
+.cours-texte { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.cours-titre { text-align: left; padding: 0; font-weight: 600; }
+.cours-titre:hover { text-decoration: underline; }
+.salle { margin: 0; color: var(--texte-2); }
+.details { margin: 4px 0 0; color: var(--texte-3); font-size: 12px; white-space: pre-line; user-select: text; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; padding: 2px 8px; border-radius: 99px; margin: 0; background: var(--panneau-2); color: var(--texte-2); width: fit-content; }
+.badge.orange { background: color-mix(in srgb, var(--orange) 18%, transparent); color: #F1C27A; }
+.badge.bleu { background: color-mix(in srgb, var(--accent) 18%, transparent); color: #9DBBF6; }
+.badge.rouge { background: color-mix(in srgb, var(--rouge) 18%, transparent); color: #F29A93; }
+.petits-liens { gap: 12px; font-size: 13px; }
+.compteur { display: inline-grid; place-items: center; min-width: 22px; height: 22px; border-radius: 99px; background: var(--accent); color: white; font-size: 12px; margin-left: 6px; vertical-align: 2px; }
+.propositions, .echeances { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.proposition { background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.proposition-tete { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.avant-apres { margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.avant-apres s { color: var(--texte-3); }
+.provenance { margin: 0; color: var(--texte-3); font-size: 12px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; user-select: text; }
+.echeances li { display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 10px; align-items: center; }
+.echeance-titre { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.quand { color: var(--texte-2); font-size: 13px; }
+.ligne-actions { display: flex; justify-content: center; }
+.ajout-mail.survol { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--panneau)); }
+.resultat { width: 100%; background: var(--panneau-2); border-radius: 10px; padding: 10px 14px; }
+.resultat ul { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.resultat p { margin: 0 0 6px; }
+.avertissement { color: #F1C27A; }
+.voile { position: fixed; inset: 0; background: rgba(0, 0, 0, .55); display: grid; place-items: center; padding: 24px; z-index: 10; }
+.source-mail { width: min(560px, 100%); max-height: 90vh; overflow: auto; }
+.source-mail dl div { grid-template-columns: 70px 1fr; }
+.source-mail dd { user-select: text; overflow-wrap: anywhere; }
+blockquote { margin: 0; border-left: 3px solid var(--accent); padding: 6px 12px; color: var(--texte); background: var(--panneau-2); border-radius: 0 8px 8px 0; user-select: text; width: 100%; }
+.fac-vide .bouton { margin-top: 2px; }
