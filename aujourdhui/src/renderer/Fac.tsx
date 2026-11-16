@@ -270,6 +270,8 @@ export function FacSettings({ f, notify }: { f: FacView; notify: (t: string) => 
       </div>
       <p className="aide">Actualisation à l'ouverture de la fenêtre (au plus toutes les 15 minutes) et avec le bouton ↻. Rien n'est téléchargé quand l'application est fermée.</p>
 
+      {f.availableGroups.length > 0 && <Groups f={f} notify={notify} />}
+
       <h3>Expéditeurs de la fac</h3>
       <p className="aide">Un par ligne : une adresse, ou <code>@univ-rennes.fr</code> pour tout le domaine. Un mail partagé venant d'ailleurs est signalé avant validation.</p>
       <textarea rows={3} value={senders} onChange={(e) => setSenders(e.target.value)} placeholder={"@univ-rennes.fr\nsecretariat-l3info@univ-rennes.fr"} />
@@ -283,6 +285,38 @@ export function FacSettings({ f, notify }: { f: FacView; notify: (t: string) => 
       <p className="aide"><b>Sur iPhone :</b> ajoute la même adresse ADE dans Réglages → Calendrier (ou Apps → Calendrier) → Comptes → Ajouter un compte → Autre → « Ajouter un calendrier avec abonnement ». C'est iOS qui choisit quand il actualise. Les corrections et échéances tirées des mails restent sur ce PC.</p>
       <button className="lien danger" onClick={() => { if (confirm("Oublier l'adresse ADE, l'emploi du temps, les mails partagés et les échéances ?")) api.fac.forget().then(() => notify("Données Fac effacées.")); }}>Oublier toutes les données Fac</button>
     </div>
+  );
+}
+
+/** Choix des groupes : utile quand le lien ADE couvre tout le parcours (tous les TD, tous les groupes d'anglais). */
+function Groups({ f, notify }: { f: FacView; notify: (t: string) => void }) {
+  const [sel, setSel] = useState<Set<string>>(new Set(f.groups));
+  const [q, setQ] = useState("");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => setSel(new Set(f.groups)), [f.groups.join("|")]);
+  const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+  const shown = f.availableGroups.filter((g) => !q || norm(g.name).includes(norm(q)));
+  const changed = [...sel].sort().join("|") !== [...f.groups].sort().join("|");
+  const toggle = (n: string) => setSel((s) => { const x = new Set(s); if (x.has(n)) x.delete(n); else x.add(n); return x; });
+  const save = async () => {
+    setBusy(true);
+    try { const v = await api.fac.setGroups([...sel]); notify(sel.size ? `Groupes enregistrés : ${v.courses.length} cours dans les 7 prochains jours.` : "Tous les cours du lien sont affichés."); } catch (e) { notify(errText(e)); } finally { setBusy(false); }
+  };
+  return (
+    <>
+      <h3>Mes groupes</h3>
+      <p className="aide">Coche tes groupes et le tronc commun (par exemple « L3 INFO-Parcours Informatique ») : seuls leurs cours sont affichés. Rien de coché : tout le lien. Les pauses méridiennes sont toujours masquées.</p>
+      <input className="large" placeholder="Filtrer (ex. G4, ESEC, Anglais)" value={q} onChange={(e) => setQ(e.target.value)} data-testid="filtre-groupes" />
+      <ul className="groupes" data-testid="groupes">
+        {shown.map((g) => (
+          <li key={g.name}><label className="case"><input type="checkbox" checked={sel.has(g.name)} onChange={() => toggle(g.name)} /><span>{g.name}<small>{g.count} cours</small></span></label></li>
+        ))}
+      </ul>
+      <div className="ligne">
+        <button className="bouton secondaire" disabled={busy || !changed} onClick={save}>{busy ? "Enregistrement…" : "Enregistrer les groupes"}</button>
+        <span className="aide">{sel.size} coché{sel.size > 1 ? "s" : ""}</span>
+      </div>
+    </>
   );
 }
 

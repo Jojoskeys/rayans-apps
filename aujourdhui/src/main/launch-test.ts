@@ -175,6 +175,11 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     const reglagesFac = await text(w, '[data-testid="reglages-fac"]');
     if (!reglagesFac.includes("planning.univ-rennes1.fr/…") || reglagesFac.includes("test.shu")) throw new Error("réglages Fac : adresse mal affichée");
     step("réglages Fac : adresse ADE raccourcie, expéditeurs, données gardées");
+    const groupes = await text(w, '[data-testid="groupes"]');
+    if (!groupes.includes("L3 Info TD2") || groupes.includes("DUPONT")) throw new Error(`groupes proposés : ${groupes}`);
+    const v = await js<{ courses: unknown[]; groups: string[] }>(w, `window.aujourdhui.fac.setGroups(["L3 Info TD2"])`);
+    if (v.groups[0] !== "L3 Info TD2" || v.courses.length !== 3) throw new Error(`filtre par groupe : ${v.courses.length} cours`);
+    step("groupes : « L3 Info TD2 » proposé (pas l'enseignant), filtre enregistré, 3 cours gardés");
     if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "5-reglages-fac.png"), (await w.webContents.capturePage()).toPNG()); }
     h.updateSettings({ reminderHour: 20, reminderMinute: 30 });
     await waitFor("heure du rappel", () => js<boolean>(w, `document.querySelector('input[type=time]').value === "20:30"`), 5000);

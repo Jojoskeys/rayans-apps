@@ -50,9 +50,36 @@ export interface FacData {
   mails: SharedMail[];
   overrides: Override[];
   deadlines: Deadline[];
+  /**
+   * Groupes gardés (noms tels qu'ADE les écrit dans la description des cours). Vide : tout le flux est gardé.
+   * Utile quand le lien ADE couvre tout un parcours : on ne garde que ses propres groupes et le tronc commun.
+   */
+  groups: string[];
+  /** Groupes trouvés dans le dernier téléchargement, avec leur nombre de cours, pour les réglages. */
+  availableGroups: { name: string; count: number }[];
 }
 
-export const EMPTY_FAC: FacData = { icsUrl: "", allowedSenders: [], courses: [], changes: [], lastFetch: 0, lastError: null, mails: [], overrides: [], deadlines: [] };
+export const EMPTY_FAC: FacData = { icsUrl: "", allowedSenders: [], courses: [], changes: [], lastFetch: 0, lastError: null, mails: [], overrides: [], deadlines: [], groups: [], availableGroups: [] };
+
+/** Une ligne de description ADE est-elle un enseignant (« NOM Prénom ») ou une mention technique ? */
+const notGroup = (l: string) => /^\(?(updated|export)/i.test(l) || /^[A-ZÀ-ÖØ-Þ' -]{2,} [A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ]/.test(l) || l.length > 60;
+/** Groupes cités dans la description d'un cours. */
+export const courseGroups = (c: Course) => c.details.split("\n").map((l) => l.trim()).filter((l) => l && !notGroup(l));
+
+/** Créneaux qui ne sont pas des cours (pause méridienne). */
+const NOT_A_COURSE = /^pause\b/i;
+
+/** Cours gardés : hors pauses, et, si des groupes sont choisis, ceux d'au moins un de ces groupes. */
+export function filterCourses(all: Course[], groups: string[]): Course[] {
+  const set = new Set(groups);
+  return all.filter((c) => !NOT_A_COURSE.test(c.title) && (!set.size || courseGroups(c).some((g) => set.has(g))));
+}
+
+export function listGroups(all: Course[]): { name: string; count: number }[] {
+  const m = new Map<string, number>();
+  for (const c of all) for (const g of courseGroups(c)) m.set(g, (m.get(g) ?? 0) + 1);
+  return [...m].map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name, "fr"));
+}
 
 const DAY = 86_400_000;
 /** Durée de conservation des mails partagés et des cours passés. */
@@ -63,15 +90,13 @@ export const KEEP_PAST_COURSES_DAYS = 1;
 function adeValue(c: Course, kind: Override["kind"]): string {
   return kind === "salle" ? c.room : kind === "horaire" ? `${c.start}-${c.end}` : "existe";
 }
-function overrideValue(o: Override): string {
-  return o.kind === "salle" ? o.room ?? "" : o.kind === "horaire" ? `${o.start}-${o.end}` : "annulé";
-}
 
 /**
  * Nouveau téléchargement ADE : changements repérés, et corrections revues. Une correction disparaît quand ADE
  * donne la même valeur que le mail ; elle passe en conflit quand ADE change vers une troisième valeur.
  */
-export function applyFetch(d: FacData, next: Course[], now: number): FacData {
+export function applyFetch(d: FacData, all: Course[], now: number): FacData {
+  const next = filterCourses(all, d.groups);
   const fresh = diffCourses(d.courses, next, now);
   const by = new Map(next.map((c) => [c.uid, c]));
   const overrides: Override[] = [];
@@ -87,7 +112,7 @@ export function applyFetch(d: FacData, next: Course[], now: number): FacData {
     if (v !== o.adeBefore && o.kind !== "annulation") overrides.push({ ...o, conflict: o.kind === "salle" ? c.room || "sans salle" : slot(c.start, c.end) });
     else overrides.push(o);
   }
-  return { ...d, courses: next.filter((c) => c.end > now - KEEP_PAST_COURSES_DAYS * DAY), changes: mergeChanges(d.changes, fresh, now), lastFetch: now, lastError: null, overrides };
+  return { ...d, courses: next.filter((c) => c.end > now - KEEP_PAST_COURSES_DAYS * DAY), changes: mergeChanges(d.changes, fresh, now), lastFetch: now, lastError: null, overrides, availableGroups: listGroups(all) };
 }
 
 export interface DisplayCourse extends Course {
@@ -222,6 +247,8 @@ export function sanitizeFac(raw: unknown): FacData {
     mails: arr<SharedMail>(r.mails, (x) => x && typeof x.id === "string" && Array.isArray(x.proposals)),
     overrides: arr<Override>(r.overrides, (x) => x && typeof x.courseUid === "string"),
     deadlines: arr<Deadline>(r.deadlines, (x) => x && typeof x.id === "string" && Number.isFinite(x.at)),
+    groups: arr<string>(r.groups, (x) => typeof x === "string"),
+    availableGroups: arr<{ name: string; count: number }>(r.availableGroups, (x) => x && typeof x.name === "string" && Number.isFinite(x.count)),
   };
 }
 

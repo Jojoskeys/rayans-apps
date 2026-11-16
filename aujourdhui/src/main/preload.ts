@@ -26,6 +26,7 @@ const api: AujourdhuiApi = {
     removeDeadline: (id) => ipcRenderer.invoke("fac-supprimer-echeance", id),
     removeMail: (id) => ipcRenderer.invoke("fac-supprimer-mail", id),
     setSenders: (l) => ipcRenderer.invoke("fac-expediteurs", l),
+    setGroups: (l) => ipcRenderer.invoke("fac-groupes", l),
     forget: () => ipcRenderer.invoke("fac-oublier"),
     openWebmail: (s) => ipcRenderer.invoke("fac-webmail", s),
   },

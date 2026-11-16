@@ -200,3 +200,22 @@ test("autres tournures de mails", () => {
   assert.equal(m.body, "Le TD d'anglais de demain est annulé.");
   assert.deepEqual(analyzeMail(m, d.courses, NOW).map((p) => [p.kind, p.courseUid]), [["annulation", "ADE60-3"]]);
 });
+
+test("filtre par groupes (lien ADE couvrant tout le parcours)", () => {
+  const grp = (uid: string, start: string, end: string, title: string, groups: string[]) =>
+    `BEGIN:VEVENT\r\nDTSTART:${start}\r\nDTEND:${end}\r\nSUMMARY:${title}\r\nLOCATION:B12\r\nDESCRIPTION:\\n${groups.join("\\n")}\\nDUPONT Marie\\n(Updated :12/11/2026 09:52)\r\nUID:${uid}\r\nEND:VEVENT\r\n`;
+  const all = parseIcs(cal(
+    grp("a", "20261117T084500Z", "20261117T101500Z", "LOG CM", ["L3 INFO-Parcours Informatique", "L3 INFO-Parcours Défi"]),
+    grp("b", "20261117T101500Z", "20261117T121500Z", "Pause Méridienne", ["L3 INFO-Parcours Informatique"]),
+    grp("c", "20261117T154500Z", "20261117T171500Z", "LOG G4 TD", ["L3 INFO-G4"]),
+    grp("d", "20261117T154500Z", "20261117T171500Z", "LOG G1 TD", ["L3 INFO-G1"]),
+    grp("e", "20261118T103000Z", "20261118T120000Z", "ANGLAIS F", ["L3 INFO et DÉFI -Anglais", "Anglais Gr F"]),
+    grp("f", "20261118T103000Z", "20261118T120000Z", "ANGLAIS A", ["L3 INFO et DÉFI -Anglais", "Anglais Gr A"]),
+  ));
+  const d = applyFetch({ ...EMPTY_FAC, groups: ["L3 INFO-Parcours Informatique", "L3 INFO-G4", "Anglais Gr F"] }, all, NOW);
+  assert.deepEqual(d.courses.map((c) => c.title), ["LOG CM", "LOG G4 TD", "ANGLAIS F"]);
+  // Les enseignants et les mentions « Updated » ne sont pas des groupes.
+  assert.deepEqual(d.availableGroups.map((g) => g.name), ["Anglais Gr A", "Anglais Gr F", "L3 INFO et DÉFI -Anglais", "L3 INFO-G1", "L3 INFO-G4", "L3 INFO-Parcours Défi", "L3 INFO-Parcours Informatique"]);
+  // Sans groupe choisi : tout, sauf la pause.
+  assert.equal(applyFetch(EMPTY_FAC, all, NOW).courses.length, 5);
+});

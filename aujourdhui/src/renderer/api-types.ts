@@ -15,6 +15,8 @@ export interface FacView {
   mails: SharedMail[];
   deadlines: Deadline[];
   allowedSenders: string[];
+  groups: string[];
+  availableGroups: { name: string; count: number }[];
   webmail: string;
 }
 
@@ -57,6 +59,7 @@ export interface AujourdhuiApi {
     removeDeadline(id: string): Promise<FacView>;
     removeMail(id: string): Promise<FacView>;
     setSenders(list: string[]): Promise<FacView>;
+    setGroups(list: string[]): Promise<FacView>;
     forget(): Promise<FacView>;
     openWebmail(subject: string): Promise<void>;
   };

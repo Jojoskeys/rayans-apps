@@ -27,6 +27,9 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
   - Un cours est reconnu par son identifiant ADE (`UID`) : une mise à jour remplace l'ancienne version, sans doublon.
     La ligne « Exporté le » d'ADE est ignorée.
   - Les changements depuis le téléchargement précédent (salle, horaire, cours ajouté ou retiré) sont signalés.
+  - **Mes groupes** : le lien d'ADE couvre toute la branche cochée (ex. tout le parcours, tous les groupes
+    d'anglais). On coche ses groupes tels qu'ADE les écrit dans la description des cours (« L3 INFO-G4 »,
+    « Anglais Gr F »…) et le tronc commun ; seuls leurs cours sont gardés. Les pauses méridiennes sont masquées.
 - **Mails** : la messagerie Partage n'offre aux étudiants qu'IMAP avec le mot de passe Sésame (pas d'accès en lecture
   seule ni d'OAuth), donc l'application ne se connecte pas à la boîte. On **partage un mail à la main** : texte collé
   depuis le webmail ou fichier `.eml` déposé. L'analyse (salle, annulation, report, examen, devoir) se fait sur le PC

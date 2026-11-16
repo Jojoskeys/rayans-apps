@@ -90,6 +90,9 @@ export function facView(): FacView {
     mails: data.mails,
     deadlines: data.deadlines,
     allowedSenders: data.allowedSenders,
+    groups: data.groups,
+    // Les groupes cités dans au moins 3 cours (le reste est surtout des notes de l'administration).
+    availableGroups: data.availableGroups.filter((g) => g.count >= 3 || data.groups.includes(g.name)),
     webmail: WEBMAIL_URL,
   };
 }
@@ -118,6 +121,12 @@ export function setupFac(c: Ctx) {
   h("fac-supprimer-echeance", (id: string) => removeDeadline(data, id));
   h("fac-supprimer-mail", (id: string) => removeMail(data, id));
   h("fac-expediteurs", (list: string[]) => ({ ...data, allowedSenders: [...new Set((Array.isArray(list) ? list : []).map((s) => String(s).trim().toLowerCase()).filter(Boolean))] }));
+  h("fac-groupes", async (list: string[]) => {
+    const groups = [...new Set((Array.isArray(list) ? list : []).map((s) => String(s).trim()).filter(Boolean))];
+    // Nouveau filtre : on repart d'un emploi du temps vierge pour ne pas signaler de faux ajouts ou retraits.
+    commit({ ...data, groups, courses: [], changes: [], lastFetch: 0 });
+    await fetchAde(true);
+  });
   h("fac-oublier", () => ({ ...EMPTY_FAC }));
   ipcMain.handle("fac-webmail", (_e, subject: unknown) => {
     // Le webmail ne permet pas d'ouvrir un message par lien direct : l'objet est copié pour la recherche.
