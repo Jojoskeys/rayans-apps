@@ -1,3 +1,6 @@
+// Les cours de test sont écrits en heure de Paris (UTC+1 en novembre) : même fuseau partout, CI comprise.
+process.env.TZ = "Europe/Paris";
+
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { checkIcsUrl, diffCourses, maskUrl, mergeChanges, parseIcs } from "../src/core/ics.ts";
