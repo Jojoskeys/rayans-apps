@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { parseTanzil, TOTAL_VERSES } from '../core/quran.ts';
 import { emptyData, normalizeData, type HifzData } from '../core/store.ts';
 import { todayISO } from '../core/dates.ts';
-import { api } from './api.ts';
+import { api, appUrl } from './api.ts';
 import { Ctx, type QuranText, type View } from './context.tsx';
 import { PlayerBar } from './PlayerBar.tsx';
 import { TodayView } from './views/Today.tsx';
@@ -16,7 +16,7 @@ import { demoData } from './demo.ts';
 
 async function loadText(): Promise<QuranText> {
   const get = async (f: string) => {
-    const r = await fetch(`hifz://app/data/${f}`);
+    const r = await fetch(appUrl(`data/${f}`));
     if (!r.ok) throw new Error(`${f} introuvable`);
     return r.text();
   };

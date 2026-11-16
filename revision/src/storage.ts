@@ -12,6 +12,10 @@ import { sampleDb } from "./core/sample";
 export const isTauri = typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
 const LS_KEY = "rayans-revision-db";
 
+/** Magasin synchronisé fourni par la web app Rayan's Mobile (iPhone), absent dans l'app Windows et en dev. */
+interface WebStore { load(app: string): Promise<string | null>; save(app: string, text: string): void }
+const webStore = (): WebStore | undefined => (typeof window !== "undefined" ? (window as unknown as { rayansStore?: WebStore }).rayansStore : undefined);
+
 export interface LoadResult {
   db: Db;
   /** Message à afficher (copie de secours utilisée, premier démarrage…). */
@@ -29,7 +33,9 @@ interface Loaded {
 export async function loadDb(): Promise<LoadResult> {
   const raw: Loaded = isTauri
     ? await invoke<Loaded>("load_db")
-    : { main: localStorage.getItem(LS_KEY), backup: null, dir: "localStorage (navigateur)" };
+    : webStore()
+      ? { main: await webStore()!.load("revision"), backup: null, dir: "cet appareil (synchronisé)" }
+      : { main: localStorage.getItem(LS_KEY), backup: null, dir: "localStorage (navigateur)" };
   if (raw.main !== null) {
     try {
       return { db: parseDb(raw.main), notice: null, firstRun: false, dir: raw.dir };
@@ -60,6 +66,7 @@ export async function loadDb(): Promise<LoadResult> {
 export async function saveDb(db: Db): Promise<void> {
   const text = JSON.stringify(db);
   if (isTauri) await invoke("save_db", { text, day: dayKey(Date.now(), db.settings.dayStartHour) });
+  else if (webStore()) webStore()!.save("revision", text);
   else localStorage.setItem(LS_KEY, text);
 }
 

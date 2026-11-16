@@ -26,6 +26,15 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 - Série : nombre de jours d'affilée où tout ce qui était prévu a été fait.
 - « Gérer » : ajouter, renommer, changer l'heure ou les jours, supprimer. Données : `routine.json`.
 
+## Synchronisation avec l'iPhone (Rayan's Mobile)
+
+Réglages → **Synchronisation avec l'iPhone** : dépôt GitHub privé (`Jojoskeys/rayans-donnees`) et jeton à accès
+limité (chiffré avec le compte Windows). Aujourd'hui sert de pont pour toutes les apps : Révision, Hifz, Chrono,
+Prière, Ouvertures (réponses aux exercices, et exercices publiés), Ma journée et les cours. Synchro au démarrage, à
+l'ouverture de la fenêtre et toutes les 15 minutes ; une app ouverte est synchronisée après sa fermeture ; une copie
+`.avant-synchro` est gardée avant chaque écriture. Règles de fusion : `mobile/src/shared/merge.ts`. Voir
+`mobile/README.md`.
+
 ## Fac : Université de Rennes
 
 - **Emploi du temps ADE** : dans ADE (depuis l'ENT), cocher ses groupes, Partager → **Agenda**, date de fin = fin du

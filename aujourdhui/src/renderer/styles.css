@@ -155,3 +155,18 @@ blockquote { margin: 0; border-left: 3px solid var(--accent); padding: 6px 12px;
 .routine-gestion li { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; background: var(--panneau-2); border-radius: 10px; padding: 8px 10px; }
 .routine-gestion li .aide { grid-column: 1 / 3; font-size: 12px; }
 .lien.actif { color: var(--texte); }
+
+/* ----- Téléphone (Rayan's Mobile sur iPhone) ----- */
+@media (max-width: 600px) {
+  .page { padding: calc(env(safe-area-inset-top) + 16px) 14px 72px; gap: 16px; }
+  h1 { font-size: 24px; }
+  .source { grid-template-columns: 40px 1fr auto; gap: 10px 12px; padding: 14px; }
+  .source .bouton { grid-column: 1 / -1; }
+  .pastille-source { width: 40px; height: 40px; }
+  .nombre { font-size: 30px; min-width: 40px; }
+  .echeances li { grid-template-columns: auto 1fr; }
+  .echeances .quand { grid-column: 2; }
+  .routine-gestion li { grid-template-columns: 1fr auto; }
+  input, textarea { font-size: 16px; }
+}
+.synchro-details { margin: 0; padding-left: 18px; }

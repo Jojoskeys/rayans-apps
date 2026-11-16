@@ -15,6 +15,11 @@ const api: AujourdhuiApi = {
   testNotification: () => ipcRenderer.invoke("tester-notification"),
   openFolder: (p) => ipcRenderer.send("ouvrir-dossier", p),
   quit: () => ipcRenderer.send("quitter"),
+  sync: {
+    configure: (r, t) => ipcRenderer.invoke("synchro-config", r, t),
+    now: () => ipcRenderer.invoke("synchro-maintenant"),
+    forget: () => ipcRenderer.invoke("synchro-oublier"),
+  },
   routine: {
     add: (t, h, d) => ipcRenderer.invoke("routine-ajouter", t, h, d),
     update: (id, p) => ipcRenderer.invoke("routine-modifier", id, p),

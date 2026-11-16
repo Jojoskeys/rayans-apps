@@ -3,6 +3,16 @@ import type { CourseChange } from "../core/ics.ts";
 import type { Deadline, DisplayCourse, SharedMail } from "../core/fac.ts";
 import type { RoutineItem } from "../core/routine.ts";
 
+/** Synchronisation avec l'iPhone (Rayan's Mobile) par un dépôt GitHub privé. */
+export interface SyncView {
+  configured: boolean;
+  repo: string;
+  state: "inactif" | "en-cours" | "a-jour" | "erreur";
+  message: string;
+  lastSync: number;
+  details: { name: string; result: string }[];
+}
+
 /** Routine : tâches de chaque jour, à cocher, avec rappel. */
 export interface RoutineView {
   items: RoutineItem[];
@@ -47,6 +57,7 @@ export interface State {
   today: string;
   fac: FacView;
   routine: RoutineView;
+  sync?: SyncView;
 }
 
 export interface AujourdhuiApi {
@@ -58,6 +69,11 @@ export interface AujourdhuiApi {
   testNotification(): Promise<boolean>;
   openFolder(p: string): void;
   quit(): void;
+  sync?: {
+    configure(repo: string, token: string): Promise<SyncView>;
+    now(): Promise<SyncView>;
+    forget(): Promise<SyncView>;
+  };
   routine: {
     add(title: string, time: string, days: number[]): Promise<RoutineView>;
     update(id: string, patch: { title?: string; time?: string; days?: number[] }): Promise<RoutineView>;

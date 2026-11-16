@@ -5,7 +5,7 @@ import { copyFileSync, mkdirSync, rmSync } from "node:fs";
 const out = "dist-app";
 rmSync(out, { recursive: true, force: true });
 mkdirSync(`${out}/renderer`, { recursive: true });
-const common = { bundle: true, logLevel: "warning", legalComments: "eof", minify: true, sourcemap: false };
+const common = { bundle: true, logLevel: "warning", legalComments: "eof", minify: true, sourcemap: false, nodePaths: ["node_modules"] };
 
 await Promise.all([
   build({ ...common, entryPoints: ["src/main/main.ts"], outfile: `${out}/main.cjs`, platform: "node", format: "cjs", target: "node22", external: ["electron"] }),

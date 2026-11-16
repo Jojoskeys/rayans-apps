@@ -3,6 +3,7 @@ import { NAMES, totalLeft, type SourceCount, type SourceId } from "../core/count
 import type { State } from "./api-types.ts";
 import { FacSettings, FacToday } from "./Fac.tsx";
 import { RoutineToday } from "./Routine.tsx";
+import { SyncSettings } from "./Sync.tsx";
 
 const api = window.aujourdhui;
 const errText = (e: unknown) => String((e as Error)?.message ?? e).replace(/^Error invoking remote method '[^']+': (Error: )?/, "");
@@ -89,6 +90,7 @@ function Reglages({ s, notify }: { s: State; notify: (t: string) => void }) {
   return (
     <section className="reglages" data-testid="reglages">
       <FacSettings f={s.fac} notify={notify} />
+      {s.sync && <SyncSettings v={s.sync} notify={notify} />}
       <div className="carte">
         <h2>Rappel du soir</h2>
         <label className="case"><input type="checkbox" checked={s.settings.reminder} onChange={(e) => set({ reminder: e.target.checked })} />

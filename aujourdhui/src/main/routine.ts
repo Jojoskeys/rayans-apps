@@ -64,3 +64,7 @@ export function setupRoutine(c: Ctx) {
 }
 
 export const routineInternals = { get data() { return data; }, file };
+
+/** Pour la synchronisation avec l'iPhone : texte actuel, et remplacement par la version fusionnée. */
+export const routineText = () => JSON.stringify(data);
+export function applyRoutineText(text: string) { commit(sanitizeRoutine(JSON.parse(text))); }

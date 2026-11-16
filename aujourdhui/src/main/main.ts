@@ -11,6 +11,7 @@ import { readCounts, sourcePaths } from "./sources.ts";
 import { runLaunchTest } from "./launch-test.ts";
 import { defaultFetch, facView, fetchAde, setupFac } from "./fac.ts";
 import { checkRoutine, routineView, setupRoutine } from "./routine.ts";
+import { setupSync, syncAll, syncView } from "./sync.ts";
 
 const APP_NAME = "Rayan's Aujourd'hui";
 const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3) ?? null;
@@ -74,7 +75,7 @@ function save() {
 }
 
 export function state(): State {
-  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView(), routine: routineView() };
+  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView(), routine: routineView(), sync: syncView() };
 }
 
 function broadcast() {
@@ -109,6 +110,7 @@ function start() {
   ipcMain.on("ouvrir-dossier", (_e, p: string) => void shell.openPath(p));
   ipcMain.on("quitter", () => { quitting = true; app.quit(); });
   setupRoutine({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast() });
+  if (!testReport) setupSync({ dataDir, changed: () => broadcast() });
   setupFac({ dataDir, clock: () => testHooks.clock(), fetchText: (u) => testHooks.fetchText(u), changed: () => broadcast() });
 
   createTray();
@@ -169,7 +171,7 @@ function createMain(show: boolean) {
   });
   win.loadFile(rendererHtml);
   win.once("ready-to-show", () => { if (show) win?.show(); });
-  win.on("focus", () => { refresh(); void fetchAde(); });
+  win.on("focus", () => { refresh(); void fetchAde(); if (!testReport && Date.now() - syncView().lastSync > 2 * 60_000) void syncAll("ouverture"); });
   win.on("close", (e) => {
     if (quitting) return;
     if (settings.closeToTray) { e.preventDefault(); win?.hide(); } else { quitting = true; app.quit(); }

@@ -1,0 +1,63 @@
+# Rayan's Mobile (mobile) : tests des règles de fusion, construction de la web app (accueil + Révision, Aujourd'hui,
+# Hifz, Prière, Chrono, Ouvertures, qui réutilisent le code des apps Windows), puis publication sur GitHub Pages
+# (https://jojoskeys.github.io/rayans-apps/). Aucune donnée personnelle ici : elles passent par le dépôt privé.
+name: Rayan's Mobile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/**'
+      - 'revision/src/**'
+      - 'revision/public/**'
+      - 'aujourdhui/src/**'
+      - 'coran-memorisation/src/**'
+      - 'coran-memorisation/data/**'
+      - 'coran-memorisation/fonts/**'
+      - 'priere/src/**'
+      - 'chrono/src/**'
+      - 'echecs-ouvertures/src/**'
+      - 'launcher/assets/hangar-logo.png'
+      - '.github/workflows/mobile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  construire:
+    name: Construction
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: npm ci
+      - name: Tests des règles de fusion
+        run: npm test
+      - name: Construction
+        run: npm run build
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: mobile/dist
+
+  publier:
+    name: Publication sur GitHub Pages
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4

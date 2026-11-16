@@ -56,10 +56,10 @@ function commit(next: FacData) {
 }
 
 /** Télécharge l'emploi du temps si l'adresse est réglée et que le dernier essai date de plus de 15 minutes. */
-export async function fetchAde(force = false): Promise<void> {
+export async function fetchAde(force = false, minInterval = MIN_INTERVAL): Promise<void> {
   const now = ctx.clock();
   if (!data.icsUrl || fetching) return;
-  if (!force && now - data.lastFetch < MIN_INTERVAL) return;
+  if (!force && now - data.lastFetch < minInterval) return;
   fetching = true;
   ctx.changed();
   try {
@@ -137,3 +137,7 @@ export function setupFac(c: Ctx) {
 
 /** Pour le test de lancement. */
 export const facInternals = { get data() { return data; }, file };
+
+/** Pour la synchronisation avec l'iPhone : texte actuel, et remplacement par la version fusionnée. */
+export const facText = () => JSON.stringify(data);
+export function applyFacText(text: string) { commit(sanitizeFac(JSON.parse(text))); }

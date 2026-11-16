@@ -246,3 +246,23 @@ ul.kv .sw { margin-left: 0; margin-right: 8px; }
   table.cards th:nth-child(3) { display: none; }
   table.cards td:nth-child(3) { display: none; }
 }
+
+/* ---------- téléphone (Rayan's Mobile sur iPhone, ou fenêtre étroite) */
+@media (max-width: 700px) {
+  .shell { flex-direction: column; height: auto; min-height: 100vh; }
+  .sidebar { width: 100%; flex-direction: row; align-items: center; gap: 6px; padding: calc(env(safe-area-inset-top) + 8px) 12px 8px; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; position: sticky; top: 0; z-index: 5; }
+  .brand { padding: 0 6px 0 0; flex-shrink: 0; }
+  .brand div { display: none; }
+  .nav-btn { white-space: nowrap; padding: 8px 10px; }
+  .sidebar-foot { margin: 0 0 0 auto; flex-shrink: 0; }
+  .sidebar-foot .btn { white-space: nowrap; padding-left: 12px; padding-right: 12px; }
+  .content { overflow: visible; }
+  .content.review-mode { min-height: 100vh; padding-top: env(safe-area-inset-top); }
+  .page { padding: 16px 14px 32px; gap: 18px; }
+  .page-head { flex-wrap: wrap; }
+  .tiles { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid-2, .two-col, .mcq { grid-template-columns: 1fr; }
+  .grades { grid-template-columns: repeat(2, 1fr); }
+  table.cards { display: block; overflow-x: auto; }
+  input, textarea, select { font-size: 16px; } /* évite le zoom automatique de Safari */
+}

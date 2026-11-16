@@ -7,6 +7,9 @@ on:
   push:
     paths:
       - 'aujourdhui/**'
+      - 'mobile/src/shared/merge.ts'
+      - 'echecs-ouvertures/src/core/**'
+      - 'echecs-ouvertures/data/openings.json'
       - '.github/workflows/aujourdhui.yml'
   workflow_dispatch:
 

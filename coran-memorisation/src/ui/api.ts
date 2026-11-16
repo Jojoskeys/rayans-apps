@@ -30,4 +30,7 @@ declare global {
 
 export const api = (): HifzApi => window.hifz;
 
-export const audioUrl = (name: string): string => `hifz://audio/${name}`;
+/** Version web (Rayan's Mobile sur iPhone) : fichiers servis à côté de la page, audio lu directement en ligne. */
+const web = (): boolean => typeof window !== 'undefined' && (window as unknown as { HIFZ_WEB?: boolean }).HIFZ_WEB === true;
+export const appUrl = (path: string): string => (web() ? path : `hifz://app/${path}`);
+export const audioUrl = (name: string): string => (web() ? `https://everyayah.com/data/Husary_128kbps/${name}` : `hifz://audio/${name}`);

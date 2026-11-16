@@ -1,0 +1,26 @@
+{
+  "name": "rayans-mobile",
+  "productName": "Rayan's Mobile",
+  "version": "1.0.0",
+  "description": "Rayan's Mobile : les apps de Rayan sur iPhone (web app installable), avec synchronisation par un dépôt GitHub privé",
+  "license": "MIT",
+  "author": "Rayan",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.ts",
+    "serve": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "chess.js": "1.4.0",
+    "chessground": "9.2.1",
+    "esbuild": "0.28.2",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "typescript": "5.9.2"
+  }
+}

@@ -133,3 +133,15 @@ button.icone:hover { background: var(--panneau-2); color: var(--texte); }
   .navigation-principale button { justify-content: center; }
   .infos { grid-template-columns: 1fr; }
 }
+
+/* Téléphone (Rayan's Mobile sur iPhone) : navigation en haut. */
+@media (max-width: 700px) {
+  html, body, #racine { height: auto; min-height: 100%; }
+  .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; min-height: 100vh; }
+  .navigation-principale { flex-direction: row; align-items: center; overflow-x: auto; padding: calc(env(safe-area-inset-top) + 6px) 8px 6px; border-right: 0; border-bottom: 1px solid var(--bord); position: sticky; top: 0; z-index: 5; }
+  .navigation-principale > :not(button) { display: none; }
+  .navigation-principale button { white-space: nowrap; flex-shrink: 0; padding: 8px 10px; }
+  .navigation-principale button.actif { box-shadow: inset 0 -3px 0 var(--accent); }
+  main, .contenu, .page { overflow: visible; }
+  input, select, textarea { font-size: 16px; }
+}

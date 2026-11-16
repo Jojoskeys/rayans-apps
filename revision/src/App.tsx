@@ -98,7 +98,7 @@ export default function App() {
         {view.name !== "review" && (
           <nav className="sidebar">
             <div className="brand">
-              <img src="/logo.svg" alt="" width={34} height={34} />
+              <img src="logo.svg" alt="" width={34} height={34} />
               <div>
                 <strong>Rayan's Révision</strong>
                 <small>{due > 0 ? `${due} carte${due > 1 ? "s" : ""} à réviser` : "Rien à réviser"}</small>
