@@ -170,3 +170,4 @@ blockquote { margin: 0; border-left: 3px solid var(--accent); padding: 6px 12px;
   input, textarea { font-size: 16px; }
 }
 .synchro-details { margin: 0; padding-left: 18px; }
+.avertissement { color: #F1C27A; }

@@ -2,13 +2,18 @@
 // Les données vivent d'abord sur l'appareil (localStorage) : l'app marche hors ligne, et la synchro se fait à
 // l'ouverture (on récupère et fusionne) et après chaque changement (on envoie, quelques secondes plus tard).
 // Le jeton d'accès est saisi par Rayan sur chaque appareil et n'est envoyé qu'à api.github.com.
+// Chiffrement de bout en bout (e2e.ts) : tout est chiffré ici avant l'envoi, avec une clé tirée de la phrase secrète ;
+// rien n'est jamais envoyé en clair, et sans clé la synchro ne démarre pas.
 
+import { b64, createKeyFile, decrypt, encrypt, isEncrypted, openKeyFile, unb64 } from "./e2e.ts";
 import { mergeText } from "./merge.ts";
 
 export interface SyncConfig {
   /** « propriétaire/dépôt », par ex. Jojoskeys/rayans-donnees. */
   repo: string;
   token: string;
+  /** Clé de chiffrement (base64), tirée de la phrase secrète. */
+  key: string;
 }
 
 export interface SyncStatus {
@@ -33,10 +38,10 @@ const ls = {
 };
 
 export function getConfig(): SyncConfig | null {
-  try { const c = JSON.parse(ls.get(K.cfg) ?? "null"); return c && c.repo && c.token ? c : null; } catch { return null; }
+  try { const c = JSON.parse(ls.get(K.cfg) ?? "null"); return c && c.repo && c.token && c.key ? c : null; } catch { return null; }
 }
 export function setConfig(c: SyncConfig | null) {
-  if (c) ls.set(K.cfg, JSON.stringify({ repo: c.repo.trim(), token: c.token.trim() }));
+  if (c) ls.set(K.cfg, JSON.stringify({ repo: c.repo.trim(), token: c.token.trim(), key: c.key }));
   else ls.del(K.cfg);
 }
 
@@ -46,7 +51,7 @@ function setStatus(p: Partial<SyncStatus>) {
   status = { ...status, ...p, configured: !!getConfig() };
   for (const l of listeners) l(status);
 }
-export const onStatus = (cb: (s: SyncStatus) => void) => { listeners.add(cb); cb(status); return () => listeners.delete(cb); };
+export const onStatus = (cb: (s: SyncStatus) => void) => { listeners.add(cb); cb(status); return () => { listeners.delete(cb); }; };
 
 // ----- Accès à GitHub -----------------------------------------------------------------------------
 
@@ -56,7 +61,8 @@ const API = () => (location.hostname === "localhost" && ls.get("rm:test-api")) |
 const dec = (b64: string) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, "")), (c) => c.charCodeAt(0)));
 const enc = (s: string) => { const b = new TextEncoder().encode(s); let bin = ""; for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode(...b.subarray(i, i + 0x8000)); return btoa(bin); };
 
-async function gh(cfg: SyncConfig, path: string, init: RequestInit = {}, accept = "application/vnd.github+json") {
+type Access = Pick<SyncConfig, "repo" | "token">;
+async function gh(cfg: Access, path: string, init: RequestInit = {}, accept = "application/vnd.github+json") {
   const res = await fetch(`${API()}/repos/${cfg.repo}/contents/${path}`, {
     ...init,
     cache: "no-store",
@@ -65,8 +71,16 @@ async function gh(cfg: SyncConfig, path: string, init: RequestInit = {}, accept 
   return res;
 }
 
-/** Fichier distant : texte et identifiant de version (sha), ou null s'il n'existe pas encore. */
-async function pull(cfg: SyncConfig, app: string): Promise<{ text: string; sha: string } | null> {
+/** Fichier distant déchiffré : texte, version (sha), et s'il était encore en clair (ancien format). */
+async function pull(cfg: SyncConfig, app: string): Promise<{ text: string; sha: string; plain: boolean } | null> {
+  const r = await pullRaw(cfg, app);
+  if (!r) return null;
+  if (isEncrypted(r.text)) return { text: await decrypt(unb64(cfg.key), r.text), sha: r.sha, plain: false };
+  return { ...r, plain: true };
+}
+
+/** Fichier distant tel quel (chiffré), ou null s'il n'existe pas encore. */
+async function pullRaw(cfg: Access, app: string): Promise<{ text: string; sha: string } | null> {
   const meta = await gh(cfg, `${app}.json`);
   if (meta.status === 404) return null;
   if (meta.status === 401 || meta.status === 403) throw new Error("jeton refusé par GitHub (vérifie qu'il donne accès en lecture et écriture au dépôt)");
@@ -80,10 +94,13 @@ async function pull(cfg: SyncConfig, app: string): Promise<{ text: string; sha: 
 }
 
 async function push(cfg: SyncConfig, app: string, text: string, sha: string | null): Promise<string> {
+  return pushRaw(cfg, app, await encrypt(unb64(cfg.key), text), sha);
+}
+async function pushRaw(cfg: Access, app: string, content: string, sha: string | null): Promise<string> {
   const res = await gh(cfg, `${app}.json`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: `${app} : synchro ${new Date().toISOString()}`, content: enc(text), ...(sha ? { sha } : {}) }),
+    body: JSON.stringify({ message: `${app} : synchro ${new Date().toISOString()}`, content: enc(content), ...(sha ? { sha } : {}) }),
   });
   if (res.status === 409 || res.status === 422) throw new Conflict();
   if (!res.ok) throw new Error(`GitHub répond ${res.status} à l'envoi`);
@@ -92,7 +109,7 @@ async function push(cfg: SyncConfig, app: string, text: string, sha: string | nu
 class Conflict extends Error {}
 
 /** Vérifie le jeton et l'accès au dépôt. */
-export async function testConfig(cfg: SyncConfig): Promise<string> {
+export async function testConfig(cfg: Access): Promise<string> {
   const res = await fetch(`${API()}/repos/${cfg.repo}`, { headers: { Authorization: `Bearer ${cfg.token}`, Accept: "application/vnd.github+json" }, cache: "no-store" });
   if (res.status === 404) throw new Error("dépôt introuvable (nom faux, ou jeton sans accès à ce dépôt)");
   if (res.status === 401) throw new Error("jeton invalide ou expiré");
@@ -101,6 +118,19 @@ export async function testConfig(cfg: SyncConfig): Promise<string> {
   if (!j.private) throw new Error("ce dépôt est public : tes données seraient visibles par tout le monde. Rends-le privé.");
   if (j.permissions && !j.permissions.push) throw new Error("le jeton ne permet pas d'écrire dans ce dépôt");
   return `Dépôt privé ${j.full_name} accessible`;
+}
+
+/**
+ * Clé de chiffrement à partir de la phrase secrète. Premier appareil : crée cle.json (sel + valeur de contrôle,
+ * jamais la phrase). Appareils suivants : vérifie la phrase avec ce fichier. Renvoie la clé (base64).
+ */
+export async function setupKey(cfg: Access, passphrase: string): Promise<{ key: string; created: boolean }> {
+  if (passphrase.trim().length < 12) throw new Error("phrase secrète trop courte (12 caractères au moins ; plusieurs mots, c'est mieux)");
+  const existing = await pullRaw(cfg, "cle");
+  if (existing) return { key: b64(await openKeyFile(passphrase, existing.text)), created: false };
+  const { file, raw } = await createKeyFile(passphrase);
+  await pushRaw(cfg, "cle", file, null);
+  return { key: b64(raw), created: true };
 }
 
 // ----- Magasin local + synchro ----------------------------------------------------------------------
@@ -123,7 +153,7 @@ export async function syncApp(app: string): Promise<string | null> {
       const merged = mergeText(app, base, cur, remote?.text ?? null);
       if (merged === null) { setStatus({ state: "a-jour", message: "Rien à synchroniser.", lastSync: Date.now() }); return null; }
       if (merged !== cur) ls.set(K.data(app), merged);
-      if (remote && merged === remote.text) {
+      if (remote && !remote.plain && merged === remote.text) {
         ls.set(K.base(app), merged); ls.set(K.sha(app), remote.sha); ls.del(K.dirty(app));
       } else {
         try {

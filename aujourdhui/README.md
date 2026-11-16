@@ -29,7 +29,7 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 ## Synchronisation avec l'iPhone (Rayan's Mobile)
 
 Réglages → **Synchronisation avec l'iPhone** : dépôt GitHub privé (`Jojoskeys/rayans-donnees`) et jeton à accès
-limité (chiffré avec le compte Windows). Aujourd'hui sert de pont pour toutes les apps : Révision, Hifz, Chrono,
+limité, et **phrase secrète** : tout est **chiffré de bout en bout** (AES-256-GCM, clé tirée de la phrase par PBKDF2) avant l'envoi, GitHub ne voit que du contenu illisible. Jeton et clé sont protégés par le compte Windows. Aujourd'hui sert de pont pour toutes les apps : Révision, Hifz, Chrono,
 Prière, Ouvertures (réponses aux exercices, et exercices publiés), Ma journée et les cours. Synchro au démarrage, à
 l'ouverture de la fenêtre et toutes les 15 minutes ; une app ouverte est synchronisée après sa fermeture ; une copie
 `.avant-synchro` est gardée avant chaque écriture. Règles de fusion : `mobile/src/shared/merge.ts`. Voir

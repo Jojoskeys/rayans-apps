@@ -24,6 +24,7 @@ Un fichier JSON par app dans un **dépôt GitHub privé** (`Jojoskeys/rayans-don
   quelques secondes après chaque changement, ou au retour en ligne.
 - **PC** : pont dans Rayan's Aujourd'hui (`aujourdhui/src/main/sync.ts`), au démarrage, à l'ouverture de la fenêtre
   et toutes les 15 minutes. Une app Windows ouverte n'est pas touchée (synchronisée après sa fermeture).
+- **Chiffrement de bout en bout** (`src/shared/e2e.ts`, testé) : AES-256-GCM, clé tirée d'une phrase secrète (PBKDF2-SHA256, 600 000 itérations). Tout est chiffré sur l'appareil avant l'envoi ; `cle.json` ne contient que le sel et une valeur de contrôle chiffrée (jamais la phrase). Sans la phrase, les données du dépôt ne peuvent pas être relues.
 - **Fusion à trois versions** (`src/shared/merge.ts`, testée) : base commune, version locale, version distante.
   Ajouts des deux côtés gardés, la carte / portion révisée le plus tard l'emporte, journaux réunis, suppression
   propagée. Le PC télécharge ADE (le serveur de la fac refuse les autres sites) et publie l'emploi du temps ; il

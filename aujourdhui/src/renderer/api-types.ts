@@ -70,7 +70,7 @@ export interface AujourdhuiApi {
   openFolder(p: string): void;
   quit(): void;
   sync?: {
-    configure(repo: string, token: string): Promise<SyncView>;
+    configure(repo: string, token: string, passphrase: string): Promise<SyncView>;
     now(): Promise<SyncView>;
     forget(): Promise<SyncView>;
   };

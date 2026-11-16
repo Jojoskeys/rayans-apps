@@ -28,3 +28,4 @@ input { font: inherit; color: var(--texte); background: var(--panneau-2); border
 .lien.danger { color: var(--rouge); }
 .ok { color: var(--vert) !important; }
 .ko { color: var(--rouge) !important; }
+.carte p.avertissement { color: #F1C27A; font-size: 14px; }

@@ -1,13 +1,16 @@
 // Pont de synchronisation PC ↔ iPhone (Rayan's Mobile) : les fichiers de données des apps Windows sont fusionnés
 // avec le dépôt GitHub privé de Rayan (un fichier JSON par app), avec les mêmes règles de fusion que le téléphone
 // (mobile/src/shared/merge.ts). Une app ouverte n'est pas touchée : elle est synchronisée quand elle est fermée.
-// Le jeton est chiffré avec la protection du compte Windows (safeStorage) et n'est envoyé qu'à api.github.com.
+// Le jeton et la clé sont chiffrés avec la protection du compte Windows (safeStorage) ; le jeton n'est envoyé qu'à
+// api.github.com. Chiffrement de bout en bout : tout est chiffré ici (AES-256-GCM, clé tirée de la phrase secrète)
+// avant l'envoi ; rien ne part jamais en clair.
 import { ipcMain, safeStorage } from "electron";
 import { execFile } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { mergeText } from "../../../mobile/src/shared/merge.ts";
+import { b64, createKeyFile, decrypt, encrypt, isEncrypted, openKeyFile, unb64 } from "../../../mobile/src/shared/e2e.ts";
 import { applyFacText, facText, fetchAde } from "./fac.ts";
 import { applyRoutineText, routineText } from "./routine.ts";
 import type { SyncView } from "../renderer/api-types.ts";
@@ -90,18 +93,20 @@ const ADAPTERS: Adapter[] = [
 
 const cfgFile = () => path.join(ctx.dataDir, "synchro.json");
 const stateDir = () => path.join(ctx.dataDir, "synchro-etat");
-function loadCfg(): { repo: string; token: string } | null {
+type Cfg = { repo: string; token: string; key: string };
+function loadCfg(): Cfg | null {
   try {
     const c = JSON.parse(fs.readFileSync(cfgFile(), "utf8"));
-    if (!c.repo || !c.token) return null;
-    const token = c.enc && safeStorage.isEncryptionAvailable() ? safeStorage.decryptString(Buffer.from(c.token, "base64")) : c.token;
-    return { repo: c.repo, token };
+    if (!c.repo || !c.token || !c.key) return null;
+    const open = (v: string) => (c.enc && safeStorage.isEncryptionAvailable() ? safeStorage.decryptString(Buffer.from(v, "base64")) : v);
+    return { repo: c.repo, token: open(c.token), key: open(c.key) };
   } catch { return null; }
 }
-function saveCfg(repo: string, token: string) {
+function saveCfg(c: Cfg) {
   const enc = safeStorage.isEncryptionAvailable();
+  const seal = (v: string) => (enc ? safeStorage.encryptString(v).toString("base64") : v);
   fs.mkdirSync(ctx.dataDir, { recursive: true });
-  fs.writeFileSync(cfgFile(), JSON.stringify({ repo, enc, token: enc ? safeStorage.encryptString(token).toString("base64") : token }));
+  fs.writeFileSync(cfgFile(), JSON.stringify({ repo: c.repo, enc, token: seal(c.token), key: seal(c.key) }));
 }
 const baseFile = (n: string) => path.join(stateDir(), `${n}.base.json`);
 
@@ -110,13 +115,20 @@ export const syncView = () => view;
 
 // ----- GitHub ------------------------------------------------------------------------------------------
 
-async function gh(cfg: { repo: string; token: string }, file: string, init: RequestInit = {}, accept = "application/vnd.github+json") {
+type Access = { repo: string; token: string };
+async function gh(cfg: Access, file: string, init: RequestInit = {}, accept = "application/vnd.github+json") {
   return fetch(`https://api.github.com/repos/${cfg.repo}/contents/${file}`, {
     ...init, signal: AbortSignal.timeout(30_000),
     headers: { Authorization: `Bearer ${cfg.token}`, Accept: accept, "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "rayans-apps", ...(init.headers ?? {}) },
   });
 }
-async function pull(cfg: { repo: string; token: string }, name: string): Promise<{ text: string; sha: string } | null> {
+async function pull(cfg: Cfg, name: string): Promise<{ text: string; sha: string; plain: boolean } | null> {
+  const r = await pullRaw(cfg, name);
+  if (!r) return null;
+  if (isEncrypted(r.text)) return { text: await decrypt(unb64(cfg.key), r.text), sha: r.sha, plain: false };
+  return { ...r, plain: true };
+}
+async function pullRaw(cfg: Access, name: string): Promise<{ text: string; sha: string } | null> {
   const r = await gh(cfg, `${name}.json`);
   if (r.status === 404) return null;
   if (!r.ok) throw new Error(r.status === 401 || r.status === 403 ? "jeton refusé par GitHub" : `GitHub répond ${r.status}`);
@@ -126,8 +138,11 @@ async function pull(cfg: { repo: string; token: string }, name: string): Promise
   if (!raw.ok) throw new Error(`GitHub répond ${raw.status}`);
   return { text: await raw.text(), sha: j.sha };
 }
-async function push(cfg: { repo: string; token: string }, name: string, text: string, sha: string | null): Promise<"ok" | "conflit"> {
-  const r = await gh(cfg, `${name}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `${name} : synchro du PC`, content: Buffer.from(text).toString("base64"), ...(sha ? { sha } : {}) }) });
+async function push(cfg: Cfg, name: string, text: string, sha: string | null): Promise<"ok" | "conflit"> {
+  return pushRaw(cfg, name, await encrypt(unb64(cfg.key), text), sha);
+}
+async function pushRaw(cfg: Access, name: string, content: string, sha: string | null): Promise<"ok" | "conflit"> {
+  const r = await gh(cfg, `${name}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: `${name} : synchro du PC`, content: Buffer.from(content).toString("base64"), ...(sha ? { sha } : {}) }) });
   if (r.status === 409 || r.status === 422) return "conflit";
   if (!r.ok) throw new Error(`GitHub répond ${r.status} à l'envoi`);
   return "ok";
@@ -171,11 +186,11 @@ export async function syncAll(reason = "") {
           const merged = mergeText(a.name, base, now, remote?.text ?? null);
           if (merged === null) { details.push({ name: a.label, result: "aucune donnée" }); done = true; break; }
           if (merged !== now) a.write(merged);
-          if (!remote || merged !== remote.text) {
+          if (!remote || remote.plain || merged !== remote.text) {
             if ((await push(cfg, a.name, merged, remote?.sha ?? null)) === "conflit") continue;
           }
           fs.writeFileSync(baseFile(a.name), merged);
-          details.push({ name: a.label, result: merged !== now ? "mis à jour depuis l'iPhone" : remote && merged === remote.text ? "à jour" : "envoyé" });
+          details.push({ name: a.label, result: merged !== now ? "mis à jour depuis l'iPhone" : remote && !remote.plain && merged === remote.text ? "à jour" : "envoyé (chiffré)" });
           done = true;
         }
         if (!done) details.push({ name: a.label, result: "conflits répétés, réessai plus tard" });
@@ -205,11 +220,20 @@ async function testRepo(repo: string, token: string) {
 export function setupSync(c: Ctx) {
   ctx = c;
   set({});
-  ipcMain.handle("synchro-config", async (_e, repo: string, token: string) => {
+  ipcMain.handle("synchro-config", async (_e, repo: string, token: string, phrase: string) => {
     const r = String(repo ?? "").trim();
     const t = String(token ?? "").trim() || loadCfg()?.token || "";
     await testRepo(r, t);
-    saveCfg(r, t);
+    const p = String(phrase ?? "");
+    let key = loadCfg()?.key ?? "";
+    if (p) {
+      if (p.trim().length < 12) throw new Error("phrase secrète trop courte (12 caractères au moins ; plusieurs mots, c'est mieux)");
+      const existing = await pullRaw({ repo: r, token: t }, "cle");
+      if (existing) key = b64(await openKeyFile(p, existing.text));
+      else { const k = await createKeyFile(p); await pushRaw({ repo: r, token: t }, "cle", k.file, null); key = b64(k.raw); }
+    }
+    if (!key) throw new Error("tape ta phrase secrète");
+    saveCfg({ repo: r, token: t, key });
     set({});
     void syncAll("configuration");
     return view;

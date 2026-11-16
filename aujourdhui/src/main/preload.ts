@@ -16,7 +16,7 @@ const api: AujourdhuiApi = {
   openFolder: (p) => ipcRenderer.send("ouvrir-dossier", p),
   quit: () => ipcRenderer.send("quitter"),
   sync: {
-    configure: (r, t) => ipcRenderer.invoke("synchro-config", r, t),
+    configure: (r, t, p) => ipcRenderer.invoke("synchro-config", r, t, p),
     now: () => ipcRenderer.invoke("synchro-maintenant"),
     forget: () => ipcRenderer.invoke("synchro-oublier"),
   },
