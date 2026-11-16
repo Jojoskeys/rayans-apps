@@ -1,8 +1,8 @@
 {
   "name": "rayans-aujourdhui",
   "productName": "Rayans Aujourdhui",
-  "version": "1.0.0",
-  "description": "Rayan's Aujourd'hui : ce qu'il reste à réviser aujourd'hui dans Révision, Hifz et Ouvertures, avec un rappel le soir",
+  "version": "1.1.0",
+  "description": "Rayan's Aujourd'hui : les cours ADE de la fac, ce qu'il reste à réviser aujourd'hui dans Révision, Hifz et Ouvertures, avec un rappel le soir",
   "main": "dist-app/main.cjs",
   "license": "MIT",
   "author": "Rayan",

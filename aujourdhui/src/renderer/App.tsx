@@ -28,13 +28,17 @@ export function App() {
   const [y, m, d] = s.today.split("-").map(Number);
   const date = new Date(y, m - 1, d).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
   const heure = `${pad(s.settings.reminderHour)}:${pad(s.settings.reminderMinute)}`;
+  // Cours d'aujourd'hui pas encore terminés : « Tout est fait » ne doit pas laisser croire que la journée est finie.
+  const d0 = new Date(y, m - 1, d).getTime();
+  const coursRestants = s.fac.courses.filter((c) => !c.cancelled && c.end > s.updatedAt && c.start < d0 + 86_400_000).length;
+  const titre = left ? `${left} élément${left > 1 ? "s" : ""} à réviser` : coursRestants ? "Révisions faites" : "Tout est fait pour aujourd'hui";
 
   return (
     <div className="page">
       <header className="entete">
         <div>
-          <p className="date">{date}</p>
-          <h1 data-testid="resume">{left ? `${left} élément${left > 1 ? "s" : ""} à réviser` : "Tout est fait pour aujourd'hui"}</h1>
+          <p className="date">{date}{coursRestants ? ` · ${coursRestants} cours ${coursRestants > 1 ? "restants" : "restant"}` : ""}</p>
+          <h1 data-testid="resume">{titre}</h1>
         </div>
         <div className="actions">
           <button className="icone" title="Actualiser" onClick={() => api.refresh().then(setS)}><IconRefresh /></button>

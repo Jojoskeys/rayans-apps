@@ -172,6 +172,10 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
 
     await js(w, `document.querySelector('[data-testid="bouton-reglages"]').click()`);
     await waitFor("réglages", () => js<boolean>(w, `!!document.querySelector('[data-testid="reglages"]')`), 5000);
+    const reglagesFac = await text(w, '[data-testid="reglages-fac"]');
+    if (!reglagesFac.includes("planning.univ-rennes1.fr/…") || reglagesFac.includes("test.shu")) throw new Error("réglages Fac : adresse mal affichée");
+    step("réglages Fac : adresse ADE raccourcie, expéditeurs, données gardées");
+    if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "5-reglages-fac.png"), (await w.webContents.capturePage()).toPNG()); }
     h.updateSettings({ reminderHour: 20, reminderMinute: 30 });
     await waitFor("heure du rappel", () => js<boolean>(w, `document.querySelector('input[type=time]').value === "20:30"`), 5000);
     const saved = JSON.parse(fs.readFileSync(h.dataFile, "utf8"));

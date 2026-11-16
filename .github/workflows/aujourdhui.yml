@@ -33,7 +33,7 @@ jobs:
       - run: npm ci
       - name: Typage TypeScript
         run: npm run typecheck
-      - name: Tests unitaires (comptes de Révision, Hifz, Ouvertures, rappel)
+      - name: Tests unitaires (comptes de Révision, Hifz, Ouvertures, rappel, ADE et mails)
         run: npm test
       # Version : majeur.mineur de package.json, correctif = numéro d'exécution de la CI. Chaque construction est
       # ainsi une mise à jour pour Rayan's Launcher.
@@ -67,7 +67,7 @@ jobs:
           $fiche = [ordered]@{
             id = 'rayans-aujourdhui'
             name = "Rayan's Aujourd'hui"
-            description = 'Ce qu''il reste à réviser aujourd''hui dans Révision, Hifz et Ouvertures, avec un rappel le soir.'
+            description = 'Les cours de la fac (ADE, Université de Rennes) et ce qu''il reste à réviser aujourd''hui dans Révision, Hifz et Ouvertures, avec un rappel le soir.'
             version = $v
             releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
             executable = 'Rayans Aujourdhui.exe'

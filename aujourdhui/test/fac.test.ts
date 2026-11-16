@@ -179,3 +179,21 @@ test("valider, ignorer, annuler une correction ; ménage", () => {
   assert.equal(prune(data, NOW + 31 * 86_400_000).mails.length, 0);
   assert.deepEqual(sanitizeFac({ courses: [{ uid: 1 }], mails: "x" }).courses, []);
 });
+
+test("autres tournures de mails", () => {
+  const d = applyFetch(EMPTY_FAC, parseIcs(cal(ANALYSE("B12"), PROG, ANGLAIS)), NOW);
+  const props = (text: string) => addMail(d, parseMailInput(text), NOW).mail.proposals;
+  // « de la salle X vers la salle Y » : la nouvelle salle est la seconde.
+  const a = props("Objet : TD Analyse\n\nLe TD d'analyse est déplacé de la salle B12 vers la salle 012 ce mardi.");
+  assert.deepEqual(a.map((p) => [p.kind, p.after]), [["salle", "Salle 012"]]);
+  // Amphi, avec le cours désigné seulement par son titre.
+  const b = props("Objet : CM Programmation fonctionnelle\n\nAttention : cet après-midi le CM aura lieu en amphi C.");
+  assert.deepEqual(b.map((p) => [p.kind, p.courseUid, p.after]), [["salle", "ADE60-2", "Amphi C"]]);
+  // Mail qui ne cite aucun cours connu : pas de proposition de salle au hasard.
+  assert.deepEqual(props("Objet : Réunion d'information\n\nLa réunion aura lieu en salle 201."), []);
+  // .eml en HTML seulement.
+  const html = ["From: scol@univ-rennes.fr", "Subject: TD Anglais annule", "Content-Type: text/html; charset=utf-8", "", "<p>Le TD d&#39;anglais de demain est <b>annul&eacute;</b>.</p>"].join("\r\n");
+  const m = parseMailInput(html);
+  assert.equal(m.body, "Le TD d'anglais de demain est annulé.");
+  assert.deepEqual(analyzeMail(m, d.courses, NOW).map((p) => [p.kind, p.courseUid]), [["annulation", "ADE60-3"]]);
+});

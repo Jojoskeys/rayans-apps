@@ -73,7 +73,8 @@ const param = (h: string | undefined, name: string) => new RegExp(`${name}="?([^
 
 const stripHtml = (h: string) => h.replace(/<(style|script)[\s\S]*?<\/\1>/gi, "").replace(/<br\s*\/?>|<\/(p|div|li|tr|h\d)>/gi, "\n").replace(/<[^>]+>/g, "")
   .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'")
-  .replace(/&#(\d+);/g, (_, n: string) => String.fromCharCode(+n));
+  .replace(/&#(\d+);/g, (_, n: string) => String.fromCharCode(+n))
+  .replace(/&([aeiouc])(acute|grave|circ|uml|cedil);/gi, (_, l: string, k: string) => `${l}${{ acute: "́", grave: "̀", circ: "̂", uml: "̈", cedil: "̧" }[k.toLowerCase()]}`.normalize("NFC"));
 
 /** Texte d'une partie MIME (texte brut de préférence, sinon HTML sans balises). */
 function partText(raw: string, depth = 0): { text: string; html: boolean } | null {
