@@ -94,7 +94,7 @@ async function main() {
     now, prefs, state, fac, newChanges,
     routine: routineF ? sanitizeRoutine(parse(routineF)) : undefined,
     revision: parse(revF), hifz: parse(hifzF), ouvertures: parse(ouvF),
-    bilan: parse(bilanF), objectifs: parse(objF), sport: parse(sportF), prieres: await heuresDuJour(parse(priereF), now),
+    bilan: parse(bilanF), objectifs: parse(objF), sport: parse(sportF), prieres: await heuresDuJour(parse(priereF), now), priere: parse(priereF),
   });
   const subs = notif.subscriptions ?? [];
   log(`${messages.length} notification(s) à envoyer, ${subs.length} appareil(s)`);

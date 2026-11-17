@@ -8,6 +8,8 @@ import { slot, type CourseChange } from "../../aujourdhui/src/core/ics.ts";
 import { nettoyerBilan, notificationsBilan, type Prieres } from "../../aujourdhui/src/core/bilan.ts";
 import { journee, nettoyerObjectifs } from "../../aujourdhui/src/core/objectifs.ts";
 import { creneau, ligneSport, nettoyerSport, seanceDuJour } from "../../aujourdhui/src/core/sport.ts";
+import { days, prayerName } from "../../priere/src/core/schedule.ts";
+import { NOTIFIED, normalizeData } from "../../priere/src/core/settings.ts";
 
 export interface Prefs {
   cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number;
@@ -15,8 +17,10 @@ export interface Prefs {
   adhkar: boolean; bilan: boolean; citations: boolean;
   /** Séance de sport : dans le message du matin, et rappel 30 min avant le créneau. */
   sport: boolean;
+  /** Heures de prière (celles cochées dans Rayan's Prière). */
+  prieres: boolean;
 }
-export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true, sport: true };
+export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true, sport: true, prieres: true };
 
 export interface VeilleurState {
   /** Dernier passage (ms). */
@@ -48,6 +52,41 @@ export interface Inputs {
   sport?: unknown;
   /** Heures de prière du jour (calculées par main.ts avec le code de Rayan's Prière), ou null. */
   prieres?: Prieres | null;
+  /** Réglages de Rayan's Prière (lieu, méthode, prières à notifier, pause), déchiffrés. */
+  priere?: unknown;
+}
+
+/** Fenêtre d'envoi autour de l'heure d'une prière : le veilleur passe toutes les 20 à 30 minutes. */
+export const PRIERE_AVANT = 25 * 60_000;
+export const PRIERE_APRES = 10 * 60_000;
+
+/**
+ * Heures de prière : une notification par prière cochée dans Rayan's Prière, au premier passage du veilleur dans
+ * les 25 minutes avant l'heure (« Dhuhr à 12:41, dans 12 min ») ou les 10 minutes après (« C'est l'heure »).
+ * Jamais plus tard : une prière passée depuis longtemps n'est pas annoncée.
+ */
+export function messagesPriere(priere: unknown, now: number): { key: string; m: Message }[] {
+  let s;
+  try { s = normalizeData(priere).settings; } catch { return []; }
+  if (!s.place || (s.pausedUntil && now < s.pausedUntil)) return [];
+  const tz = s.place.tz;
+  const hmTz = (t: number) => new Intl.DateTimeFormat("fr-FR", { timeZone: tz, hour: "2-digit", minute: "2-digit" }).format(new Date(t));
+  const out: { key: string; m: Message }[] = [];
+  for (const v of days(s, now - DAY, 2)) {
+    for (const id of NOTIFIED) {
+      const t = v.times[id];
+      if (!s.atTime[id] || !Number.isFinite(t) || now < t - PRIERE_AVANT || now > t + PRIERE_APRES) continue;
+      const nom = prayerName(id, v.date);
+      const min = Math.round((t - now) / 60_000);
+      out.push({
+        key: `priere|${v.date.map((x) => String(x).padStart(2, "0")).join("-")}|${id}`,
+        m: min > 0
+          ? { title: `${nom} à ${hmTz(t)}`, body: `Dans ${min} min (${s.place.name}).`, url: "./priere/", tag: "priere" }
+          : { title: `C'est l'heure de ${nom}`, body: `${nom} : ${hmTz(t)} (${s.place.name}).`, url: "./priere/", tag: "priere" },
+      });
+    }
+  }
+  return out;
 }
 
 const DAY = 86_400_000;
@@ -143,6 +182,9 @@ export function plan(i: Inputs): { messages: Message[]; state: VeilleurState } {
       out.push({ title: m.titre, body: corps, url: "./aujourdhui/", tag });
     }
   }
+
+  // 7. Heures de prière (une fois par prière).
+  if (prefs.prieres && i.priere !== undefined) for (const { key, m } of messagesPriere(i.priere, now)) once(key, m);
 
   // 6. Séance de sport : rappel 30 minutes avant le créneau libre du jour (d'après l'emploi du temps).
   if (prefs.sport && i.sport !== undefined) {

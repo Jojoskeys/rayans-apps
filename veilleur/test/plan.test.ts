@@ -86,3 +86,26 @@ test("iPhone : séance de sport dans le message du matin et rappel 30 min avant 
   assert.ok(r.messages.some((m) => m.title === "Séance à 07:00 : Jambes (Leg)"), JSON.stringify(r.messages.map((m) => m.title)));
   assert.equal(plan({ ...base, now: at(17, 6, 50), state: r.state }).messages.filter((m) => m.tag === "sport").length, 0, "une seule fois");
 });
+
+test("iPhone : heures de prière, une fois chacune, prières décochées et pause respectées", async () => {
+  const { messagesPriere } = await import("../src/plan.ts");
+  const priere = { version: 1, settings: { place: { name: "Rennes", lat: 48.1173, lng: -1.6778, tz: "Europe/Paris" }, method: "uoif", asr: "shafii", highLat: "angle", atTime: { fajr: true, dhuhr: true, asr: false, maghrib: true, isha: true } } };
+  const base = { prefs: DEFAULT_PREFS, newChanges: [], priere };
+  // Maghrib à Rennes le 17/11 vers 17 h 26 : passage de 17 h 10 → « Maghrib à 17:26, dans 16 min ».
+  const a = plan({ ...base, now: at(17, 17, 10), state: EMPTY_STATE });
+  const maghrib = a.messages.filter((m) => m.tag === "priere");
+  assert.equal(maghrib.length, 1);
+  assert.match(maghrib[0].title, /^Maghrib à 17:2\d$/);
+  assert.match(maghrib[0].body, /^Dans 1\d min \(Rennes\)\.$/);
+  // Passage suivant (17 h 30) : déjà annoncée.
+  assert.equal(plan({ ...base, now: at(17, 17, 30), state: a.state }).messages.filter((m) => m.tag === "priere").length, 0);
+  // Passage juste après l'heure, sans annonce avant : « C'est l'heure ».
+  assert.match(plan({ ...base, now: at(17, 17, 30), state: EMPTY_STATE }).messages.find((m) => m.tag === "priere")!.title, /^C'est l'heure de Maghrib$/);
+  // 40 minutes après (et Isha encore loin) : plus rien.
+  assert.equal(plan({ ...base, now: at(17, 18, 5), state: EMPTY_STATE }).messages.filter((m) => m.tag === "priere").length, 0);
+  // Asr décochée dans Rayan's Prière (vers 14 h 50) : pas de notification.
+  assert.equal(messagesPriere(priere, at(17, 14, 40)).length, 0);
+  // Pause, ou réglage coupé dans les notifications de l'iPhone.
+  assert.equal(messagesPriere({ ...priere, settings: { ...priere.settings, pausedUntil: at(17, 20) } }, at(17, 17, 10)).length, 0);
+  assert.equal(plan({ ...base, prefs: { ...DEFAULT_PREFS, prieres: false }, now: at(17, 17, 10), state: EMPTY_STATE }).messages.filter((m) => m.tag === "priere").length, 0);
+});
