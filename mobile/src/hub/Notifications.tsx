@@ -17,6 +17,12 @@ async function loadData(): Promise<NotifData> {
   try { const d = t ? JSON.parse(t) : {}; return { subscriptions: d.subscriptions ?? [], prefs: { ...DEFAULT, ...(d.prefs ?? {}) } }; } catch { return { subscriptions: [], prefs: { ...DEFAULT } }; }
 }
 function saveData(d: NotifData) { store.save("notifications", JSON.stringify(d)); }
+/** Pourquoi le service n'est pas prêt (affiché pour savoir quoi faire). */
+async function swState() {
+  const r = await navigator.serviceWorker.getRegistration().catch(() => undefined);
+  const st = !r ? "non enregistré" : r.active ? "actif" : r.waiting ? "en attente" : r.installing ? "en installation" : "installation échouée";
+  return `service de l'app pas prêt (${st}). Ferme l'app complètement, rouvre-la, attends 10 secondes et réessaie.`;
+}
 const within = <T,>(p: Promise<T>, ms: number, what: string) => Promise.race([p, new Promise<T>((_, ko) => setTimeout(() => ko(new Error(what)), ms))]);
 
 export function Notifications() {
@@ -43,10 +49,10 @@ export function Notifications() {
   const activate = async () => {
     setBusy(true); setMsg(null);
     try {
-      if (!reg) throw new Error("l'app n'est pas encore prête (service hors ligne en cours d'installation). Ferme-la complètement, rouvre-la et réessaie.");
+      const r = reg ?? await within(navigator.serviceWorker.ready, 5_000, await swState());
       if (!vapid) throw new Error(vapid === null ? "clé des notifications introuvable : vérifie que la synchro marche, puis rouvre l'app." : "chargement en cours, réessaie dans 2 secondes.");
       // Premier appel après le toucher : c'est lui qui affiche la demande d'autorisation d'iOS.
-      const sub = (await reg.pushManager.getSubscription()) ?? await within(reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(vapid) as BufferSource }), 30_000, "iOS n'a pas répondu à la demande d'abonnement");
+      const sub = (await r.pushManager.getSubscription()) ?? await within(r.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(vapid) as BufferSource }), 30_000, "iOS n'a pas répondu à la demande d'abonnement");
       const j = sub.toJSON() as { endpoint: string; keys: { p256dh: string; auth: string } };
       const d = await loadData();
       const next = { ...d, subscriptions: [...d.subscriptions.filter((s) => s.endpoint !== j.endpoint), { endpoint: j.endpoint, keys: j.keys, appareil: "iPhone", added: Date.now() }] };

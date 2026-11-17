@@ -81,7 +81,8 @@ writeFileSync(join(out, "manifest.webmanifest"), JSON.stringify({
   icons: [{ src: "icon.png", sizes: "1024x1024", type: "image/png", purpose: "any" }],
 }, null, 1));
 
-// Service worker : liste de tous les fichiers, mise en cache à l'installation, réseau d'abord pour les pages.
+// Service worker : liste de tous les fichiers, mise en cache à l'installation (fichier par fichier : un échec
+// n'empêche pas l'installation, sinon iOS n'active jamais le service et les notifications ne marchent pas), réseau d'abord pour les pages.
 const files = [];
 const walk = (d) => { for (const f of readdirSync(d)) { const p = join(d, f); if (statSync(p).isDirectory()) walk(p); else files.push(relative(out, p).replaceAll("\\", "/")); } };
 walk(out);
@@ -91,7 +92,7 @@ const version = hash.digest("hex").slice(0, 12) + "-" + Date.now().toString(36);
 writeFileSync(join(out, "sw.js"), `// Rayan's Mobile, version ${version}
 const CACHE = "rayans-mobile-${version}";
 const FILES = ${JSON.stringify(["./", ...files.map((f) => "./" + f.replace(/index\.html$/, ""))])};
-self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES.map((f) => new Request(f, { cache: "reload" })))).then(() => self.skipWaiting())); });
+self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => Promise.allSettled(FILES.map((f) => c.add(new Request(f, { cache: "reload" }))))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 // Notifications envoyées par le veilleur (GitHub Actions) : affichage, et ouverture de l'app au toucher.
 self.addEventListener("push", (e) => {
