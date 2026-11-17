@@ -14,6 +14,7 @@ export function SecuriteView(p: { etat: EtatVue; onActiver: () => void }) {
   const [filtre, setFiltre] = useState<Niveau | "">("");
   const [mots, setMots] = useState("");
   const [erreur, setErreur] = useState<string | null>(null);
+  const [voirDisparus, setVoirDisparus] = useState(false);
 
   const charger = useCallback(async () => {
     try {
@@ -30,9 +31,12 @@ export function SecuriteView(p: { etat: EtatVue; onActiver: () => void }) {
     return () => window.clearInterval(t);
   }, [charger]);
 
-  const progs = v?.programmes ?? [];
+  const tous = v?.programmes ?? [];
+  // Fichiers qui n'existent plus (ancienne version remplacée, programme désinstallé…) : masqués par défaut.
+  const disparus = tous.filter((x) => !x.existe);
+  const progs = voirDisparus ? tous : tous.filter((x) => x.existe);
   const compte = (n: Niveau) => progs.filter((x) => x.analyse.niveau === n).length;
-  const parChemin = useMemo(() => new Map(progs.map((x) => [x.analyse.chemin.toLowerCase(), x])), [progs]);
+  const parChemin = useMemo(() => new Map(tous.map((x) => [x.analyse.chemin.toLowerCase(), x])), [tous]);
   const visibles = progs.filter(
     (x) =>
       (!filtre || x.analyse.niveau === filtre) &&
@@ -79,6 +83,25 @@ export function SecuriteView(p: { etat: EtatVue; onActiver: () => void }) {
           <input value={mots} onChange={(e) => setMots(e.target.value)} placeholder="ex. roblox" />
         </label>
       </div>
+
+      {disparus.length > 0 && (
+        <div className="row small muted">
+          <span>
+            {disparus.length} programme{disparus.length > 1 ? "s" : ""} dont le fichier n’existe plus (ancienne version remplacée par une mise à jour,
+            programme désinstallé ou supprimé) {voirDisparus ? "affiché" : "masqué"}{disparus.length > 1 ? "s" : ""}.
+          </span>
+          <button className="link small" onClick={() => setVoirDisparus(!voirDisparus)}>{voirDisparus ? "Les masquer" : "Les afficher"}</button>
+          <button
+            className="link small"
+            onClick={async () => {
+              await api.oublierDisparus();
+              charger();
+            }}
+          >
+            Les retirer de la liste
+          </button>
+        </div>
+      )}
 
       {progs.length === 0 ? (
         <div className="empty small-empty">

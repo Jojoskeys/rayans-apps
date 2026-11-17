@@ -156,5 +156,9 @@ fn inventaire_des_programmes_dans_l_archive() {
     assert_eq!(l[0].analyse.niveau, Niveau::Fiable);
     a.point_de_controle().unwrap();
     let base = std::fs::read(a.chemin_base()).unwrap();
+    // Oublié : retiré de la liste, réanalysé s'il réapparaît.
+    let oublie = Archive::ouvrir(dir.path(), &[3u8; 32]).unwrap();
+    oublie.oublier_programme(r"C:\PROGRAM FILES\LGHUB\lghub.exe").unwrap();
+    assert!(oublie.programmes().unwrap().is_empty());
     assert!(!base.windows(5).any(|w| w == b"LGHUB"), "chemin en clair dans la base");
 }

@@ -199,6 +199,8 @@ export interface Programme {
   };
   premiereVueMs: number;
   derniereVueMs: number;
+  /** Faux si le fichier n'existe plus (ancienne version, programme désinstallé…). */
+  existe: boolean;
 }
 
 export interface EntreeDemarrage {
@@ -234,6 +236,7 @@ export const api = {
   absence: (actif: boolean) => invoke<EtatVue>("absence", { actif }),
   securite: () => invoke<SecuriteVue>("securite_etat"),
   reanalyser: (chemin: string) => invoke<void>("reanalyser", { chemin }),
+  oublierDisparus: () => invoke<number>("oublier_disparus"),
   analyserDefender: (chemin: string) => invoke<[boolean, string]>("analyser_defender", { chemin }),
   montrerFichier: (chemin: string) => invoke<void>("montrer_fichier", { chemin }),
   faireConfiance: (chemin: string, dossier: string | null) => invoke<EtatVue>("faire_confiance", { chemin, dossier }),

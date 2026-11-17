@@ -273,18 +273,45 @@ fn ouvrir_dossier(chemin: PathBuf, app: AppHandle) -> Result<(), String> {
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 struct SecuriteVue {
-    programmes: Vec<journal_core::archive::ProgrammeVue>,
+    programmes: Vec<ProgrammeAffiche>,
     demarrage: Vec<securite::EntreeDemarrage>,
     detections: Vec<securite::Detection>,
 }
 
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ProgrammeAffiche {
+    #[serde(flatten)]
+    programme: journal_core::archive::ProgrammeVue,
+    /// Faux si le fichier n'existe plus (ancienne version remplacée par une mise à jour, programme désinstallé,
+    /// fichier de test supprimé) : masqué par défaut dans la page Sécurité.
+    existe: bool,
+}
+
 #[tauri::command]
 fn securite_etat(state: State<AppState>) -> Result<SecuriteVue, String> {
-    Ok(SecuriteVue {
-        programmes: avec(&state.ctx, |a| a.programmes())?,
-        demarrage: securite::entrees_demarrage(),
-        detections: securite::detections(),
-    })
+    let programmes = avec(&state.ctx, |a| a.programmes())?
+        .into_iter()
+        .map(|p| {
+            let existe = std::path::Path::new(&p.analyse.chemin).exists();
+            ProgrammeAffiche { programme: p, existe }
+        })
+        .collect();
+    Ok(SecuriteVue { programmes, demarrage: securite::entrees_demarrage(), detections: securite::detections() })
+}
+
+/// Retire de l'inventaire les programmes dont le fichier n'existe plus. Renvoie leur nombre.
+#[tauri::command]
+fn oublier_disparus(state: State<AppState>) -> Result<usize, String> {
+    let disparus: Vec<String> = avec(&state.ctx, |a| a.programmes())?
+        .into_iter()
+        .map(|p| p.analyse.chemin)
+        .filter(|c| !std::path::Path::new(c).exists())
+        .collect();
+    for c in &disparus {
+        avec(&state.ctx, |a| a.oublier_programme(c))?;
+    }
+    Ok(disparus.len())
 }
 
 #[tauri::command]
@@ -686,6 +713,7 @@ pub fn run() {
             montrer_fichier,
             faire_confiance,
             retirer_confiance,
+            oublier_disparus,
             rapport,
             a_l_instant,
             fichiers,

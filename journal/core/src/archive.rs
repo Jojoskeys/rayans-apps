@@ -1114,6 +1114,12 @@ impl Archive {
         Ok(())
     }
 
+    /// Retire un programme de l'inventaire (il sera réanalysé s'il réapparaît).
+    pub fn oublier_programme(&self, chemin: &str) -> Resultat<()> {
+        self.db.execute("DELETE FROM programmes WHERE cle = ?1", [self.cle_programme(chemin)])?;
+        Ok(())
+    }
+
     pub fn nombre_programmes(&self) -> Resultat<i64> {
         Ok(self.db.query_row("SELECT COUNT(*) FROM programmes", [], |r| r.get(0))?)
     }

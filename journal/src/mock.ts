@@ -106,11 +106,11 @@ const securite = {
     { analyse: { chemin: "C:\\Users\\exemple\\Downloads\\cheat-roblox.exe", nom: "cheat-roblox.exe", niveau: "suspect", editeur: null, demarrage: [], analyseMs: Date.now(), raisons: [
       { gravite: "avertissement", texte: "Non signé : l'éditeur ne peut pas être vérifié." },
       { gravite: "avertissement", texte: "Lancé directement depuis Téléchargements, le Bureau ou le dossier Public." },
-      { gravite: "avertissement", texte: "Téléchargé d'Internet depuis https://exemple.test/cheat.exe." } ] }, premiereVueMs: Date.now() - 3600_000, derniereVueMs: Date.now() },
+      { gravite: "avertissement", texte: "Téléchargé d'Internet depuis https://exemple.test/cheat.exe." } ] }, premiereVueMs: Date.now() - 3600_000, derniereVueMs: Date.now(), existe: true },
     { analyse: { chemin: "C:\\Program Files\\Git\\usr\\bin\\grep.exe", nom: "grep.exe", niveau: "a_verifier", editeur: null, demarrage: [], analyseMs: Date.now(), raisons: [
-      { gravite: "avertissement", texte: "Non signé : l'éditeur ne peut pas être vérifié." }, { gravite: "info", texte: "Installé dans Program Files." } ] }, premiereVueMs: Date.now() - 86400_000, derniereVueMs: Date.now() },
+      { gravite: "avertissement", texte: "Non signé : l'éditeur ne peut pas être vérifié." }, { gravite: "info", texte: "Installé dans Program Files." } ] }, premiereVueMs: Date.now() - 86400_000, derniereVueMs: Date.now(), existe: true },
     { analyse: { chemin: "C:\\Users\\exemple\\AppData\\Local\\Discord\\app-1.0\\Discord.exe", nom: "Discord.exe", niveau: "fiable", editeur: "Discord Inc.", demarrage: ["Registre utilisateur Run : Discord"], analyseMs: Date.now(), raisons: [
-      { gravite: "info", texte: "Signé par Discord Inc. : signature vérifiée par Windows." }, { gravite: "info", texte: "Se lance automatiquement : Registre utilisateur Run : Discord." } ] }, premiereVueMs: Date.now() - 5 * 86400_000, derniereVueMs: Date.now() },
+      { gravite: "info", texte: "Signé par Discord Inc. : signature vérifiée par Windows." }, { gravite: "info", texte: "Se lance automatiquement : Registre utilisateur Run : Discord." } ] }, premiereVueMs: Date.now() - 5 * 86400_000, derniereVueMs: Date.now(), existe: true },
   ],
   demarrage: [{ source: "Registre utilisateur Run", nom: "Discord", commande: "\"C:\\Users\\exemple\\AppData\\Local\\Discord\\Update.exe\" --processStart Discord.exe", executable: "C:\\Users\\exemple\\AppData\\Local\\Discord\\Update.exe" }],
   detections: [{ numero: "9025", quandMs: Date.parse("2026-01-19T00:05:56Z"), menace: "PUADlManager:Win32/OfferCore", gravite: "Faible", categorie: "Logiciel potentiellement non désiré", chemins: ["C:\\$Recycle.Bin\\…\\$RWL4XQB.exe"], action: "Non applicable", id: 1116 }],
