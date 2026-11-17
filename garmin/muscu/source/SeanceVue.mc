@@ -1,104 +1,120 @@
+// Écrans de la séance. Un anneau au bord de l'écran sert de jauge : répétitions vers l'objectif pendant la
+// série (or, vert une fois l'objectif atteint), temps de repos qui se vide (bleu, or quand c'est l'heure).
 import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-const C_VERT = 0x00C853;
-const C_AMBRE = 0xFFB300;
-const C_GRIS_M = 0xAAAAAA;
-
 class SeanceVue extends WatchUi.View {
 
     var seance as Seance;
+    var fEtiquette as Graphics.FontType?;
+    var fEnorme as Graphics.FontType?;
+    var fGrand as Graphics.FontType?;
+    var fMoyen as Graphics.FontType?;
+    var fPetit as Graphics.FontType?;
 
     function initialize(s as Seance) {
         View.initialize();
         seance = s;
     }
 
-    function texteSeries() as String {
-        var s = "";
-        for (var i = 0; i < seance.series.size(); i++) {
-            s += (i > 0 ? " · " : "") + seance.series[i].format("%d");
-        }
-        return s;
-    }
-
-    function mmss(s as Number) as String {
-        var a = s < 0 ? -s : s;
-        return (s < 0 ? "+" : "") + (a / 60).format("%d") + ":" + (a % 60).format("%02d");
+    function onLayout(dc as Graphics.Dc) as Void {
+        var h = dc.getHeight();
+        fEtiquette = Dessin.police(h * 7 / 100, true);
+        fEnorme = Dessin.police(h * 40 / 100, true);
+        fGrand = Dessin.police(h * 26 / 100, true);
+        fMoyen = Dessin.police(h * 8 / 100, false);
+        fPetit = Dessin.police(h * 6 / 100, false);
     }
 
     function onUpdate(dc as Graphics.Dc) as Void {
         var w = dc.getWidth();
         var h = dc.getHeight();
         var cx = w / 2;
-        var cy = h / 2;
-        var c = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;
         if (dc has :setAntiAlias) { dc.setAntiAlias(true); }
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
         dc.clear();
+        var e = seance.etat;
+        if (e == ETAT_PRET) { pret(dc, cx, h); }
+        else if (e == ETAT_SERIE) { serie(dc, cx, h); }
+        else if (e == ETAT_REPOS) { repos(dc, cx, h); }
+        else { fin(dc, cx, h); }
+    }
 
-        var numero = seance.series.size() + (seance.etat == ETAT_SERIE ? 1 : 0);
-        var restantes = seance.seriesVisees - seance.series.size();
-        if (restantes < 0) { restantes = 0; }
+    function pret(dc as Graphics.Dc, cx as Number, h as Number) as Void {
+        Dessin.anneau(dc, 0.0, C_OR);
+        Dessin.texte(dc, cx, h * 17 / 100, fEtiquette as Graphics.FontType, seance.nom.toUpper(), C_OR);
+        Dessin.pictogramme(dc, seance.exercice, cx, h * 33 / 100, Graphics.COLOR_WHITE);
+        Dessin.texte(dc, cx, h * 53 / 100, fGrand as Graphics.FontType,
+            seance.seriesVisees.format("%d") + " × " + seance.repsVisees.format("%d"), Graphics.COLOR_WHITE);
+        var d = seance.derniere();
+        var info = "repos " + Dessin.mmss(seance.repos);
+        if (d != null && d.size() > 0) { info += "  ·  avant : " + Dessin.liste(d); }
+        Dessin.texte(dc, cx, h * 68 / 100, fPetit as Graphics.FontType, info, C_GRIS);
+        // Bouton START
+        var lb = 150;
+        var hb = h * 12 / 100;
+        var yb = h * 82 / 100;
+        dc.setColor(C_VERT, Graphics.COLOR_TRANSPARENT);
+        dc.fillRoundedRectangle(cx - lb / 2, yb - hb / 2, lb, hb, hb / 2);
+        Dessin.texte(dc, cx, yb, fEtiquette as Graphics.FontType, "START", Graphics.COLOR_BLACK);
+    }
 
-        dc.setColor(C_GRIS_M, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy - h * 36 / 100, Graphics.FONT_SMALL, seance.nom, c);
+    function serie(dc as Graphics.Dc, cx as Number, h as Number) as Void {
+        var reps = seance.compteur.reps;
+        var vise = seance.repsVisees;
+        var atteint = reps >= vise;
+        Dessin.anneau(dc, vise > 0 ? (reps.toFloat() / vise.toFloat()) : 0.0, atteint ? C_VERT : C_OR);
+        Dessin.texte(dc, cx, h * 18 / 100, fMoyen as Graphics.FontType,
+            "SÉRIE " + (seance.series.size() + 1).format("%d") + " / " + seance.seriesVisees.format("%d"), C_GRIS);
+        Dessin.texte(dc, cx, h * 44 / 100, fEnorme as Graphics.FontType, reps.format("%d"), atteint ? C_VERT : Graphics.COLOR_WHITE);
+        Dessin.texte(dc, cx, h * 64 / 100, fMoyen as Graphics.FontType, "objectif " + vise.format("%d"), C_GRIS);
+        Dessin.points(dc, cx, h * 74 / 100, seance.series.size(), seance.seriesVisees, true);
+        Dessin.texte(dc, cx, h * 84 / 100, fPetit as Graphics.FontType, Dessin.mmss(seance.secondesEcoulees()) + "   ·   HAUT/BAS ±1", 0x6A6A6A);
+    }
 
-        if (seance.etat == ETAT_PRET) {
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy - h * 12 / 100, Graphics.FONT_MEDIUM,
-                seance.seriesVisees.format("%d") + " × " + seance.repsVisees.format("%d"), c);
-            dc.drawText(cx, cy + h * 2 / 100, Graphics.FONT_SMALL, "repos " + seance.repos.format("%d") + " s", c);
-            var d = seance.derniere();
-            if (d != null && d.size() > 0) {
-                var t = "";
-                for (var i = 0; i < d.size(); i++) { t += (i > 0 ? " · " : "") + d[i].format("%d"); }
-                dc.setColor(C_GRIS_M, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(cx, cy + h * 16 / 100, Graphics.FONT_XTINY, "Dernière fois : " + t, c);
-            }
-            dc.setColor(C_VERT, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy + h * 30 / 100, Graphics.FONT_SMALL, "START : série 1", c);
-            return;
+    function repos(dc as Graphics.Dc, cx as Number, h as Number) as Void {
+        var r = seance.reposRestant();
+        var fini = r <= 0;
+        Dessin.anneau(dc, fini ? 1.0 : r.toFloat() / seance.repos.toFloat(), fini ? C_OR : C_BLEU);
+        var faites = seance.series.size();
+        var restantes = seance.seriesVisees - faites;
+        Dessin.texte(dc, cx, h * 18 / 100, fEtiquette as Graphics.FontType, fini ? "C'EST REPARTI" : "REPOS", fini ? C_OR : C_BLEU);
+        Dessin.texte(dc, cx, h * 41 / 100, fGrand as Graphics.FontType, Dessin.mmss(r), fini ? C_OR : Graphics.COLOR_WHITE);
+        var derniere = faites > 0 ? seance.series[faites - 1] : 0;
+        Dessin.texte(dc, cx, h * 59 / 100, fMoyen as Graphics.FontType,
+            "série " + faites.format("%d") + " : " + derniere.format("%d") + " rép.", 0xC8C8C8);
+        Dessin.points(dc, cx, h * 70 / 100, faites, seance.seriesVisees, false);
+        Dessin.texte(dc, cx, h * 82 / 100, fPetit as Graphics.FontType,
+            restantes > 0 ? "START  ·  série " + (faites + 1).format("%d") : "Séries faites  ·  RETOUR", restantes > 0 ? C_VERT : C_OR);
+    }
+
+    function fin(dc as Graphics.Dc, cx as Number, h as Number) as Void {
+        Dessin.anneau(dc, seance.enregistree ? 1.0 : 0.0, C_OR);
+        Dessin.texte(dc, cx, h * 16 / 100, fPetit as Graphics.FontType,
+            seance.enregistree ? "SÉANCE ENREGISTRÉE" : "NON ENREGISTRÉE", seance.enregistree ? C_VERT : C_GRIS);
+        Dessin.texte(dc, cx, h * 33 / 100, fGrand as Graphics.FontType, seance.total().format("%d"), Graphics.COLOR_WHITE);
+        Dessin.texte(dc, cx, h * 48 / 100, fPetit as Graphics.FontType, seance.nom.toLower() + " au total", C_GRIS);
+
+        // Histogramme des séries.
+        var n = seance.series.size();
+        if (n == 0) { return; }
+        var max = seance.meilleure();
+        if (max < 1) { max = 1; }
+        var larg = n > 6 ? 16 : 24;
+        var ecart = n > 6 ? 8 : 12;
+        var hMax = h * 18 / 100;
+        var base = h * 76 / 100;
+        var x = cx - (n * larg + (n - 1) * ecart) / 2;
+        for (var i = 0; i < n; i++) {
+            var v = seance.series[i];
+            var hb = v * hMax / max;
+            if (hb < 4) { hb = 4; }
+            dc.setColor(v == max ? C_OR : 0x7A6232, Graphics.COLOR_TRANSPARENT);
+            dc.fillRoundedRectangle(x, base - hb, larg, hb, 5);
+            Dessin.texte(dc, x + larg / 2, base + h * 5 / 100, fPetit as Graphics.FontType, v.format("%d"), 0xB0B0B0);
+            x += larg + ecart;
         }
-
-        if (seance.etat == ETAT_SERIE) {
-            var reps = seance.compteur.reps;
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy - h * 24 / 100, Graphics.FONT_SMALL,
-                "Série " + numero.format("%d") + " / " + seance.seriesVisees.format("%d"), c);
-            dc.setColor(reps >= seance.repsVisees ? C_VERT : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy + h * 1 / 100, Graphics.FONT_NUMBER_THAI_HOT, reps.format("%d"), c);
-            dc.setColor(C_GRIS_M, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy + h * 22 / 100, Graphics.FONT_SMALL,
-                "objectif " + seance.repsVisees.format("%d") + "  ·  " + mmss(seance.secondesEcoulees()), c);
-            dc.drawText(cx, cy + h * 32 / 100, Graphics.FONT_XTINY, "HAUT/BAS : ±1", c);
-            return;
-        }
-
-        if (seance.etat == ETAT_REPOS) {
-            var r = seance.reposRestant();
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy - h * 24 / 100, Graphics.FONT_SMALL,
-                restantes == 0 ? "Séries faites" : ("Encore " + restantes.format("%d") + " série" + (restantes > 1 ? "s" : "")), c);
-            dc.setColor(r <= 0 ? C_AMBRE : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy, Graphics.FONT_NUMBER_HOT, mmss(r), c);
-            dc.setColor(C_GRIS_M, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy + h * 21 / 100, Graphics.FONT_SMALL, texteSeries(), c);
-            dc.setColor(C_VERT, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx, cy + h * 32 / 100, Graphics.FONT_XTINY,
-                restantes == 0 ? "RETOUR : fin" : "START : série " + (numero + 1).format("%d"), c);
-            return;
-        }
-
-        // Fin
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy - h * 20 / 100, Graphics.FONT_MEDIUM, seance.enregistree ? "Enregistrée" : "Non enregistrée", c);
-        dc.drawText(cx, cy, Graphics.FONT_NUMBER_MEDIUM, seance.total().format("%d"), c);
-        dc.setColor(C_GRIS_M, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy + h * 15 / 100, Graphics.FONT_SMALL,
-            seance.series.size().format("%d") + (seance.series.size() > 1 ? " séries" : " série") + " · meilleure " + seance.meilleure().format("%d"), c);
-        dc.drawText(cx, cy + h * 26 / 100, Graphics.FONT_XTINY, texteSeries(), c);
     }
 }
 

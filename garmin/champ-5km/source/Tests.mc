@@ -7,6 +7,7 @@ import Toybox.Test;
 function tempsLu(logger as Test.Logger) as Boolean {
     // Textes : equals (== compare les objets en Monkey C).
     return lireTemps("29:30") == 1770.0 && lireTemps("1:02:03") == 3723.0 && lireTemps("abc") == null
+        && virgule("2.65").equals("2,65") && virgule("3").equals("3")
         && chrono(1770.0).equals("29:30") && ecartTexte(-8.0).equals("-0:08") && ecartTexte(12.0).equals("+0:12");
 }
 

@@ -9,6 +9,21 @@ Rien n'est piraté : la montre accepte les apps de développeur copiées par câ
 | Rayan's 5 km | [`champ-5km/`](champ-5km/) | champ de données | Pendant une course : **avance ou retard** sur le temps visé, temps final estimé, distance restante ; alerte à chaque km (temps du km, écart) ; après 5 km, le vrai temps sur 5 km. |
 | Rayan's Muscu | [`muscu/`](muscu/) | app | **Tractions** ou **pompes** : répétitions comptées au poignet, objectif par série, repos minuté (vibre à 10 s et à la fin), séries restantes, dernière séance rappelée. Enregistrée comme activité « Musculation » dans Garmin Connect (un circuit par série, répétitions par circuit et au total). |
 
+![Cadran, écran toujours allumé, champ 5 km](captures/cadran-et-5km.png)
+![Muscu : accueil, prêt, série](captures/muscu-accueil-serie.png)
+![Muscu : objectif atteint, repos, fin](captures/muscu-objectif-repos-fin.png)
+
+## Design
+
+- **Cadran** : anneau de 24 h (midi en haut, minuit en bas) aux couleurs de la lumière du jour — nuit (bleu),
+  aube de Fajr au lever (violet), jour (or sombre), crépuscule de Maghrib à Isha (prune). Un trait par prière (la
+  prochaine en or), un point blanc pour l'heure actuelle. Heure en Roboto Condensed gras, deux-points en or.
+- **Muscu** : accueil en deux cartes avec pictogramme ; pendant la série, l'anneau se remplit vers l'objectif
+  (or, puis vert) ; pendant le repos, il se vide (bleu, puis or) ; points des séries ; histogramme à la fin.
+- **5 km** (champ en plein écran) : anneau de distance coloré selon l'écart, trait du temps visé (où il faudrait
+  être maintenant), dernier kilomètre.
+- Polices vectorielles de la montre (`Graphics.getVectorFont`) avec repli sur les polices système.
+
 ## Détails
 
 - **Horaires de prière** : même calcul que Rayan's Prière (`priere/src/core/praytimes.ts`), refait en Monkey C

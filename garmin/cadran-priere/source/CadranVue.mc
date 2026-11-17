@@ -1,6 +1,7 @@
-// Cadran : heure, date, prochaine prière (heure et temps restant), anneau qui se remplit entre la prière
-// précédente et la suivante, pas, cœur et batterie. Écran toujours allumé : affichage minimal qui se décale
-// chaque minute (protection de l'écran AMOLED).
+// Cadran « soleil » : anneau de 24 heures (midi en haut, minuit en bas) coloré selon la lumière du jour — nuit,
+// aube (Fajr → lever), jour, crépuscule (Maghrib → Isha) — avec un repère par prière et un point pour l'heure
+// actuelle. Au centre : date, heure, prochaine prière et temps restant ; en bas : pas, cœur, batterie.
+// Écran toujours allumé : heure et prochaine prière seulement, en gris, et décalées chaque minute (AMOLED).
 import Toybox.Activity;
 import Toybox.ActivityMonitor;
 import Toybox.Application;
@@ -13,13 +14,20 @@ import Toybox.Time.Gregorian;
 import Toybox.WatchUi;
 import Toybox.Weather;
 
-const JOURS = ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."];
-const MOIS = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+const JOURS = ["DIMANCHE", "LUNDI", "MARDI", "MERCREDI", "JEUDI", "VENDREDI", "SAMEDI"];
+const MOIS = ["JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DÉCEMBRE"];
+const NOMS_MAJ = ["FAJR", "CHOUROUQ", "DHUHR", "ASR", "MAGHRIB", "ISHA"];
 
-const C_ACCENT = 0xFFB300;   // ambre : prochaine prière
-const C_ANNEAU = 0x2E7D32;   // vert : avancée vers la prochaine prière
-const C_FOND_ANNEAU = 0x222222;
-const C_GRIS = 0xAAAAAA;
+// Palette : or pour la prière qui vient, couleurs sourdes pour l'anneau (l'heure reste ce qui ressort).
+const C_OR = 0xF2B544;
+const C_GRIS = 0x8C8C8C;
+const C_GRIS_FONCE = 0x3A3A3A;
+const C_NUIT = 0x1B2357;
+const C_AUBE = 0x4A3F95;
+const C_JOUR = 0x7A5A12;
+const C_CREPUSCULE = 0x6A2C63;
+const C_PAS = 0x4DD0C8;
+const C_COEUR = 0xFF5A5F;
 
 // Rennes, tant que la montre n'a jamais eu de position GPS.
 const LAT_DEFAUT = 48.1173d;
@@ -147,6 +155,23 @@ class CadranVue extends WatchUi.WatchFace {
 
     // ----- Dessin -----------------------------------------------------------------------------------------
 
+    var fHeure as Graphics.FontType?;
+    var fHeureVeille as Graphics.FontType?;
+    var fDate as Graphics.FontType?;
+    var fPriere as Graphics.FontType?;
+    var fPriereFine as Graphics.FontType?;
+    var fPetit as Graphics.FontType?;
+
+    function onLayout(dc as Graphics.Dc) as Void {
+        var h = dc.getHeight();
+        fHeure = Dessin.police(h * 33 / 100, true);
+        fHeureVeille = Dessin.police(h * 24 / 100, false);
+        fDate = Dessin.police(h * 6 / 100, false);
+        fPriere = Dessin.police(h * 9 / 100, true);
+        fPriereFine = Dessin.police(h * 9 / 100, false);
+        fPetit = Dessin.police(h * 6 / 100, false);
+    }
+
     function hhmm(minutes as Number) as String {
         var m = ((minutes % 1440) + 1440) % 1440;
         return (m / 60).format("%d") + ":" + (m % 60).format("%02d");
@@ -158,11 +183,11 @@ class CadranVue extends WatchUi.WatchFace {
     }
 
     function onUpdate(dc as Graphics.Dc) as Void {
+        if (fHeure == null) { onLayout(dc); }
         preparerHoraires();
         var horloge = System.getClockTime();
         var maintenant = horloge.hour * 60 + horloge.min;
         var p = prochaine(maintenant);
-        var nom = Priere.NOMS[p[0]] as String;
         var reste = p[2] - maintenant;
 
         var w = dc.getWidth();
@@ -173,71 +198,130 @@ class CadranVue extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
         dc.clear();
 
-        var heure = horloge.hour.format("%02d") + ":" + horloge.min.format("%02d");
-        var reglages = System.getDeviceSettings();
+        var hh = horloge.hour.format("%02d");
+        var mm = horloge.min.format("%02d");
 
-        if (enVeille && reglages.requiresBurnInProtection) {
-            // Écran toujours allumé : peu de pixels, gris, et position qui bouge chaque minute.
-            var dx = ((horloge.min % 5) - 2) * 6;
-            var dy = (((horloge.min / 5) % 5) - 2) * 6;
-            dc.setColor(0x777777, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx + dx, cy - 30 + dy, Graphics.FONT_NUMBER_MEDIUM, heure, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            dc.setColor(0x996B00, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx + dx, cy + 45 + dy, Graphics.FONT_TINY, nom + " " + hhmm(p[2]), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        if (enVeille && System.getDeviceSettings().requiresBurnInProtection) {
+            // Écran toujours allumé : peu de pixels, gris, position qui bouge chaque minute.
+            var dx = ((horloge.min % 5) - 2) * 7;
+            var dy = (((horloge.min / 5) % 5) - 2) * 7;
+            Dessin.texte(dc, cx + dx, cy - h * 6 / 100 + dy, fHeureVeille as Graphics.FontType, hh + ":" + mm, 0x6E6E6E);
+            Dessin.texte(dc, cx + dx, cy + h * 14 / 100 + dy, fPetit as Graphics.FontType, (NOMS_MAJ[p[0]] as String) + "  " + hhmm(p[2]), 0x8A6A2A);
             return;
         }
 
-        // Anneau : part écoulée entre la prière précédente et la prochaine.
-        var rayon = cx - 8;
-        dc.setPenWidth(10);
-        dc.setColor(C_FOND_ANNEAU, Graphics.COLOR_TRANSPARENT);
-        dc.drawCircle(cx, cy, rayon);
-        var total = p[2] - p[1];
-        if (total > 0) {
-            var frac = (maintenant - p[1]).toFloat() / total.toFloat();
-            if (frac > 0.0) {
-                if (frac > 1.0) { frac = 1.0; }
-                var fin = 90 - (frac * 360.0).toNumber();
-                dc.setColor(reste <= 15 ? C_ACCENT : C_ANNEAU, Graphics.COLOR_TRANSPARENT);
-                if (frac >= 0.999) { dc.drawCircle(cx, cy, rayon); }
-                else { dc.drawArc(cx, cy, rayon, Graphics.ARC_CLOCKWISE, 90, ((fin % 360) + 360) % 360); }
-            }
-        }
-        dc.setPenWidth(1);
+        // Après Isha, la prochaine est Fajr de demain : même place sur l'anneau que celui d'aujourd'hui.
+        dessinerAnneau(dc, cx, cy, h, maintenant, p[0]);
 
         // Date
         var g = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
         var date = (JOURS[(g.day_of_week as Number) - 1] as String) + " " + (g.day as Number).format("%d") + " " + (MOIS[(g.month as Number) - 1] as String);
-        dc.setColor(C_GRIS, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy - h * 30 / 100, Graphics.FONT_SMALL, date, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        Dessin.texte(dc, cx, cy - h * 27 / 100, fDate as Graphics.FontType, date, C_GRIS);
 
-        // Heure
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy - h * 7 / 100, Graphics.FONT_NUMBER_HOT, heure, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        // Heure : HH (blanc) : (or) MM (blanc)
+        var fh = fHeure as Graphics.FontType;
+        var wH = dc.getTextWidthInPixels(hh, fh);
+        var wP = dc.getTextWidthInPixels(":", fh);
+        var wM = dc.getTextWidthInPixels(mm, fh);
+        var x0 = cx - (wH + wP + wM) / 2;
+        var yH = cy - h * 5 / 100;
+        Dessin.texteAligne(dc, x0, yH, fh, hh, Graphics.COLOR_WHITE, false);
+        Dessin.texteAligne(dc, x0 + wH, yH, fh, ":", C_OR, false);
+        Dessin.texteAligne(dc, x0 + wH + wP, yH, fh, mm, Graphics.COLOR_WHITE, false);
 
-        // Prochaine prière
-        dc.setColor(C_ACCENT, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy + h * 15 / 100, Graphics.FONT_MEDIUM, nom + "  " + hhmm(p[2]), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy + h * 24 / 100, Graphics.FONT_SMALL, "dans " + duree(reste), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        // Prochaine prière : NOM (or, gras) + heure (blanc), puis le temps restant.
+        var nom = NOMS_MAJ[p[0]] as String;
+        var heure = "  " + hhmm(p[2]);
+        var fp = fPriere as Graphics.FontType;
+        var fpf = fPriereFine as Graphics.FontType;
+        var wN = dc.getTextWidthInPixels(nom, fp);
+        var wT = dc.getTextWidthInPixels(heure, fpf);
+        var xp = cx - (wN + wT) / 2;
+        var yp = cy + h * 17 / 100;
+        Dessin.texteAligne(dc, xp, yp, fp, nom, C_OR, false);
+        Dessin.texteAligne(dc, xp + wN, yp, fpf, heure, Graphics.COLOR_WHITE, false);
+        Dessin.texte(dc, cx, cy + h * 26 / 100, fPetit as Graphics.FontType, "dans " + duree(reste), reste <= 15 ? C_OR : C_GRIS);
 
-        // Pas · cœur · batterie
-        dc.setColor(C_GRIS, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy + h * 34 / 100, Graphics.FONT_XTINY, ligneBas(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dessinerBas(dc, cx, cy + h * 35 / 100);
     }
 
-    function ligneBas() as String {
-        var morceaux = [] as Array<String>;
-        var am = ActivityMonitor.getInfo();
-        if (am != null && am.steps != null) { morceaux.add((am.steps as Number).format("%d") + " pas"); }
-        var fc = frequenceCardiaque();
-        if (fc != null) { morceaux.add(fc.format("%d") + " bpm"); }
-        morceaux.add(System.getSystemStats().battery.format("%d") + " %");
-        var s = "";
-        for (var i = 0; i < morceaux.size(); i++) {
-            s += (i > 0 ? "  ·  " : "") + morceaux[i];
+    // Anneau de 24 h : piste sombre, segments nuit / aube / jour / crépuscule, repères des prières, heure actuelle.
+    function dessinerAnneau(dc as Graphics.Dc, cx as Number, cy as Number, h as Number, maintenant as Number, suivante as Number) as Void {
+        var r = h / 2 - 9;
+        var t = aujourdhui;
+        dc.setPenWidth(10);
+        dc.setColor(0x151515, Graphics.COLOR_TRANSPARENT);
+        dc.drawCircle(cx, cy, r);
+        Dessin.arc24(dc, cx, cy, r, t[5], t[0], C_NUIT);        // Isha → Fajr
+        Dessin.arc24(dc, cx, cy, r, t[0], t[1], C_AUBE);        // Fajr → lever
+        Dessin.arc24(dc, cx, cy, r, t[1], t[4], C_JOUR);        // lever → Maghrib
+        Dessin.arc24(dc, cx, cy, r, t[4], t[5], C_CREPUSCULE);  // Maghrib → Isha
+        dc.setPenWidth(1);
+
+        // Graduations : un point toutes les 3 h, un trait à 0 h, 6 h, 12 h, 18 h.
+        for (var k = 0; k < 8; k++) {
+            var a = Dessin.angle24(k * 180);
+            var rr = (r - 16).toFloat();
+            dc.setColor(k % 2 == 0 ? 0x5A5A5A : C_GRIS_FONCE, Graphics.COLOR_TRANSPARENT);
+            if (k % 2 == 0) {
+                dc.setPenWidth(3);
+                dc.drawLine(Dessin.px(cx, rr - 6.0, a), Dessin.py(cy, rr - 6.0, a), Dessin.px(cx, rr + 2.0, a), Dessin.py(cy, rr + 2.0, a));
+                dc.setPenWidth(1);
+            } else {
+                dc.fillCircle(Dessin.px(cx, rr, a), Dessin.py(cy, rr, a), 2);
+            }
         }
-        return s;
+
+        // Repères des cinq prières (traits en travers de l'anneau) ; la prochaine en or, plus longue.
+        for (var i = 0; i < 6; i++) {
+            if (i == 1 || t[i] <= -100000) { continue; }
+            var a = Dessin.angle24(t[i]);
+            var prochaine = i == suivante;
+            var r1 = (r - (prochaine ? 12 : 7)).toFloat();
+            var r2 = (r + (prochaine ? 8 : 6)).toFloat();
+            dc.setPenWidth(prochaine ? 5 : 3);
+            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+            dc.drawLine(Dessin.px(cx, r1, a), Dessin.py(cy, r1, a), Dessin.px(cx, r2, a), Dessin.py(cy, r2, a));
+            dc.setPenWidth(prochaine ? 3 : 1);
+            dc.setColor(prochaine ? C_OR : 0xBDBDBD, Graphics.COLOR_TRANSPARENT);
+            dc.drawLine(Dessin.px(cx, r1, a), Dessin.py(cy, r1, a), Dessin.px(cx, r2, a), Dessin.py(cy, r2, a));
+        }
+        dc.setPenWidth(1);
+
+        // Heure actuelle : point blanc cerclé de noir sur l'anneau.
+        var an = Dessin.angle24(maintenant);
+        var xn = Dessin.px(cx, r.toFloat(), an);
+        var yn = Dessin.py(cy, r.toFloat(), an);
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(xn, yn, 10);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(xn, yn, 7);
+    }
+
+    // Pas · cœur · batterie, chaque valeur précédée de son icône, l'ensemble centré.
+    function dessinerBas(dc as Graphics.Dc, cx as Number, y as Number) as Void {
+        var f = fPetit as Graphics.FontType;
+        var am = ActivityMonitor.getInfo();
+        var pasTxt = am != null && am.steps != null ? (am.steps as Number).format("%d") : "--";
+        var fc = frequenceCardiaque();
+        var fcTxt = fc != null ? fc.format("%d") : "--";
+        var bat = System.getSystemStats().battery;
+        var batTxt = bat.format("%d") + "%";
+        var ecart = 18;
+        var icone = 24;
+        var w1 = dc.getTextWidthInPixels(pasTxt, f);
+        var w2 = dc.getTextWidthInPixels(fcTxt, f);
+        var w3 = dc.getTextWidthInPixels(batTxt, f);
+        var total = 3 * icone + w1 + w2 + w3 + 2 * ecart;
+        var x = cx - total / 2;
+        Dessin.pas(dc, x + 8, y - 4, C_PAS);
+        Dessin.texteAligne(dc, x + icone, y, f, pasTxt, 0xD0D0D0, false);
+        x += icone + w1 + ecart;
+        Dessin.coeur(dc, x + 9, y - 3, C_COEUR);
+        Dessin.texteAligne(dc, x + icone, y, f, fcTxt, 0xD0D0D0, false);
+        x += icone + w2 + ecart;
+        Dessin.batterie(dc, x + 10, y, bat, bat <= 20.0 ? C_COEUR : 0x7BD88F);
+        Dessin.texteAligne(dc, x + icone + 2, y, f, batTxt, 0xD0D0D0, false);
     }
 
     function frequenceCardiaque() as Number? {
