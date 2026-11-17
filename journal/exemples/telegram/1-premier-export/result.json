@@ -1,0 +1,58 @@
+{
+ "about": "Export fictif",
+ "chats": {
+  "about": "",
+  "list": [
+   {
+    "name": "Club échecs (exemple)",
+    "type": "private_group",
+    "id": 4242,
+    "messages": [
+     {
+      "id": 101,
+      "type": "message",
+      "date": "2026-11-14T21:05:09",
+      "date_unixtime": "1794686709",
+      "from": "Noé Exemple",
+      "from_id": "user77",
+      "text": "Partie à 21 h ? ♟️"
+     },
+     {
+      "id": 102,
+      "type": "message",
+      "date": "2026-11-14T21:06:30",
+      "date_unixtime": "1794686790",
+      "from": "Rayan",
+      "from_id": "user1",
+      "text": [
+       "Oui ! Ouverture ",
+       {
+        "type": "bold",
+        "text": "italienne"
+       },
+       " cette fois."
+      ]
+     },
+     {
+      "id": 103,
+      "type": "message",
+      "date": "2026-11-14T21:07:12",
+      "date_unixtime": "1794686832",
+      "from": "Noé Exemple",
+      "from_id": "user77",
+      "text": "Message que Noé supprimera ensuite."
+     },
+     {
+      "id": 104,
+      "type": "message",
+      "date": "2026-11-14T21:10:00",
+      "date_unixtime": "1794687000",
+      "from": "Noé Exemple",
+      "from_id": "user77",
+      "text": "Ok, à tout de suite."
+     }
+    ]
+   }
+  ]
+ }
+}

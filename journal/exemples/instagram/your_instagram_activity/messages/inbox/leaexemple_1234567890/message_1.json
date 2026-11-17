@@ -1,0 +1,31 @@
+{
+  "participants": [
+    {
+      "name": "LÃ©a Exemple"
+    },
+    {
+      "name": "Rayan"
+    }
+  ],
+  "messages": [
+    {
+      "sender_name": "Rayan",
+      "timestamp_ms": 1794740400123,
+      "content": "Ãa va ? ð"
+    },
+    {
+      "sender_name": "LÃ©a Exemple",
+      "timestamp_ms": 1794740300456,
+      "content": "TrÃ¨s bien, et toi ?",
+      "reactions": [
+        {
+          "reaction": "â¤ï¸",
+          "actor": "Rayan"
+        }
+      ]
+    }
+  ],
+  "title": "LÃ©a Exemple",
+  "is_still_participant": true,
+  "thread_path": "inbox/leaexemple_1234567890"
+}
