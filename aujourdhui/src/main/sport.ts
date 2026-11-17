@@ -77,6 +77,10 @@ export function setupSport(c: Ctx) {
   h("sport-semaine", (s) => reglerSemaine(data, (s ?? null) as TypeSeance[] | null));
 }
 
+/** Données actuelles et modification (import des activités de la montre). */
+export const donneesSport = () => data;
+export function modifierSport(next: SportData) { commit(next); }
+
 /** Synchronisation avec l'iPhone. */
 export const sportText = () => JSON.stringify(data);
 export function applySportText(text: string) { commit(nettoyerSport(JSON.parse(text))); }

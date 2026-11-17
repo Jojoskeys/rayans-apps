@@ -1,0 +1,5 @@
+<strings>
+    <string id="AppName">Rayan’s 5 km</string>
+    <string id="reglageObjectif">Temps visé sur 5 km (min:s, ex. 29:30)</string>
+    <string id="reglageAlertes">Alerte à chaque kilomètre</string>
+</strings>

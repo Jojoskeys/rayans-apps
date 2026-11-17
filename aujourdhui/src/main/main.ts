@@ -16,6 +16,7 @@ import { adhkarSuivis, bilanView, checkBilan, matinActif, setupBilan } from "./b
 import { setupSync, syncAll, syncView } from "./sync.ts";
 import { courrierView, setupCourrier, verifierCourrier } from "./courrier.ts";
 import { checkSport, setupSport, sportDuJour, view as sportView } from "./sport.ts";
+import { setupGarmin } from "./garmin.ts";
 import { occupations } from "./fac.ts";
 
 const APP_NAME = "Rayan's Aujourd'hui";
@@ -126,6 +127,7 @@ function start() {
   setupFac({ dataDir, clock: () => testHooks.clock(), fetchText: (u) => testHooks.fetchText(u), changed: () => broadcast() });
   setupSport({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => { checkObjectifs(); broadcast(); }, cours: () => occupations() });
   setupCourrier({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast() });
+  if (!testReport) setupGarmin({ dataDir, notify: (t, b) => { notify(t, b); } });
 
   createTray();
   createMain(!atLogin);

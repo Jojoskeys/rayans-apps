@@ -1,0 +1,31 @@
+<settings>
+    <setting propertyKey="@Properties.methode" title="@Strings.reglageMethode">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.m0</listEntry>
+            <listEntry value="1">@Strings.m1</listEntry>
+            <listEntry value="2">@Strings.m2</listEntry>
+            <listEntry value="3">@Strings.m3</listEntry>
+            <listEntry value="4">@Strings.m4</listEntry>
+            <listEntry value="5">@Strings.m5</listEntry>
+            <listEntry value="6">@Strings.m6</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.ecoleAsr" title="@Strings.reglageAsr">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.asrShafii</listEntry>
+            <listEntry value="1">@Strings.asrHanafi</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.decalage" title="@Strings.reglageDecalage">
+        <settingConfig type="numeric" min="-30" max="30"/>
+    </setting>
+    <setting propertyKey="@Properties.positionManuelle" title="@Strings.reglageManuelle">
+        <settingConfig type="boolean"/>
+    </setting>
+    <setting propertyKey="@Properties.latitude" title="@Strings.reglageLatitude">
+        <settingConfig type="numeric" min="-89.9" max="89.9"/>
+    </setting>
+    <setting propertyKey="@Properties.longitude" title="@Strings.reglageLongitude">
+        <settingConfig type="numeric" min="-180" max="180"/>
+    </setting>
+</settings>

@@ -43,6 +43,13 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 - **Créneau** : premier moment libre assez long d'après l'emploi du temps (20 min de marge autour des cours ; dès
   7 h en semaine, 9 h 30 le week-end, jusqu'à 21 h 30). Dans la notification du matin, et rappel 30 min avant.
 - Données : `sport.json`, synchronisé avec l'iPhone (séances saisies à la salle sur le téléphone).
+- **Montre Garmin branchée en USB** (`src/main/garmin.ts`, toutes les 2 minutes, Windows) : les nouvelles activités
+  de `GARMIN\Activity` sont copiées dans `montre/` (sur le PC) et lues (`src/core/fit.ts`). Séances de Rayan's Muscu
+  (voir `garmin/`) → tractions strictes ou pompes, une série par circuit ; courses d'au moins 1 km → course du jour
+  (sinon sortie longue), ressenti « correct ». Placées dans la séance prévue ce jour-là si elle contient
+  l'exercice, sinon dans celle qui le contient. **Une saisie existante n'est jamais remplacée.** Rien avant le début
+  du plan. Notification avec ce qui a été ajouté ; fichiers déjà traités dans `montre.json`. Rien ne passe par
+  Internet. Règles : `src/core/garmin.ts`, testées (`test/garmin.test.ts`).
 
 ## Mails de la fac : lecture automatique
 

@@ -1,0 +1,18 @@
+<strings>
+    <string id="AppName">Rayan’s Prière (cadran)</string>
+    <string id="reglageMethode">Méthode de calcul</string>
+    <string id="m0">UOIF (France, 12°)</string>
+    <string id="m1">France 15°</string>
+    <string id="m2">Ligue islamique mondiale (18°)</string>
+    <string id="m3">ISNA (15°)</string>
+    <string id="m4">Autorité égyptienne</string>
+    <string id="m5">Umm al-Qura (La Mecque)</string>
+    <string id="m6">Université de Karachi</string>
+    <string id="reglageAsr">Asr</string>
+    <string id="asrShafii">Standard (ombre × 1)</string>
+    <string id="asrHanafi">Hanafite (ombre × 2)</string>
+    <string id="reglageDecalage">Décalage de toutes les prières (minutes)</string>
+    <string id="reglageManuelle">Position saisie à la main</string>
+    <string id="reglageLatitude">Latitude (ex. 48.1173)</string>
+    <string id="reglageLongitude">Longitude (ex. -1.6778)</string>
+</strings>

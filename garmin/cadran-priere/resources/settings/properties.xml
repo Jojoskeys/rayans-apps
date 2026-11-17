@@ -1,0 +1,8 @@
+<properties>
+    <property id="methode" type="number">0</property>
+    <property id="ecoleAsr" type="number">0</property>
+    <property id="decalage" type="number">0</property>
+    <property id="positionManuelle" type="boolean">false</property>
+    <property id="latitude" type="float">48.1173</property>
+    <property id="longitude" type="float">-1.6778</property>
+</properties>

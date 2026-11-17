@@ -1,0 +1,5 @@
+<properties>
+    <!-- Valeur de départ, à régler dans Garmin Connect (temps visé du test 5 km dans Rayan's Aujourd'hui). -->
+    <property id="objectif" type="string">30:00</property>
+    <property id="alertesKm" type="boolean">true</property>
+</properties>

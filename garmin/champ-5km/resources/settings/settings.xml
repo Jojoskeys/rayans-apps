@@ -1,0 +1,8 @@
+<settings>
+    <setting propertyKey="@Properties.objectif" title="@Strings.reglageObjectif">
+        <settingConfig type="alphaNumeric"/>
+    </setting>
+    <setting propertyKey="@Properties.alertesKm" title="@Strings.reglageAlertes">
+        <settingConfig type="boolean"/>
+    </setting>
+</settings>
