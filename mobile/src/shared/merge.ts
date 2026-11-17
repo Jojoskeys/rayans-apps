@@ -163,6 +163,25 @@ export function mergeBilan(base: Obj | undefined, local: Obj, remote: Obj): Obj 
   };
 }
 
+// ----- Rayan's Aujourd'hui : sport ---------------------------------------------------------------------------
+// Les charges sont recalculées à partir du journal : il suffit de réunir les journaux. Une même séance (même jour,
+// même type) saisie des deux côtés : la plus récente l'emporte.
+
+export function mergeSport(base: Obj | undefined, local: Obj, remote: Obj): Obj {
+  const parSeance = new Map<string, Obj>();
+  for (const s of [...(remote.journal ?? []), ...(local.journal ?? [])]) {
+    const k = `${s.jour}|${s.type}`;
+    const prev = parSeance.get(k);
+    if (!prev || (s.at ?? 0) >= (prev.at ?? 0)) parSeance.set(k, s);
+  }
+  return {
+    debut: local.debut ?? remote.debut,
+    journal: [...parSeance.values()].sort((a, b) => (a.at ?? 0) - (b.at ?? 0)),
+    perfs: mergeById(base?.perfs, local.perfs ?? [], remote.perfs ?? [], (p: Obj) => p.id, () => false),
+    ajustements: unionBy(local.ajustements ?? [], remote.ajustements ?? [], (a: Obj) => a.id).sort((a: Obj, b: Obj) => a.at - b.at),
+  };
+}
+
 // ----- Rayan's Chrono --------------------------------------------------------------------------------
 
 export function mergeChrono(base: Obj | undefined, local: Obj, remote: Obj): Obj {
@@ -225,6 +244,7 @@ export const MERGERS: Record<string, (base: Obj | undefined, local: Obj, remote:
   routine: mergeRoutine,
   objectifs: mergeObjectifs,
   bilan: mergeBilan,
+  sport: mergeSport,
   chrono: mergeChrono,
   priere: mergeWhole,
   ouvertures: mergeOuvertures,

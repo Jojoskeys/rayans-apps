@@ -7,13 +7,16 @@ import { displayCourses, type FacData } from "../../aujourdhui/src/core/fac.ts";
 import { slot, type CourseChange } from "../../aujourdhui/src/core/ics.ts";
 import { nettoyerBilan, notificationsBilan, type Prieres } from "../../aujourdhui/src/core/bilan.ts";
 import { journee, nettoyerObjectifs } from "../../aujourdhui/src/core/objectifs.ts";
+import { creneau, ligneSport, nettoyerSport, seanceDuJour } from "../../aujourdhui/src/core/sport.ts";
 
 export interface Prefs {
   cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number;
   /** Adhkar après Fajr et entre Asr et Maghrib ; bilan du matin et du soir ; citations du jour. */
   adhkar: boolean; bilan: boolean; citations: boolean;
+  /** Séance de sport : dans le message du matin, et rappel 30 min avant le créneau. */
+  sport: boolean;
 }
-export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true };
+export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true, sport: true };
 
 export interface VeilleurState {
   /** Dernier passage (ms). */
@@ -41,6 +44,8 @@ export interface Inputs {
   /** Fichiers d'Aujourd'hui (bilan, objectifs), déchiffrés. */
   bilan?: unknown;
   objectifs?: unknown;
+  /** Fichier sport d'Aujourd'hui (journal des séances), déchiffré. */
+  sport?: unknown;
   /** Heures de prière du jour (calculées par main.ts avec le code de Rayan's Prière), ou null. */
   prieres?: Prieres | null;
 }
@@ -129,10 +134,24 @@ export function plan(i: Inputs): { messages: Message[]; state: VeilleurState } {
     const res = notificationsBilan({ ...b, reglages, envoyes: bilanEnvoyes }, now, i.prieres ?? null);
     bilanEnvoyes = res.data.envoyes;
     const obj = i.objectifs ? nettoyerObjectifs(i.objectifs).jours[journee(now)] ?? [] : [];
+    const occ = i.fac ? displayCourses(i.fac).filter((c) => !c.cancelled).map((c) => ({ start: c.start, end: c.end })) : [];
+    const sportLigne = prefs.sport && i.sport !== undefined ? ligneSport(nettoyerSport(i.sport), day, occ, now) : null;
     for (const m of res.messages) {
-      const corps = m.titre.startsWith("Bonjour") && obj.length ? `${m.corps}\nObjectifs : ${obj.map((o) => o.titre).join(" · ")}` : m.corps;
+      const matin = m.titre.startsWith("Bonjour");
+      const corps = [m.corps, matin && obj.length ? `Objectifs : ${obj.map((o) => o.titre).join(" · ")}` : "", matin ? sportLigne ?? "" : ""].filter(Boolean).join("\n");
       const tag = m.titre.startsWith("Adhkar") ? "adhkar" : m.titre.startsWith("Bilan") ? "bilan" : m.titre.startsWith("Bonjour") ? "bonjour" : "citation";
       out.push({ title: m.titre, body: corps, url: "./aujourdhui/", tag });
+    }
+  }
+
+  // 6. Séance de sport : rappel 30 minutes avant le créneau libre du jour (d'après l'emploi du temps).
+  if (prefs.sport && i.sport !== undefined) {
+    const sp = nettoyerSport(i.sport);
+    const s = seanceDuJour(sp, day, now);
+    const occ = i.fac ? displayCourses(i.fac).filter((c) => !c.cancelled).map((c) => ({ start: c.start, end: c.end })) : [];
+    const c = s.type === "repos" || s.faite ? null : creneau(day, s.dureeMin, occ);
+    if (c && now >= c.debut - 40 * 60_000 && now < c.debut + 20 * 60_000) {
+      once(`sport|${day}`, { title: `Séance à ${hm(c.debut)} : ${s.titre}`, body: s.course ? s.course.etapes.slice(0, 2).join("\n") : s.blocs.filter((b) => b.ex !== "echauffement-epaule").slice(0, 3).map((b) => `${b.nom} : ${b.series} × ${b.mode === "plage" ? `${b.plage![0]}-${b.plage![1]}` : b.prescription.reps}${b.prescription.charge ? ` à ${b.prescription.charge} kg` : ""}`).join("\n"), url: "./aujourdhui/", tag: "sport" });
     }
   }
 

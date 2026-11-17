@@ -116,3 +116,15 @@ test("Objectifs : deux listes différentes pour le même jour → les deux appar
   const surTel = mergeObjectifs(undefined, tel, pc);
   assert.deepEqual(surPc.jours, surTel.jours);
 });
+
+test("Sport : journaux réunis ; même séance saisie sur les deux appareils → la plus récente", async () => {
+  const { mergeSport } = await import("../src/shared/merge.ts");
+  const s = (jour: string, type: string, at: number, reps: number) => ({ id: `${jour}-${type}`, jour, type, exercices: [{ bloc: "squat", series: [{ charge: 80, reps }] }], at });
+  const base = { debut: "2026-11-16", journal: [], perfs: [], ajustements: [] };
+  const pc = { ...base, journal: [s("2026-11-16", "upper", 10, 5)] };
+  const tel = { ...base, journal: [s("2026-11-17", "leg", 20, 8), s("2026-11-16", "upper", 30, 6)] };
+  const m = mergeSport(base, pc, tel);
+  assert.deepEqual(m.journal.map((x: { jour: string }) => x.jour), ["2026-11-17", "2026-11-16"]);
+  assert.equal(m.journal.find((x: { type: string }) => x.type === "upper").exercices[0].series[0].reps, 6);
+  assert.deepEqual(mergeSport(base, tel, pc).journal, m.journal, "même résultat sur les deux appareils");
+});

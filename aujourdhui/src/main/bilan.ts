@@ -17,6 +17,8 @@ interface Ctx {
   changed: () => void;
   /** Objectifs du jour, ajoutés au rappel du matin. */
   objectifs: () => string[];
+  /** Séance de sport du jour et son créneau (« Sport : Jambes (Leg) à 18 h 20 »). */
+  sport: () => string | null;
 }
 
 let ctx: Ctx;
@@ -61,8 +63,10 @@ export function checkBilan() {
   const { data: next, messages } = notificationsBilan(data, now, prieres(now));
   commit(next);
   for (const m of messages) {
-    const o = m.titre.startsWith("Bonjour") ? ctx.objectifs() : [];
-    ctx.notify(m.titre, o.length ? `${m.corps}\nObjectifs : ${o.join(" · ")}` : m.corps);
+    const matin = m.titre.startsWith("Bonjour");
+    const o = matin ? ctx.objectifs() : [];
+    const sport = matin ? ctx.sport() : null;
+    ctx.notify(m.titre, [m.corps, o.length ? `Objectifs : ${o.join(" · ")}` : "", sport ?? ""].filter(Boolean).join("\n"));
   }
 }
 

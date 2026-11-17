@@ -15,6 +15,7 @@ import { applyFacText, facText, fetchAde } from "./fac.ts";
 import { applyRoutineText, routineText } from "./routine.ts";
 import { applyObjectifsText, objectifsText } from "./objectifs.ts";
 import { applyBilanText, bilanText } from "./bilan.ts";
+import { applySportText, sportText } from "./sport.ts";
 import type { SyncView } from "../renderer/api-types.ts";
 // @ts-expect-error modules CommonJS de Rayan's Ouvertures, sans types
 import R from "../../../echecs-ouvertures/src/core/repertoire.js";
@@ -80,6 +81,7 @@ const ADAPTERS: Adapter[] = [
   { name: "routine", label: "Ma journée", read: () => routineText(), write: (t) => applyRoutineText(t) },
   { name: "objectifs", label: "Objectifs du jour", read: () => objectifsText(), write: (t) => applyObjectifsText(t) },
   { name: "bilan", label: "Bilan et adhkar", read: () => bilanText(), write: (t) => applyBilanText(t) },
+  { name: "sport", label: "Sport", read: () => sportText(), write: (t) => applySportText(t) },
   { name: "fac", label: "Cours de la fac", read: () => facText(), write: (t) => applyFacText(t) },
   fileAdapter("revision", "Révision", "Rayans Revision.exe", () => path.join(process.env.REVISION_DATA_DIR || path.join(roaming(), "fr.rayan.revision"), "revision.json")),
   fileAdapter("hifz", "Hifz", "Rayans Hifz.exe", () => path.join(process.env.HIFZ_DATA_DIR || path.join(roaming(), "Rayans Hifz"), "hifz-donnees.json")),

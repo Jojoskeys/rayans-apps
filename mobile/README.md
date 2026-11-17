@@ -5,7 +5,7 @@ GitHub Pages : **https://jojoskeys.github.io/rayans-apps/**
 
 | App | Sur l'iPhone | Reste sur le PC |
 | --- | --- | --- |
-| Aujourd'hui | Ma journée (cocher, gérer), cours ADE et changements, mails partagés, échéances, compteurs | téléchargement d'ADE, rappels Windows |
+| Aujourd'hui | Ma journée, objectifs, bilan, adhkar, citation, **sport (séance guidée, saisie, course)**, cours ADE, mails partagés, échéances, compteurs | téléchargement d'ADE, lecture automatique des mails, rappels Windows |
 | Révision | tout (séances, paquets, cartes, stats, import/export) | — |
 | Hifz | tout, audio lu en ligne (everyayah.com) | audio hors ligne |
 | Prière | horaires calculés sur le téléphone, réglages | notifications |

@@ -14,6 +14,9 @@ import { checkRoutine, routineView, setupRoutine } from "./routine.ts";
 import { checkObjectifs, objectifsView, setupObjectifs, titresDuJour } from "./objectifs.ts";
 import { adhkarSuivis, bilanView, checkBilan, matinActif, setupBilan } from "./bilan.ts";
 import { setupSync, syncAll, syncView } from "./sync.ts";
+import { courrierView, setupCourrier, verifierCourrier } from "./courrier.ts";
+import { checkSport, setupSport, sportDuJour, view as sportView } from "./sport.ts";
+import { occupations } from "./fac.ts";
 
 const APP_NAME = "Rayan's Aujourd'hui";
 const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3) ?? null;
@@ -79,7 +82,7 @@ function save() {
 }
 
 export function state(): State {
-  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView(), routine: routineView(), objectifs: objectifsView(), bilan: bilanView(), sync: syncView() };
+  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView(), routine: routineView(), objectifs: objectifsView(), bilan: bilanView(), courrier: courrierView(), sport: sportView(), sync: syncView() };
 }
 
 function broadcast() {
@@ -114,13 +117,15 @@ function start() {
   ipcMain.on("ouvrir-dossier", (_e, p: string) => void shell.openPath(p));
   ipcMain.on("quitter", () => { quitting = true; app.quit(); });
   setupRoutine({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast() });
-  setupBilan({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast(), objectifs: () => titresDuJour() });
+  setupBilan({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast(), objectifs: () => titresDuJour(), sport: () => sportDuJour() });
   setupObjectifs({
     dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast(), counts: () => counts,
     revisionFile: () => testHooks.paths.revision, adhkarSuivis: () => adhkarSuivis(), matinParBilan: () => matinActif(), reminder: () => ({ on: settings.reminder, h: settings.reminderHour, m: settings.reminderMinute }),
   });
   if (!testReport) setupSync({ dataDir, changed: () => broadcast() });
   setupFac({ dataDir, clock: () => testHooks.clock(), fetchText: (u) => testHooks.fetchText(u), changed: () => broadcast() });
+  setupSport({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast(), cours: () => occupations() });
+  setupCourrier({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast() });
 
   createTray();
   createMain(!atLogin);
@@ -149,6 +154,8 @@ export function refresh() {
   checkRoutine();
   checkObjectifs();
   checkBilan();
+  checkSport();
+  if (!testReport) void verifierCourrier();
   if (settings.reminder && reminderDue(now, settings.reminderHour, settings.reminderMinute, lastSentDay)) {
     lastSentDay = todayISO(now);
     try { save(); } catch (e) { console.error(e); }

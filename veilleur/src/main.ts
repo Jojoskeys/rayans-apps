@@ -69,7 +69,7 @@ async function heuresDuJour(priere: unknown, now: number) {
 
 async function main() {
   const now = Date.now();
-  const [facF, routineF, revF, hifzF, ouvF, notifF, stateF, bilanF, objF, priereF] = await Promise.all(["fac", "routine", "revision", "hifz", "ouvertures", "notifications", "veilleur", "bilan", "objectifs", "priere"].map(pull));
+  const [facF, routineF, revF, hifzF, ouvF, notifF, stateF, bilanF, objF, priereF, sportF] = await Promise.all(["fac", "routine", "revision", "hifz", "ouvertures", "notifications", "veilleur", "bilan", "objectifs", "priere", "sport"].map(pull));
 
   // 1. Emploi du temps : téléchargé ici, même PC éteint.
   let fac: FacData | undefined = facF ? sanitizeFac(parse(facF)) : undefined;
@@ -94,7 +94,7 @@ async function main() {
     now, prefs, state, fac, newChanges,
     routine: routineF ? sanitizeRoutine(parse(routineF)) : undefined,
     revision: parse(revF), hifz: parse(hifzF), ouvertures: parse(ouvF),
-    bilan: parse(bilanF), objectifs: parse(objF), prieres: await heuresDuJour(parse(priereF), now),
+    bilan: parse(bilanF), objectifs: parse(objF), sport: parse(sportF), prieres: await heuresDuJour(parse(priereF), now),
   });
   const subs = notif.subscriptions ?? [];
   log(`${messages.length} notification(s) à envoyer, ${subs.length} appareil(s)`);

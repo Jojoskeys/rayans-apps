@@ -26,6 +26,17 @@ const api: AujourdhuiApi = {
     remove: (id) => ipcRenderer.invoke("routine-supprimer", id),
     toggle: (id) => ipcRenderer.invoke("routine-cocher", id),
   },
+  sport: {
+    save: (s) => ipcRenderer.invoke("sport-enregistrer", s),
+    addPerf: (p) => ipcRenderer.invoke("sport-perf", p),
+    adjust: (a) => ipcRenderer.invoke("sport-ajuster", a),
+  },
+  courrier: {
+    configure: (p) => ipcRenderer.invoke("courrier-config", p),
+    now: () => ipcRenderer.invoke("courrier-maintenant"),
+    setActive: (a) => ipcRenderer.invoke("courrier-actif", a),
+    forget: () => ipcRenderer.invoke("courrier-oublier"),
+  },
   bilan: {
     morning: (h, t) => ipcRenderer.invoke("bilan-matin", h, t),
     evening: (h, j, r, d) => ipcRenderer.invoke("bilan-soir", h, j, r, d),

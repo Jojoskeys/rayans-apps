@@ -17,6 +17,8 @@ import { mesures } from "../../../aujourdhui/src/core/mesures.ts";
 import { aRemplir, BILAN_VIDE, cocherAdhkar, cocherPrevu, moments, nettoyerBilan, noterMatin, noterSoir, reglerBilan, type BilanData } from "../../../aujourdhui/src/core/bilan.ts";
 import { heuresDePriere } from "../../../aujourdhui/src/core/prieres.ts";
 import { citationsDuJour } from "../../../aujourdhui/src/core/citations.ts";
+import { ajouterPerf, ajuster, enregistrer, nettoyerSport, SPORT_DEPART, type SportData } from "../../../aujourdhui/src/core/sport.ts";
+import { sportView } from "../../../aujourdhui/src/core/sportvue.ts";
 import type { AujourdhuiApi, BilanView, FacView, ObjectifsView, RoutineView, Settings, State } from "../../../aujourdhui/src/renderer/api-types.ts";
 
 const WEBMAIL = "https://partage.univ-rennes.fr/";
@@ -28,6 +30,7 @@ let objectifs: ObjectifsData = OBJECTIFS_VIDES;
 let bilan: BilanData = BILAN_VIDE;
 let m: Mesures = {};
 let priereRaw: unknown;
+let sport: SportData = SPORT_DEPART;
 let updatedAt = Date.now();
 const listeners = new Set<(s: State) => void>();
 const settings: Settings = { reminder: false, reminderHour: 19, reminderMinute: 0, startWithWindows: false, closeToTray: false };
@@ -35,11 +38,12 @@ const settings: Settings = { reminder: false, reminderHour: 19, reminderMinute: 
 const parse = (t: string | null) => { try { return t ? JSON.parse(t) : undefined; } catch { return undefined; } };
 
 async function loadAll() {
-  const [r, f, rev, hifz, ouv, obj, bil, pri, chr] = await Promise.all(["routine", "fac", "revision", "hifz", "ouvertures", "objectifs", "bilan", "priere", "chrono"].map((a) => store.load(a)));
+  const [r, f, rev, hifz, ouv, obj, bil, pri, chr, spo] = await Promise.all(["routine", "fac", "revision", "hifz", "ouvertures", "objectifs", "bilan", "priere", "chrono", "sport"].map((a) => store.load(a)));
   routine = sanitizeRoutine(parse(r) ?? {});
   fac = sanitizeFac(parse(f) ?? {});
   bilan = nettoyerBilan(parse(bil) ?? {});
   priereRaw = parse(pri);
+  sport = spo ? nettoyerSport(parse(spo)) : SPORT_DEPART;
   const now = Date.now();
   const src = (id: SourceId, raw: unknown, fn: () => { total: number; detail: string }): SourceCount => {
     if (raw === undefined) return { id, total: 0, detail: "Pas encore de données sur ce téléphone", missing: true, error: null };
@@ -115,12 +119,15 @@ function facView(): FacView {
 }
 
 function state(): State {
-  return { settings, counts, updatedAt, version: "mobile", dataDir: "iPhone (synchronisé)", paths: { revision: "revision.json", hifz: "hifz.json", ouvertures: "ouvertures.json" }, today: todayISO(Date.now()), fac: facView(), routine: routineView(), objectifs: objectifsView(), bilan: bilanView() };
+  return { settings, counts, updatedAt, version: "mobile", dataDir: "iPhone (synchronisé)", paths: { revision: "revision.json", hifz: "hifz.json", ouvertures: "ouvertures.json" }, today: todayISO(Date.now()), fac: facView(), routine: routineView(), objectifs: objectifsView(), bilan: bilanView(), sport: vueSport() };
 }
 function emit() { const s = state(); for (const l of listeners) l(s); }
 
 const commitRoutine = (r: RoutineData) => { routine = r; store.save("routine", JSON.stringify(r)); emit(); return routineView(); };
 const commitFac = (f: FacData) => { fac = prune(f, Date.now()); store.save("fac", JSON.stringify(fac)); emit(); return facView(); };
+const occupations = () => displayCourses(fac).filter((c) => !c.cancelled).map((c) => ({ start: c.start, end: c.end }));
+const vueSport = () => sportView(sport, occupations(), Date.now());
+const commitSport = (s: SportData) => { sport = s; store.save("sport", JSON.stringify(s)); emit(); return vueSport(); };
 const commitObjectifs = (o: ObjectifsData) => { objectifs = o; store.save("objectifs", JSON.stringify(o)); emit(); return objectifsView(); };
 const commitBilan = (b: BilanData) => { bilan = b; store.save("bilan", JSON.stringify(b)); emit(); return bilanView(); };
 const pcOnly = () => Promise.reject(new Error("réglage disponible dans l'app Windows (le PC télécharge l'emploi du temps ADE)"));
@@ -139,6 +146,11 @@ const api: AujourdhuiApi = {
     update: async (id, p) => commitRoutine(updateItem(routine, id, p)),
     remove: async (id) => commitRoutine(removeItem(routine, id)),
     toggle: async (id) => commitRoutine(toggleDone(routine, id, Date.now())),
+  },
+  sport: {
+    save: async (s) => commitSport(enregistrer(sport, s)),
+    addPerf: async (p) => commitSport(ajouterPerf(sport, p)),
+    adjust: async (a) => commitSport(ajuster(sport, a)),
   },
   objectifs: {
     toggle: async (id) => commitObjectifs(cocher(objectifs, id, Date.now())),
@@ -175,6 +187,6 @@ const api: AujourdhuiApi = {
 };
 window.aujourdhui = api;
 
-mountChrome(["routine", "fac", "objectifs", "bilan"]);
+mountChrome(["routine", "fac", "objectifs", "bilan", "sport"]);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") void loadAll(); });
 void loadAll().then(() => import("../../../aujourdhui/src/renderer/main.tsx"));

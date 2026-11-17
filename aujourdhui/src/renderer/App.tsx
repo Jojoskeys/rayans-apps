@@ -5,6 +5,8 @@ import { FacSettings, FacToday } from "./Fac.tsx";
 import { RoutineToday } from "./Routine.tsx";
 import { ObjectifsReglages, ObjectifsToday } from "./Objectifs.tsx";
 import { BilanReglages, BilanToday } from "./Bilan.tsx";
+import { CourrierReglages } from "./Courrier.tsx";
+import { SportPage, SportResume } from "./Sport.tsx";
 import { SyncSettings } from "./Sync.tsx";
 
 const api = window.aujourdhui;
@@ -21,6 +23,7 @@ export function App() {
   const [s, setS] = useState<State | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [reglages, setReglages] = useState(false);
+  const [sport, setSport] = useState(false);
   useEffect(() => {
     api.getState().then(setS);
     return api.onState(setS);
@@ -50,9 +53,12 @@ export function App() {
         </div>
       </header>
 
-      {!reglages ? (
+      {sport && !reglages ? (
+        <SportPage s={s.sport} notify={setToast} onClose={() => setSport(false)} />
+      ) : !reglages ? (
         <>
           <BilanToday b={s.bilan} now={s.updatedAt} notify={setToast} />
+          <SportResume s={s.sport} onOpen={() => setSport(true)} />
           <ObjectifsToday o={s.objectifs} notify={setToast} />
           <RoutineToday r={s.routine} now={s.updatedAt} notify={setToast} />
           <FacToday f={s.fac} now={s.updatedAt} notify={setToast} onSettings={() => setReglages(true)} />
@@ -94,6 +100,7 @@ function Reglages({ s, notify }: { s: State; notify: (t: string) => void }) {
   return (
     <section className="reglages" data-testid="reglages">
       <FacSettings f={s.fac} notify={notify} />
+      {s.courrier && <CourrierReglages c={s.courrier} expediteurs={s.fac.allowedSenders} notify={notify} />}
       <BilanReglages b={s.bilan} notify={notify} />
       <ObjectifsReglages o={s.objectifs} notify={notify} />
       {s.sync && <SyncSettings v={s.sync} notify={notify} />}

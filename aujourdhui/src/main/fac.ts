@@ -5,9 +5,9 @@ import { clipboard, ipcMain, shell } from "electron";
 import fs from "node:fs";
 import path from "node:path";
 import { checkIcsUrl, maskUrl, parseIcs } from "../core/ics.ts";
-import { parseMailInput } from "../core/mail.ts";
+import { parseMailInput, senderAllowed, type Proposal } from "../core/mail.ts";
 import {
-  acceptProposal, addMail, applyFetch, displayCourses, EMPTY_FAC, ignoreProposal, prune, removeDeadline, removedCourses,
+  acceptProposal, addMail, appliquerAutomatiquement, applyFetch, displayCourses, EMPTY_FAC, ignoreProposal, prune, removeDeadline, removedCourses,
   removeMail, removeOverride, resolveConflict, sanitizeFac, type FacData,
 } from "../core/fac.ts";
 import type { FacView } from "../renderer/api-types.ts";
@@ -133,6 +133,23 @@ export function setupFac(c: Ctx) {
     if (typeof subject === "string" && subject) clipboard.writeText(subject);
     return shell.openExternal(WEBMAIL_URL);
   });
+}
+
+/** Cours de l'emploi du temps (corrections des mails comprises, annulés exclus), pour placer les séances de sport. */
+export const occupations = () => displayCourses(data).filter((c) => !c.cancelled).map((c) => ({ start: c.start, end: c.end }));
+
+/** Expéditeur dans la liste des profs et du secrétariat (réglages Fac). */
+export const expediteurAutorise = (adresse: string) => data.allowedSenders.length > 0 && senderAllowed(adresse, data.allowedSenders);
+
+/** Mail lu automatiquement dans la boîte (IMAP) : analysé, puis appliqué directement si l'expéditeur est autorisé. */
+export function ajouterMailImap(source: string): { sujet: string; appliquees: Proposal[]; aValider: number } {
+  const mail = parseMailInput(source.slice(0, 2_000_000));
+  const r = addMail(data, mail, ctx.clock());
+  const marque = { ...r.data, mails: r.data.mails.map((m) => (m.id === r.mail.id ? { ...m, imap: true } : m)) };
+  const a = appliquerAutomatiquement(marque, r.mail.id);
+  commit(a.data);
+  const m = a.data.mails.find((x) => x.id === r.mail.id)!;
+  return { sujet: mail.subject, appliquees: a.appliquees, aValider: m.proposals.filter((p) => p.status === "a-valider").length };
 }
 
 /** Pour le test de lancement. */

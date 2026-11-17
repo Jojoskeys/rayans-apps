@@ -209,6 +209,29 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     step(`objectifs du jour : 3 objectifs de domaines différents, ${aCocher} à cocher, notification du matin envoyée une fois`);
     if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6b-objectifs.png"), (await w.webContents.capturePage()).toPNG()); }
 
+    // ----- Sport : page ouverte, séance guidée, une série notée, séance enregistrée -----
+    await js(w, `document.querySelector('[data-testid="sport-resume"] button').click()`);
+    await waitFor("page sport", () => js<boolean>(w, `!!document.querySelector('[data-testid="sport"]')`), 5000);
+    const muscu = await js<boolean>(w, `!!document.querySelector('[data-testid="commencer"]')`);
+    if (muscu) {
+      await js(w, `document.querySelector('[data-testid="commencer"]').click()`);
+      await waitFor("séance guidée", () => js<boolean>(w, `!!document.querySelector('[data-testid="seance-guidee"]')`), 5000);
+      await js(w, `document.querySelector('[data-testid="serie-faite"]').click()`);
+      if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6d-sport-seance.png"), (await w.webContents.capturePage()).toPNG()); }
+    }
+    const jourSport = new Date(h.testHooks.clock());
+    const iso = `${jourSport.getFullYear()}-${String(jourSport.getMonth() + 1).padStart(2, "0")}-${String(jourSport.getDate()).padStart(2, "0")}`;
+    await js(w, `window.aujourdhui.sport.save({ id: "test", jour: "${iso}", type: "upper", exercices: [{ bloc: "developpe-couche", series: [{charge:85,reps:5},{charge:85,reps:5},{charge:85,reps:5},{charge:85,reps:5}] }], at: Date.now() })`);
+    const sportFichier = JSON.parse(fs.readFileSync(path.join(path.dirname(h.dataFile), "sport.json"), "utf8"));
+    if (!sportFichier.journal?.length) throw new Error("séance de sport non enregistrée");
+    const dc = h.state().sport.charges.find((c) => c.bloc === "developpe-couche")!;
+    if (dc.prescription.charge !== 87.5) throw new Error(`progression : ${dc.prescription.charge}`);
+    step(`sport : page et séance guidée ${muscu ? "ouvertes, série notée" : "(jour de course)"}, développé couché 85 × 5 × 4 réussi → 87,5 kg la prochaine fois`);
+    await js(w, `document.querySelectorAll('.lien').forEach((b) => { if (b.textContent.includes('Quitter') || b.textContent.includes('Retour')) b.click(); })`);
+    await sleep(300);
+    await js(w, `document.querySelectorAll('.lien').forEach((b) => { if (b.textContent.includes('Retour')) b.click(); })`);
+    await sleep(300);
+
     // ----- Bilan du soir : rappel à 17 h 30, formulaire rempli, liste pour demain enregistrée -----
     h.testHooks.clock = () => at(17, 31);
     h.refresh();

@@ -4,6 +4,8 @@ import type { Deadline, DisplayCourse, SharedMail } from "../core/fac.ts";
 import type { RoutineItem } from "../core/routine.ts";
 import type { Avancement, Domaine, ObjectifJour } from "../core/objectifs.ts";
 import type { Citation } from "../core/citations.ts";
+import type { SportView } from "../core/sportvue.ts";
+import type { Ajustement, Perf, SeanceFaite } from "../core/sport.ts";
 import type { APrevoir, EntreeMatin, EntreeSoir, JourBilan, Moments, Prieres, ReglagesBilan } from "../core/bilan.ts";
 
 /** Synchronisation avec l'iPhone (Rayan's Mobile) par un dépôt GitHub privé. */
@@ -22,6 +24,19 @@ export interface RoutineView {
   today: (RoutineItem & { done: boolean })[];
   streak: number;
   day: string;
+}
+
+/** Lecture automatique des mails de la fac (IMAP, lecture seule). Le mot de passe n'est jamais renvoyé. */
+export interface CourrierView {
+  host: string;
+  port: number;
+  user: string;
+  motDePasseEnregistre: boolean;
+  actif: boolean;
+  lastCheck: number;
+  lastError: string | null;
+  enCours: boolean;
+  derniers: { at: number; sujet: string; appliquees: string[]; aValider: number }[];
 }
 
 /** Bilan du matin et du soir, liste prévue la veille, adhkar. */
@@ -86,6 +101,8 @@ export interface State {
   routine: RoutineView;
   objectifs: ObjectifsView;
   bilan: BilanView;
+  courrier?: CourrierView;
+  sport: SportView;
   sync?: SyncView;
 }
 
@@ -108,6 +125,17 @@ export interface AujourdhuiApi {
     update(id: string, patch: { title?: string; time?: string; days?: number[] }): Promise<RoutineView>;
     remove(id: string): Promise<RoutineView>;
     toggle(id: string): Promise<RoutineView>;
+  };
+  sport: {
+    save(s: SeanceFaite): Promise<SportView>;
+    addPerf(p: Perf): Promise<SportView>;
+    adjust(a: Ajustement): Promise<SportView>;
+  };
+  courrier?: {
+    configure(p: { host?: string; port?: number; user?: string; motDePasse?: string }): Promise<CourrierView & { messagesDansLaBoite: number }>;
+    now(): Promise<CourrierView>;
+    setActive(actif: boolean): Promise<CourrierView>;
+    forget(): Promise<CourrierView>;
   };
   bilan: {
     morning(humeur: number, ressenti: string): Promise<BilanView>;

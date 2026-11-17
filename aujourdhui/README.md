@@ -26,6 +26,34 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 - Série : nombre de jours d'affilée où tout ce qui était prévu a été fait.
 - « Gérer » : ajouter, renommer, changer l'heure ou les jours, supprimer. Données : `routine.json`.
 
+## Sport
+
+- **Semaine** : lundi haut du corps force (Upper Power), mardi jambes, mercredi fractionné, jeudi poussée, vendredi
+  tirage, samedi allure seuil (test 5 km toutes les 4 semaines), dimanche sortie longue facile.
+- **Séance guidée** : pour chaque exercice, muscles travaillés, fonctionnement expliqué simplement, consignes,
+  objectif (séries × reps × charge) ; saisie série par série, minuteur de repos et séries restantes ; la saisie en
+  cours est gardée si on quitte. Échauffement d'épaule avant les séances du haut du corps, pas de dips.
+- **Progression** (`src/core/sport.ts`) : charges de départ = dernières charges notées ; toutes les séries réussies →
+  +2,5 kg (barre), +2 kg (haltères), +1 rep (poids du corps) ou +5 s (gainage, équilibres) ; deux séances ratées de
+  suite → −5 %. Les charges sont **recalculées à partir du journal** : PC et iPhone n'ont qu'à réunir leurs journaux.
+- **Course (objectif 5 km)** : 5 km estimé par la formule de Riegel à partir de la meilleure perf des 120 derniers
+  jours (au départ : 10 km de Paris, 10,30 km en 1:05:49 → 5 km ≈ 30:34) ; allures facile, seuil et fractionné en
+  découlent ; cycles de 4 semaines (3 de progression, 1 allégée avec test).
+- **Créneau** : premier moment libre assez long d'après l'emploi du temps (20 min de marge autour des cours ; dès
+  7 h en semaine, 9 h 30 le week-end, jusqu'à 21 h 30). Dans la notification du matin, et rappel 30 min avant.
+- Données : `sport.json`, synchronisé avec l'iPhone (séances saisies à la salle sur le téléphone).
+
+## Mails de la fac : lecture automatique
+
+- Option (réglages Fac) : la boîte Partage est lue toutes les 15 minutes **en lecture seule** par un petit client
+  IMAP (`src/main/imap-client.ts` : EXAMINE, BODY.PEEK ; rien n'est marqué lu, déplacé ni supprimé). Serveur par
+  défaut `partage.univ-rennes.fr:993` (modifiable ; vérifié par « Tester et activer »).
+- Seuls les mails des expéditeurs de la liste (profs, secrétariat) sont téléchargés. Un changement de salle, d'horaire
+  ou une annulation sur un cours reconnu est **appliqué directement** (notification, annulable comme une correction
+  validée) ; le reste reste à valider.
+- Le mot de passe Sésame est saisi dans la fenêtre, chiffré par Windows (`safeStorage`), jamais affiché ni
+  synchronisé. État dans `courrier.json` (identifiants déjà vus, dernière vérification).
+
 ## Bilan du jour et adhkar
 
 - **Le matin, après Fajr (Sobh)** (10 min après, réglable ; heures de Rayan's Prière) : une notification avec les

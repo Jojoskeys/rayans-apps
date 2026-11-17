@@ -15,6 +15,10 @@ export interface SharedMail {
   /** Expéditeur absent de la liste choisie dans les réglages. */
   unknownSender: boolean;
   proposals: Proposal[];
+  /** Lu automatiquement dans la boîte mail (IMAP), et non partagé à la main. */
+  imap?: boolean;
+  /** Propositions appliquées sans validation (expéditeur autorisé, cours reconnu). */
+  auto?: boolean;
 }
 
 /** Correction validée par Rayan d'après un mail. `adeBefore` : la valeur d'ADE au moment de la validation. */
@@ -187,6 +191,28 @@ export function acceptProposal(d: FacData, mailId: string, proposalId: string): 
     overrides = [...overrides.filter((x) => !(x.courseUid === c.uid && x.kind === p.kind)), o];
   }
   return { ...d, overrides, deadlines, mails: setStatus(d.mails, mailId, proposalId, "appliquee") };
+}
+
+/**
+ * Mail d'un expéditeur autorisé : applique directement chaque proposition qui vise un cours précis (ou une échéance
+ * datée). Les autres restent à valider. Renvoie les propositions appliquées (pour la notification).
+ */
+export function appliquerAutomatiquement(d: FacData, mailId: string): { data: FacData; appliquees: Proposal[] } {
+  const mail = d.mails.find((m) => m.id === mailId);
+  if (!mail || mail.unknownSender) return { data: d, appliquees: [] };
+  let data = d;
+  const appliquees: Proposal[] = [];
+  for (const p of mail.proposals) {
+    if (p.status !== "a-valider") continue;
+    const sur = p.kind === "examen" || p.kind === "devoir" ? p.deadlineAt !== undefined : !!p.courseUid && d.courses.some((c) => c.uid === p.courseUid);
+    if (!sur) continue;
+    try {
+      data = acceptProposal(data, mailId, p.id);
+      appliquees.push(p);
+    } catch { /* cours disparu entre-temps : laissé à valider */ }
+  }
+  if (appliquees.length) data = { ...data, mails: data.mails.map((m) => (m.id === mailId ? { ...m, auto: true } : m)) };
+  return { data, appliquees };
 }
 
 export function ignoreProposal(d: FacData, mailId: string, proposalId: string): FacData {

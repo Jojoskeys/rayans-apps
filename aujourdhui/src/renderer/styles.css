@@ -202,3 +202,15 @@ blockquote { margin: 0; border-left: 3px solid var(--accent); padding: 6px 12px;
 .citation { margin: 0 0 4px; padding: 14px 18px; border-radius: var(--rayon); background: color-mix(in srgb, var(--accent) 10%, var(--panneau)); border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--bord)); }
 .citation blockquote { border: 0; background: none; padding: 0; font-size: 16px; line-height: 1.5; font-style: italic; }
 .citation figcaption { margin-top: 6px; color: var(--texte-2); font-size: 13px; }
+
+/* Sport */
+.sport { display: flex; flex-direction: column; gap: 14px; }
+.sport-liste { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; line-height: 1.45; }
+.table-charges { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table-charges td { padding: 5px 4px; border-top: 1px solid var(--bord); }
+.seance .cible { font-size: 15px; margin: 4px 0; }
+.seance .fiche { background: var(--panneau-2); border-radius: 10px; padding: 10px 14px; font-size: 13px; width: 100%; }
+.seance .fiche ul { margin: 6px 0 0; padding-left: 18px; }
+.repos { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.repos-temps { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); }
+.saisie p { margin: 0 0 6px; font-weight: 600; }

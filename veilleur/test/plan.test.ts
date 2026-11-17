@@ -73,3 +73,16 @@ test("iPhone : adhkar après Fajr et avant Maghrib, bilan du soir, citations, au
   const off = plan({ ...base, prefs: { ...DEFAULT_PREFS, adhkar: false, bilan: false, citations: false }, now: at(17, 7, 20), state: { ...EMPTY_STATE, lastRun: at(17, 7) } });
   assert.equal(off.messages.length, 0);
 });
+
+test("iPhone : séance de sport dans le message du matin et rappel 30 min avant le créneau", async () => {
+  const { SPORT_DEPART } = await import("../../aujourdhui/src/core/sport.ts");
+  const { BILAN_VIDE } = await import("../../aujourdhui/src/core/bilan.ts");
+  // Mardi 17 : cours jusqu'à 12 h 15 (fac de test), séance Jambes de 75 min → premier créneau libre après.
+  const base = { prefs: DEFAULT_PREFS, newChanges: [], fac, sport: SPORT_DEPART, bilan: BILAN_VIDE };
+  const matin = plan({ ...base, now: at(17, 7, 20), state: { ...EMPTY_STATE, lastRun: at(17, 7) } });
+  assert.match(matin.messages.find((m) => m.title.startsWith("Bonjour"))!.body, /Sport : Jambes \(Leg\) à 07 h 00|Sport : Jambes \(Leg\) à/);
+  // Créneau du jour : premier moment libre ≥ 75 min autour du TD de 10 h 15 – 12 h 15 → 7 h 00 (avant 9 h 55).
+  const r = plan({ ...base, now: at(17, 6, 30), state: { ...EMPTY_STATE, lastRun: at(17, 6, 10) } });
+  assert.ok(r.messages.some((m) => m.title === "Séance à 07:00 : Jambes (Leg)"), JSON.stringify(r.messages.map((m) => m.title)));
+  assert.equal(plan({ ...base, now: at(17, 6, 50), state: r.state }).messages.filter((m) => m.tag === "sport").length, 0, "une seule fois");
+});
