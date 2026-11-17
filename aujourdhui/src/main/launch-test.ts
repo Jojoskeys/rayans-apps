@@ -196,8 +196,10 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     step(`routine : 2 tâches, rappel « ${rappels[0]} » envoyé une fois, case cochée`);
     if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6-routine.png"), (await w.webContents.capturePage()).toPNG()); }
 
-    // ----- Objectifs du jour : 3 objectifs affichés, une case cochée, un objectif changé -----
-    await waitFor("objectifs du jour", async () => (await js<number>(w, `document.querySelectorAll('[data-testid="objectif"]').length`)) === 3, 5000);
+    // ----- Objectifs du jour : 10 objectifs affichés, une case cochée, compteur de pas avec le bouton + -----
+    await waitFor("objectifs du jour", async () => (await js<number>(w, `document.querySelectorAll('[data-testid="objectif"]').length`)) === 10, 5000);
+    await js(w, `document.querySelector('[data-testid="compteur-pas"] button[aria-label^="Ajouter"]').click()`);
+    await waitFor("compteur de pas à 1000", () => js<boolean>(w, `document.querySelector('[data-testid="compteur-pas"] input').value === "1000"`), 5000);
     const aCocher = await js<number>(w, `document.querySelectorAll('[data-testid="objectif"] input[type=checkbox]').length`);
     if (aCocher > 0) {
       await js(w, `document.querySelector('[data-testid="objectif"] input[type=checkbox]').click()`);
@@ -205,8 +207,8 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     }
     const objectifsFichier = JSON.parse(fs.readFileSync(path.join(path.dirname(h.dataFile), "objectifs.json"), "utf8"));
     const duJour = Object.values(objectifsFichier.jours as Record<string, { domaine: string }[]>).at(-1)!;
-    if (new Set(duJour.map((o) => o.domaine)).size !== 3) throw new Error("objectifs : 3 domaines différents attendus");
-    step(`objectifs du jour : 3 objectifs de domaines différents, ${aCocher} à cocher, notification du matin envoyée une fois`);
+    if (new Set(duJour.map((o) => o.domaine)).size < 3) throw new Error("objectifs : au moins 3 domaines différents attendus");
+    step(`objectifs du jour : 10 objectifs (${new Set(duJour.map((o) => o.domaine)).size} domaines), pas à 1000 avec le bouton +, ${aCocher} à cocher, notification du matin envoyée une fois`);
     if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6b-objectifs.png"), (await w.webContents.capturePage()).toPNG()); }
 
     // ----- Sport : page ouverte, séance guidée, une série notée, séance enregistrée -----
@@ -221,12 +223,12 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     }
     const jourSport = new Date(h.testHooks.clock());
     const iso = `${jourSport.getFullYear()}-${String(jourSport.getMonth() + 1).padStart(2, "0")}-${String(jourSport.getDate()).padStart(2, "0")}`;
-    await js(w, `window.aujourdhui.sport.save({ id: "test", jour: "${iso}", type: "upper", exercices: [{ bloc: "developpe-couche", series: [{charge:85,reps:5},{charge:85,reps:5},{charge:85,reps:5},{charge:85,reps:5}] }], at: Date.now() })`);
+    await js(w, `window.aujourdhui.sport.save({ id: "test", jour: "${iso}", type: "upper", exercices: [{ bloc: "developpe-couche", series: [{charge:40,reps:5},{charge:40,reps:5},{charge:40,reps:5},{charge:40,reps:5}] }], at: Date.now() })`);
     const sportFichier = JSON.parse(fs.readFileSync(path.join(path.dirname(h.dataFile), "sport.json"), "utf8"));
     if (!sportFichier.journal?.length) throw new Error("séance de sport non enregistrée");
     const dc = h.state().sport.charges.find((c) => c.bloc === "developpe-couche")!;
-    if (dc.prescription.charge !== 87.5) throw new Error(`progression : ${dc.prescription.charge}`);
-    step(`sport : page et séance guidée ${muscu ? "ouvertes, série notée" : "(jour de course)"}, développé couché 85 × 5 × 4 réussi → 87,5 kg la prochaine fois`);
+    if (dc.prescription.charge !== 42.5) throw new Error(`progression : ${dc.prescription.charge}`);
+    step(`sport : page et séance guidée ${muscu ? "ouvertes, série notée" : "(jour de course)"}, développé couché 40 × 5 × 4 réussi → 42,5 kg la prochaine fois`);
     await js(w, `document.querySelectorAll('.lien').forEach((b) => { if (b.textContent.includes('Quitter') || b.textContent.includes('Retour')) b.click(); })`);
     await sleep(300);
     await js(w, `document.querySelectorAll('.lien').forEach((b) => { if (b.textContent.includes('Retour')) b.click(); })`);
