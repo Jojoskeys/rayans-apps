@@ -322,6 +322,7 @@ fn analyser(ctx: &Ctx, app: &AppHandle, d: &Dossiers, demandes: Vec<Demande>, in
             nom: nom.clone(),
             signature: sigs.get(&bas).cloned().unwrap_or_default(),
             origine: origine(&chemin),
+            introuvable: !std::path::Path::new(&chemin).exists(),
             demarrage: demarrage.iter().filter(|e| e.executable.as_ref().is_some_and(|x| x.to_lowercase() == bas)).map(|e| e.libelle()).collect(),
             defender: detections
                 .iter()
@@ -428,10 +429,44 @@ fn verifier_defender(ctx: &Ctx, app: &AppHandle) {
     }
 }
 
+/// Verdict tiré du texte de MpCmdRun : son code de sortie (2) est le même pour « menace trouvée » et pour
+/// « analyse impossible », il ne suffit pas.
+pub fn verdict_defender(sortie: &str) -> Result<bool, String> {
+    let bas = sortie.to_lowercase();
+    if bas.contains("found no threats") {
+        return Ok(false);
+    }
+    if let Some(i) = bas.find("failed with hr = ") {
+        let code: String = bas[i + 17..].chars().take_while(|c| c.is_ascii_hexdigit() || *c == 'x').collect();
+        let pourquoi = match code.as_str() {
+            "0x80070002" | "0x80070003" | "0x80508023" => "le fichier n'existe plus à cet emplacement (remplacé par une mise à jour ou supprimé)",
+            "0x80070005" => "accès refusé au fichier",
+            "0x80070020" => "le fichier est verrouillé par un autre programme",
+            _ => "erreur de Microsoft Defender",
+        };
+        return Err(format!("Analyse impossible : {pourquoi} (code {code})."));
+    }
+    let menaces = bas
+        .split("found ")
+        .skip(1)
+        .filter_map(|s| s.split_whitespace().next()?.parse::<u32>().ok())
+        .sum::<u32>();
+    if menaces > 0 || bas.contains("threat                  :") {
+        return Ok(true);
+    }
+    Err(format!("Résultat de Microsoft Defender non reconnu : {}", sortie.trim()))
+}
+
 /// Analyse d'un fichier par Microsoft Defender (MpCmdRun). Renvoie (menace trouvée ?, sortie).
 #[cfg(windows)]
 pub fn analyse_defender(chemin: &str) -> Result<(bool, String), String> {
     use std::os::windows::process::CommandExt;
+    if !std::path::Path::new(chemin).exists() {
+        return Err(
+            "Ce fichier n'existe plus à cet emplacement : il a été remplacé par une mise à jour pendant qu'il tournait (comme old_chrome.exe) ou supprimé. Rien à analyser."
+                .into(),
+        );
+    }
     let pf = std::env::var("ProgramFiles").unwrap_or_else(|_| r"C:\Program Files".into());
     let o = std::process::Command::new(format!(r"{pf}\Windows Defender\MpCmdRun.exe"))
         .args(["-Scan", "-ScanType", "3", "-File", chemin])
@@ -439,11 +474,7 @@ pub fn analyse_defender(chemin: &str) -> Result<(bool, String), String> {
         .output()
         .map_err(|e| format!("Microsoft Defender indisponible : {e}"))?;
     let sortie = String::from_utf8_lossy(&o.stdout).trim().to_string();
-    match o.status.code() {
-        Some(0) => Ok((false, sortie)),
-        Some(2) => Ok((true, sortie)),
-        c => Err(format!("Analyse impossible (code {c:?}). {sortie}")),
-    }
+    verdict_defender(&sortie).map(|m| (m, sortie))
 }
 
 #[cfg(not(windows))]
@@ -490,6 +521,7 @@ mod essai_reel {
                 nom: c.rsplit(['\\', '/']).next().unwrap_or(n).to_string(),
                 signature: sigs.get(&bas).cloned().unwrap_or_default(),
                 origine: super::origine(c),
+                introuvable: !std::path::Path::new(c).exists(),
                 demarrage: dem.iter().filter(|e| e.executable.as_ref().is_some_and(|x| x.to_lowercase() == bas)).map(|e| e.libelle()).collect(),
                 defender: det.iter().filter(|x| x.chemins.iter().any(|p| p.to_lowercase() == bas)).map(|x| x.menace.clone()).collect(),
             };
@@ -500,5 +532,20 @@ mod essai_reel {
             }
         }
         println!("{compte:?} ; {} entrées de démarrage ; {} détections Defender", dem.len(), det.len());
+    }
+}
+
+#[cfg(test)]
+mod verdict {
+    use super::verdict_defender;
+
+    #[test]
+    fn lit_le_vrai_verdict_de_defender() {
+        assert_eq!(verdict_defender("Scan starting...\nScan finished.\nScanning C:/x/a.exe found no threats."), Ok(false));
+        let e = verdict_defender("Scan starting...\nCmdTool: Failed with hr = 0x80070002. Check C:/Temp/MpCmdRun.log").unwrap_err();
+        assert!(e.contains("n'existe plus"), "{e}");
+        assert!(verdict_defender("CmdTool: Failed with hr = 0x80508023.").unwrap_err().contains("n'existe plus"));
+        assert_eq!(verdict_defender("Scan finished.\nScanning C:/x/eicar.com found 1 threats.\nThreat                  : Virus:DOS/EICAR_Test_File"), Ok(true));
+        assert!(verdict_defender("quelque chose d'inattendu").is_err());
     }
 }

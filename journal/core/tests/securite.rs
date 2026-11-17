@@ -90,6 +90,15 @@ fn application_du_store() {
 }
 
 #[test]
+fn fichier_remplace_par_une_mise_a_jour() {
+    let mut f = faits(r"C:\Program Files\Google\Chrome\Application\old_chrome.exe", Signature::default());
+    f.introuvable = true;
+    let a = evaluer(&f, &dossiers(), 1);
+    assert_eq!(a.niveau, Niveau::Inconnu);
+    assert!(a.raisons.iter().any(|r| r.texte.contains("introuvable")), "{:?}", a.raisons);
+}
+
+#[test]
 fn signature_illisible() {
     let a = evaluer(&faits(r"C:\Program Files\Protege\p.exe", Signature::default()), &dossiers(), 1);
     assert_eq!(a.niveau, Niveau::Inconnu);

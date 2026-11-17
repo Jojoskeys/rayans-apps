@@ -134,6 +134,9 @@ pub struct Faits {
     pub origine: Option<Origine>,
     /// Entrées de démarrage automatique qui lancent ce programme (« Registre Run : Discord »…).
     pub demarrage: Vec<String>,
+    /// Le fichier n'existe plus à cet emplacement (remplacé par une mise à jour, ex. `old_chrome.exe`,
+    /// ou supprimé depuis son lancement) : rien ne peut être vérifié.
+    pub introuvable: bool,
     /// Détections de Microsoft Defender visant ce fichier.
     pub defender: Vec<String>,
 }
@@ -250,6 +253,10 @@ pub fn evaluer(f: &Faits, d: &Dossiers, maintenant_ms: i64) -> Analyse {
         "NotSigned" if store => ajouter(Gravite::Info, "Application du Microsoft Store : paquet signé, installé dans un dossier protégé.".into()),
         "NotSigned" => ajouter(Gravite::Avertissement, "Non signé : l'éditeur ne peut pas être vérifié.".into()),
         "HashMismatch" => ajouter(Gravite::Critique, "Signature invalide : le fichier a été modifié après avoir été signé.".into()),
+        "" if f.introuvable => ajouter(
+            Gravite::Info,
+            "Fichier introuvable à cet emplacement : remplacé par une mise à jour pendant qu'il tournait (comme old_chrome.exe), ou supprimé depuis son lancement. Rien ne peut être vérifié.".into(),
+        ),
         "" => ajouter(Gravite::Info, "Signature non lue (fichier inaccessible ou protégé).".into()),
         autre => ajouter(Gravite::Avertissement, format!("Signature non reconnue par Windows ({autre}).")),
     }
