@@ -120,6 +120,13 @@ export async function testConfig(cfg: Access): Promise<string> {
   return `Dépôt privé ${j.full_name} accessible`;
 }
 
+/** Fichier non chiffré du dépôt (clé publique des notifications), ou null. */
+export async function readPlain(name: string): Promise<string | null> {
+  const cfg = getConfig();
+  if (!cfg) return null;
+  return (await pullRaw(cfg, name))?.text ?? null;
+}
+
 /**
  * Clé de chiffrement à partir de la phrase secrète. Premier appareil : crée cle.json (sel + valeur de contrôle,
  * jamais la phrase). Appareils suivants : vérifie la phrase avec ce fichier. Renvoie la clé (base64).

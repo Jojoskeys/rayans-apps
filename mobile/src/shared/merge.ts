@@ -158,6 +158,11 @@ export const MERGERS: Record<string, (base: Obj | undefined, local: Obj, remote:
   ouvertures: mergeOuvertures,
   "ouvertures-donnees": (_b, local, remote) => ((remote.publishedAt ?? 0) >= (local.publishedAt ?? 0) ? remote : local),
   fac: mergeFac,
+  // Abonnements aux notifications (un par appareil) et préférences.
+  notifications: (base, local, remote) => ({
+    subscriptions: mergeById(base?.subscriptions, local.subscriptions ?? [], remote.subscriptions ?? [], (x: Obj) => x.endpoint, () => false),
+    prefs: mergeSettings(base?.prefs, local.prefs ?? {}, remote.prefs ?? {}),
+  }),
 };
 
 /** Fusionne des textes JSON. Renvoie le texte fusionné. */

@@ -92,6 +92,17 @@ const CACHE = "rayans-mobile-${version}";
 const FILES = ${JSON.stringify(["./", ...files.map((f) => "./" + f.replace(/index\.html$/, ""))])};
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
+// Notifications envoyées par le veilleur (GitHub Actions) : affichage, et ouverture de l'app au toucher.
+self.addEventListener("push", (e) => {
+  let m = { title: "Rayan", body: "", url: "./", tag: undefined };
+  try { m = { ...m, ...e.data.json() }; } catch { if (e.data) m.body = e.data.text(); }
+  e.waitUntil(self.registration.showNotification(m.title, { body: m.body, tag: m.tag, data: { url: m.url }, icon: "icon.png", badge: "icon.png" }));
+});
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || "./";
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((cs) => { for (const c of cs) if ("focus" in c) { c.navigate(url); return c.focus(); } return self.clients.openWindow(url); }));
+});
 self.addEventListener("fetch", (e) => {
   const u = new URL(e.request.url);
   if (e.request.method !== "GET" || u.origin !== location.origin) return; // GitHub, ADE… : jamais mis en cache

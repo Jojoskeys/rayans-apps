@@ -1,0 +1,46 @@
+# Veilleur de Rayan's Mobile (installé dans le dépôt privé des données par veilleur/configurer.ps1).
+# Toutes les 20 minutes de 7 h à 22 h (heure de Paris) : met à jour l'emploi du temps ADE et envoie les
+# notifications à l'iPhone. Le code vient du dépôt public rayans-apps ; les données restent chiffrées ici.
+name: Veilleur
+
+on:
+  schedule:
+    - cron: '*/20 5-21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: veilleur
+  cancel-in-progress: false
+
+jobs:
+  veiller:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TZ: Europe/Paris
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Jojoskeys/rayans-apps
+          sparse-checkout: |
+            veilleur
+            mobile/src/shared
+            aujourdhui/src/core
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: veilleur/package-lock.json
+      - run: npm ci --omit=dev
+        working-directory: veilleur
+      - run: node src/main.ts
+        working-directory: veilleur
+        env:
+          RAYANS_CLE: ${{ secrets.RAYANS_CLE }}
+          VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
+          VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

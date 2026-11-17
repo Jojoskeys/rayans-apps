@@ -3,6 +3,7 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { getConfig, onStatus, setConfig, setupKey, syncApp, testConfig, type SyncStatus } from "../shared/sync.ts";
 import { APPS } from "../shared/apps.ts";
+import { Notifications } from "./Notifications.tsx";
 import "./hub.css";
 
 function Hub() {
@@ -34,6 +35,7 @@ function Hub() {
               </li>
             ))}
           </ul>
+          {st?.configured && <Notifications />}
           <p className="etat">{st?.configured ? (st.lastSync ? `Synchronisé ${new Date(st.lastSync).toLocaleString("fr-FR", { weekday: "short", hour: "2-digit", minute: "2-digit" })}` : "Pas encore synchronisé") : "Synchronisation non configurée : tes données restent sur ce téléphone."}{st?.state === "erreur" ? ` · ${st.message}` : ""}</p>
         </>
       ) : <Synchro onDone={() => setPage("accueil")} />}

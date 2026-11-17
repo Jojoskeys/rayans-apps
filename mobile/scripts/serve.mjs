@@ -11,6 +11,7 @@ const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", "
 
 // Faux GitHub (tests locaux uniquement) : /faux-github/repos/<dépôt>/contents/<fichier>, avec sha et conflits 409.
 const fake = new Map();
+let pushes = 0;
 const sha = (t) => createHash("sha1").update(t).digest("hex");
 async function fakeGithub(req, res, p) {
   const send = (code, body) => { res.writeHead(code, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*", "Access-Control-Allow-Methods": "GET,PUT,OPTIONS" }); res.end(JSON.stringify(body)); };
@@ -39,6 +40,11 @@ createServer(async (req, res) => {
     const key = p.slice("/faux-depot/".length);
     if (req.method === "PUT") { let b = ""; for await (const c of req) b += c; fake.set(key, { text: b, sha: sha(b) }); res.writeHead(200); return res.end("ok"); }
     const f = fake.get(key); res.writeHead(f ? 200 : 404, { "Content-Type": "application/json" }); return res.end(f?.text ?? "");
+  }
+  // Faux service de notifications (tests du veilleur) : compte les envois reçus.
+  if (p === "/faux-push") {
+    if (req.method === "POST") { for await (const _ of req) { /* contenu chiffré, ignoré */ } pushes++; res.writeHead(201); return res.end(); }
+    res.writeHead(200, { "Content-Type": "application/json" }); return res.end(JSON.stringify({ recus: pushes }));
   }
   if (p === "/" ) { res.writeHead(302, { Location: "/rayans-apps/" }); return res.end(); }
   if (!p.startsWith("/rayans-apps/")) { res.writeHead(404); return res.end(); }

@@ -1,0 +1,15 @@
+{
+  "name": "rayans-veilleur",
+  "version": "1.0.0",
+  "description": "Veilleur de Rayan's Mobile : emploi du temps ADE et notifications sur l'iPhone, lancé par GitHub Actions",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.ts",
+    "test": "node --test test/*.test.ts"
+  },
+  "dependencies": {
+    "web-push": "3.6.7"
+  }
+}

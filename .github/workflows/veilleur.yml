@@ -1,0 +1,37 @@
+# Veilleur (veilleur/) : tests de la planification des notifications. Le veilleur lui-même tourne dans le dépôt
+# privé des données (veilleur/modele/veilleur.yml), jamais ici.
+name: Veilleur
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'veilleur/**'
+      - 'mobile/src/shared/**'
+      - 'aujourdhui/src/core/**'
+      - '.github/workflows/veilleur.yml'
+  pull_request:
+    paths:
+      - 'veilleur/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: veilleur
+    env:
+      TZ: Europe/Paris
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: veilleur/package-lock.json
+      - run: npm ci
+      - run: npm test

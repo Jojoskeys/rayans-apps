@@ -29,3 +29,8 @@ input { font: inherit; color: var(--texte); background: var(--panneau-2); border
 .ok { color: var(--vert) !important; }
 .ko { color: var(--rouge) !important; }
 .carte p.avertissement { color: #F1C27A; font-size: 14px; }
+.notifs { margin-top: 16px; }
+.case { flex-direction: row; align-items: center; gap: 10px; color: var(--texte); font-size: 15px; }
+.case input { width: 20px; height: 20px; }
+.heures label { flex-direction: row; align-items: center; gap: 8px; }
+.heures input { width: 70px; }
