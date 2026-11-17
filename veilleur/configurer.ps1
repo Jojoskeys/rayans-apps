@@ -1,4 +1,4 @@
-# Met en place le veilleur en ligne (notifications iPhone + emploi du temps sans le PC). À lancer UNE fois, sur le PC :
+﻿# Met en place le veilleur en ligne (notifications iPhone + emploi du temps sans le PC). À lancer UNE fois, sur le PC :
 #   powershell -ExecutionPolicy Bypass -File veilleur\configurer.ps1
 # Les secrets (clé de chiffrement, clé d'envoi) vont directement dans les secrets GitHub du dépôt privé :
 # ils ne s'affichent jamais. Option : -NouvellesCles pour régénérer les clés de notification.
