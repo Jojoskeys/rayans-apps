@@ -1,6 +1,7 @@
 // Réglage des notifications sur l'iPhone : abonnement Web Push (envoyées par le veilleur en ligne) et choix de ce
 // qui est notifié. L'abonnement et les préférences sont synchronisés (fichier « notifications », chiffré).
 import { useEffect, useState } from "react";
+declare const __BUILD__: string;
 import { readPlain, store, syncApp } from "../shared/sync.ts";
 
 interface Prefs { cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number }
@@ -88,6 +89,7 @@ export function Notifications() {
         </>
       ) : <button className="bouton" disabled={busy} onClick={() => void activate()}>{busy ? "Activation…" : "Activer les notifications"}</button>}
       {msg && <p className={msg.startsWith("✓") ? "ok" : msg.startsWith("✗") ? "ko" : ""}>{msg}</p>}
+      <p className="version">Version du {new Date(__BUILD__).toLocaleString("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}</p>
     </section>
   );
 }

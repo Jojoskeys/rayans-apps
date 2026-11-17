@@ -34,3 +34,4 @@ input { font: inherit; color: var(--texte); background: var(--panneau-2); border
 .case input { width: 20px; height: 20px; }
 .heures label { flex-direction: row; align-items: center; gap: 8px; }
 .heures input { width: 70px; }
+.version { font-size: 12px; opacity: .5; margin: 8px 0 0; }

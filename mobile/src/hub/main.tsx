@@ -87,4 +87,10 @@ function Synchro({ onDone }: { onDone: () => void }) {
 }
 
 createRoot(document.getElementById("racine")!).render(<StrictMode><Hub /></StrictMode>);
-if ("serviceWorker" in navigator) void navigator.serviceWorker.register("./sw.js").catch(() => {});
+if ("serviceWorker" in navigator) {
+  // Nouvelle version installée pendant que l'app est ouverte : on recharge une fois pour l'utiliser tout de suite.
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadController && !reloaded) { reloaded = true; location.reload(); } });
+  void navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then((r) => r.update()).catch(() => {});
+}

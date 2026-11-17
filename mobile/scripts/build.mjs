@@ -31,6 +31,7 @@ export const PAGES = [
 ];
 
 const tauriStub = join(root, "src/stubs/tauri.ts");
+const BUILD = new Date().toISOString();
 for (const p of PAGES) {
   const dir = join(out, p.id);
   mkdirSync(dir, { recursive: true });
@@ -40,7 +41,7 @@ for (const p of PAGES) {
     bundle: true, minify: true, format: "esm", splitting: false, target: ["safari16"], jsx: "automatic", legalComments: "none",
     loader: { ".png": "dataurl", ".svg": "dataurl", ".json": "json", ".woff2": "file", ".ttf": "file" },
     assetNames: "assets/[name]-[hash]",
-    define: { "process.env.NODE_ENV": '"production"' },
+    define: { "process.env.NODE_ENV": '"production"', __BUILD__: JSON.stringify(BUILD) },
     nodePaths: [join(root, "node_modules")],
     alias: { "@tauri-apps/api/core": tauriStub, "@tauri-apps/plugin-dialog": tauriStub, ...(p.alias ?? {}) },
     logLevel: "warning",
@@ -90,7 +91,7 @@ const version = hash.digest("hex").slice(0, 12) + "-" + Date.now().toString(36);
 writeFileSync(join(out, "sw.js"), `// Rayan's Mobile, version ${version}
 const CACHE = "rayans-mobile-${version}";
 const FILES = ${JSON.stringify(["./", ...files.map((f) => "./" + f.replace(/index\.html$/, ""))])};
-self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });
+self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES.map((f) => new Request(f, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 // Notifications envoyées par le veilleur (GitHub Actions) : affichage, et ouverture de l'app au toucher.
 self.addEventListener("push", (e) => {
