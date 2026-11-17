@@ -11,6 +11,8 @@ import { readCounts, sourcePaths } from "./sources.ts";
 import { runLaunchTest } from "./launch-test.ts";
 import { defaultFetch, facView, fetchAde, setupFac } from "./fac.ts";
 import { checkRoutine, routineView, setupRoutine } from "./routine.ts";
+import { checkObjectifs, objectifsView, setupObjectifs, titresDuJour } from "./objectifs.ts";
+import { adhkarSuivis, bilanView, checkBilan, matinActif, setupBilan } from "./bilan.ts";
 import { setupSync, syncAll, syncView } from "./sync.ts";
 
 const APP_NAME = "Rayan's Aujourd'hui";
@@ -22,6 +24,8 @@ const dataDir = testReport
   ? fs.mkdtempSync(path.join(os.tmpdir(), "rayans-aujourdhui-test-"))
   : arg("donnees") || process.env.HANGAR_APP_DATA || path.join(app.getPath("appData"), "Rayans Aujourdhui");
 if (testReport) app.setPath("userData", path.join(dataDir, "electron"));
+// En test, les objectifs ne lisent pas les vraies données de Chrono ni de Rayan's Journal.
+if (testReport) { process.env.PRIERE_DATA_FILE = path.join(dataDir, "absent-priere.json"); process.env.CHRONO_DATA_FILE = path.join(dataDir, "absent-chrono.json"); process.env.JOURNAL_DATA_DIR = path.join(dataDir, "absent-journal"); }
 const dataFile = path.join(dataDir, "aujourdhui.json");
 
 const assets = path.join(__dirname, "..", "assets");
@@ -75,7 +79,7 @@ function save() {
 }
 
 export function state(): State {
-  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView(), routine: routineView(), sync: syncView() };
+  return { settings, counts, updatedAt, version: app.getVersion(), dataDir, paths: testHooks.paths, today: todayISO(testHooks.clock()), fac: facView(), routine: routineView(), objectifs: objectifsView(), bilan: bilanView(), sync: syncView() };
 }
 
 function broadcast() {
@@ -110,6 +114,11 @@ function start() {
   ipcMain.on("ouvrir-dossier", (_e, p: string) => void shell.openPath(p));
   ipcMain.on("quitter", () => { quitting = true; app.quit(); });
   setupRoutine({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast() });
+  setupBilan({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast(), objectifs: () => titresDuJour() });
+  setupObjectifs({
+    dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast(), counts: () => counts,
+    revisionFile: () => testHooks.paths.revision, adhkarSuivis: () => adhkarSuivis(), matinParBilan: () => matinActif(), reminder: () => ({ on: settings.reminder, h: settings.reminderHour, m: settings.reminderMinute }),
+  });
   if (!testReport) setupSync({ dataDir, changed: () => broadcast() });
   setupFac({ dataDir, clock: () => testHooks.clock(), fetchText: (u) => testHooks.fetchText(u), changed: () => broadcast() });
 
@@ -138,6 +147,8 @@ export function refresh() {
   counts = readCounts(now, testHooks.paths);
   updatedAt = now;
   checkRoutine();
+  checkObjectifs();
+  checkBilan();
   if (settings.reminder && reminderDue(now, settings.reminderHour, settings.reminderMinute, lastSentDay)) {
     lastSentDay = todayISO(now);
     try { save(); } catch (e) { console.error(e); }

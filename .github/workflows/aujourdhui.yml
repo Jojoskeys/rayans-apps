@@ -10,6 +10,7 @@ on:
       - 'mobile/src/shared/merge.ts'
       - 'mobile/src/shared/e2e.ts'
       - 'echecs-ouvertures/src/core/**'
+      - 'priere/src/core/**'
       - 'echecs-ouvertures/data/openings.json'
       - '.github/workflows/aujourdhui.yml'
   workflow_dispatch:

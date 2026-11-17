@@ -3,6 +3,8 @@ import { NAMES, totalLeft, type SourceCount, type SourceId } from "../core/count
 import type { State } from "./api-types.ts";
 import { FacSettings, FacToday } from "./Fac.tsx";
 import { RoutineToday } from "./Routine.tsx";
+import { ObjectifsReglages, ObjectifsToday } from "./Objectifs.tsx";
+import { BilanReglages, BilanToday } from "./Bilan.tsx";
 import { SyncSettings } from "./Sync.tsx";
 
 const api = window.aujourdhui;
@@ -50,6 +52,8 @@ export function App() {
 
       {!reglages ? (
         <>
+          <BilanToday b={s.bilan} now={s.updatedAt} notify={setToast} />
+          <ObjectifsToday o={s.objectifs} notify={setToast} />
           <RoutineToday r={s.routine} now={s.updatedAt} notify={setToast} />
           <FacToday f={s.fac} now={s.updatedAt} notify={setToast} onSettings={() => setReglages(true)} />
           <h2 className="intertitre">Révisions</h2>
@@ -90,13 +94,15 @@ function Reglages({ s, notify }: { s: State; notify: (t: string) => void }) {
   return (
     <section className="reglages" data-testid="reglages">
       <FacSettings f={s.fac} notify={notify} />
+      <BilanReglages b={s.bilan} notify={notify} />
+      <ObjectifsReglages o={s.objectifs} notify={notify} />
       {s.sync && <SyncSettings v={s.sync} notify={notify} />}
       <div className="carte">
         <h2>Rappel du soir</h2>
         <label className="case"><input type="checkbox" checked={s.settings.reminder} onChange={(e) => set({ reminder: e.target.checked })} />
           <span>Me prévenir s'il reste des révisions<small>Une notification Windows, une fois par jour.</small></span></label>
         <label className="champ-ligne">Heure
-          <input type="time" value={`${pad(s.settings.reminderHour)}:${pad(s.settings.reminderMinute)}`} disabled={!s.settings.reminder}
+          <input type="time" data-testid="heure-rappel" value={`${pad(s.settings.reminderHour)}:${pad(s.settings.reminderMinute)}`} disabled={!s.settings.reminder}
             onChange={(e) => { const [h, m] = e.target.value.split(":").map(Number); if (Number.isInteger(h) && Number.isInteger(m)) void set({ reminderHour: h, reminderMinute: m }); }} />
         </label>
         <button className="lien" onClick={async () => notify((await api.testNotification()) ? "Notification envoyée." : "Les notifications ne sont pas disponibles.")}>Tester la notification</button>

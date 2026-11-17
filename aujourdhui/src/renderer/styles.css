@@ -171,3 +171,34 @@ blockquote { margin: 0; border-left: 3px solid var(--accent); padding: 6px 12px;
 }
 .synchro-details { margin: 0; padding-left: 18px; }
 .avertissement { color: #F1C27A; }
+
+/* Objectifs du jour */
+.objectifs-liste { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column; }
+.objectif { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--bord); }
+.objectif:first-child { border-top: 0; }
+.objectif-icone { font-size: 20px; line-height: 1.2; flex: none; width: 26px; text-align: center; }
+.objectif-texte { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.objectif-texte small { color: var(--texte-3); }
+.objectif-titre { font-weight: 600; }
+.objectif.atteint .objectif-titre { color: var(--vert); }
+.objectif.manque .objectif-titre { color: var(--texte-3); text-decoration: line-through; }
+.objectif-barre { height: 6px; border-radius: 99px; background: var(--panneau-2); overflow: hidden; max-width: 320px; }
+.objectif-barre > div { height: 100%; background: var(--accent); border-radius: 99px; }
+.objectif.atteint .objectif-barre > div { background: var(--vert); }
+
+/* Bilan du jour */
+.bilan-form { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.bilan-form p { margin: 4px 0 0; font-weight: 600; }
+.bilan-form textarea { width: 100%; }
+.humeurs { display: flex; gap: 6px; }
+.humeurs button { font-size: 24px; width: 46px; height: 42px; border-radius: 10px; background: var(--panneau-2); border: 1px solid var(--bord); opacity: 0.55; }
+.humeurs button.on { opacity: 1; border-color: var(--accent); background: color-mix(in srgb, var(--accent) 18%, var(--panneau-2)); }
+.humeurs button:hover { opacity: 1; }
+.demain { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.bilan-lien { margin: 0; }
+.historique-bilan { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+
+/* Citation du jour */
+.citation { margin: 0 0 4px; padding: 14px 18px; border-radius: var(--rayon); background: color-mix(in srgb, var(--accent) 10%, var(--panneau)); border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--bord)); }
+.citation blockquote { border: 0; background: none; padding: 0; font-size: 16px; line-height: 1.5; font-style: italic; }
+.citation figcaption { margin-top: 6px; color: var(--texte-2); font-size: 13px; }

@@ -26,6 +26,52 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 - Série : nombre de jours d'affilée où tout ce qui était prévu a été fait.
 - « Gérer » : ajouter, renommer, changer l'heure ou les jours, supprimer. Données : `routine.json`.
 
+## Bilan du jour et adhkar
+
+- **Le matin, après Fajr (Sobh)** (10 min après, réglable ; heures de Rayan's Prière) : une notification avec les
+  **adhkar as-sabâh** (avant le lever du soleil), « comment tu te sens aujourd'hui ? », ce qui a été prévu hier
+  soir et les objectifs du jour. Dans la fenêtre : humeur (5 visages), quelques mots, case « adhkar as-sabâh ».
+- **Entre Asr et Maghrib** : rappel des **adhkar al-masâ'** 40 min avant Maghrib (jamais avant Asr + 5 min), et un
+  dernier rappel 10 min avant Maghrib s'ils ne sont pas cochés.
+- **Le soir** (17 h 30 par défaut) : **bilan** — comment s'est passée la journée, comment je me sens, et ce que je
+  veux faire demain. Cette liste devient, le lendemain, une carte « Prévu hier soir » à cocher.
+- Chaque notification part une fois par jour, et seulement dans les 3 h qui suivent son heure. Les heures de prière
+  sont calculées avec le code de Rayan's Prière (`priere/src/core`, même lieu et même méthode, `priere.json` seulement
+  lu) ; sans ville choisie dans Prière, le rappel du matin part à 7 h et il n'y a pas de rappel des adhkar du soir.
+- Les textes des adhkar ne sont pas affichés : seulement les rappels et les cases.
+- Données : `bilan.json` (365 jours, sur le PC, non synchronisé avec l'iPhone). Calculs : `src/core/bilan.ts`.
+
+## Citations du jour
+
+- Une citation **le matin** (8 h) pour bien commencer et une **à midi** (12 h 30) pour garder le cap : notification
+  Windows et encadré en haut de la fenêtre. Heures réglables, désactivable.
+- Hadiths du Prophète ﷺ **avec leur référence** (al-Bukhârî, Muslim, at-Tirmidhî, Abû Dâwûd…), savants (al-Hasan
+  al-Basrî, Ibn al-Qayyim) et philosophes **avec l'œuvre citée** (Sénèque, Marc Aurèle, Épictète, Lao Tseu, Confucius,
+  Aristote, Descartes, Voltaire), et des phrases sans auteur. Traductions françaises faites pour l'app (sens fidèle).
+- Les citations célèbres mais mal attribuées sont volontairement écartées. Avant d'en ajouter une
+  (`src/core/citations.ts`), vérifier sa source.
+- Même citation toute la journée ; aucune ne revient avant que les autres soient passées.
+
+## Objectifs du jour
+
+- Chaque jour, **3 petits objectifs faciles** (réglable de 1 à 5), dans des domaines différents : prière et Coran,
+  études, écran, santé (domaines au choix dans les réglages). Le domaine laissé de côté change d'un jour à l'autre,
+  et un objectif proposé la veille revient rarement le lendemain.
+- **Adaptés aux habitudes** : la cible est un peu au-dessus de la médiane des 7 jours précédents (×1,1), plus douce
+  après un objectif raté (×0,8, ou « version douce » pour un objectif à cocher). Les objectifs déjà souvent réussis
+  sont un peu préférés : le but est de réussir chaque jour.
+- **Mesurés automatiquement** quand une app le sait (fichiers seulement lus) :
+  - cartes révisées dans Rayan's Révision (`reviews`), sans viser plus que ce qui reste à réviser ;
+  - minutes chronométrées dans Rayan's Chrono (`entries`) ;
+  - temps de jeu et heure de la dernière activité, d'après le résumé quotidien de Rayan's Journal
+    (`%LOCALAPPDATA%\Rayan's Journal\resume-quotidien.json` : seulement des durées et des heures). Proposés
+    seulement si c'est déjà beaucoup (au moins 30 min de jeux, ou coucher après 23 h 30).
+  - Le reste (prières, Coran, eau, marche, rangement…) est à cocher.
+- Journées de 4 h à 4 h. Les objectifs sont choisis une fois par journée et ne changent pas en cours de route ;
+  « Autre » en propose un autre du même domaine. Série : jours d'affilée où tout a été atteint.
+- Notifications : la liste le matin (dès 8 h, une fois) et, à l'heure du rappel du soir, ce qu'il reste à faire.
+- Données : `objectifs.json` (60 jours). Calculs : `src/core/objectifs.ts`, `src/core/mesures.ts`.
+
 ## Synchronisation avec l'iPhone (Rayan's Mobile)
 
 Réglages → **Synchronisation avec l'iPhone** : dépôt GitHub privé (`Jojoskeys/rayans-donnees`) et jeton à accès

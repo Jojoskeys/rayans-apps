@@ -94,20 +94,22 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     if (resume !== "8 éléments à réviser") throw new Error(`résumé : ${resume}`);
     step(`à réviser : Révision ${shown.revision} (2 révisions, 1 en réapprentissage, 2 nouvelles sur 3 : limite du paquet), Hifz ${shown.hifz} (dont 1 verset à revoir), Ouvertures ${shown.ouvertures} → « ${resume} »`);
 
+    // Seuls les rappels de révision comptent ici (les objectifs du jour ont leurs propres notifications).
+    const revisions = () => h.testHooks.sent.filter((x) => x.startsWith("Il reste des révisions"));
     h.refresh();
-    if (h.testHooks.sent.length) throw new Error("rappel envoyé avant l'heure");
+    if (revisions().length) throw new Error("rappel envoyé avant l'heure");
     h.testHooks.clock = () => at(19, 5);
     h.refresh();
-    if (h.testHooks.sent.length !== 1) throw new Error("rappel de 19 h non envoyé");
+    if (revisions().length !== 1) throw new Error("rappel de 19 h non envoyé");
     h.refresh();
-    if (h.testHooks.sent.length !== 1) throw new Error("rappel envoyé deux fois");
-    step(`rappel de 19 h envoyé une seule fois : « ${h.testHooks.sent[0]} »`);
+    if (revisions().length !== 1) throw new Error("rappel envoyé deux fois");
+    step(`rappel de 19 h envoyé une seule fois : « ${revisions()[0]} »`);
 
     // Tout est fait : le lendemain, avec des données à jour, aucun rappel.
     h.testHooks.paths = { revision: path.join(path.dirname(h.dataFile), "absent.json"), hifz: path.join(path.dirname(h.dataFile), "absent2.json"), ouvertures: path.join(path.dirname(h.dataFile), "absent") };
     h.testHooks.clock = () => at(19, 5) + 86_400_000;
     h.refresh();
-    if (h.testHooks.sent.length !== 1) throw new Error("rappel envoyé alors que rien ne reste");
+    if (revisions().length !== 1) throw new Error("rappel envoyé alors que rien ne reste");
     await waitFor("tout est fait", async () => (await text(w, '[data-testid="resume"]')) === "Tout est fait pour aujourd'hui", 5000);
     step("applications sans données : « Tout est fait pour aujourd'hui », pas de rappel");
 
@@ -180,14 +182,46 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     h.testHooks.clock = () => at(8, 31);
     h.refresh();
     h.refresh();
-    const rappels = h.testHooks.sent.slice(avant);
-    if (rappels.length !== 1 || !rappels[0].includes("Rappel : 30 min de sport")) throw new Error(`rappels : ${JSON.stringify(rappels)}`);
+    const envoyes = h.testHooks.sent.slice(avant);
+    const rappels = envoyes.filter((x) => x.startsWith("Rappel"));
+    if (rappels.length !== 1 || !rappels[0].includes("Rappel : 30 min de sport")) throw new Error(`rappels : ${JSON.stringify(envoyes)}`);
+    // Rappel du matin (sans heures de prière : 7 h), une fois, avec les objectifs du jour ; pas de second message à 8 h.
+    const matins = h.testHooks.sent.filter((x) => x.startsWith("Bonjour : début de journée"));
+    if (matins.length !== 1 || !matins[0].includes("Objectifs : ")) throw new Error(`rappel du matin : ${JSON.stringify(h.testHooks.sent)}`);
+    if (h.testHooks.sent.some((x) => x.startsWith("Tes objectifs du jour"))) throw new Error("objectifs annoncés deux fois le matin");
     await js(w, `document.querySelector('[data-testid="gerer-routine"]').click()`);
     await waitFor("tâches du jour", async () => (await js<number>(w, `document.querySelectorAll('[data-testid="tache"]').length`)) === 2, 5000);
     await js(w, `document.querySelector('[data-testid="tache"] input').click()`);
     await waitFor("tâche cochée", () => js<boolean>(w, `document.querySelector('[data-testid="tache"]').classList.contains("fait")`), 5000);
     step(`routine : 2 tâches, rappel « ${rappels[0]} » envoyé une fois, case cochée`);
     if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6-routine.png"), (await w.webContents.capturePage()).toPNG()); }
+
+    // ----- Objectifs du jour : 3 objectifs affichés, une case cochée, un objectif changé -----
+    await waitFor("objectifs du jour", async () => (await js<number>(w, `document.querySelectorAll('[data-testid="objectif"]').length`)) === 3, 5000);
+    const aCocher = await js<number>(w, `document.querySelectorAll('[data-testid="objectif"] input[type=checkbox]').length`);
+    if (aCocher > 0) {
+      await js(w, `document.querySelector('[data-testid="objectif"] input[type=checkbox]').click()`);
+      await waitFor("objectif coché", async () => (await js<number>(w, `document.querySelectorAll('[data-testid="objectif"].atteint').length`)) === 1, 5000);
+    }
+    const objectifsFichier = JSON.parse(fs.readFileSync(path.join(path.dirname(h.dataFile), "objectifs.json"), "utf8"));
+    const duJour = Object.values(objectifsFichier.jours as Record<string, { domaine: string }[]>).at(-1)!;
+    if (new Set(duJour.map((o) => o.domaine)).size !== 3) throw new Error("objectifs : 3 domaines différents attendus");
+    step(`objectifs du jour : 3 objectifs de domaines différents, ${aCocher} à cocher, notification du matin envoyée une fois`);
+    if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6b-objectifs.png"), (await w.webContents.capturePage()).toPNG()); }
+
+    // ----- Bilan du soir : rappel à 17 h 30, formulaire rempli, liste pour demain enregistrée -----
+    h.testHooks.clock = () => at(17, 31);
+    h.refresh();
+    if (!h.testHooks.sent.some((x) => x.startsWith("Bilan du soir"))) throw new Error(`bilan du soir non rappelé : ${JSON.stringify(h.testHooks.sent)}`);
+    await waitFor("formulaire du soir", () => js<boolean>(w, `!!document.querySelector('[data-testid="bilan-soir"]')`), 5000);
+    if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6c-bilan-formulaire.png"), (await w.webContents.capturePage()).toPNG()); }
+    await js(w, `window.aujourdhui.bilan.evening(4, "Bonne journée, TD réussi.", "Content 🙂", ["Réviser le chapitre 3", "Appeler maman"])`);
+    const bilan = JSON.parse(fs.readFileSync(path.join(path.dirname(h.dataFile), "bilan.json"), "utf8"));
+    const prevus = Object.values(bilan.jours as Record<string, { prevu?: { texte: string }[] }>).flatMap((j) => j.prevu ?? []).map((p) => p.texte);
+    if (prevus.join("|") !== "Réviser le chapitre 3|Appeler maman") throw new Error(`liste pour demain : ${JSON.stringify(prevus)}`);
+    await waitFor("bilan noté", () => js<boolean>(w, `!document.querySelector('[data-testid="bilan-soir"]') && !!document.querySelector('[data-testid="ouvrir-bilan-soir"]')`), 5000);
+    step("bilan du soir : rappel à 17 h 30, journée et ressenti notés, 2 choses prévues pour demain");
+    if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "6c-bilan.png"), (await w.webContents.capturePage()).toPNG()); }
 
     await js(w, `document.querySelector('[data-testid="bouton-reglages"]').click()`);
     await waitFor("réglages", () => js<boolean>(w, `!!document.querySelector('[data-testid="reglages"]')`), 5000);
@@ -201,7 +235,7 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     step("groupes : « L3 Info TD2 » proposé (pas l'enseignant), filtre enregistré, 3 cours gardés");
     if (dir) { await sleep(400); fs.writeFileSync(path.join(dir, "5-reglages-fac.png"), (await w.webContents.capturePage()).toPNG()); }
     h.updateSettings({ reminderHour: 20, reminderMinute: 30 });
-    await waitFor("heure du rappel", () => js<boolean>(w, `document.querySelector('input[type=time]').value === "20:30"`), 5000);
+    await waitFor("heure du rappel", () => js<boolean>(w, `document.querySelector('[data-testid="heure-rappel"]').value === "20:30"`), 5000);
     const saved = JSON.parse(fs.readFileSync(h.dataFile, "utf8"));
     if (saved.settings?.reminderHour !== 20) throw new Error("réglages non enregistrés");
     step(`réglages : rappel à 20:30, enregistré dans ${h.dataFile}`);

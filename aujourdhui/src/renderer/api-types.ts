@@ -2,6 +2,9 @@ import type { SourceCount, SourceId } from "../core/counts.ts";
 import type { CourseChange } from "../core/ics.ts";
 import type { Deadline, DisplayCourse, SharedMail } from "../core/fac.ts";
 import type { RoutineItem } from "../core/routine.ts";
+import type { Avancement, Domaine, ObjectifJour } from "../core/objectifs.ts";
+import type { Citation } from "../core/citations.ts";
+import type { APrevoir, EntreeMatin, EntreeSoir, JourBilan, Moments, Prieres, ReglagesBilan } from "../core/bilan.ts";
 
 /** Synchronisation avec l'iPhone (Rayan's Mobile) par un dépôt GitHub privé. */
 export interface SyncView {
@@ -19,6 +22,30 @@ export interface RoutineView {
   today: (RoutineItem & { done: boolean })[];
   streak: number;
   day: string;
+}
+
+/** Bilan du matin et du soir, liste prévue la veille, adhkar. */
+export interface BilanView {
+  jour: string;
+  aujourdhui: JourBilan;
+  /** Ce qui est déjà noté pour demain (bilan du soir). */
+  demain: APrevoir[];
+  aRemplir: { matin: boolean; soir: boolean };
+  moments: Moments;
+  prieres: Prieres | null;
+  reglages: ReglagesBilan;
+  historique: { jour: string; matin: EntreeMatin | null; soir: EntreeSoir | null }[];
+  citations: { matin: Citation; midi: Citation };
+}
+
+/** Objectifs du jour : petits objectifs faciles, adaptés aux habitudes. */
+export interface ObjectifsView {
+  jour: string;
+  objectifs: (ObjectifJour & { avancement: Avancement })[];
+  serie: number;
+  reglages: { domaines: Domaine[]; nombre: number };
+  /** Ce qui peut être mesuré automatiquement. */
+  sources: { journal: boolean; chrono: boolean; revision: boolean };
 }
 
 /** Fac : emploi du temps ADE et mails partagés, tels qu'affichés. */
@@ -57,6 +84,8 @@ export interface State {
   today: string;
   fac: FacView;
   routine: RoutineView;
+  objectifs: ObjectifsView;
+  bilan: BilanView;
   sync?: SyncView;
 }
 
@@ -79,6 +108,18 @@ export interface AujourdhuiApi {
     update(id: string, patch: { title?: string; time?: string; days?: number[] }): Promise<RoutineView>;
     remove(id: string): Promise<RoutineView>;
     toggle(id: string): Promise<RoutineView>;
+  };
+  bilan: {
+    morning(humeur: number, ressenti: string): Promise<BilanView>;
+    evening(humeur: number, journee: string, ressenti: string, demain: string[]): Promise<BilanView>;
+    togglePlanned(id: string): Promise<BilanView>;
+    toggleAdhkar(quand: "sabah" | "masa"): Promise<BilanView>;
+    settings(r: Partial<ReglagesBilan>): Promise<BilanView>;
+  };
+  objectifs: {
+    toggle(id: string): Promise<ObjectifsView>;
+    change(id: string): Promise<ObjectifsView>;
+    settings(r: { domaines?: Domaine[]; nombre?: number }): Promise<ObjectifsView>;
   };
   fac: {
     setUrl(url: string): Promise<FacView>;

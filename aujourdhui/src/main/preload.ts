@@ -26,6 +26,18 @@ const api: AujourdhuiApi = {
     remove: (id) => ipcRenderer.invoke("routine-supprimer", id),
     toggle: (id) => ipcRenderer.invoke("routine-cocher", id),
   },
+  bilan: {
+    morning: (h, t) => ipcRenderer.invoke("bilan-matin", h, t),
+    evening: (h, j, r, d) => ipcRenderer.invoke("bilan-soir", h, j, r, d),
+    togglePlanned: (id) => ipcRenderer.invoke("bilan-prevu", id),
+    toggleAdhkar: (q) => ipcRenderer.invoke("bilan-adhkar", q),
+    settings: (r) => ipcRenderer.invoke("bilan-reglages", r),
+  },
+  objectifs: {
+    toggle: (id) => ipcRenderer.invoke("objectif-cocher", id),
+    change: (id) => ipcRenderer.invoke("objectif-changer", id),
+    settings: (r) => ipcRenderer.invoke("objectifs-reglages", r),
+  },
   fac: {
     setUrl: (u) => ipcRenderer.invoke("fac-url", u),
     refresh: () => ipcRenderer.invoke("fac-actualiser"),
