@@ -15,4 +15,5 @@ export const APPS: MobileApp[] = [
   { id: "priere", name: "Prière", tagline: "Horaires du jour", icon: "◷", color: "#4FC08D", files: ["priere"] },
   { id: "chrono", name: "Chrono", tagline: "Pomodoro et temps passé", icon: "◔", color: "#E8594F", files: ["chrono"] },
   { id: "ouvertures", name: "Ouvertures", tagline: "Positions d'échecs à rejouer", icon: "♞", color: "#9B7BEA", files: ["ouvertures", "ouvertures-donnees"] },
+  { id: "telecommande", name: "Télécommande", tagline: "Piloter le PC, fichiers", icon: "⌘", color: "#3D8BFD", files: [] },
 ];

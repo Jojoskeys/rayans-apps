@@ -28,6 +28,7 @@ export const PAGES = [
     head: '<link rel="stylesheet" href="chessground.css" /><link rel="stylesheet" href="styles.css" />',
     concat: [{ to: "chessground.css", from: ["node_modules/chessground/assets/chessground.base.css", "node_modules/chessground/assets/chessground.brown.css", "node_modules/chessground/assets/chessground.cburnett.css"] }],
     copy: [{ from: "../echecs-ouvertures/src/ui/styles.css", to: "styles.css" }] },
+  { id: "telecommande", title: "Télécommande", entry: "src/apps/telecommande.tsx", root: "racine" },
 ];
 
 const tauriStub = join(root, "src/stubs/tauri.ts");
