@@ -20,6 +20,13 @@ export interface Apparence {
   afficherEtat: boolean;
   /** Bouton d'accueil flottant dans les apps. */
   boutonAccueil: "gauche" | "droite";
+  /** Apps favorites : en grand, en haut de l'accueil. */
+  favoris: string[];
+  /** App ouverte directement au lancement ("" : l'accueil). */
+  demarrage: string;
+  /** Raccourci « Reprendre » vers la dernière app ouverte. */
+  reprendre: boolean;
+  tailleTuiles: "petites" | "normales" | "grandes";
   /** Icône de l'écran d'accueil : modèle, ou image (data URL PNG) pour une photo. */
   icone: { modele: string; image?: string };
 }
@@ -32,9 +39,19 @@ export const COULEURS: { nom: string; valeur: string }[] = [
 export const APPARENCE_DEPART: Apparence = {
   theme: "sombre", accent: "#5B8DEF", taille: 1, prenom: "Rayan", afficherDate: true, ordre: [], masquees: [], disposition: "grille",
   afficherEtat: true, boutonAccueil: "gauche", icone: { modele: "origine" },
+  favoris: [], demarrage: "", reprendre: true, tailleTuiles: "normales",
 };
 
 const CLE = "rm-apparence";
+const DERNIERE = "rm-derniere-app";
+
+/** Dernière app ouverte (pour « Reprendre ») : id et heure. */
+export function derniereApp(): { id: string; at: number } | null {
+  try { const r = JSON.parse(localStorage.getItem(DERNIERE) ?? "null"); return r && typeof r.id === "string" ? r : null; } catch { return null; }
+}
+export function noterApp(id: string) {
+  try { localStorage.setItem(DERNIERE, JSON.stringify({ id, at: Date.now() })); } catch { /* */ }
+}
 
 export function lireApparence(): Apparence {
   try {
@@ -56,6 +73,10 @@ export function nettoyerApparence(r: Partial<Apparence>): Apparence {
     disposition: r.disposition === "liste" ? "liste" : "grille",
     afficherEtat: r.afficherEtat !== false,
     boutonAccueil: r.boutonAccueil === "droite" ? "droite" : "gauche",
+    favoris: liste(r.favoris),
+    demarrage: typeof r.demarrage === "string" && /^[a-z0-9-]{0,30}$/.test(r.demarrage) ? r.demarrage : "",
+    reprendre: r.reprendre !== false,
+    tailleTuiles: r.tailleTuiles === "petites" || r.tailleTuiles === "grandes" ? r.tailleTuiles : "normales",
     icone: r.icone && typeof r.icone.modele === "string" ? { modele: r.icone.modele, ...(typeof r.icone.image === "string" && r.icone.image.startsWith("data:image/") ? { image: r.icone.image } : {}) } : d.icone,
   };
 }

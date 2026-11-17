@@ -5,7 +5,7 @@ import { getConfig, onStatus, setConfig, setupKey, syncApp, testConfig, type Syn
 import { APPS } from "../shared/apps.ts";
 import { Notifications } from "./Notifications.tsx";
 import { Personnaliser } from "./Personnaliser.tsx";
-import { appliquerApparence, lireApparence, trier } from "../shared/apparence.ts";
+import { appliquerApparence, derniereApp, lireApparence, trier } from "../shared/apparence.ts";
 import "./hub.css";
 
 function Hub() {
@@ -15,7 +15,11 @@ function Hub() {
   useEffect(() => onStatus(setSt), []);
   const heure = new Date().getHours();
   const salut = heure < 18 ? "Bonjour" : "Bonsoir";
-  const apps = trier(APPS, a).filter((x) => !a.masquees.includes(x.id));
+  const visibles = trier(APPS, a).filter((x) => !a.masquees.includes(x.id));
+  const favoris = a.favoris.map((id) => visibles.find((x) => x.id === id)).filter((x): x is (typeof APPS)[number] => !!x);
+  const apps = visibles.filter((x) => !a.favoris.includes(x.id));
+  const derniere = a.reprendre ? derniereApp() : null;
+  const reprise = derniere && Date.now() - derniere.at < 12 * 3600_000 ? APPS.find((x) => x.id === derniere.id) : undefined;
   return (
     <div className="hub">
       <header>
@@ -32,7 +36,31 @@ function Hub() {
       </header>
       {page === "accueil" ? (
         <>
-          <ul className={`tuiles ${a.disposition}`}>
+          {reprise && (
+            <a className="reprendre" href={`./${reprise.id}/`} style={{ ["--c" as string]: reprise.color }}>
+              <span className="icone">{reprise.icon}</span>
+              <span><small>Reprendre</small><b>{reprise.name}</b></span>
+              <span className="fleche">›</span>
+            </a>
+          )}
+          {favoris.length > 0 && (
+            <>
+              <h2 className="section">★ Favoris</h2>
+              <ul className={`tuiles favoris taille-${a.tailleTuiles}`}>
+                {favoris.map((x) => (
+                  <li key={x.id}>
+                    <a href={`./${x.id}/`} style={{ ["--c" as string]: x.color }}>
+                      <span className="icone">{x.icon}</span>
+                      <b>{x.name}</b>
+                      <small>{x.tagline}</small>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {apps.length > 0 && <h2 className="section">Autres apps</h2>}
+            </>
+          )}
+          <ul className={`tuiles ${a.disposition} taille-${a.tailleTuiles}`}>
             {apps.map((a) => (
               <li key={a.id}>
                 <a href={`./${a.id}/`} style={{ ["--c" as string]: a.color }}>
@@ -96,6 +124,11 @@ function Synchro({ onDone }: { onDone: () => void }) {
 }
 
 appliquerApparence();
+// App ouverte directement au lancement (sauf retour volontaire à l'accueil : « ?accueil »).
+{
+  const dem = lireApparence().demarrage;
+  if (dem && APPS.some((x) => x.id === dem) && !new URLSearchParams(location.search).has("accueil")) location.replace(`./${dem}/`);
+}
 createRoot(document.getElementById("racine")!).render(<StrictMode><Hub /></StrictMode>);
 if ("serviceWorker" in navigator) {
   // Nouvelle version installée pendant que l'app est ouverte : on recharge une fois pour l'utiliser tout de suite.

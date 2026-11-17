@@ -66,6 +66,8 @@ export function Personnaliser({ a, onChange, onDone }: { a: Apparence; onChange:
               <label className="case"><input type="checkbox" checked={visible} onChange={(e) => maj({ masquees: e.target.checked ? a.masquees.filter((y) => y !== x.id) : [...a.masquees, x.id] })} />
                 <span className="icone" style={{ ["--c" as string]: x.color }}>{x.icon}</span>{x.name}</label>
               <span>
+                <button className={`lien etoile ${a.favoris.includes(x.id) ? "on" : ""}`} aria-pressed={a.favoris.includes(x.id)} aria-label={`${x.name} en favori`}
+                  onClick={() => maj({ favoris: a.favoris.includes(x.id) ? a.favoris.filter((y) => y !== x.id) : [...a.favoris, x.id] })}>{a.favoris.includes(x.id) ? "★" : "☆"}</button>
                 <button className="lien" aria-label={`Monter ${x.name}`} disabled={i === 0} onClick={() => deplacer(x.id, -1)}>↑</button>
                 <button className="lien" aria-label={`Descendre ${x.name}`} disabled={i === apps.length - 1} onClick={() => deplacer(x.id, 1)}>↓</button>
               </span>
@@ -73,6 +75,20 @@ export function Personnaliser({ a, onChange, onDone }: { a: Apparence; onChange:
           );
         })}
       </ul>
+      <p className="petit">☆ : met l'app en favori, en grand tout en haut. Coche : visible sur l'accueil. ↑ ↓ : ordre.</p>
+      <div className="ligne">
+        <span>Taille des tuiles</span>
+        <div className="segments">
+          {(["petites", "normales", "grandes"] as const).map((t) => <button key={t} className={a.tailleTuiles === t ? "actif" : ""} onClick={() => maj({ tailleTuiles: t })}>{t === "petites" ? "Petites" : t === "normales" ? "Normales" : "Grandes"}</button>)}
+        </div>
+      </div>
+      <label>Au lancement, ouvrir
+        <select value={a.demarrage} onChange={(e) => maj({ demarrage: e.target.value })}>
+          <option value="">l'accueil</option>
+          {APPS.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}
+        </select>
+      </label>
+      <label className="case"><input type="checkbox" checked={a.reprendre} onChange={(e) => maj({ reprendre: e.target.checked })} />Raccourci « Reprendre » vers la dernière app ouverte</label>
       <div className="ligne">
         <span>Bouton ⌂ dans les apps</span>
         <div className="segments">

@@ -7,8 +7,8 @@ import { BackupsPanel, useBackups, VersionsPanel } from "./safety";
 import { AppDiagnostics, HistoryPage, MyApps, PaletteShortcutPanel, RecentHistory, StoragePage, TransferPanel, UpdateRulePicker, UpdateRulesPanel, WorkshopPage, WorkspacesPage } from "./pages";
 import { applyPrefs, DEFAULT_PREFS, loadPrefs, PrefsContext, savePrefs, THEMES, usePrefs, type Prefs, type ThemeId } from "./prefs";
 
-type Page = "catalog" | "installed" | "workspaces" | "history" | "storage" | "workshop" | "settings";
-const PAGES: Page[] = ["catalog", "installed", "workspaces", "history", "storage", "workshop", "settings"];
+type Page = "favorites" | "catalog" | "installed" | "workspaces" | "history" | "storage" | "workshop" | "settings";
+const PAGES: Page[] = ["favorites", "catalog", "installed", "workspaces", "history", "storage", "workshop", "settings"];
 
 export default function App() {
   const [prefs, setPrefsState] = useState<Prefs>(loadPrefs);
@@ -19,7 +19,7 @@ export default function App() {
   const ctx = useMemo(
     () => ({
       prefs,
-      setPrefs: (p: Partial<Prefs>) => setPrefsState((x) => ({ ...x, ...p })),
+      setPrefs: (p: Partial<Prefs> | ((x: Prefs) => Partial<Prefs>)) => setPrefsState((x) => ({ ...x, ...(typeof p === "function" ? p(x) : p) })),
       resetPrefs: () => setPrefsState({ ...DEFAULT_PREFS }),
     }),
     [prefs],
@@ -85,11 +85,22 @@ function Launcher() {
     };
   }, [reload]);
 
+  // Ctrl + 1 à 9 : lance le favori correspondant (ou ouvre sa fiche s'il n'est pas installé).
+  const favRef = useRef({ favorites: prefs.favorites, snap });
+  favRef.current = { favorites: prefs.favorites, snap };
+
   // Ctrl + K (et Ctrl + Alt + Espace quand le launcher a déjà le focus) ; le raccourci global arrive par événement.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const k = e.key.toLowerCase();
-      if ((e.ctrlKey || e.metaKey) && !e.altKey && k === "k") {
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && /^Digit[1-9]$/.test(e.code)) {
+        const { favorites, snap: s } = favRef.current;
+        const a = s?.apps.find((x) => x.id === favorites[Number(e.code.slice(5)) - 1]);
+        if (!a) return;
+        e.preventDefault();
+        if (a.installedVersion) api.launch(a.id).then(() => setToast(`${a.name} se lance…`)).catch((err) => setToast(toErrorInfo(err).message));
+        else setDetail(a.id);
+      } else if ((e.ctrlKey || e.metaKey) && !e.altKey && k === "k") {
         e.preventDefault();
         setPalette((p) => (p ? null : { external: false }));
       } else if (e.ctrlKey && e.altKey && e.code === "Space") {
@@ -169,6 +180,7 @@ function Launcher() {
         </div>
         <nav>
           <span className="nav-indicator" style={{ "--nav-i": PAGES.indexOf(page) } as React.CSSProperties} aria-hidden />
+          <NavItem icon="star" label="Favoris" active={page === "favorites"} onClick={() => nav("favorites")} count={prefs.favorites.filter((id) => snap.apps.some((a) => a.id === id)).length} />
           <NavItem icon="catalog" label="Catalogue" active={page === "catalog"} onClick={() => nav("catalog")} badge={updates ? `${updates}` : undefined} badgeTitle="mises à jour disponibles" />
           <NavItem icon="installed" label="Installées" active={page === "installed"} onClick={() => nav("installed")} count={installedCount + snap.profile.personal.length} />
           <NavItem icon="layers" label="Espaces" active={page === "workspaces"} onClick={() => nav("workspaces")} count={snap.profile.workspaces.length} />
@@ -279,8 +291,11 @@ function CatalogStatus({ snap }: { snap: Snapshot }) {
 function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings, onToast }: { snap: Snapshot; page: Page; onOpen: (id: string) => void; onRefresh: () => void; goCatalog: () => void; goSettings: () => void; onToast: (s: string) => void }) {
   const c = snap.catalog;
   const [adding, setAdding] = useState(false);
-  const { prefs } = usePrefs();
-  const apps = useMemo(() => {
+  const [filtre, setFiltre] = useState("");
+  const { prefs, setPrefs } = usePrefs();
+  const favoris = page === "favorites";
+  const tous = useMemo(() => {
+    if (favoris) return prefs.favorites.map((id) => snap.apps.find((a) => a.id === id)).filter((a): a is AppView => !!a);
     const list = page === "installed" ? snap.apps.filter((a) => a.installedVersion) : snap.apps.filter((a) => a.inCatalog);
     const byName = (a: AppView, b: AppView) => a.name.localeCompare(b.name, "fr");
     const rank = (f: (a: AppView) => boolean) => (a: AppView, b: AppView) => Number(f(b)) - Number(f(a)) || byName(a, b);
@@ -288,10 +303,14 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings, onToast
     if (prefs.sort === "installees") return [...list].sort(rank((a) => !!a.installedVersion));
     if (prefs.sort === "maj") return [...list].sort(rank((a) => a.updateAvailable));
     return list;
-  }, [snap, page, prefs.sort]);
-  const title = page === "installed" ? "Installées" : c.title ?? "Catalogue";
+  }, [snap, page, prefs.sort, prefs.favorites, favoris]);
+  const q = filtre.trim().toLocaleLowerCase("fr");
+  const apps = q ? tous.filter((a) => `${a.name} ${a.description}`.toLocaleLowerCase("fr").includes(q)) : tous;
+  const title = favoris ? "Favoris" : page === "installed" ? "Installées" : c.title ?? "Catalogue";
   const subtitle =
-    page === "installed"
+    favoris
+      ? tous.length ? `${tous.length} favori${tous.length > 1 ? "s" : ""} · Ctrl + 1 à ${Math.min(9, tous.length)} pour lancer · glisser pour réordonner` : ""
+      : page === "installed"
       ? `${apps.length} application${apps.length > 1 ? "s" : ""} sur cet ordinateur`
       : c.status === "ready"
         ? `${c.appCount} application${c.appCount > 1 ? "s" : ""} disponible${c.appCount > 1 ? "s" : ""}`
@@ -315,7 +334,7 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings, onToast
     <>
       <header className="page-head">
         <div>
-          <span className="eyebrow">{page === "installed" ? "Sur cet ordinateur" : "Rayan's Launcher"}</span>
+          <span className="eyebrow">{favoris ? "Accès rapide" : page === "installed" ? "Sur cet ordinateur" : "Rayan's Launcher"}</span>
           <h1>{title}</h1>
           {subtitle && <p className="muted">{subtitle}</p>}
           {stats.some(Boolean) && (
@@ -339,7 +358,43 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings, onToast
 
       {adding && <AddZip snap={snap} onClose={() => setAdding(false)} onAdded={(id) => { setAdding(false); onOpen(id); }} />}
 
-      <Banners snap={snap} onRetry={onRefresh} />
+      {!favoris && <Banners snap={snap} onRetry={onRefresh} />}
+
+      {(tous.length > 0 || favoris) && (
+        <div className="lib-toolbar">
+          <label className="lib-filter">
+            <Icon name="search" size={15} />
+            <input value={filtre} onChange={(e) => setFiltre(e.target.value)} placeholder="Filtrer…" aria-label="Filtrer les applications" spellCheck={false} />
+            {filtre && <button className="link" onClick={() => setFiltre("")} aria-label="Effacer le filtre"><Icon name="close" size={14} /></button>}
+          </label>
+          <div className="seg-icons" role="radiogroup" aria-label="Affichage">
+            {([["tuiles", "grid", "Tuiles"], ["liste", "list", "Liste"], ["cartes", "cards", "Grandes cartes"]] as const).map(([v, ic, label]) => (
+              <button key={v} role="radio" aria-checked={prefs.view === v} className={prefs.view === v ? "on" : ""} title={label} aria-label={label} onClick={() => setPrefs({ view: v })}><Icon name={ic} size={16} /></button>
+            ))}
+          </div>
+          {prefs.view === "cartes" ? (
+            <label className="lib-size" title="Taille des cartes">
+              <span>Taille</span>
+              <input type="range" min={230} max={420} step={10} value={prefs.cardSize} onChange={(e) => setPrefs({ cardSize: Number(e.target.value) })} aria-label="Taille des cartes" />
+            </label>
+          ) : (
+            <label className="lib-size" title="Taille des icônes">
+              <span>Icônes</span>
+              <input type="range" min={32} max={112} step={4} value={prefs.iconSize} onChange={(e) => setPrefs({ iconSize: Number(e.target.value) })} aria-label="Taille des icônes" />
+            </label>
+          )}
+        </div>
+      )}
+
+      {favoris && tous.length === 0 && (
+        <EmptyState
+          icon="star"
+          title="Aucun favori pour l'instant"
+          text="Clique sur l'étoile d'une application (dans le catalogue, les installées ou sa fiche) pour la retrouver ici. Les 9 premiers se lancent aussi avec Ctrl + 1 à Ctrl + 9."
+          actions={<button className="btn primary" onClick={goCatalog}>Parcourir le catalogue</button>}
+        />
+      )}
+      {q && apps.length === 0 && tous.length > 0 && <p className="muted">Aucune application ne correspond à « {filtre} ».</p>}
 
       {page === "catalog" && c.status === "none" && !c.refreshing && (
         <EmptyState
@@ -362,7 +417,7 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings, onToast
         />
       )}
       {page === "catalog" && c.status === "none" && c.refreshing && <SkeletonGrid />}
-      {page === "catalog" && c.status === "ready" && apps.length === 0 && (
+      {page === "catalog" && c.status === "ready" && tous.length === 0 && (
         <EmptyState
           icon="box"
           title="Catalogue vide"
@@ -378,7 +433,7 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings, onToast
           }
         />
       )}
-      {page === "installed" && apps.length === 0 && (
+      {page === "installed" && tous.length === 0 && (
         <EmptyState
           icon="installed"
           title="Aucune application installée"
@@ -387,13 +442,16 @@ function Library({ snap, page, onOpen, onRefresh, goCatalog, goSettings, onToast
         />
       )}
 
-      {apps.length > 0 && (
+      {apps.length > 0 && (prefs.view === "cartes" ? (
         <div className="grid">
           {apps.map((a, i) => (
             <AppCard key={a.id} index={i} app={a} refresh={c.fetchedAt} onOpen={() => onOpen(a.id)} />
           ))}
         </div>
-      )}
+      ) : (
+        <AppTiles apps={apps} refresh={c.fetchedAt} onOpen={onOpen} onToast={onToast} reorder={favoris && !q} />
+      ))}
+      {favoris && <RecentLaunches snap={snap} onOpen={onOpen} onToast={onToast} />}
       {page === "installed" && <MyApps snap={snap} onToast={onToast} />}
     </>
   );
@@ -562,6 +620,7 @@ function AppCard({ app, index, refresh, onOpen }: { app: AppView; index: number;
     >
       <span className="card-glow" aria-hidden />
       <Visual app={app} refresh={refresh} className="card-visual" />
+      <FavStar app={app} className="card-star" />
       {app.updateAvailable && <span className="ribbon">Mise à jour {app.availableVersion}</span>}
       {done && (
         <span className="done-badge" role="status">
@@ -604,6 +663,101 @@ function useJustDone(app: AppView): "install" | "update" | null {
     return () => clearTimeout(t);
   }, [done]);
   return done;
+}
+
+/** Étoile : ajoute ou retire l'application des favoris (sans ouvrir la fiche). */
+function FavStar({ app, className = "" }: { app: AppView; className?: string }) {
+  const { prefs, setPrefs } = usePrefs();
+  const on = prefs.favorites.includes(app.id);
+  return (
+    <button
+      className={`fav-star ${on ? "on" : ""} ${className}`}
+      aria-pressed={on}
+      aria-label={on ? `Retirer ${app.name} des favoris` : `Ajouter ${app.name} aux favoris`}
+      title={on ? "Retirer des favoris" : "Ajouter aux favoris"}
+      onClick={(e) => { e.stopPropagation(); setPrefs((x) => ({ favorites: x.favorites.includes(app.id) ? x.favorites.filter((y) => y !== app.id) : [...x.favorites, app.id] })); }}
+      onKeyDown={(e) => e.stopPropagation()}
+    >
+      <Icon name="star" size={16} />
+    </button>
+  );
+}
+
+/** Tuiles compactes ou liste : icône à la taille choisie, lancement en un clic, favoris réordonnables par glisser. */
+function AppTiles({ apps, refresh, onOpen, onToast, reorder }: { apps: AppView[]; refresh: string | null; onOpen: (id: string) => void; onToast: (s: string) => void; reorder: boolean }) {
+  const { prefs, setPrefs } = usePrefs();
+  const [drag, setDrag] = useState<string | null>(null);
+  const liste = prefs.view === "liste";
+  const deposer = (cible: string) => {
+    if (!drag || drag === cible) return;
+    const ids = prefs.favorites.filter((x) => x !== drag);
+    ids.splice(ids.indexOf(cible), 0, drag);
+    setPrefs({ favorites: ids });
+  };
+  const lancer = (a: AppView) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    api.launch(a.id).then(() => onToast(`${a.name} se lance…`)).catch((err) => onToast(toErrorInfo(err).message));
+  };
+  return (
+    <div className={liste ? "app-list" : "tiles"}>
+      {apps.map((a, i) => (
+        <article
+          key={a.id}
+          className={`tile ${a.updateAvailable ? "has-update" : ""} ${drag === a.id ? "dragging" : ""}`}
+          style={{ "--i": Math.min(i, 12) } as React.CSSProperties}
+          onClick={() => onOpen(a.id)}
+          onKeyDown={(e) => e.key === "Enter" && onOpen(a.id)}
+          tabIndex={0}
+          aria-label={a.name}
+          draggable={reorder}
+          onDragStart={() => setDrag(a.id)}
+          onDragEnd={() => setDrag(null)}
+          onDragOver={(e) => reorder && e.preventDefault()}
+          onDrop={() => deposer(a.id)}
+        >
+          <div className="tile-icon">
+            <AppIcon app={a} refresh={refresh} size={liste ? Math.round(prefs.iconSize * 0.75) : prefs.iconSize} />
+            {a.running && <span className="tile-dot running" title="En cours d'exécution" />}
+            {!a.running && a.updateAvailable && <span className="tile-dot" title={`Mise à jour ${a.availableVersion}`} />}
+          </div>
+          <div className="tile-text">
+            <b>{reorder && i < 9 ? <kbd className="tile-key">{i + 1}</kbd> : null}{a.name}</b>
+            {liste ? <span className="muted">{a.description}</span> : null}
+            <span className="tile-meta">{a.task ? "En cours…" : a.installedVersion ? `v${a.installedVersion}${a.updateAvailable ? ` → ${a.availableVersion}` : ""}` : "Non installée"}</span>
+          </div>
+          <FavStar app={a} className="tile-star" />
+          {liste ? (
+            <div className="tile-actions" onClick={(e) => e.stopPropagation()}><Actions app={a} compact /></div>
+          ) : a.installedVersion && !a.task ? (
+            <button className="tile-play" onClick={lancer(a)} title={`Lancer ${a.name}`} aria-label={`Lancer ${a.name}`}><Icon name="play" size={14} /></button>
+          ) : null}
+        </article>
+      ))}
+    </div>
+  );
+}
+
+/** Dernières applications lancées (journal du launcher), pour y revenir vite. */
+function RecentLaunches({ snap, onOpen, onToast }: { snap: Snapshot; onOpen: (id: string) => void; onToast: (s: string) => void }) {
+  const [ids, setIds] = useState<string[]>([]);
+  useEffect(() => {
+    let gone = false;
+    api.history(null, 300).then((h) => {
+      if (gone) return;
+      const vus: string[] = [];
+      for (const e of h) if (e.kind === "launch" && e.appId && !vus.includes(e.appId)) vus.push(e.appId);
+      setIds(vus);
+    }).catch(() => {});
+    return () => { gone = true; };
+  }, [snap]);
+  const apps = ids.map((id) => snap.apps.find((a) => a.id === id && a.installedVersion)).filter((a): a is AppView => !!a).slice(0, 8);
+  if (!apps.length) return null;
+  return (
+    <section className="recent-launches">
+      <h3>Récemment lancées</h3>
+      <AppTiles apps={apps} refresh={snap.catalog.fetchedAt} onOpen={onOpen} onToast={onToast} reorder={false} />
+    </section>
+  );
 }
 
 function SkeletonGrid() {
@@ -678,7 +832,7 @@ function Detail({ app, snap, features, section, onBack, onToast }: { app: AppVie
         <div className="hero-content">
           <AppIcon app={app} refresh={refresh} size={72} />
           <div>
-            <h1>{app.name}</h1>
+            <h1>{app.name} <FavStar app={app} className="hero-star" /></h1>
             <p>{app.description}</p>
           </div>
         </div>
@@ -888,7 +1042,13 @@ function Personalize() {
             </select>
           </Pref>
           <Pref title="Page à l'ouverture">
-            <Seg label="Page à l'ouverture" value={p.startPage} onChange={(v) => set({ startPage: v })} options={[["catalog", "Catalogue"], ["installed", "Installées"]]} />
+            <Seg label="Page à l'ouverture" value={p.startPage} onChange={(v) => set({ startPage: v })} options={[["favorites", "Favoris"], ["catalog", "Catalogue"], ["installed", "Installées"]]} />
+          </Pref>
+          <Pref title="Affichage des applications">
+            <Seg label="Affichage des applications" value={p.view} onChange={(v) => set({ view: v })} options={[["tuiles", "Tuiles"], ["liste", "Liste"], ["cartes", "Grandes cartes"]]} />
+          </Pref>
+          <Pref title="Taille des icônes (tuiles et liste)">
+            <Range label="Taille des icônes" value={p.iconSize} min={32} max={112} step={4} unit=" px" onChange={(v) => set({ iconSize: v })} />
           </Pref>
         </div>
       </div>

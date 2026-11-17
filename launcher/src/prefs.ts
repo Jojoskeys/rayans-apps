@@ -20,7 +20,13 @@ export interface Prefs {
   showNotes: boolean;
   showStats: boolean;
   sort: "catalogue" | "nom" | "installees" | "maj";
-  startPage: "catalog" | "installed";
+  startPage: "favorites" | "catalog" | "installed";
+  /** Affichage des applications : grandes cartes, tuiles compactes ou liste. */
+  view: "cartes" | "tuiles" | "liste";
+  /** Taille des icônes en tuiles et en liste, en px. */
+  iconSize: number;
+  /** Applications favorites, dans l'ordre choisi (Ctrl + 1 à 9 pour les lancer). */
+  favorites: string[];
 }
 
 export const DEFAULT_PREFS: Prefs = {
@@ -40,6 +46,9 @@ export const DEFAULT_PREFS: Prefs = {
   showStats: true,
   sort: "catalogue",
   startPage: "catalog",
+  view: "tuiles",
+  iconSize: 56,
+  favorites: [],
 };
 
 interface Theme {
@@ -68,7 +77,11 @@ const KEY = "rayans-launcher:prefs";
 export function loadPrefs(): Prefs {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return { ...DEFAULT_PREFS, ...JSON.parse(raw) };
+    if (raw) {
+      const p = { ...DEFAULT_PREFS, ...JSON.parse(raw) } as Prefs;
+      if (!Array.isArray(p.favorites)) p.favorites = [];
+      return p;
+    }
   } catch {
     /* stockage indisponible : valeurs par défaut */
   }
@@ -174,6 +187,7 @@ export function applyPrefs(p: Prefs) {
   set("--radius", `${p.radius}px`);
   set("--radius-sm", `${Math.max(4, Math.round(p.radius * 0.72))}px`);
   set("--card-min", `${p.cardSize}px`);
+  set("--icon-size", `${p.iconSize}px`);
   set("--ambient-level", String(p.ambient ? p.ambientLevel : 0));
   const app = document.getElementById("root");
   if (app) app.style.zoom = String(p.textScale / 100);
@@ -187,7 +201,7 @@ export function applyPrefs(p: Prefs) {
   root.dataset.stats = p.showStats ? "on" : "off";
 }
 
-export const PrefsContext = createContext<{ prefs: Prefs; setPrefs: (p: Partial<Prefs>) => void; resetPrefs: () => void }>({
+export const PrefsContext = createContext<{ prefs: Prefs; setPrefs: (p: Partial<Prefs> | ((x: Prefs) => Partial<Prefs>)) => void; resetPrefs: () => void }>({
   prefs: DEFAULT_PREFS,
   setPrefs: () => {},
   resetPrefs: () => {},

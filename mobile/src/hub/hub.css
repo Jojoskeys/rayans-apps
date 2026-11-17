@@ -67,3 +67,25 @@ input[type="range"] { padding: 0; accent-color: var(--accent); }
 .icones small { font-size: 12px; }
 .apercu img { width: 72px; height: 72px; border-radius: 16px; object-fit: cover; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
 .bouton.secondaire { background: var(--panneau-2); color: var(--texte); border: 1px solid var(--bord); text-decoration: none; font-size: 15px; }
+
+/* ----- Favoris, reprendre, taille des tuiles ----- */
+.section { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--texte-2); margin: 18px 0 10px; }
+.tuiles.favoris a { background: color-mix(in srgb, var(--c) 10%, var(--panneau)); border-color: color-mix(in srgb, var(--c) 35%, var(--bord)); }
+.tuiles.taille-petites { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.tuiles.taille-petites a { min-height: 0; padding: 12px 8px; align-items: center; text-align: center; }
+.tuiles.taille-petites small { display: none; }
+.tuiles.taille-petites b { font-size: 13px; }
+.tuiles.taille-petites .icone { margin: 0 0 4px; }
+.tuiles.taille-grandes { grid-template-columns: 1fr; }
+.tuiles.taille-grandes a { min-height: 110px; }
+.tuiles.taille-grandes .icone { width: 52px; height: 52px; font-size: 28px; }
+.tuiles.liste.taille-petites { grid-template-columns: 1fr; }
+.tuiles.liste.taille-petites a { flex-direction: row; text-align: left; }
+.reprendre { display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin-bottom: 4px; border-radius: 16px; background: var(--panneau); border: 1px solid var(--bord); color: inherit; text-decoration: none; }
+.reprendre .icone { margin: 0; width: 36px; height: 36px; font-size: 18px; }
+.reprendre small { display: block; color: var(--texte-2); font-size: 12px; }
+.reprendre .fleche { margin-left: auto; font-size: 24px; color: var(--texte-2); }
+.reprendre:active { background: var(--panneau-2); }
+.etoile { font-size: 20px !important; color: var(--texte-2); }
+.etoile.on { color: #F5B83D; }
+select { font: inherit; color: var(--texte); background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 10px; padding: 10px 12px; }
