@@ -128,3 +128,21 @@ test("Sport : journaux réunis ; même séance saisie sur les deux appareils →
   assert.equal(m.journal.find((x: { type: string }) => x.type === "upper").exercices[0].series[0].reps, 6);
   assert.deepEqual(mergeSport(base, tel, pc).journal, m.journal, "même résultat sur les deux appareils");
 });
+
+test("objectifs : compteur modifié des deux côtés → la plus grande valeur ; sport : réglages et semaine gardés", async () => {
+  const { mergeObjectifs, mergeSport } = await import("../src/shared/merge.ts");
+  const o = (id: string, extra = {}) => ({ id, domaine: "sante", titre: id, detail: "", mesure: null, facile: false, fait: false, ...extra });
+  const base = { jours: { "2026-11-17": [o("pas", { valeur: 1000 }), o("fruit")] }, envoyes: [], reglages: {} };
+  const pc = { ...base, jours: { "2026-11-17": [o("pas", { valeur: 3000 }), o("fruit", { fait: true })] } };
+  const tel = { ...base, jours: { "2026-11-17": [o("pas", { valeur: 8000 }), o("fruit")] } };
+  const m = mergeObjectifs(base, pc, tel);
+  assert.equal(m.jours["2026-11-17"].find((x: { id: string }) => x.id === "pas").valeur, 8000);
+  assert.ok(m.jours["2026-11-17"].find((x: { id: string }) => x.id === "fruit").fait);
+
+  const sb = { debut: "2026-11-16", journal: [], perfs: [], ajustements: [], reglages: {}, semaine: null };
+  const spc = { ...sb, reglages: { "developpe-couche": { depart: 85, max: 100, increment: 2 } } };
+  const stel = { ...sb, semaine: ["upper", "leg", "fractionne", "push", "pull", "seuil", "repos"] };
+  const s = mergeSport(sb, spc, stel);
+  assert.deepEqual(s.reglages, spc.reglages);
+  assert.deepEqual(s.semaine, stel.semaine);
+});

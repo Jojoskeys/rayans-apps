@@ -214,3 +214,28 @@ blockquote { margin: 0; border-left: 3px solid var(--accent); padding: 6px 12px;
 .repos { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .repos-temps { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); }
 .saisie p { margin: 0 0 6px; font-weight: 600; }
+
+/* ----- Compteurs, réglages des objectifs et des charges ----- */
+.bouton.petit { padding: 4px 10px; font-size: 13px; min-width: 34px; }
+.bouton:disabled { opacity: .45; cursor: default; }
+.objectif-compteur { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.objectif-compteur input { width: 96px; text-align: center; font-variant-numeric: tabular-nums; }
+.objectif-barre.bonus > div, .objectif.bonus .objectif-barre > div { background: var(--orange); }
+.objectif.bonus .objectif-titre { color: var(--orange); }
+.table-objectifs { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table-objectifs th { text-align: left; font-weight: 500; color: var(--texte-2); padding: 4px; }
+.table-objectifs td { padding: 5px 4px; border-top: 1px solid var(--bord); }
+.table-objectifs td:nth-child(2), .table-objectifs td:nth-child(3), .table-objectifs th:nth-child(2), .table-objectifs th:nth-child(3) { text-align: center; width: 90px; }
+.table-objectifs tr.masque td:first-child { color: var(--texte-3); text-decoration: line-through; }
+.table-objectifs .actions, .table-charges td:last-child { text-align: right; white-space: nowrap; }
+.editeur { display: flex; flex-direction: column; gap: 10px; width: 100%; background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 10px; padding: 12px; }
+.editeur h3 { margin: 0; font-size: 15px; }
+.editeur input { background: var(--panneau); }
+.charge-valeur { white-space: nowrap; }
+.charge-valeur b { display: inline-block; min-width: 40px; text-align: right; font-variant-numeric: tabular-nums; }
+.charge-valeur .bouton { margin: 0 6px; }
+@media (max-width: 600px) {
+  .table-charges tr { display: grid; grid-template-columns: 1fr auto; }
+  .table-charges td.aide { grid-column: 1 / -1; border-top: 0; padding-top: 0; }
+  .table-objectifs td:nth-child(2), .table-objectifs td:nth-child(3), .table-objectifs th:nth-child(2), .table-objectifs th:nth-child(3) { width: 56px; }
+}

@@ -30,6 +30,8 @@ const api: AujourdhuiApi = {
     save: (s) => ipcRenderer.invoke("sport-enregistrer", s),
     addPerf: (p) => ipcRenderer.invoke("sport-perf", p),
     adjust: (a) => ipcRenderer.invoke("sport-ajuster", a),
+    configure: (bloc, r) => ipcRenderer.invoke("sport-regler", bloc, r),
+    setWeek: (s) => ipcRenderer.invoke("sport-semaine", s),
   },
   courrier: {
     configure: (p) => ipcRenderer.invoke("courrier-config", p),
@@ -47,6 +49,7 @@ const api: AujourdhuiApi = {
   objectifs: {
     toggle: (id) => ipcRenderer.invoke("objectif-cocher", id),
     change: (id) => ipcRenderer.invoke("objectif-changer", id),
+    count: (id, total) => ipcRenderer.invoke("objectif-saisir", id, total),
     settings: (r) => ipcRenderer.invoke("objectifs-reglages", r),
   },
   fac: {

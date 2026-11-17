@@ -33,11 +33,12 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 - **Séance guidée** : pour chaque exercice, muscles travaillés, fonctionnement expliqué simplement, consignes,
   objectif (séries × reps × charge) ; saisie série par série, minuteur de repos et séries restantes ; la saisie en
   cours est gardée si on quitte. Échauffement d'épaule avant les séances du haut du corps, pas de dips.
-- **Progression** (`src/core/sport.ts`) : charges de départ = dernières charges notées ; toutes les séries réussies →
+- **Progression** (`src/core/sport.ts`) : charges de départ génériques dans le code, les vraies dans les données
+  (réglages de chaque exercice, ou fichier privé `profil-sport.json` importé au premier lancement) ; toutes les séries réussies →
   +2,5 kg (barre), +2 kg (haltères), +1 rep (poids du corps) ou +5 s (gainage, équilibres) ; deux séances ratées de
   suite → −5 %. Les charges sont **recalculées à partir du journal** : PC et iPhone n'ont qu'à réunir leurs journaux.
 - **Course (objectif 5 km)** : 5 km estimé par la formule de Riegel à partir de la meilleure perf des 120 derniers
-  jours (au départ : 10 km de Paris, 10,30 km en 1:05:49 → 5 km ≈ 30:34) ; allures facile, seuil et fractionné en
+  jours (sans perf : 32 min) ; allures facile, seuil et fractionné en
   découlent ; cycles de 4 semaines (3 de progression, 1 allégée avec test).
 - **Créneau** : premier moment libre assez long d'après l'emploi du temps (20 min de marge autour des cours ; dès
   7 h en semaine, 9 h 30 le week-end, jusqu'à 21 h 30). Dans la notification du matin, et rappel 30 min avant.

@@ -95,7 +95,8 @@ export function mergeRoutine(base: Obj | undefined, local: Obj, remote: Obj): Ob
 
 // ----- Rayan's Aujourd'hui : objectifs du jour ----------------------------------------------------------
 // Par journée : si un seul côté a changé la liste (objectif remplacé, case cochée), il l'emporte ; si les deux
-// ont changé, la liste du côté qui l'a créée en premier est gardée, et une case cochée d'un côté reste cochée.
+// ont changé, la liste du côté qui l'a créée en premier est gardée, une case cochée d'un côté reste cochée, et un
+// compteur (pas, pompes…) garde la plus grande valeur.
 
 const memeJson = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -111,7 +112,8 @@ export function mergeObjectifs(base: Obj | undefined, local: Obj, remote: Obj): 
     const cle = (x: Obj[]) => x.map((o) => o.id).join("|");
     const liste = (cle(l) <= cle(r) ? l : r) as Obj[];
     const faits = new Set([...l, ...r].filter((o: Obj) => o.fait).map((o: Obj) => o.id));
-    jours[j] = liste.map((o) => ({ ...o, fait: !!o.fait || faits.has(o.id) }));
+    const valeur = (o: Obj) => Math.max(...[...l, ...r].filter((x: Obj) => x.id === o.id && typeof x.valeur === "number").map((x: Obj) => x.valeur as number), -1);
+    jours[j] = liste.map((o) => { const v = valeur(o); return { ...o, fait: !!o.fait || faits.has(o.id), ...(v >= 0 ? { valeur: v } : {}) }; });
   }
   return {
     jours,
@@ -179,6 +181,12 @@ export function mergeSport(base: Obj | undefined, local: Obj, remote: Obj): Obj 
     journal: [...parSeance.values()].sort((a, b) => (a.at ?? 0) - (b.at ?? 0)),
     perfs: mergeById(base?.perfs, local.perfs ?? [], remote.perfs ?? [], (p: Obj) => p.id, () => false),
     ajustements: unionBy(local.ajustements ?? [], remote.ajustements ?? [], (a: Obj) => a.id).sort((a: Obj, b: Obj) => a.at - b.at),
+    // Réglages des exercices et programme de la semaine : la valeur modifiée depuis la base l'emporte.
+    ...mergeSettings(
+      base ? { reglages: base.reglages ?? {}, semaine: base.semaine ?? null } : undefined,
+      { reglages: local.reglages ?? {}, semaine: local.semaine ?? null },
+      { reglages: remote.reglages ?? {}, semaine: remote.semaine ?? null },
+    ),
   };
 }
 

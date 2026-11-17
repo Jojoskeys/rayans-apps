@@ -124,7 +124,7 @@ function start() {
   });
   if (!testReport) setupSync({ dataDir, changed: () => broadcast() });
   setupFac({ dataDir, clock: () => testHooks.clock(), fetchText: (u) => testHooks.fetchText(u), changed: () => broadcast() });
-  setupSport({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast(), cours: () => occupations() });
+  setupSport({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => { checkObjectifs(); broadcast(); }, cours: () => occupations() });
   setupCourrier({ dataDir, clock: () => testHooks.clock(), notify: (t, b) => { notify(t, b); }, changed: () => broadcast() });
 
   createTray();

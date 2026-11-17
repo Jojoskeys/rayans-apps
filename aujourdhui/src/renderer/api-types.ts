@@ -2,10 +2,10 @@ import type { SourceCount, SourceId } from "../core/counts.ts";
 import type { CourseChange } from "../core/ics.ts";
 import type { Deadline, DisplayCourse, SharedMail } from "../core/fac.ts";
 import type { RoutineItem } from "../core/routine.ts";
-import type { Avancement, Domaine, ObjectifJour } from "../core/objectifs.ts";
+import type { Avancement, ObjectifJour, Reglages, catalogue } from "../core/objectifs.ts";
 import type { Citation } from "../core/citations.ts";
 import type { SportView } from "../core/sportvue.ts";
-import type { Ajustement, Perf, SeanceFaite } from "../core/sport.ts";
+import type { Ajustement, BlocReglage, Perf, SeanceFaite, TypeSeance } from "../core/sport.ts";
 import type { APrevoir, EntreeMatin, EntreeSoir, JourBilan, Moments, Prieres, ReglagesBilan } from "../core/bilan.ts";
 
 /** Synchronisation avec l'iPhone (Rayan's Mobile) par un dépôt GitHub privé. */
@@ -58,7 +58,9 @@ export interface ObjectifsView {
   jour: string;
   objectifs: (ObjectifJour & { avancement: Avancement })[];
   serie: number;
-  reglages: { domaines: Domaine[]; nombre: number };
+  reglages: Reglages;
+  /** Tous les objectifs connus (modèles, automatiques, perso), pour les réglages. */
+  catalogue: ReturnType<typeof catalogue>;
   /** Ce qui peut être mesuré automatiquement. */
   sources: { journal: boolean; chrono: boolean; revision: boolean };
 }
@@ -130,6 +132,8 @@ export interface AujourdhuiApi {
     save(s: SeanceFaite): Promise<SportView>;
     addPerf(p: Perf): Promise<SportView>;
     adjust(a: Ajustement): Promise<SportView>;
+    configure(bloc: string, r: BlocReglage | null): Promise<SportView>;
+    setWeek(s: TypeSeance[] | null): Promise<SportView>;
   };
   courrier?: {
     configure(p: { host?: string; port?: number; user?: string; motDePasse?: string }): Promise<CourrierView & { messagesDansLaBoite: number }>;
@@ -147,7 +151,9 @@ export interface AujourdhuiApi {
   objectifs: {
     toggle(id: string): Promise<ObjectifsView>;
     change(id: string): Promise<ObjectifsView>;
-    settings(r: { domaines?: Domaine[]; nombre?: number }): Promise<ObjectifsView>;
+    /** Compteur : nouveau total du jour. */
+    count(id: string, total: number): Promise<ObjectifsView>;
+    settings(r: Partial<Reglages>): Promise<ObjectifsView>;
   };
   fac: {
     setUrl(url: string): Promise<FacView>;

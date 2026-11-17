@@ -70,7 +70,7 @@ export const SEANCES: Record<"upper" | "leg" | "push" | "pull", Bloc[]> = {
     { ex: "hspu-assiste", series: 3, mode: "volume", reps: 3, repos: 120, increment: 1, plafond: 8 },
   ],
   pull: [
-    { ex: "tractions-strictes", series: 5, mode: "volume", reps: 7, repos: 120, increment: 1, plafond: 15, note: "Ton max est 10 : séries de 7, sans aller à l'échec" },
+    { ex: "tractions-strictes", series: 5, mode: "volume", reps: 7, repos: 120, increment: 1, plafond: 15, note: "Séries à environ 70 % de ton max, sans aller à l'échec" },
     { ex: "rowing-appuye", series: 3, mode: "plage", plage: [10, 12], repos: 90, increment: 2 },
     { ex: "oiseau", series: 3, mode: "plage", plage: [12, 15], repos: 60, increment: 1 },
     { ex: "front-lever-tuck", series: 5, mode: "maintien", reps: 5, repos: 90, plafond: 20 },
@@ -81,29 +81,32 @@ export const SEANCES: Record<"upper" | "leg" | "push" | "pull", Bloc[]> = {
 /** Exercice sous un autre nom de bloc (pompes en volume le jeudi = mêmes pompes, progression séparée). */
 export const ALIAS: Record<string, string> = { "pompes-volume": "pompes" };
 
-/** Charges de départ (dernières charges notées avec le coach, et cibles « à reprendre »). */
+/**
+ * Charges de départ génériques (prudentes). Les vraies charges de chacun sont dans ses données (réglages
+ * « départ » de chaque exercice, modifiables dans l'app) : rien de personnel dans le code, qui est public.
+ */
 export const DEPART: Record<string, { charge: number; reps: number }> = {
   "echauffement-epaule": { charge: 0, reps: 1 },
-  "developpe-couche": { charge: 85, reps: 5 },
-  "tractions-lestees": { charge: 15, reps: 5 },
-  "rowing-barre": { charge: 80, reps: 8 },
-  pompes: { charge: 0, reps: 20 },
-  "pompes-volume": { charge: 0, reps: 15 },
-  planche: { charge: 0, reps: 60 },
-  squat: { charge: 80, reps: 6 },
-  "sdt-roumain": { charge: 90, reps: 8 },
-  fentes: { charge: 16, reps: 10 },
-  mollets: { charge: 48, reps: 12 },
-  "pistol-squat": { charge: 0, reps: 5 },
-  "incline-halteres": { charge: 26, reps: 8 },
-  "elevations-laterales": { charge: 10, reps: 12 },
-  "handstand-mur": { charge: 0, reps: 20 },
-  "hspu-assiste": { charge: 0, reps: 3 },
-  "tractions-strictes": { charge: 0, reps: 7 },
-  "rowing-appuye": { charge: 20, reps: 10 },
-  oiseau: { charge: 10, reps: 12 },
+  "developpe-couche": { charge: 40, reps: 5 },
+  "tractions-lestees": { charge: 0, reps: 5 },
+  "rowing-barre": { charge: 40, reps: 8 },
+  pompes: { charge: 0, reps: 10 },
+  "pompes-volume": { charge: 0, reps: 8 },
+  planche: { charge: 0, reps: 30 },
+  squat: { charge: 40, reps: 6 },
+  "sdt-roumain": { charge: 40, reps: 8 },
+  fentes: { charge: 8, reps: 10 },
+  mollets: { charge: 20, reps: 12 },
+  "pistol-squat": { charge: 0, reps: 3 },
+  "incline-halteres": { charge: 12, reps: 8 },
+  "elevations-laterales": { charge: 5, reps: 12 },
+  "handstand-mur": { charge: 0, reps: 15 },
+  "hspu-assiste": { charge: 0, reps: 2 },
+  "tractions-strictes": { charge: 0, reps: 4 },
+  "rowing-appuye": { charge: 10, reps: 10 },
+  oiseau: { charge: 4, reps: 12 },
   "front-lever-tuck": { charge: 0, reps: 5 },
-  "muscle-up-transition": { charge: 0, reps: 3 },
+  "muscle-up-transition": { charge: 0, reps: 2 },
 };
 
 // ----- Données ---------------------------------------------------------------------------------------------
@@ -128,30 +131,87 @@ export interface Perf { id: string; jour: string | null; distanceKm: number; dur
 /** Correction à la main d'une charge (« le prochain squat à 77,5 kg »). */
 export interface Ajustement { id: string; bloc: string; charge?: number; reps?: number; at: number }
 
+/**
+ * Réglages d'un exercice, modifiables : séries, reps (séries × reps fixes), plage de reps, repos (s), incrément,
+ * charge de départ (ou reps / secondes de départ au poids du corps) et maximum (kg, ou reps / secondes).
+ */
+export interface BlocReglage { series?: number; reps?: number; plage?: [number, number]; repos?: number; increment?: number; depart?: number; max?: number }
+
 export interface SportData {
   /** Lundi de la première semaine du plan (pour les cycles de course). */
   debut: string;
   journal: SeanceFaite[];
   perfs: Perf[];
   ajustements: Ajustement[];
+  /** Exercice → réglages modifiés. */
+  reglages: Record<string, BlocReglage>;
+  /** Programme de la semaine modifié (lundi → dimanche) ; null : programme de départ. */
+  semaine: TypeSeance[] | null;
 }
 
 export const SPORT_DEPART: SportData = {
   debut: "2026-11-16",
   journal: [],
-  perfs: [
-    { id: "p-10k-1", jour: null, distanceKm: 10.18, dureeS: 70 * 60, titre: "Premier 10 km (Strava)" },
-    { id: "p-10k-paris", jour: "2026-11-15", distanceKm: 10.3, dureeS: 65 * 60 + 49, titre: "10 km de Paris" },
-  ],
+  perfs: [],
   ajustements: [],
+  reglages: {},
+  semaine: null,
 };
+
+/**
+ * Profil de départ personnel (fichier privé `profil-sport.json`, lu une fois puis gardé dans les données) :
+ * charges de départ et performances de course. Ce qui est déjà réglé dans les données n'est pas écrasé.
+ */
+export function importerProfil(d: SportData, raw: unknown): SportData {
+  const p = (raw ?? {}) as { reglages?: Record<string, BlocReglage>; perfs?: Perf[]; debut?: string };
+  const avec = nettoyerSport({ ...d, reglages: { ...(p.reglages ?? {}), ...d.reglages }, perfs: [...d.perfs, ...(p.perfs ?? []).filter((x) => !d.perfs.some((y) => y.id === x?.id))] });
+  return typeof p.debut === "string" && /^\d{4}-\d{2}-\d{2}$/.test(p.debut) ? { ...avec, debut: p.debut } : avec;
+}
+
+/** Programme de la semaine (lundi → dimanche). */
+export const semaineDe = (d: SportData): TypeSeance[] => d.semaine ?? SEMAINE;
+
+/** Exercice qui progresse en charge (kg) plutôt qu'en reps ou en secondes. */
+export const enCharge = (b: Bloc) => b.mode === "fixe" || b.mode === "plage";
+
+/** Bloc avec ses réglages modifiés. */
+export function blocEffectif(b: Bloc, r: BlocReglage | undefined): Bloc {
+  if (!r) return b;
+  return {
+    ...b,
+    series: r.series ?? b.series,
+    repos: r.repos ?? b.repos,
+    increment: r.increment ?? b.increment,
+    ...(b.mode === "fixe" && r.reps ? { reps: r.reps } : {}),
+    ...(b.mode === "plage" && r.plage ? { plage: r.plage } : {}),
+    ...(!enCharge(b) && r.max ? { plafond: r.max } : {}),
+  };
+}
+
+/** Séances avec les réglages modifiés. */
+export function seances(d: SportData): typeof SEANCES {
+  const out = {} as typeof SEANCES;
+  for (const [k, l] of Object.entries(SEANCES) as [keyof typeof SEANCES, Bloc[]][]) out[k] = l.map((b) => blocEffectif(b, d.reglages[b.ex]));
+  return out;
+}
+
+/** Point de départ d'un exercice (charge et reps), réglages compris. */
+export function departDe(d: SportData, b: Bloc): { charge: number; reps: number } {
+  const base = DEPART[b.ex] ?? { charge: 0, reps: b.reps ?? 1 };
+  const r = d.reglages[b.ex] ?? {};
+  if (b.mode === "fixe") return { charge: r.depart ?? base.charge, reps: r.reps ?? base.reps };
+  if (b.mode === "plage") return { charge: r.depart ?? base.charge, reps: b.plage![0] };
+  return { charge: base.charge, reps: r.depart ?? base.reps };
+}
+
+/** Maximum réglé : charge (exercices en charge) ou reps / secondes (plafond). */
+export const maxDe = (d: SportData, b: Bloc): number | undefined => (enCharge(b) ? d.reglages[b.ex]?.max : b.plafond);
 
 // ----- Progression -------------------------------------------------------------------------------------------
 
 export interface Prescription { charge: number; reps: number; echecs: number }
 
 const arrondi = (x: number, pas: number) => Math.max(0, Math.round(x / pas) * pas);
-const blocDe = (id: string): Bloc | undefined => Object.values(SEANCES).flat().find((b) => b.ex === id);
 
 /** Une séance d'un exercice : réussie, ratée, ou entre les deux (on garde la même charge). */
 export function verdict(b: Bloc, cible: Prescription, series: SerieFaite[]): "reussi" | "rate" | "tenu" {
@@ -170,10 +230,14 @@ export function verdict(b: Bloc, cible: Prescription, series: SerieFaite[]): "re
   return total < cible.reps * b.series * 0.8 ? "rate" : "tenu";
 }
 
-function suivante(b: Bloc, p: Prescription, v: "reussi" | "rate" | "tenu"): Prescription {
+function suivante(b: Bloc, p: Prescription, v: "reussi" | "rate" | "tenu", max?: number): Prescription {
   if (v === "tenu") return p;
   if (v === "reussi") {
-    if (b.mode === "fixe" || b.mode === "plage") return { charge: p.charge + (b.increment ?? 2.5), reps: b.mode === "plage" ? b.plage![0] : p.reps, echecs: 0 };
+    if (b.mode === "fixe" || b.mode === "plage") {
+      const plus = p.charge + (b.increment ?? 2.5);
+      // Maximum atteint : la charge ne monte plus (une charge déjà au-dessus, réglée à la main, est gardée).
+      return { charge: max ? Math.max(p.charge, Math.min(max, plus)) : plus, reps: b.mode === "plage" ? b.plage![0] : p.reps, echecs: 0 };
+    }
     if (b.mode === "volume") return { ...p, reps: Math.min(b.plafond ?? 99, p.reps + (b.increment ?? 1)), echecs: 0 };
     return { ...p, reps: Math.min(b.plafond ?? 600, p.reps + 5), echecs: 0 };
   }
@@ -186,14 +250,15 @@ function suivante(b: Bloc, p: Prescription, v: "reussi" | "rate" | "tenu"): Pres
 /** Charges actuelles : charges de départ, puis chaque séance et chaque correction, dans l'ordre. */
 export function prescriptions(d: SportData): Record<string, Prescription> {
   const out: Record<string, Prescription> = {};
-  for (const [id, x] of Object.entries(DEPART)) out[id] = { ...x, echecs: 0 };
+  const blocs = new Map(Object.values(seances(d)).flat().map((b) => [b.ex, b]));
+  for (const b of blocs.values()) out[b.ex] = { ...departDe(d, b), echecs: 0 };
   const evts: { at: number; f: () => void }[] = [];
   for (const s of d.journal) {
     evts.push({ at: s.at, f: () => {
       for (const e of s.exercices) {
-        const b = blocDe(e.bloc);
+        const b = blocs.get(e.bloc);
         if (!b || !out[e.bloc]) continue;
-        out[e.bloc] = suivante(b, out[e.bloc], verdict(b, out[e.bloc], e.series));
+        out[e.bloc] = suivante(b, out[e.bloc], verdict(b, out[e.bloc], e.series), maxDe(d, b));
       }
     } });
   }
@@ -281,7 +346,7 @@ export interface SeanceDuJour {
 }
 
 export function seanceDuJour(d: SportData, jour: string, now: number): SeanceDuJour {
-  const type = SEMAINE[jourSemaine(jour)];
+  const type = semaineDe(d)[jourSemaine(jour)];
   const faite = [...d.journal].reverse().find((s) => s.jour === jour && s.type === type) ?? null;
   if (type === "fractionne" || type === "seuil" || type === "longue") {
     const course = planCourse(type, d, jour, now);
@@ -290,7 +355,7 @@ export function seanceDuJour(d: SportData, jour: string, now: number): SeanceDuJ
   if (type === "repos") return { jour, type, titre: "Repos", blocs: [], faite, dureeMin: 0 };
   // Si la séance du jour est déjà faite, on montre ce qui était prévu (prescriptions d'avant la séance).
   const pres = prescriptions(faite ? { ...d, journal: d.journal.filter((s) => s.at < faite.at) } : d);
-  const blocs = SEANCES[type].map((b) => ({ ...b, prescription: pres[b.ex], nom: nomBloc(b.ex) }));
+  const blocs = seances(d)[type].map((b) => ({ ...b, prescription: pres[b.ex], nom: nomBloc(b.ex) }));
   return { jour, type, titre: NOMS_SEANCES[type], blocs, faite, dureeMin: 75 };
 }
 
@@ -307,7 +372,66 @@ export function ajouterPerf(d: SportData, p: Perf): SportData {
 }
 
 export function ajuster(d: SportData, a: Ajustement): SportData {
+  if (a.charge !== undefined && !(a.charge >= 0)) throw new Error("Charge invalide.");
+  if (a.reps !== undefined && !(a.reps >= 1)) throw new Error("Il faut au moins 1 rep (ou 1 seconde).");
   return { ...d, ajustements: [...d.ajustements, a] };
+}
+
+const TYPES: TypeSeance[] = ["upper", "leg", "push", "pull", "fractionne", "seuil", "longue", "repos"];
+const IDS_BLOCS = new Set(Object.values(SEANCES).flat().map((b) => b.ex));
+
+function nettoyerReglage(raw: unknown): BlocReglage | null {
+  const r = (raw ?? {}) as Record<string, unknown>;
+  const out: BlocReglage = {};
+  const noms = { series: "séries", reps: "reps", repos: "repos", increment: "incrément", depart: "départ", max: "maximum" };
+  const n = (k: "series" | "reps" | "repos" | "increment" | "depart" | "max", min: number, maxi: number) => {
+    const v = r[k];
+    if (v === undefined || v === null || v === "") return;
+    const x = Number(v);
+    if (!Number.isFinite(x) || x < min || x > maxi) throw new Error("Valeur invalide : " + noms[k] + ".");
+    out[k] = Math.round(x * 100) / 100;
+  };
+  n("series", 1, 20); n("reps", 1, 100); n("repos", 0, 900); n("increment", 0.25, 50); n("depart", 0, 500); n("max", 0, 600);
+  if (Array.isArray(r.plage)) {
+    const [a, b] = r.plage.map(Number);
+    if (!(a >= 1 && b >= a && b <= 100)) throw new Error("Plage de reps invalide (min ≤ max).");
+    out.plage = [Math.round(a), Math.round(b)];
+  }
+  return Object.keys(out).length ? out : null;
+}
+
+/** Modifie les réglages d'un exercice (null : revenir aux réglages de départ). */
+export function regler(d: SportData, bloc: string, r: BlocReglage | null): SportData {
+  if (!IDS_BLOCS.has(bloc)) throw new Error("Exercice inconnu.");
+  const reglages = { ...d.reglages };
+  const x = r ? nettoyerReglage(r) : null;
+  if (x && x.depart !== undefined && x.max && x.max < x.depart) throw new Error("Le maximum doit être au-dessus du départ.");
+  if (x) reglages[bloc] = x; else delete reglages[bloc];
+  return { ...d, reglages };
+}
+
+/** Programme de la semaine (7 séances, lundi → dimanche ; null : programme de départ). */
+export function reglerSemaine(d: SportData, semaine: TypeSeance[] | null): SportData {
+  if (semaine === null) return { ...d, semaine: null };
+  if (!Array.isArray(semaine) || semaine.length !== 7 || !semaine.every((t) => TYPES.includes(t))) throw new Error("Il faut une séance (ou repos) pour chaque jour.");
+  return { ...d, semaine: [...semaine] };
+}
+
+/** Pour les objectifs du jour : séance faite par jour, jours de repos, reps par jour et par exercice. */
+export function resumeSport(d: SportData): { seanceFaite: Record<string, boolean>; repos: (jour: string) => boolean; sportReps: Record<string, Record<string, number>> } {
+  const seanceFaite: Record<string, boolean> = {};
+  const sportReps: Record<string, Record<string, number>> = {};
+  const blocs = new Map(Object.values(SEANCES).flat().map((b) => [b.ex, b]));
+  for (const s of d.journal) {
+    if (s.course || s.exercices.some((e) => e.series.length)) seanceFaite[s.jour] = true;
+    for (const e of s.exercices) {
+      if (blocs.get(e.bloc)?.mode === "maintien") continue;
+      const r = (sportReps[s.jour] ??= {});
+      r[e.bloc] = (r[e.bloc] ?? 0) + e.series.reduce((n, x) => n + x.reps, 0);
+    }
+  }
+  const sem = semaineDe(d);
+  return { seanceFaite, repos: (jour) => sem[jourSemaine(jour)] === "repos", sportReps };
 }
 
 // ----- Créneau selon l'emploi du temps ------------------------------------------------------------------------
@@ -341,8 +465,13 @@ export function nettoyerSport(raw: unknown): SportData {
   return {
     debut: typeof r.debut === "string" && /^\d{4}-\d{2}-\d{2}$/.test(r.debut) ? r.debut : SPORT_DEPART.debut,
     journal: arr<SeanceFaite>(r.journal, (x) => x && typeof x.id === "string" && typeof x.jour === "string" && Array.isArray(x.exercices)).sort((a, b) => a.at - b.at),
-    perfs: Array.isArray(r.perfs) ? arr<Perf>(r.perfs, (x) => x && typeof x.id === "string" && x.distanceKm > 0 && x.dureeS > 0) : SPORT_DEPART.perfs,
+    perfs: arr<Perf>(r.perfs, (x) => x && typeof x.id === "string" && x.distanceKm > 0 && x.dureeS > 0),
     ajustements: arr<Ajustement>(r.ajustements, (x) => x && typeof x.id === "string" && typeof x.bloc === "string"),
+    reglages: Object.fromEntries(Object.entries(r.reglages && typeof r.reglages === "object" ? r.reglages : {}).flatMap(([k, v]) => {
+      if (!IDS_BLOCS.has(k)) return [];
+      try { const x = nettoyerReglage(v); return x ? [[k, x]] : []; } catch { return []; }
+    })),
+    semaine: Array.isArray(r.semaine) && r.semaine.length === 7 && r.semaine.every((t) => TYPES.includes(t)) ? [...r.semaine] : null,
   };
 }
 

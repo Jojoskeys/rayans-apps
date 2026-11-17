@@ -4,7 +4,7 @@ import { ipcMain } from "electron";
 import fs from "node:fs";
 import path from "node:path";
 import { todayISO } from "../core/counts.ts";
-import { ajouterPerf, ajuster, enregistrer, ligneSport, nettoyerSport, seanceDuJour, SPORT_DEPART, creneau, type Ajustement, type Occupation, type Perf, type SeanceFaite, type SportData } from "../core/sport.ts";
+import { ajouterPerf, ajuster, enregistrer, importerProfil, ligneSport, nettoyerSport, regler, reglerSemaine, seanceDuJour, SPORT_DEPART, creneau, type Ajustement, type BlocReglage, type Occupation, type Perf, type SeanceFaite, type SportData, type TypeSeance } from "../core/sport.ts";
 import { sportView, type SportView } from "../core/sportvue.ts";
 
 interface Ctx {
@@ -22,6 +22,20 @@ const file = () => path.join(ctx.dataDir, "sport.json");
 
 function load() {
   try { data = nettoyerSport(JSON.parse(fs.readFileSync(file(), "utf8"))); } catch { data = { ...SPORT_DEPART }; }
+  // Profil de départ privé (charges, perfs), posé à côté des données : importé une fois, puis renommé.
+  // Gardé ensuite : si les réglages ont disparu (effacés par une ancienne version pendant une synchro), on le
+  // réimporte (sans jamais écraser un réglage existant).
+  const profil = path.join(ctx.dataDir, "profil-sport.json");
+  const importe = `${profil}.importe`;
+  const source = fs.existsSync(profil) ? profil : fs.existsSync(importe) && !Object.keys(data.reglages).length ? importe : null;
+  if (source) {
+    try {
+      const avant = JSON.stringify(data);
+      data = importerProfil(data, JSON.parse(fs.readFileSync(source, "utf8")));
+      if (JSON.stringify(data) !== avant) save();
+      if (source === profil) fs.renameSync(profil, importe);
+    } catch (e) { console.error(e); }
+  }
 }
 function save() {
   fs.mkdirSync(ctx.dataDir, { recursive: true });
@@ -59,6 +73,8 @@ export function setupSport(c: Ctx) {
   h("sport-enregistrer", (s) => enregistrer(data, s as SeanceFaite));
   h("sport-perf", (p) => ajouterPerf(data, p as Perf));
   h("sport-ajuster", (a) => ajuster(data, a as Ajustement));
+  h("sport-regler", (bloc, r) => regler(data, String(bloc), (r ?? null) as BlocReglage | null));
+  h("sport-semaine", (s) => reglerSemaine(data, (s ?? null) as TypeSeance[] | null));
 }
 
 /** Synchronisation avec l'iPhone. */

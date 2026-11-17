@@ -4,28 +4,36 @@ import { createRoot } from "react-dom/client";
 import { getConfig, onStatus, setConfig, setupKey, syncApp, testConfig, type SyncStatus } from "../shared/sync.ts";
 import { APPS } from "../shared/apps.ts";
 import { Notifications } from "./Notifications.tsx";
+import { Personnaliser } from "./Personnaliser.tsx";
+import { appliquerApparence, lireApparence, trier } from "../shared/apparence.ts";
 import "./hub.css";
 
 function Hub() {
-  const [page, setPage] = useState<"accueil" | "synchro">(getConfig() ? "accueil" : "synchro");
+  const [page, setPage] = useState<"accueil" | "synchro" | "perso">(getConfig() ? "accueil" : "synchro");
+  const [a, setA] = useState(lireApparence);
   const [st, setSt] = useState<SyncStatus | null>(null);
   useEffect(() => onStatus(setSt), []);
   const heure = new Date().getHours();
+  const salut = heure < 18 ? "Bonjour" : "Bonsoir";
+  const apps = trier(APPS, a).filter((x) => !a.masquees.includes(x.id));
   return (
     <div className="hub">
       <header>
         <div>
-          <p className="sous">{new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}</p>
-          <h1>{heure < 18 ? "Bonjour Rayan" : "Bonsoir Rayan"}</h1>
+          {a.afficherDate && <p className="sous">{new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}</p>}
+          <h1>{a.prenom.trim() ? `${salut} ${a.prenom.trim()}` : salut}</h1>
         </div>
+        <div className="boutons-entete">
+        <button className={`pastille ${page === "perso" ? "a-jour" : ""}`} onClick={() => setPage(page === "perso" ? "accueil" : "perso")} aria-label="Personnaliser" data-testid="bouton-personnaliser">🎨</button>
         <button className={`pastille ${st?.state ?? ""}`} onClick={() => setPage(page === "synchro" ? "accueil" : "synchro")} aria-label="Synchronisation">
           {st?.configured ? (st.state === "erreur" ? "!" : st.state === "hors-ligne" ? "⌁" : "⟳") : "⚙"}
         </button>
+        </div>
       </header>
       {page === "accueil" ? (
         <>
-          <ul className="tuiles">
-            {APPS.map((a) => (
+          <ul className={`tuiles ${a.disposition}`}>
+            {apps.map((a) => (
               <li key={a.id}>
                 <a href={`./${a.id}/`} style={{ ["--c" as string]: a.color }}>
                   <span className="icone">{a.icon}</span>
@@ -36,9 +44,10 @@ function Hub() {
             ))}
           </ul>
           {st?.configured && <Notifications />}
-          <p className="etat">{st?.configured ? (st.lastSync ? `Synchronisé ${new Date(st.lastSync).toLocaleString("fr-FR", { weekday: "short", hour: "2-digit", minute: "2-digit" })}` : "Pas encore synchronisé") : "Synchronisation non configurée : tes données restent sur ce téléphone."}{st?.state === "erreur" ? ` · ${st.message}` : ""}</p>
+          {a.afficherEtat && <p className="etat">{st?.configured ? (st.lastSync ? `Synchronisé ${new Date(st.lastSync).toLocaleString("fr-FR", { weekday: "short", hour: "2-digit", minute: "2-digit" })}` : "Pas encore synchronisé") : "Synchronisation non configurée : tes données restent sur ce téléphone."}{st?.state === "erreur" ? ` · ${st.message}` : ""}</p>}
         </>
-      ) : <Synchro onDone={() => setPage("accueil")} />}
+      ) : page === "perso" ? <Personnaliser a={a} onChange={setA} onDone={() => setPage("accueil")} />
+        : <Synchro onDone={() => setPage("accueil")} />}
     </div>
   );
 }
@@ -86,6 +95,7 @@ function Synchro({ onDone }: { onDone: () => void }) {
   );
 }
 
+appliquerApparence();
 createRoot(document.getElementById("racine")!).render(<StrictMode><Hub /></StrictMode>);
 if ("serviceWorker" in navigator) {
   // Nouvelle version installée pendant que l'app est ouverte : on recharge une fois pour l'utiliser tout de suite.

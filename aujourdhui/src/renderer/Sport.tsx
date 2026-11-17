@@ -1,7 +1,7 @@
 // Sport : séance du jour (créneau selon l'emploi du temps), séance guidée série par série avec repos, saisie des
 // courses, semaine, charges actuelles, allures et performances. Les charges suivantes se recalculent à l'enregistrement.
 import { useEffect, useRef, useState } from "react";
-import { allure, duree, type Bloc, type Prescription, type SeanceFaite, type SerieFaite } from "../core/sport.ts";
+import { allure, duree, NOMS_SEANCES, type Bloc, type BlocReglage, type Prescription, type SeanceFaite, type SerieFaite, type TypeSeance } from "../core/sport.ts";
 import type { SportView } from "../core/sportvue.ts";
 
 const api = window.aujourdhui;
@@ -60,17 +60,7 @@ export function SportPage({ s, notify, onClose }: { s: SportView; notify: (t: st
         {a.course && <Course s={s} notify={notify} />}
       </div>
 
-      <div className="carte">
-        <h2>Semaine</h2>
-        <ul className="routine-liste">
-          {s.semaine.map((j, i) => (
-            <li key={j.jour} className={j.faite ? "fait" : ""}>
-              <span className="routine-heure">{JOURS[i]}</span> <span className="routine-titre">{j.titre}</span>
-              <span className="aide"> {j.faite ? "✓" : j.creneau ? `· ${hm(j.creneau.debut)}` : ""}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Semaine s={s} notify={notify} />
 
       <div className="carte">
         <h2>Course : objectif 5 km</h2>
@@ -79,21 +69,7 @@ export function SportPage({ s, notify, onClose }: { s: SportView; notify: (t: st
         <Perfs s={s} notify={notify} />
       </div>
 
-      <div className="carte">
-        <h2>Charges actuelles</h2>
-        <table className="table-charges">
-          <tbody>
-            {s.charges.map((c) => (
-              <tr key={c.bloc}>
-                <td>{c.nom}</td>
-                <td>{c.unite === "reps" || c.unite === "s" ? `${c.prescription.reps} ${c.unite}` : `${c.prescription.charge} ${c.unite}`}</td>
-                <td className="aide">départ {c.depart}{c.prescription.echecs ? " · 1 séance ratée" : ""}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p className="aide">Réussi (toutes les séries) → +2,5 kg (barre), +2 kg (haltères), +1 rep ou +5 s. Deux séances ratées de suite → −5 %.</p>
-      </div>
+      <Charges s={s} notify={notify} />
 
       {s.historique.length > 0 && (
         <div className="carte">
@@ -273,5 +249,134 @@ function Perfs({ s, notify }: { s: SportView; notify: (t: string) => void }) {
         </div>
       </details>
     </>
+  );
+}
+
+// ----- Semaine modifiable -----------------------------------------------------------------------------------
+
+const TYPES = Object.keys(NOMS_SEANCES) as TypeSeance[];
+
+function Semaine({ s, notify }: { s: SportView; notify: (t: string) => void }) {
+  const [edit, setEdit] = useState(false);
+  const types = s.semaine.map((j) => j.type);
+  const changer = (i: number, t: TypeSeance) => api.sport.setWeek(types.map((x, k) => (k === i ? t : x))).catch((e) => notify(errText(e)));
+  return (
+    <div className="carte" data-testid="semaine">
+      <div className="titre-ligne">
+        <h2>Semaine</h2>
+        <button className="lien" onClick={() => setEdit(!edit)}>{edit ? "Fini" : "Modifier"}</button>
+      </div>
+      <ul className="routine-liste">
+        {s.semaine.map((j, i) => (
+          <li key={j.jour} className={j.faite ? "fait" : ""}>
+            <span className="routine-heure">{JOURS[i]}</span>{" "}
+            {edit ? (
+              <select value={j.type} onChange={(e) => changer(i, e.target.value as TypeSeance)} aria-label={`Séance du ${JOURS[i]}`}>
+                {TYPES.map((t) => <option key={t} value={t}>{NOMS_SEANCES[t]}</option>)}
+              </select>
+            ) : <span className="routine-titre">{j.titre}</span>}
+            <span className="aide"> {j.faite ? "✓" : j.creneau ? `· ${hm(j.creneau.debut)}` : ""}</span>
+          </li>
+        ))}
+      </ul>
+      {edit && s.semainePerso && <button className="lien" onClick={() => api.sport.setWeek(null).then(() => notify("Programme de départ rétabli.")).catch((e) => notify(errText(e)))}>Revenir au programme de départ</button>}
+    </div>
+  );
+}
+
+// ----- Charges : + / − et réglages de chaque exercice ---------------------------------------------------------
+
+type Charge = SportView["charges"][number];
+const nb = (x: number) => String(x).replace(".", ",");
+const valeurCharge = (c: Charge) => (c.enCharge ? c.prescription.charge : c.prescription.reps);
+const uniteCourte = (c: Charge) => (c.enCharge ? (c.unite === "kg de lest" ? "kg de lest" : c.unite === "kg par haltère" ? "kg / haltère" : "kg") : c.unite);
+
+function Charges({ s, notify }: { s: SportView; notify: (t: string) => void }) {
+  const [ouvert, setOuvert] = useState<string | null>(null);
+  const bouger = (c: Charge, sens: 1 | -1) => {
+    const v = Math.max(0, Math.round((valeurCharge(c) + sens * c.pas) * 100) / 100);
+    const a = { id: `a${Date.now().toString(36)}`, bloc: c.bloc, at: Date.now(), ...(c.enCharge ? { charge: v } : { reps: Math.max(1, v) }) };
+    api.sport.adjust(a).then(() => notify(`${c.nom} : ${nb(c.enCharge ? v : Math.max(1, v))} ${uniteCourte(c)} à la prochaine séance.`)).catch((e) => notify(errText(e)));
+  };
+  return (
+    <div className="carte" data-testid="charges">
+      <h2>Charges actuelles</h2>
+      <table className="table-charges">
+        <tbody>
+          {s.charges.map((c) => (
+            <ChargeLigne key={c.bloc} c={c} ouvert={ouvert === c.bloc} onOuvrir={() => setOuvert(ouvert === c.bloc ? null : c.bloc)} onBouger={(x) => bouger(c, x)} notify={notify} />
+          ))}
+        </tbody>
+      </table>
+      <p className="aide">
+        + / − : change la charge de la prochaine séance (du pas réglé pour l'exercice). Réussi (toutes les séries) → + l'incrément, jusqu'au maximum s'il y en a un.
+        Deux séances ratées de suite → −5 %. « Modifier » : départ, maximum, incrément, séries, reps, repos.
+      </p>
+    </div>
+  );
+}
+
+function ChargeLigne({ c, ouvert, onOuvrir, onBouger, notify }: { c: Charge; ouvert: boolean; onOuvrir: () => void; onBouger: (sens: 1 | -1) => void; notify: (t: string) => void }) {
+  const v = valeurCharge(c);
+  const atteint = c.max !== null && v >= c.max;
+  return (
+    <>
+      <tr data-testid={`charge-${c.bloc}`}>
+        <td>{c.nom}</td>
+        <td className="charge-valeur">
+          <button className="bouton secondaire petit" aria-label={`Baisser ${c.nom}`} onClick={() => onBouger(-1)} disabled={c.enCharge ? v <= 0 : v <= 1}>−</button>
+          <b>{nb(v)}</b> {uniteCourte(c)}
+          <button className="bouton petit" aria-label={`Monter ${c.nom}`} onClick={() => onBouger(1)}>+</button>
+        </td>
+        <td className="aide">
+          départ {nb(c.depart)}{c.max !== null ? ` → max ${nb(c.max)}` : ""} · ±{nb(c.pas)}{atteint ? " · max atteint" : ""}{c.prescription.echecs ? " · 1 séance ratée" : ""}
+        </td>
+        <td><button className="lien" onClick={onOuvrir}>{ouvert ? "Fermer" : "Modifier"}</button></td>
+      </tr>
+      {ouvert && <tr><td colSpan={4}><EditeurBloc c={c} notify={notify} onFin={onOuvrir} /></td></tr>}
+    </>
+  );
+}
+
+function EditeurBloc({ c, notify, onFin }: { c: Charge; notify: (t: string) => void; onFin: () => void }) {
+  const b = c.config;
+  const [f, setF] = useState(() => ({
+    depart: nb(c.depart), max: c.max !== null ? nb(c.max) : "", increment: nb(b.increment ?? (c.enCharge ? 2.5 : 1)), series: String(b.series),
+    reps: String(b.reps ?? ""), min: String(b.plage?.[0] ?? ""), maxi: String(b.plage?.[1] ?? ""), repos: String(b.repos),
+  }));
+  const num = (t: string) => (t.trim() === "" ? undefined : Number(t.replace(",", ".")));
+  const enregistrer = () => {
+    const r: BlocReglage = {
+      depart: num(f.depart), max: num(f.max), series: num(f.series), repos: num(f.repos),
+      ...(c.enCharge ? { increment: num(f.increment) } : {}),
+      ...(b.mode === "fixe" ? { reps: num(f.reps) } : {}),
+      ...(b.mode === "plage" ? { plage: [num(f.min) ?? 0, num(f.maxi) ?? 0] as [number, number] } : {}),
+    };
+    api.sport.configure(c.bloc, r).then(() => { notify(`${c.nom} : réglages enregistrés.`); onFin(); }).catch((e) => notify(errText(e)));
+  };
+  const champ = (k: keyof typeof f, label: string, w = 70) => (
+    <label className="champ-ligne">{label}<input inputMode="decimal" style={{ width: w }} value={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.value })} /></label>
+  );
+  const u = c.enCharge ? "kg" : b.mode === "maintien" ? "s" : "reps";
+  return (
+    <div className="editeur" data-testid={`editeur-${c.bloc}`}>
+      <div className="ligne" style={{ flexWrap: "wrap" }}>
+        {champ("depart", `Départ (${u})`)}
+        {champ("max", `Maximum (${u})`)}
+        {c.enCharge && champ("increment", "Incrément (kg)")}
+        {champ("series", "Séries", 55)}
+        {b.mode === "fixe" && champ("reps", "Reps", 55)}
+        {b.mode === "plage" && <>{champ("min", "Reps min", 55)}{champ("maxi", "Reps max", 55)}</>}
+        {champ("repos", "Repos (s)")}
+      </div>
+      <p className="aide">
+        Le départ et l'incrément recalculent toute la progression depuis le début. {c.enCharge ? "Au maximum, la charge ne monte plus." : "Au maximum, les reps ou secondes ne montent plus."} Laisse « Maximum » vide pour ne pas en avoir.
+      </p>
+      <div className="ligne">
+        <button className="bouton" onClick={enregistrer}>Enregistrer</button>
+        {c.reglage && <button className="lien" onClick={() => api.sport.configure(c.bloc, null).then(() => { notify(`${c.nom} : réglages de départ rétablis.`); onFin(); }).catch((e) => notify(errText(e)))}>Réglages de départ</button>}
+        <button className="lien" onClick={onFin}>Annuler</button>
+      </div>
+    </div>
   );
 }

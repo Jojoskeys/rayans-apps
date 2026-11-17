@@ -2,10 +2,12 @@
 //   Révision : journal des révisions (`reviews[].ts`) → cartes révisées par journée.
 //   Chrono   : plages de temps (`entries[].start/end`) → minutes par journée.
 //   Journal  : `resume-quotidien.json` (temps de jeu, dernière activité par journée, de 4 h à 4 h).
+//   Sport    : `sport.json` d'Aujourd'hui (séance faite, jours de repos, pompes et tractions des séances).
 // Fonctions pures : le contenu des fichiers est passé en paramètre.
 
 import type { SourceCount } from "./counts.ts";
 import { journee, type Mesures } from "./objectifs.ts";
+import { nettoyerSport, resumeSport } from "./sport.ts";
 
 export function revisionParJour(raw: unknown): Record<string, number> | undefined {
   const reviews = (raw as { reviews?: { ts?: number }[] })?.reviews;
@@ -46,7 +48,7 @@ export function journalParJour(raw: unknown): { jeuxMin?: Record<string, number>
   return { jeuxMin, coucherMin };
 }
 
-export function mesures(p: { revision?: unknown; chrono?: unknown; journal?: unknown; counts: SourceCount[] }): Mesures {
+export function mesures(p: { revision?: unknown; chrono?: unknown; journal?: unknown; sport?: unknown; counts: SourceCount[] }): Mesures {
   const reste = (id: SourceCount["id"]) => {
     const c = p.counts.find((x) => x.id === id);
     return c && !c.missing && c.total !== null ? c.total : undefined;
@@ -60,5 +62,6 @@ export function mesures(p: { revision?: unknown; chrono?: unknown; journal?: unk
     coucherMin: j.coucherMin,
     hifzRestantes: reste("hifz"),
     ouverturesRestantes: reste("ouvertures"),
+    ...resumeSport(nettoyerSport(p.sport)),
   };
 }

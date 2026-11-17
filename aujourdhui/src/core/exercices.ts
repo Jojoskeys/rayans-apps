@@ -1,5 +1,5 @@
-// Bibliothèque d'exercices de Rayan : muscles travaillés, fonctionnement expliqué simplement, consignes techniques.
-// Épaule droite (avant) sensible : échauffement d'épaule avant chaque séance du haut du corps, pas de dips.
+// Bibliothèque d'exercices : muscles travaillés, fonctionnement expliqué simplement, consignes techniques.
+// Programme prudent pour les épaules : échauffement d'épaule avant chaque séance du haut du corps, pas de dips.
 
 export interface Exercice {
   id: string;
@@ -22,7 +22,7 @@ export const EXERCICES: Record<string, Exercice> = {
   "echauffement-epaule": {
     id: "echauffement-epaule", nom: "Échauffement des épaules", mesure: "corps",
     muscles: "Coiffe des rotateurs (petits muscles qui tiennent l'épaule), trapèzes moyens et inférieurs",
-    explication: "La coiffe des rotateurs centre la tête de l'humérus dans l'articulation. Chaude et activée, elle protège l'épaule quand tu pousses lourd : c'est ce qui évite la gêne à l'avant de l'épaule droite.",
+    explication: "La coiffe des rotateurs centre la tête de l'humérus dans l'articulation. Chaude et activée, elle protège l'épaule quand tu pousses lourd : c'est ce qui évite la gêne à l'avant de l'épaule.",
     consignes: ["Rotations externes à l'élastique, coude collé au corps : 2 × 15 par bras", "Écartés à l'élastique (pull-aparts), bras tendus : 2 × 15", "Puis 2 à 3 séries de montée en charge sur le premier exercice (barre vide, 50 %, 75 %)", "Douleur au-dessus de 1/10 : on garde la charge, on ne force pas"],
   },
   "developpe-couche": {
@@ -88,7 +88,7 @@ export const EXERCICES: Record<string, Exercice> = {
   "incline-halteres": {
     id: "incline-halteres", nom: "Développé incliné haltères", mesure: "charge", parHaltere: true,
     muscles: "Haut des pectoraux, avant des épaules, triceps",
-    explication: "Banc incliné à 30° : le haut des pectoraux travaille plus. Les haltères laissent l'épaule trouver sa trajectoire, plus doux pour l'épaule droite qu'une barre.",
+    explication: "Banc incliné à 30° : le haut des pectoraux travaille plus. Les haltères laissent l'épaule trouver sa trajectoire, plus doux pour une épaule sensible qu'une barre.",
     consignes: ["Banc à 30° maximum", "Omoplates serrées, coudes à 45°", "Descente contrôlée, haltères au niveau du haut de la poitrine"],
   },
   "elevations-laterales": {
@@ -124,7 +124,7 @@ export const EXERCICES: Record<string, Exercice> = {
   oiseau: {
     id: "oiseau", nom: "Oiseau haltères", mesure: "charge", parHaltere: true,
     muscles: "Arrière des épaules, rhomboïdes",
-    explication: "Penché en avant, tu écartes les bras : l'arrière de l'épaule, souvent faible, équilibre l'avant (très sollicité au développé). Bon pour l'épaule droite.",
+    explication: "Penché en avant, tu écartes les bras : l'arrière de l'épaule, souvent faible, équilibre l'avant (très sollicité au développé). Bon pour des épaules sensibles.",
     consignes: ["Buste presque à l'horizontale, dos plat", "Coudes légèrement fléchis, écarte jusqu'à l'horizontale", "Léger, lent, contrôlé"],
   },
   "front-lever-tuck": {

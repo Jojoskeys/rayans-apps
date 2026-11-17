@@ -6,7 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import type { SourceCount } from "../core/counts.ts";
 import { mesures } from "../core/mesures.ts";
-import { avancement, changer, cocher, journee, nettoyerObjectifs, notificationsDues, OBJECTIFS_VIDES, preparer, reglerObjectifs, serie, type Mesures, type ObjectifsData } from "../core/objectifs.ts";
+import { avancement, catalogue, changer, cocher, journee, nettoyerObjectifs, notificationsDues, OBJECTIFS_VIDES, preparer, reglerObjectifs, saisir, serie, type Mesures, type ObjectifsData, type Reglages } from "../core/objectifs.ts";
 import type { ObjectifsView } from "../renderer/api-types.ts";
 
 interface Ctx {
@@ -63,7 +63,7 @@ function commit(next: ObjectifsData) {
 export function checkObjectifs() {
   const now = ctx.clock();
   const s = objectifsSources();
-  m = { ...mesures({ revision: lire(ctx.revisionFile()), chrono: lire(s.chrono), journal: lire(s.journal), counts: ctx.counts() }), sansAdhkar: ctx.adhkarSuivis() };
+  m = { ...mesures({ revision: lire(ctx.revisionFile()), chrono: lire(s.chrono), journal: lire(s.journal), sport: lire(path.join(ctx.dataDir, "sport.json")), counts: ctx.counts() }), sansAdhkar: ctx.adhkarSuivis() };
   commit(preparer(data, m, now));
   const r = ctx.reminder();
   const { data: next, messages } = notificationsDues(data, m, now, r.h, r.m, ctx.matinParBilan());
@@ -83,6 +83,7 @@ export function objectifsView(): ObjectifsView {
     objectifs: (data.jours[jour] ?? []).map((o) => ({ ...o, avancement: avancement(o, m, jour, false) })),
     serie: serie(data, m, now),
     reglages: data.reglages,
+    catalogue: catalogue(data),
     sources: { journal: fs.existsSync(s.journal), chrono: !!m.chronoMin, revision: !!m.revisionCartes },
   };
 }
@@ -98,11 +99,7 @@ export function setupObjectifs(c: Ctx) {
     ipcMain.handle(name, (_e, ...a: unknown[]) => { commit(fn(...a)); ctx.changed(); return objectifsView(); });
   h("objectif-cocher", (id) => cocher(data, String(id), ctx.clock()));
   h("objectif-changer", (id) => changer(data, m, String(id), ctx.clock()));
-  h("objectifs-reglages", (r) => {
-    const next = reglerObjectifs(data, (r ?? {}) as Partial<ObjectifsData["reglages"]>);
-    // Nouveaux réglages : les objectifs du jour sont choisis à nouveau.
-    const jours = { ...next.jours };
-    delete jours[journee(ctx.clock())];
-    return preparer({ ...next, jours }, m, ctx.clock());
-  });
+  h("objectif-saisir", (id, total) => saisir(data, m, String(id), Number(total), ctx.clock()));
+  // Nouveaux réglages : la liste du jour est complétée ou réduite (cases cochées et compteurs gardés).
+  h("objectifs-reglages", (r) => preparer(reglerObjectifs(data, (r ?? {}) as Partial<Reglages>), m, ctx.clock()));
 }

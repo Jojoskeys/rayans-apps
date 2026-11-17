@@ -12,12 +12,12 @@ import {
   removeOverride, resolveConflict, sanitizeFac, type FacData,
 } from "../../../aujourdhui/src/core/fac.ts";
 import { parseMailInput } from "../../../aujourdhui/src/core/mail.ts";
-import { avancement, changer, cocher, journee, nettoyerObjectifs, OBJECTIFS_VIDES, preparer, reglerObjectifs, serie, type Mesures, type ObjectifsData } from "../../../aujourdhui/src/core/objectifs.ts";
+import { avancement, catalogue, changer, cocher, journee, nettoyerObjectifs, OBJECTIFS_VIDES, preparer, reglerObjectifs, saisir, serie, type Mesures, type ObjectifsData } from "../../../aujourdhui/src/core/objectifs.ts";
 import { mesures } from "../../../aujourdhui/src/core/mesures.ts";
 import { aRemplir, BILAN_VIDE, cocherAdhkar, cocherPrevu, moments, nettoyerBilan, noterMatin, noterSoir, reglerBilan, type BilanData } from "../../../aujourdhui/src/core/bilan.ts";
 import { heuresDePriere } from "../../../aujourdhui/src/core/prieres.ts";
 import { citationsDuJour } from "../../../aujourdhui/src/core/citations.ts";
-import { ajouterPerf, ajuster, enregistrer, nettoyerSport, SPORT_DEPART, type SportData } from "../../../aujourdhui/src/core/sport.ts";
+import { ajouterPerf, ajuster, enregistrer, nettoyerSport, regler, reglerSemaine, resumeSport, SPORT_DEPART, type SportData } from "../../../aujourdhui/src/core/sport.ts";
 import { sportView } from "../../../aujourdhui/src/core/sportvue.ts";
 import type { AujourdhuiApi, BilanView, FacView, ObjectifsView, RoutineView, Settings, State } from "../../../aujourdhui/src/renderer/api-types.ts";
 
@@ -56,7 +56,7 @@ async function loadAll() {
     src("ouvertures", ouvRaw, () => { const c = ouverturesCount(Object.values(ouvRaw as object), now); return { total: c.total, detail: ouverturesDetail(c) }; }),
   ];
   // Objectifs : mesurés ici avec Révision et Chrono (synchronisés) ; jeux et coucher sont mesurés sur le PC.
-  m = { ...mesures({ revision: revRaw, chrono: parse(chr), counts }), sansAdhkar: bilan.reglages.adhkar };
+  m = { ...mesures({ revision: revRaw, chrono: parse(chr), sport, counts }), sansAdhkar: bilan.reglages.adhkar };
   const avant = parse(obj) ?? {};
   objectifs = preparer(nettoyerObjectifs(avant), m, now);
   if (JSON.stringify(objectifs) !== JSON.stringify(nettoyerObjectifs(avant))) store.save("objectifs", JSON.stringify(objectifs));
@@ -72,6 +72,7 @@ function objectifsView(): ObjectifsView {
     objectifs: (objectifs.jours[jour] ?? []).map((o) => ({ ...o, avancement: avancement(o, m, jour, false) })),
     serie: serie(objectifs, m, now),
     reglages: objectifs.reglages,
+    catalogue: catalogue(objectifs),
     sources: { journal: true, chrono: !!m.chronoMin, revision: !!m.revisionCartes },
   };
 }
@@ -127,7 +128,14 @@ const commitRoutine = (r: RoutineData) => { routine = r; store.save("routine", J
 const commitFac = (f: FacData) => { fac = prune(f, Date.now()); store.save("fac", JSON.stringify(fac)); emit(); return facView(); };
 const occupations = () => displayCourses(fac).filter((c) => !c.cancelled).map((c) => ({ start: c.start, end: c.end }));
 const vueSport = () => sportView(sport, occupations(), Date.now());
-const commitSport = (s: SportData) => { sport = s; store.save("sport", JSON.stringify(s)); emit(); return vueSport(); };
+const commitSport = (s: SportData) => {
+  sport = s;
+  store.save("sport", JSON.stringify(s));
+  // Séance enregistrée : les objectifs (séance du jour, pompes, tractions) se mettent à jour.
+  m = { ...m, ...resumeSport(s) };
+  emit();
+  return vueSport();
+};
 const commitObjectifs = (o: ObjectifsData) => { objectifs = o; store.save("objectifs", JSON.stringify(o)); emit(); return objectifsView(); };
 const commitBilan = (b: BilanData) => { bilan = b; store.save("bilan", JSON.stringify(b)); emit(); return bilanView(); };
 const pcOnly = () => Promise.reject(new Error("réglage disponible dans l'app Windows (le PC télécharge l'emploi du temps ADE)"));
@@ -151,16 +159,14 @@ const api: AujourdhuiApi = {
     save: async (s) => commitSport(enregistrer(sport, s)),
     addPerf: async (p) => commitSport(ajouterPerf(sport, p)),
     adjust: async (a) => commitSport(ajuster(sport, a)),
+    configure: async (bloc, r) => commitSport(regler(sport, bloc, r)),
+    setWeek: async (s) => commitSport(reglerSemaine(sport, s)),
   },
   objectifs: {
     toggle: async (id) => commitObjectifs(cocher(objectifs, id, Date.now())),
     change: async (id) => commitObjectifs(changer(objectifs, m, id, Date.now())),
-    settings: async (r) => {
-      const next = reglerObjectifs(objectifs, r);
-      const jours = { ...next.jours };
-      delete jours[journee(Date.now())];
-      return commitObjectifs(preparer({ ...next, jours }, m, Date.now()));
-    },
+    count: async (id, total) => commitObjectifs(saisir(objectifs, m, id, total, Date.now())),
+    settings: async (r) => commitObjectifs(preparer(reglerObjectifs(objectifs, r), m, Date.now())),
   },
   bilan: {
     morning: async (h, t) => commitBilan(noterMatin(bilan, Date.now(), h, t)),

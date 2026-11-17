@@ -1,6 +1,7 @@
 // Habillage commun des apps sur l'iPhone : bouton de retour à l'accueil (en mode « écran d'accueil » il n'y a pas
 // de barre du navigateur), pastille d'état de la synchro, envoi automatique en arrière-plan.
 import { installAutoSync, onStatus } from "./sync.ts";
+import { appliquerApparence, lireApparence } from "./apparence.ts";
 
 export function mountChrome(files: string[]) {
   installAutoSync(files);
@@ -13,7 +14,15 @@ export function mountChrome(files: string[]) {
     #rm-accueil i.a-jour { background: #3BA776; } #rm-accueil i.erreur { background: #E8594F; } #rm-accueil i.en-cours { background: #E3A33B; }
     html { -webkit-text-size-adjust: 100%; }
     body { padding-bottom: calc(env(safe-area-inset-bottom) + 64px); }`;
+  const app = lireApparence();
+  if (app.boutonAccueil === "droite") css.textContent += `
+#rm-accueil { left: auto; right: max(10px, env(safe-area-inset-right)); }`;
   document.head.append(css);
+  // Thème, couleur, taille du texte et icône choisis dans « Personnaliser » (après les styles de l'app).
+  const appliquer = () => appliquerApparence(app);
+  appliquer();
+  addEventListener("load", appliquer);
+  addEventListener("storage", (e) => { if (e.key === "rm-apparence") location.reload(); });
   const a = document.createElement("a");
   a.id = "rm-accueil";
   a.href = "../";
