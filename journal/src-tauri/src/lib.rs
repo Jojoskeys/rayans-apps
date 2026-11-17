@@ -128,6 +128,8 @@ fn enregistrer_reglages(nouveaux: Reglages, app: AppHandle, state: State<AppStat
         // L'accord et la pause ne changent que par leurs propres commandes.
         n.collecte_active = r.collecte_active;
         n.pause_jusqua_ms = r.pause_jusqua_ms;
+        n.confiance = r.confiance.clone();
+        n.absent_depuis_ms = r.absent_depuis_ms;
         let relancer = n.dossiers != r.dossiers || n.ignores != r.ignores || n.fichiers != r.fichiers;
         n.enregistrer(&ctx.dossier)?;
         *r = n;
@@ -316,6 +318,50 @@ async fn analyser_defender(chemin: String, state: State<'_, AppState>) -> Result
 #[tauri::command]
 fn montrer_fichier(chemin: PathBuf, app: AppHandle) -> Result<(), String> {
     app.opener().reveal_item_in_dir(&chemin).map_err(err)
+}
+
+/// Ajoute (ou retire) une règle de confiance, puis refait l'analyse des programmes concernés.
+fn changer_confiance(app: &AppHandle, ctx: &Ctx, ajouter: Option<String>, retirer: Option<String>) -> Result<EtatVue, String> {
+    let concernee = ajouter.clone().or(retirer.clone()).unwrap_or_default();
+    {
+        let mut r = ctx.reglages.write().unwrap();
+        if let Some(a) = &ajouter {
+            if !r.confiance.iter().any(|x| x.eq_ignore_ascii_case(a)) {
+                r.confiance.push(a.clone());
+            }
+        }
+        if let Some(x) = &retirer {
+            r.confiance.retain(|y| !y.eq_ignore_ascii_case(x));
+        }
+        r.enregistrer(&ctx.dossier)?;
+    }
+    for p in avec(ctx, |a| a.programmes())? {
+        if securite::regle_couvre(&concernee, &p.analyse.chemin) {
+            securite::reanalyser(&p.analyse.chemin);
+        }
+    }
+    Ok(vue(app, ctx))
+}
+
+/// `dossier` : faire confiance à tout un dossier (ex. tes projets) plutôt qu'à ce seul fichier.
+#[tauri::command]
+fn faire_confiance(chemin: String, dossier: Option<String>, app: AppHandle, state: State<AppState>) -> Result<EtatVue, String> {
+    let regle = match dossier {
+        Some(d) => {
+            let d = d.trim_end_matches(['\\', '/']).to_string() + "\\";
+            if !securite::regle_couvre(&d, &chemin) {
+                return Err("Ce dossier ne contient pas le programme.".into());
+            }
+            d
+        }
+        None => chemin,
+    };
+    changer_confiance(&app, &state.ctx, Some(regle), None)
+}
+
+#[tauri::command]
+fn retirer_confiance(regle: String, app: AppHandle, state: State<AppState>) -> Result<EtatVue, String> {
+    changer_confiance(&app, &state.ctx, None, Some(regle))
 }
 
 // ---------------------------------------------------------------------------------------------------
@@ -638,6 +684,8 @@ pub fn run() {
             reanalyser,
             analyser_defender,
             montrer_fichier,
+            faire_confiance,
+            retirer_confiance,
             rapport,
             a_l_instant,
             fichiers,

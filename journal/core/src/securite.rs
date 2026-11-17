@@ -139,6 +139,12 @@ pub struct Faits {
     pub introuvable: bool,
     /// Détections de Microsoft Defender visant ce fichier.
     pub defender: Vec<String>,
+    /// Programme reconnu comme sûr, et pourquoi (installé par Rayan's Launcher avec la même empreinte que
+    /// celle publiée, ou règle de confiance de l'utilisateur). Remplace la signature d'éditeur ; une
+    /// détection Defender, une imitation de nom ou une signature altérée restent signalées.
+    pub confiance: Option<String>,
+    /// Fichier placé par Rayan's Launcher mais différent de celui qu'il a installé.
+    pub altere_depuis_installation: bool,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -221,10 +227,20 @@ pub fn evaluer(f: &Faits, d: &Dossiers, maintenant_ms: i64) -> Analyse {
     // Les applications du Microsoft Store sont signées au niveau du paquet (installé dans WindowsApps,
     // dossier protégé), pas fichier par fichier.
     let store = chemin.contains(r"\windowsapps\") &&f.signature.statut == "NotSigned";
-    let signe = f.signature.valide() || store;
+    let signe = f.signature.valide() || store || f.confiance.is_some();
     let editeur = f.signature.editeur();
     let dans_windows = chemin.starts_with(&d.windows);
     let microsoft = editeur.as_deref().is_some_and(|e| e.starts_with("Microsoft"));
+
+    if let Some(c) = &f.confiance {
+        ajouter(Gravite::Info, format!("{c}"));
+    }
+    if f.altere_depuis_installation {
+        ajouter(
+            Gravite::Critique,
+            "Différent du fichier installé par Rayan's Launcher (empreinte SHA-256 changée) : modifié après son installation.".into(),
+        );
+    }
 
     // Defender.
     for x in &f.defender {
@@ -250,6 +266,7 @@ pub fn evaluer(f: &Faits, d: &Dossiers, maintenant_ms: i64) -> Analyse {
             let cat = if f.signature.genre == "Catalog" { " (catalogue de Windows)" } else { "" };
             ajouter(Gravite::Info, format!("Signé par {par}{cat} : signature vérifiée par Windows."));
         }
+        "NotSigned" if f.confiance.is_some() => ajouter(Gravite::Info, "Non signé par un éditeur (remplacé par la confiance ci-dessus).".into()),
         "NotSigned" if store => ajouter(Gravite::Info, "Application du Microsoft Store : paquet signé, installé dans un dossier protégé.".into()),
         "NotSigned" => ajouter(Gravite::Avertissement, "Non signé : l'éditeur ne peut pas être vérifié.".into()),
         "HashMismatch" => ajouter(Gravite::Critique, "Signature invalide : le fichier a été modifié après avoir été signé.".into()),

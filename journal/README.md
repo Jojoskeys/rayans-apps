@@ -63,6 +63,12 @@ Chaque programme vu par le suivi est vérifié **sur le PC, sans rien envoyer en
 | Démarrage automatique | Registre Run/RunOnce, dossier Démarrage, tâches planifiées (hors Microsoft), relus toutes les 5 min | Ajout ou retrait noté dans le journal ; à vérifier s'il n'est pas signé |
 | Microsoft Defender | Journal de Defender (détections des 90 derniers jours) ; bouton « Analyser avec Microsoft Defender » (`MpCmdRun`) | Fichier détecté : suspect ; nouvelles détections notées et notifiées |
 
+**Tes programmes** : une app installée par Rayan's Launcher est fiable si son exécutable a exactement l'empreinte
+SHA-256 que le launcher a vérifiée à l'installation (d'après le catalogue signé, `installed.json`) ; un fichier
+différent devient **suspect**. Les autres (versions de développement, outils) se marquent comme sûrs depuis la
+page Sécurité, programme par programme ou par dossier (liste dans Réglages). Une détection Defender, une
+imitation de nom Windows ou une signature altérée restent toujours signalées.
+
 Une critique, ou deux avertissements, donnent **suspect** (notification) ; un avertissement, **à vérifier** ; une
 signature valide sans avertissement, **fiable**. Le résultat est gardé et refait si le fichier change, ou au bout
 de 7 jours. Le premier inventaire résume tout en une seule ligne du journal. Ce n'est pas un antivirus : il ne

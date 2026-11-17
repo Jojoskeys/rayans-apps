@@ -39,6 +39,7 @@ export interface Reglages {
   intervalleProcessusS: number;
   pauseJusquaMs: number | null;
   raccourciPause: boolean;
+  confiance: string[];
   seuilInactiviteMin: number;
   heuresCalmes: boolean;
   calmeDebutH: number;
@@ -235,6 +236,12 @@ export const api = {
   reanalyser: (chemin: string) => invoke<void>("reanalyser", { chemin }),
   analyserDefender: (chemin: string) => invoke<[boolean, string]>("analyser_defender", { chemin }),
   montrerFichier: (chemin: string) => invoke<void>("montrer_fichier", { chemin }),
+  faireConfiance: (chemin: string, dossier: string | null) => invoke<EtatVue>("faire_confiance", { chemin, dossier }),
+  retirerConfiance: (regle: string) => invoke<EtatVue>("retirer_confiance", { regle }),
+  choisirDossierDepuis: async (title: string, defaultPath: string): Promise<string | null> => {
+    const r = await open({ directory: true, multiple: false, title, defaultPath });
+    return typeof r === "string" ? r : null;
+  },
   etat: () => invoke<EtatVue>("etat"),
   enregistrerReglages: (nouveaux: Reglages) => invoke<EtatVue>("enregistrer_reglages", { nouveaux }),
   activerCollecte: (actif: boolean) => invoke<EtatVue>("activer_collecte", { actif }),

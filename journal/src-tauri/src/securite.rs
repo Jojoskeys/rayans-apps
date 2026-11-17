@@ -315,9 +315,14 @@ fn analyser(ctx: &Ctx, app: &AppHandle, d: &Dossiers, demandes: Vec<Demande>, in
     let demarrage = entrees_demarrage();
     let detections = detections();
     let (mut n_suspects, mut n_verifier) = (0, 0);
+    let installes = installes_par_le_launcher();
+    let regles = ctx.reglages.read().unwrap().confiance.clone();
     for (chemin, nom, ancien) in a_faire {
         let bas = chemin.to_lowercase();
+        let (confiance, altere) = confiance_de(&chemin, &installes, &regles);
         let faits = Faits {
+            confiance,
+            altere_depuis_installation: altere,
             chemin: chemin.clone(),
             nom: nom.clone(),
             signature: sigs.get(&bas).cloned().unwrap_or_default(),
@@ -429,6 +434,87 @@ fn verifier_defender(ctx: &Ctx, app: &AppHandle) {
     }
 }
 
+// ---------------------------------------------------------------------------------------------------
+// Programmes de confiance : apps installées par Rayan's Launcher, règles de l'utilisateur
+// ---------------------------------------------------------------------------------------------------
+
+/// Exécutable installé par Rayan's Launcher : chemin attendu (en minuscules) → (nom de l'app, version,
+/// SHA-256 de l'exécutable vérifié par le launcher à l'installation, d'après le catalogue signé).
+pub fn installes_par_le_launcher() -> HashMap<String, (String, String, String)> {
+    let mut out = HashMap::new();
+    let Some(base) = dirs::data_local_dir().map(|d| d.join("fr.rayan.launcher")) else { return out };
+    let Ok(t) = std::fs::read(base.join("installed.json")) else { return out };
+    let Ok(v) = serde_json::from_slice::<Value>(&t) else { return out };
+    // `apps` est un objet { id: app } (ou une liste dans d'anciens formats).
+    let apps: Vec<&Value> = match v.get("apps") {
+        Some(Value::Object(o)) => o.values().collect(),
+        Some(Value::Array(a)) => a.iter().collect(),
+        _ => vec![],
+    };
+    for app in apps {
+        let id = texte(app, "id");
+        let nom = texte(app, "name");
+        for cle in ["current", "previous", "pending"] {
+            let Some(c) = app.get(cle).filter(|c| c.is_object()) else { continue };
+            let (dir, exe, sha) = (texte(c, "dir"), texte(c, "executable"), texte(c, "executableSha256"));
+            if id.is_empty() || dir.is_empty() || exe.is_empty() || sha.is_empty() {
+                continue;
+            }
+            let chemin = base.join("apps").join(&id).join("versions").join(&dir).join(exe.replace('/', "\\"));
+            out.insert(chemin.to_string_lossy().to_lowercase(), (nom.clone(), texte(c, "version"), sha.to_lowercase()));
+        }
+    }
+    out
+}
+
+fn sha256_fichier(chemin: &str) -> Option<String> {
+    use sha2::{Digest, Sha256};
+    use std::io::Read;
+    let mut f = std::fs::File::open(chemin).ok()?;
+    let mut h = Sha256::new();
+    let mut buf = vec![0u8; 1 << 16];
+    loop {
+        let n = f.read(&mut buf).ok()?;
+        if n == 0 {
+            break;
+        }
+        h.update(&buf[..n]);
+    }
+    Some(hex::encode(h.finalize()))
+}
+
+/// Une règle de confiance couvre ce chemin : chemin exact, ou dossier (terminé par `\`) qui le contient.
+pub fn regle_couvre(regle: &str, chemin: &str) -> bool {
+    let r = regle.to_lowercase();
+    let c = chemin.to_lowercase();
+    if r.ends_with('\\') {
+        c.starts_with(&r)
+    } else {
+        c == r
+    }
+}
+
+/// (raison de confiance, fichier du launcher modifié depuis son installation ?)
+pub fn confiance_de(chemin: &str, installes: &HashMap<String, (String, String, String)>, regles: &[String]) -> (Option<String>, bool) {
+    if let Some((nom, version, sha)) = installes.get(&chemin.to_lowercase()) {
+        return match sha256_fichier(chemin) {
+            Some(s) if s == *sha => (
+                Some(format!(
+                    "{nom} {version}, installé par Rayan's Launcher depuis ton catalogue signé : fichier identique à celui publié (empreinte SHA-256 vérifiée)."
+                )),
+                false,
+            ),
+            Some(_) => (None, true),
+            None => (None, false),
+        };
+    }
+    if let Some(r) = regles.iter().find(|r| regle_couvre(r, chemin)) {
+        let quoi = if r.ends_with('\\') { format!("dans le dossier {r}, marqué comme sûr par toi") } else { "marqué comme sûr par toi".into() };
+        return (Some(format!("Programme de confiance : {quoi}.")), false);
+    }
+    (None, false)
+}
+
 /// Verdict tiré du texte de MpCmdRun : son code de sortie (2) est le même pour « menace trouvée » et pour
 /// « analyse impossible », il ne suffit pas.
 pub fn verdict_defender(sortie: &str) -> Result<bool, String> {
@@ -513,6 +599,8 @@ mod essai_reel {
         let sigs = super::signatures(&chemins.iter().map(|c| c.0.clone()).collect::<Vec<_>>());
         let dem = super::lire_demarrage().unwrap_or_default();
         let det = super::lire_defender(0).unwrap_or_default();
+        let installes = super::installes_par_le_launcher();
+        println!("{} exécutables installés par Rayan's Launcher", installes.len());
         let mut compte = std::collections::BTreeMap::new();
         for (c, n) in &chemins {
             let bas = c.to_lowercase();
@@ -522,6 +610,11 @@ mod essai_reel {
                 signature: sigs.get(&bas).cloned().unwrap_or_default(),
                 origine: super::origine(c),
                 introuvable: !std::path::Path::new(c).exists(),
+                confiance: {
+                    let (c2, _) = super::confiance_de(c, &installes, &[]);
+                    c2
+                },
+                altere_depuis_installation: super::confiance_de(c, &installes, &[]).1,
                 demarrage: dem.iter().filter(|e| e.executable.as_ref().is_some_and(|x| x.to_lowercase() == bas)).map(|e| e.libelle()).collect(),
                 defender: det.iter().filter(|x| x.chemins.iter().any(|p| p.to_lowercase() == bas)).map(|x| x.menace.clone()).collect(),
             };
@@ -547,5 +640,29 @@ mod verdict {
         assert!(verdict_defender("CmdTool: Failed with hr = 0x80508023.").unwrap_err().contains("n'existe plus"));
         assert_eq!(verdict_defender("Scan finished.\nScanning C:/x/eicar.com found 1 threats.\nThreat                  : Virus:DOS/EICAR_Test_File"), Ok(true));
         assert!(verdict_defender("quelque chose d'inattendu").is_err());
+    }
+}
+
+#[cfg(all(test, windows))]
+mod launcher_reel {
+    /// Chaque app installée par Rayan's Launcher sur ce PC est reconnue, empreinte comprise.
+    #[test]
+    fn apps_du_launcher_reconnues() {
+        let installes = super::installes_par_le_launcher();
+        let base = dirs::data_local_dir().unwrap().join("fr.rayan.launcher").join("installed.json");
+        if base.exists() {
+            assert!(!installes.is_empty(), "installed.json présent mais aucune app lue");
+        }
+        for (chemin, (nom, _, _)) in &installes {
+            if !std::path::Path::new(chemin).exists() {
+                continue;
+            }
+            let (c, altere) = super::confiance_de(chemin, &installes, &[]);
+            assert!(!altere, "{nom} : empreinte différente");
+            assert!(c.is_some_and(|t| t.contains("empreinte SHA-256 vérifiée")), "{nom} non reconnu");
+        }
+        assert!(super::regle_couvre(r"C:\Users\x\Desktop\rayans-apps\", r"C:\Users\X\Desktop\rayans-apps\journal\target\a.exe"));
+        assert!(!super::regle_couvre(r"C:\Users\x\Desktop\rayans-apps\", r"C:\Users\x\Desktop\rayans-apps-faux\a.exe"));
+        assert!(super::regle_couvre(r"C:\outils\a.exe", r"c:\OUTILS\A.EXE"));
     }
 }

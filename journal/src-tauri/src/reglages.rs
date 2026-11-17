@@ -27,6 +27,8 @@ pub struct Reglages {
     /// Pause jusqu'à cet instant (ms UTC) ; `i64::MAX` = jusqu'à reprise manuelle.
     pub pause_jusqua_ms: Option<i64>,
     pub raccourci_pause: bool,
+    /// Programmes (chemin exact) ou dossiers (terminés par `\`) marqués comme sûrs par l'utilisateur.
+    pub confiance: Vec<String>,
     /// Minutes sans clavier ni souris avant de noter « inactif » (le temps d'écran s'arrête).
     pub seuil_inactivite_min: u32,
     /// Alerte si le PC est utilisé pendant les heures calmes.
@@ -62,6 +64,7 @@ impl Default for Reglages {
             intervalle_processus_s: 2,
             pause_jusqua_ms: None,
             raccourci_pause: true,
+            confiance: Vec::new(),
             seuil_inactivite_min: 5,
             heures_calmes: false,
             calme_debut_h: 0,

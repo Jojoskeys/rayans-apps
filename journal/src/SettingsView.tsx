@@ -143,6 +143,28 @@ export function SettingsView(p: {
       </div>
 
       <div className="card">
+        <h2>Programmes de confiance</h2>
+        <p className="small muted">
+          Les apps installées par Rayan’s Launcher sont reconnues automatiquement : leur fichier doit être identique à celui publié dans ton catalogue signé
+          (empreinte SHA-256). Ajoute ici tes autres programmes ou dossiers depuis la page Sécurité. Une détection de Microsoft Defender, une imitation de
+          nom de Windows ou un fichier modifié restent toujours signalés.
+        </p>
+        {p.etat.reglages.confiance.length === 0 ? (
+          <p className="small muted">Aucune règle.</p>
+        ) : (
+          <ul className="folders">
+            {p.etat.reglages.confiance.map((c) => (
+              <li key={c}>
+                <span className="path">{c}</span>
+                <span className="tag">{c.endsWith("\\") ? "dossier" : "programme"}</span>
+                <button className="icon-btn" title="Retirer" onClick={() => action(() => api.retirerConfiance(c))}>✕</button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="card">
         <h2>Secrets : jamais enregistrés</h2>
         <p className="small muted">
           Le clavier n’est jamais lu : mots de passe et codes tapés ne peuvent pas entrer dans le journal. Ces règles filtrent aussi ce que Windows affiche

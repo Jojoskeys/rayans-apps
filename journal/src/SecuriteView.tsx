@@ -196,6 +196,39 @@ function Carte({ x, onChange }: { x: Programme; onChange: () => void }) {
             </button>
             <button className="btn small ghost" onClick={async () => { await api.reanalyser(a.chemin); window.setTimeout(onChange, 4000); }}>Revérifier</button>
             <button className="btn small ghost" onClick={() => api.montrerFichier(a.chemin)}>Afficher dans l’Explorateur</button>
+            {a.niveau !== "fiable" && (
+              <>
+                <button
+                  className="btn small ghost"
+                  title="Marquer ce programme comme sûr (une détection Defender ou une imitation de nom restera signalée)"
+                  onClick={async () => {
+                    await api.faireConfiance(a.chemin, null);
+                    window.setTimeout(onChange, 5000);
+                    setDefender("Marqué comme sûr : nouvelle vérification en cours…");
+                  }}
+                >
+                  C’est mon programme : le marquer comme sûr
+                </button>
+                <button
+                  className="btn small ghost"
+                  title="Choisir un dossier (ex. tes projets) dont tous les programmes seront considérés comme sûrs"
+                  onClick={async () => {
+                    const dossierExe = a.chemin.slice(0, a.chemin.lastIndexOf("\\"));
+                    const d = await api.choisirDossierDepuis("Dossier dont tous les programmes sont à toi", dossierExe);
+                    if (!d) return;
+                    try {
+                      await api.faireConfiance(a.chemin, d);
+                      window.setTimeout(onChange, 5000);
+                      setDefender(`Dossier marqué comme sûr : ${d}. Nouvelle vérification en cours…`);
+                    } catch (e) {
+                      setDefender(texteErreur(e));
+                    }
+                  }}
+                >
+                  Faire confiance à un dossier…
+                </button>
+              </>
+            )}
             <span className="small muted">Analysé le {local(a.analyseMs)} · vu en dernier le {local(x.derniereVueMs)}</span>
           </div>
           {defender && <div className="small">{defender}</div>}

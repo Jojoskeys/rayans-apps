@@ -99,6 +99,33 @@ fn fichier_remplace_par_une_mise_a_jour() {
 }
 
 #[test]
+fn mes_applications_de_confiance() {
+    let ns = || Signature { statut: "NotSigned".into(), ..Default::default() };
+    // Installée par Rayan's Launcher, empreinte identique, lancée au démarrage : fiable.
+    let mut f = faits(r"C:\Users\lea\AppData\Local\fr.rayan.launcher\apps\rayans-journal\versions\1.0.101-dfdda20a\Rayans Journal.exe", ns());
+    f.demarrage = vec!["Registre utilisateur Run : Rayans Journal".into()];
+    f.confiance = Some("Installé par Rayan's Launcher (empreinte vérifiée).".into());
+    let a = evaluer(&f, &dossiers(), 1);
+    assert_eq!(a.niveau, Niveau::Fiable, "{:?}", a.raisons);
+    assert!(a.raisons.iter().all(|r| r.gravite == Gravite::Info));
+    // Compilation de développement sur le Bureau, dossier marqué comme sûr : fiable.
+    let mut f = faits(r"C:\Users\lea\Desktop\rayans-apps\journal\target\debug\journal_lib-41e3.exe", ns());
+    f.confiance = Some("Dans un dossier marqué comme sûr par toi.".into());
+    assert_eq!(evaluer(&f, &dossiers(), 1).niveau, Niveau::Fiable);
+    // La confiance ne cache jamais Defender, une imitation ni une modification après installation.
+    let mut f = faits(r"C:\Users\lea\Desktop\rayans-apps\svchost.exe", ns());
+    f.confiance = Some("Dans un dossier marqué comme sûr par toi.".into());
+    assert_eq!(evaluer(&f, &dossiers(), 1).niveau, Niveau::Suspect);
+    let mut f = faits(r"C:\Users\lea\Desktop\rayans-apps\outil.exe", ns());
+    f.confiance = Some("Dans un dossier marqué comme sûr par toi.".into());
+    f.defender = vec!["Trojan:Win32/Exemple".into()];
+    assert_eq!(evaluer(&f, &dossiers(), 1).niveau, Niveau::Suspect);
+    let mut f = faits(r"C:\Users\lea\AppData\Local\fr.rayan.launcher\apps\x\versions\1\x.exe", ns());
+    f.altere_depuis_installation = true;
+    assert_eq!(evaluer(&f, &dossiers(), 1).niveau, Niveau::Suspect);
+}
+
+#[test]
 fn signature_illisible() {
     let a = evaluer(&faits(r"C:\Program Files\Protege\p.exe", Signature::default()), &dossiers(), 1);
     assert_eq!(a.niveau, Niveau::Inconnu);
