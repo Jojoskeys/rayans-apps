@@ -86,7 +86,8 @@ test("ressenti du matin, réglages et relecture du fichier", () => {
 
 test("heures de prière calculées comme Rayan's Prière (Rennes, UOIF)", () => {
   const p = heuresDePriere({ version: 1, settings: { place: { name: "Rennes", lat: 48.1173, lng: -1.6778, tz: "Europe/Paris" }, method: "uoif", asr: "shafii", highLat: "angle" } }, at(17, 12))!;
-  const hm = (ms: number) => new Date(ms).toTimeString().slice(0, 5);
+  // Heure de Paris, quel que soit le fuseau de la machine (la CI tourne en UTC).
+  const hm = (ms: number) => new Date(ms).toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" });
   assert.ok(p.fajr < p.lever && p.lever < p.asr && p.asr < p.maghrib);
   // Ordres de grandeur pour Rennes mi-novembre.
   assert.ok(hm(p.fajr) >= "06:00" && hm(p.fajr) <= "07:30", hm(p.fajr));
