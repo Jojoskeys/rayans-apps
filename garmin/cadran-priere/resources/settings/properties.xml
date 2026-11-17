@@ -1,4 +1,6 @@
 <properties>
+    <property id="alertes" type="boolean">true</property>
+    <property id="alerteAvance" type="number">0</property>
     <property id="methode" type="number">0</property>
     <property id="ecoleAsr" type="number">0</property>
     <property id="decalage" type="number">0</property>

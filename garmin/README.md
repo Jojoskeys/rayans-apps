@@ -5,9 +5,9 @@ Rien n'est piraté : la montre accepte les apps de développeur copiées par câ
 
 | App | Dossier | Type | Ce qu'elle fait |
 | --- | --- | --- | --- |
-| Rayan's Prière (cadran) | [`cadran-priere/`](cadran-priere/) | cadran | Heure, date, **prochaine prière** et temps restant, anneau qui se remplit jusqu'à la prochaine prière (ambre dans les 15 dernières minutes), pas, cœur, batterie. Écran toujours allumé : affichage réduit qui se décale chaque minute. |
+| Rayan's Prière (cadran) | [`cadran-priere/`](cadran-priere/) | cadran | Heure, date, **prochaine prière** et temps restant sur un anneau solaire de 24 h, pas, cœur, batterie. **Alerte à l'heure de chaque prière** : notification de la montre « C'est l'heure de Asr — 15:20 », avec vibration. Écran toujours allumé : affichage réduit qui se décale chaque minute. |
 | Rayan's 5 km | [`champ-5km/`](champ-5km/) | champ de données | Pendant une course : **avance ou retard** sur le temps visé, temps final estimé, distance restante ; alerte à chaque km (temps du km, écart) ; après 5 km, le vrai temps sur 5 km. |
-| Rayan's Muscu | [`muscu/`](muscu/) | app | **Tractions** ou **pompes** : répétitions comptées au poignet, objectif par série, repos minuté (vibre à 10 s et à la fin), séries restantes, dernière séance rappelée. Enregistrée comme activité « Musculation » dans Garmin Connect (un circuit par série, répétitions par circuit et au total). |
+| Rayan's Muscu | [`muscu/`](muscu/) | app | **Tractions** ou **pompes**, comme une course : le chrono part dès le choix, START passe de la série (répétitions comptées au poignet) à la pause (chrono), puis à la série suivante ; RETOUR termine. Compteurs du jour et de toujours par exercice. Réglages sur la montre. Enregistrée comme activité « Musculation » (un circuit par série). |
 
 ![Cadran, écran toujours allumé, champ 5 km](captures/cadran-et-5km.png)
 ![Muscu : accueil, prêt, série](captures/muscu-accueil-serie.png)
@@ -35,9 +35,11 @@ Rien n'est piraté : la montre accepte les apps de développeur copiées par câ
   amplitude minimale (sensibilité réglable) et temps minimum entre deux répétitions. Testé sur des mouvements
   simulés, **pas encore sur le vrai poignet** : HAUT / BAS corrigent le compte (pendant la série, ou pendant le
   repos pour la série qui vient de finir).
-- **Valeurs par défaut** reprises de Rayan's Aujourd'hui (`aujourdhui/src/core/sport.ts`) : tractions strictes 5 × 7,
-  repos 120 s ; pompes 4 × 15, repos 90 s ; 5 km visé en 30:00 (à régler : le temps visé du test 5 km dans
-  Aujourd'hui).
+- **Alerte de prière** (`cadran-priere/source/Alerte.mc`) : le cadran programme un réveil à l'heure de la prochaine
+  prière ; le service en arrière-plan affiche une notification de la montre (vibration des notifications), puis
+  programme la suivante. Chourouq n'a pas d'alerte. Fonctionne tant que Rayan's Prière est le cadran actif.
+- **Valeurs par défaut** : objectif 7 tractions / 15 pompes par série (comme le programme d'Aujourd'hui), pas de
+  rappel de pause ; 5 km visé en 30:00.
 
 ## Lien avec Rayan's Aujourd'hui
 
@@ -51,16 +53,22 @@ qui suit, donc une correction faite pendant le repos est bien prise en compte.
 
 | Écran | START | HAUT / BAS | RETOUR |
 | --- | --- | --- | --- |
-| Prêt | commence la série 1 | — | quitte |
-| Série | fin de la série → repos | +1 / −1 | fin de séance (Enregistrer / Reprendre / Supprimer) |
-| Repos | série suivante | corrige la série finie | fin de séance |
+| Accueil | lance l'exercice choisi (le chrono part) ou ouvre Réglages | choisir | quitte |
+| Série | pause (la série compte) | +1 / −1 répétition | fin de séance (Enregistrer / Reprendre / Supprimer) |
+| Pause | série suivante | corrige la série qui vient de finir | fin de séance |
 
-## Réglages
+Pendant la séance, l'écran tactile est ignoré (sol, transpiration) : seulement les boutons. À la fin, une série en
+cours compte si elle a au moins une répétition.
 
-Dans l'app **Garmin Connect** du téléphone : Appareils → Forerunner 165 → Activités et applications (ou Cadrans) →
-l'app → Réglages. Cadran : méthode, Asr, décalage en minutes, position manuelle. 5 km : temps visé (`29:30`),
-alertes par km. Muscu : séries, répétitions, repos de chaque exercice, sensibilité du comptage.
+## Réglages (sur la montre)
 
+Une app copiée par câble ne se règle pas depuis Garmin Connect : les réglages sont sur la montre.
+
+- **Cadran** : appui long sur le cadran → Personnaliser (ou Réglages) : alerte à chaque prière (oui/non), moment
+  de l'alerte (à l'heure, 5 à 30 min avant), méthode de calcul, Asr, décalage des horaires.
+- **Muscu** : bouton Réglages de l'accueil : objectif par série (libre ou 3 à 50), rappel de pause (aucun ou 0:45
+  à 5:00, la montre vibre), sensibilité du comptage.
+- **5 km** : temps visé 30:00 (à changer dans `champ-5km/resources/settings/properties.xml`, puis réinstaller).
 ## Installer sur la montre
 
 1. Brancher la montre en USB : elle apparaît dans l'Explorateur (« Forerunner 165 »).
@@ -68,7 +76,7 @@ alertes par km. Muscu : séries, répétitions, repos de chaque exercice, sensib
    faut d'abord retirer l'ancien `.prg` de la montre : une copie ne remplace pas un fichier existant.
 3. Débrancher.
 4. Cadran : appui long sur l'écran de l'heure → Cadran → Rayan's Prière. Champ 5 km : Course → réglages →
-   Écrans de données → un champ → Connect IQ → Rayan's 5 km. Muscu : START → Rayan's Muscu.
+   Écrans de données → un champ → Connect IQ → Rayan's 5 km. Muscu : START → Rayan's Muscu. Alerte de prière : autoriser les notifications de Rayan's Prière si la montre le demande.
 
 Une app copiée à la main n'est pas mise à jour par Garmin : recopier le `.prg` après chaque changement.
 

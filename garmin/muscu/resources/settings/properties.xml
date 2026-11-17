@@ -1,11 +1,9 @@
 <properties>
-    <!-- Valeurs du programme de Rayan's Aujourd'hui (aujourdhui/src/core/sport.ts) :
-         tractions strictes 5 × 7, repos 120 s ; pompes en volume 4 × 15, repos 90 s. -->
-    <property id="tractionsSeries" type="number">5</property>
-    <property id="tractionsReps" type="number">7</property>
-    <property id="tractionsRepos" type="number">120</property>
-    <property id="pompesSeries" type="number">4</property>
-    <property id="pompesReps" type="number">15</property>
-    <property id="pompesRepos" type="number">90</property>
+    <!-- Réglables sur la montre (Muscu > Réglages). Objectif : répétitions par série, 0 = libre.
+         Rappel : vibration après tant de secondes de pause, 0 = aucun (la pause se termine avec START). -->
+    <property id="tractionsObjectif" type="number">7</property>
+    <property id="tractionsRappel" type="number">0</property>
+    <property id="pompesObjectif" type="number">15</property>
+    <property id="pompesRappel" type="number">0</property>
     <property id="sensibilite" type="number">1</property>
 </properties>

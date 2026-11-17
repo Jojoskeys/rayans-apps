@@ -1,15 +1,11 @@
 <strings>
     <string id="AppName">Rayan’s Muscu</string>
-    <string id="tractionsSeries">Tractions : séries</string>
-    <string id="tractionsReps">Tractions : répétitions visées par série</string>
-    <string id="tractionsRepos">Tractions : repos (secondes)</string>
-    <string id="pompesSeries">Pompes : séries</string>
-    <string id="pompesReps">Pompes : répétitions visées par série</string>
-    <string id="pompesRepos">Pompes : repos (secondes)</string>
+    <string id="tractionsObjectif">Tractions : objectif par série (0 = libre)</string>
+    <string id="tractionsRappel">Tractions : rappel de pause en secondes (0 = aucun)</string>
+    <string id="pompesObjectif">Pompes : objectif par série (0 = libre)</string>
+    <string id="pompesRappel">Pompes : rappel de pause en secondes (0 = aucun)</string>
     <string id="sensibilite">Sensibilité du comptage</string>
     <string id="sensBasse">Basse (moins de faux comptes)</string>
     <string id="sensNormale">Normale</string>
     <string id="sensHaute">Haute (petits mouvements)</string>
-    <string id="lapReps">Répétitions</string>
-    <string id="totalReps">Répétitions (total)</string>
 </strings>

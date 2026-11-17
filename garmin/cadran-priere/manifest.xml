@@ -7,6 +7,8 @@
         </iq:products>
         <iq:permissions>
             <iq:uses-permission id="Positioning"/>
+            <iq:uses-permission id="Background"/>
+            <iq:uses-permission id="Notifications"/>
         </iq:permissions>
         <iq:languages>
             <iq:language>fre</iq:language>

@@ -36,6 +36,7 @@ const LNG_DEFAUT = -1.6778d;
 class CadranVue extends WatchUi.WatchFace {
 
     var enVeille as Boolean = false;
+    var programmerAlerte as Boolean = true;
     // Cache des horaires : recalculés au changement de jour, de position ou de réglage.
     var cleCache as String = "";
     var hier as Array<Number> = [] as Array<Number>;
@@ -126,6 +127,7 @@ class CadranVue extends WatchUi.WatchFace {
         var cle = n.toString() + "|" + pos[0].toString() + "|" + pos[1].toString() + "|" + tz.toString() + "|" + methode + "|" + hanafi + "|" + decalage;
         if (cle.equals(cleCache)) { return; }
         cleCache = cle;
+        programmerAlerte = true;
         hier = decaler(Priere.jour(pos[0], pos[1], tz, n - 1, methode, hanafi), decalage);
         aujourdhui = decaler(Priere.jour(pos[0], pos[1], tz, n, methode, hanafi), decalage);
         demain = decaler(Priere.jour(pos[0], pos[1], tz, n + 1, methode, hanafi), decalage);
@@ -186,6 +188,11 @@ class CadranVue extends WatchUi.WatchFace {
         if (fHeure == null) { onLayout(dc); }
         preparerHoraires();
         var horloge = System.getClockTime();
+        // Réveil de l'alerte de prière : vérifié au changement d'horaires et toutes les 10 minutes.
+        if (programmerAlerte || horloge.min % 10 == 0) {
+            programmerAlerte = false;
+            Planif.programmer();
+        }
         var maintenant = horloge.hour * 60 + horloge.min;
         var p = prochaine(maintenant);
         var reste = p[2] - maintenant;

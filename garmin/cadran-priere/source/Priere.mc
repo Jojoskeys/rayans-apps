@@ -4,6 +4,7 @@
 import Toybox.Lang;
 import Toybox.Math;
 
+(:background)
 module Priere {
 
     // Méthodes, dans l'ordre du réglage « methode » :

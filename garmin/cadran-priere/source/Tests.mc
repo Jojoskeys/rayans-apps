@@ -2,6 +2,8 @@
 // code de Rayan's Prière (priere/src/core/praytimes.ts), en minutes depuis minuit local.
 import Toybox.Lang;
 import Toybox.Test;
+import Toybox.Application;
+import Toybox.Time;
 
 (:test)
 function horairesCommePriere(logger as Test.Logger) as Boolean {
@@ -23,5 +25,26 @@ function horairesCommePriere(logger as Test.Logger) as Boolean {
             }
         }
     }
+    return ok;
+}
+
+// Alertes : 5 prières par jour sur deux jours, dans l'ordre ; la prochaine est dans le futur ; coupées → aucune.
+(:test)
+function alertesDePriere(logger as Test.Logger) as Boolean {
+    Application.Properties.setValue("alertes", true);
+    Application.Properties.setValue("alerteAvance", 0);
+    var a = Planif.alertes();
+    var ok = a.size() == 10;
+    for (var i = 1; i < a.size(); i++) { if (a[i][0] <= a[i - 1][0]) { ok = false; } }
+    var p = Planif.prochaine();
+    ok = ok && p != null && (p as Array<Number>)[0] > Time.now().value() && (p as Array<Number>)[1] != 1;
+    Application.Properties.setValue("alerteAvance", 10);
+    var b = Planif.alertes();
+    ok = ok && b[0][0] == a[0][0] - 600;
+    Application.Properties.setValue("alertes", false);
+    ok = ok && Planif.prochaine() == null;
+    Application.Properties.setValue("alertes", true);
+    Application.Properties.setValue("alerteAvance", 0);
+    logger.debug("prochaine alerte : " + Priere.NOMS[(p as Array<Number>)[1]] + " " + Planif.hhmm((p as Array<Number>)[2]));
     return ok;
 }

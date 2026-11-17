@@ -1,21 +1,15 @@
 <settings>
-    <setting propertyKey="@Properties.tractionsSeries" title="@Strings.tractionsSeries">
-        <settingConfig type="numeric" min="1" max="10"/>
+    <setting propertyKey="@Properties.tractionsObjectif" title="@Strings.tractionsObjectif">
+        <settingConfig type="numeric" min="0" max="100"/>
     </setting>
-    <setting propertyKey="@Properties.tractionsReps" title="@Strings.tractionsReps">
-        <settingConfig type="numeric" min="1" max="50"/>
+    <setting propertyKey="@Properties.tractionsRappel" title="@Strings.tractionsRappel">
+        <settingConfig type="numeric" min="0" max="600"/>
     </setting>
-    <setting propertyKey="@Properties.tractionsRepos" title="@Strings.tractionsRepos">
-        <settingConfig type="numeric" min="15" max="600"/>
+    <setting propertyKey="@Properties.pompesObjectif" title="@Strings.pompesObjectif">
+        <settingConfig type="numeric" min="0" max="100"/>
     </setting>
-    <setting propertyKey="@Properties.pompesSeries" title="@Strings.pompesSeries">
-        <settingConfig type="numeric" min="1" max="10"/>
-    </setting>
-    <setting propertyKey="@Properties.pompesReps" title="@Strings.pompesReps">
-        <settingConfig type="numeric" min="1" max="100"/>
-    </setting>
-    <setting propertyKey="@Properties.pompesRepos" title="@Strings.pompesRepos">
-        <settingConfig type="numeric" min="15" max="600"/>
+    <setting propertyKey="@Properties.pompesRappel" title="@Strings.pompesRappel">
+        <settingConfig type="numeric" min="0" max="600"/>
     </setting>
     <setting propertyKey="@Properties.sensibilite" title="@Strings.sensibilite">
         <settingConfig type="list">

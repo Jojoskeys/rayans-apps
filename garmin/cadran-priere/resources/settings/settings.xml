@@ -1,4 +1,10 @@
 <settings>
+    <setting propertyKey="@Properties.alertes" title="@Strings.reglageAlertes">
+        <settingConfig type="boolean"/>
+    </setting>
+    <setting propertyKey="@Properties.alerteAvance" title="@Strings.reglageAvance">
+        <settingConfig type="numeric" min="0" max="30"/>
+    </setting>
     <setting propertyKey="@Properties.methode" title="@Strings.reglageMethode">
         <settingConfig type="list">
             <listEntry value="0">@Strings.m0</listEntry>
