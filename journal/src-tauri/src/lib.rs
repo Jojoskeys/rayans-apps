@@ -7,6 +7,7 @@
 mod chrono_lien;
 mod collecte;
 mod reglages;
+mod resume_aujourdhui;
 mod securite;
 
 use collecte::{Contexte, Ctx};
@@ -135,6 +136,7 @@ fn enregistrer_reglages(nouveaux: Reglages, app: AppHandle, state: State<AppStat
         *r = n;
         relancer
     };
+    resume_aujourdhui::ecrire(ctx);
     if relancer_fichiers {
         collecte::fichiers::reconfigurer(ctx, false);
     }

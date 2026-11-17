@@ -12,6 +12,7 @@ pub mod crypto;
 pub mod error;
 pub mod imports;
 pub mod rapport;
+pub mod resume;
 pub mod securite;
 pub mod temps;
 pub mod texte;

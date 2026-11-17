@@ -107,6 +107,14 @@ export function SettingsView(p: {
           <input className="inline" type="number" min={0} max={23} value={b.calmeFinH} onChange={(e) => maj({ calmeFinH: Math.min(23, Math.max(0, Number(e.target.value) || 0)) })} />
           h
         </label>
+        <label className="check">
+          <input type="checkbox" checked={b.partagerResume} onChange={(e) => maj({ partagerResume: e.target.checked })} />
+          Partager un résumé quotidien avec Rayan’s Aujourd’hui (pour tes objectifs du jour)
+        </label>
+        <p className="small muted">
+          Seulement des durées et des heures, par journée : temps d’écran, temps de jeu, première et dernière activité. Ni titre, ni programme, ni
+          fichier. Écrit en clair dans <code>resume-quotidien.json</code> (dossier des données) pour qu’Aujourd’hui puisse le lire ; décocher le supprime.
+        </p>
         <p className="small muted">
           « Je m’absente » (barre de gauche ou icône près de l’horloge) signale toute utilisation jusqu’à ton retour : déverrouillage, fenêtre ouverte,
           clavier ou souris. Une notification au plus toutes les 30 minutes, et un résumé à ton retour.

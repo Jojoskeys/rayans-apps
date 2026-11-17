@@ -39,6 +39,7 @@ export interface Reglages {
   intervalleProcessusS: number;
   pauseJusquaMs: number | null;
   raccourciPause: boolean;
+  partagerResume: boolean;
   confiance: string[];
   seuilInactiviteMin: number;
   heuresCalmes: boolean;

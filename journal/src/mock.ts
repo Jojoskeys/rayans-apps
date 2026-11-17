@@ -23,6 +23,7 @@ let reglages: Reglages = {
   intervalleProcessusS: 2,
   pauseJusquaMs: null,
   raccourciPause: true,
+  partagerResume: true,
   confiance: [],
   seuilInactiviteMin: 5,
   heuresCalmes: false,

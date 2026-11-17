@@ -130,3 +130,28 @@ fn historique_d_un_fichier_telecharge_renomme_deplace() {
     assert_eq!(s.len(), 1);
     assert!(s[0].chemin.ends_with("notes.txt"));
 }
+
+#[test]
+fn resume_quotidien_pour_aujourdhui() {
+    use journal_core::resume::{noms_de_jeux, resumer};
+    let mut evs = journee();
+    // Roblox lancé depuis son dossier : reconnu comme jeu ; un jeu Steam inconnu aussi.
+    let mut a = ev(20, JOUR + 10 * H + 29 * M, "application", "ouverture", "RobloxPlayerBeta.exe", Some("RobloxPlayerBeta.exe"));
+    a.contenu.chemin = Some(r"C:\Users\lea\AppData\Local\Roblox\Versions\v1\RobloxPlayerBeta.exe".into());
+    evs.push(a);
+    let mut s = ev(21, JOUR + H, "application", "ouverture", "Terraria.exe", Some("Terraria.exe"));
+    s.contenu.chemin = Some(r"C:\Program Files (x86)\Steam\steamapps\common\Terraria\Terraria.exe".into());
+    evs.push(s);
+    let mut l = ev(22, JOUR + H, "application", "ouverture", "steam.exe", Some("steam.exe"));
+    l.contenu.chemin = Some(r"C:\Program Files (x86)\Steam\steam.exe".into());
+    evs.push(l);
+    let jeux = noms_de_jeux(&evs);
+    assert!(jeux.contains("terraria.exe") && jeux.contains("robloxplayerbeta.exe") && !jeux.contains("steam.exe"));
+    // Journée du 17 (de 4 h à 4 h le 18).
+    let j = resumer(&evs, &jeux, &[("2026-11-17".into(), JOUR + 4 * H)], JOUR + 28 * H);
+    assert_eq!(j.len(), 1);
+    assert_eq!(j[0].jeux_ms, 80 * M);
+    assert_eq!(j[0].ecran_ms, (90 + 80 + 5 + 45) * M);
+    assert_eq!(j[0].premiere_ms, Some(JOUR + 9 * H));
+    assert_eq!(j[0].derniere_ms, Some(JOUR + 18 * H + 45 * M));
+}

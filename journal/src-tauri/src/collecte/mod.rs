@@ -184,6 +184,9 @@ pub fn demarrer(ctx: Ctx, rx: Receiver<NouvelEvenement>) {
                 if tour % 2 == 0 {
                     systeme::rattraper(&c);
                 }
+                if tour % 10 == 0 {
+                    crate::resume_aujourdhui::ecrire(&c);
+                }
             }
             if tour % 360 == 0 {
                 appliquer_conservation(&c);

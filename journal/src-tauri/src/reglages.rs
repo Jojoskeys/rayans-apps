@@ -27,6 +27,8 @@ pub struct Reglages {
     /// Pause jusqu'à cet instant (ms UTC) ; `i64::MAX` = jusqu'à reprise manuelle.
     pub pause_jusqua_ms: Option<i64>,
     pub raccourci_pause: bool,
+    /// Écrit un résumé quotidien (durées et heures seulement) lisible par Rayan's Aujourd'hui.
+    pub partager_resume: bool,
     /// Programmes (chemin exact) ou dossiers (terminés par `\`) marqués comme sûrs par l'utilisateur.
     pub confiance: Vec<String>,
     /// Minutes sans clavier ni souris avant de noter « inactif » (le temps d'écran s'arrête).
@@ -64,6 +66,7 @@ impl Default for Reglages {
             intervalle_processus_s: 2,
             pause_jusqua_ms: None,
             raccourci_pause: true,
+            partager_resume: true,
             confiance: Vec::new(),
             seuil_inactivite_min: 5,
             heures_calmes: false,
