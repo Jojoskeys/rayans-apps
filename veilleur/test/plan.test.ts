@@ -49,3 +49,27 @@ test("rappel du soir seulement s'il reste des révisions", () => {
   assert.deepEqual(a.messages.map((m) => [m.title, m.body]), [["Il reste des révisions", "Révision 1"]]);
   assert.equal(plan({ now: at(17, 19, 5), prefs: DEFAULT_PREFS, state: EMPTY_STATE, newChanges: [] }).messages.length, 0);
 });
+
+test("iPhone : adhkar après Fajr et avant Maghrib, bilan du soir, citations, aux heures de Rennes", async () => {
+  const { BILAN_VIDE } = await import("../../aujourdhui/src/core/bilan.ts");
+  const priere = { version: 1, settings: { place: { name: "Rennes", lat: 48.1173, lng: -1.6778, tz: "Europe/Paris" }, method: "uoif", asr: "shafii", highLat: "angle" } };
+  const objectifs = { jours: { "2026-11-17": [{ id: "eau", domaine: "sante", titre: "Boire 1,5 L d'eau", detail: "", mesure: null, facile: false, fait: false }] }, envoyes: [], reglages: { domaines: ["sante"], nombre: 1 } };
+  const { heuresDePriere } = await import("../../aujourdhui/src/core/prieres.ts");
+  const base = { prefs: DEFAULT_PREFS, newChanges: [], bilan: BILAN_VIDE, objectifs, prieres: heuresDePriere(priere, at(17, 12)) };
+  let st = { ...EMPTY_STATE, lastRun: at(17, 6, 50) };
+  // Fajr à Rennes le 17/11 : 07:04 → rappel à 07:14 ; passage de 07:20.
+  const matin = plan({ ...base, now: at(17, 7, 20), state: st });
+  const bonjour = matin.messages.find((m) => m.title === "Bonjour : début de journée")!;
+  assert.match(bonjour.body, /Adhkar as-sabâh \(avant le lever du soleil, 08 h 16\)/);
+  assert.match(bonjour.body, /Objectifs : Boire 1,5 L d'eau/);
+  st = matin.state;
+  assert.equal(plan({ ...base, now: at(17, 7, 40), state: st }).messages.filter((m) => m.title.startsWith("Bonjour")).length, 0);
+  // Citation de 8 h au passage de 8 h 00 ; adhkar al-masâ' (Maghrib 17:26 → 16:46) au passage de 17 h 00 ; bilan à 17 h 40.
+  assert.ok(plan({ ...base, now: at(17, 8, 0), state: st }).messages.some((m) => m.title === "Citation du jour ☀️"));
+  const soir = plan({ ...base, now: at(17, 17, 0), state: st });
+  assert.ok(soir.messages.some((m) => m.title === "Adhkar al-masâ'"));
+  assert.ok(plan({ ...base, now: at(17, 17, 40), state: soir.state }).messages.some((m) => m.title === "Bilan du soir"));
+  // Désactivé dans les préférences du téléphone : rien.
+  const off = plan({ ...base, prefs: { ...DEFAULT_PREFS, adhkar: false, bilan: false, citations: false }, now: at(17, 7, 20), state: { ...EMPTY_STATE, lastRun: at(17, 7) } });
+  assert.equal(off.messages.length, 0);
+});

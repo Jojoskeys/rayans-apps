@@ -52,9 +52,24 @@ async function save(name: string, base: { text: string; sha: string } | null, mi
 }
 const parse = (t: { text: string } | null) => { try { return t ? JSON.parse(t.text) : undefined; } catch { return undefined; } };
 
+/**
+ * Heures de prière du jour, avec le code de Rayan's Prière. Chargé à la demande : si le workflow ne récupère pas
+ * encore priere/src/core, le veilleur continue sans (rappel du matin à 7 h, pas de rappel des adhkar du soir).
+ */
+async function heuresDuJour(priere: unknown, now: number) {
+  if (!priere) return null;
+  try {
+    const { heuresDePriere } = await import("../../aujourdhui/src/core/prieres.ts");
+    return heuresDePriere(priere, now);
+  } catch {
+    log("code de Rayan's Prière absent : rappels sans heures de prière");
+    return null;
+  }
+}
+
 async function main() {
   const now = Date.now();
-  const [facF, routineF, revF, hifzF, ouvF, notifF, stateF] = await Promise.all(["fac", "routine", "revision", "hifz", "ouvertures", "notifications", "veilleur"].map(pull));
+  const [facF, routineF, revF, hifzF, ouvF, notifF, stateF, bilanF, objF, priereF] = await Promise.all(["fac", "routine", "revision", "hifz", "ouvertures", "notifications", "veilleur", "bilan", "objectifs", "priere"].map(pull));
 
   // 1. Emploi du temps : téléchargé ici, même PC éteint.
   let fac: FacData | undefined = facF ? sanitizeFac(parse(facF)) : undefined;
@@ -79,6 +94,7 @@ async function main() {
     now, prefs, state, fac, newChanges,
     routine: routineF ? sanitizeRoutine(parse(routineF)) : undefined,
     revision: parse(revF), hifz: parse(hifzF), ouvertures: parse(ouvF),
+    bilan: parse(bilanF), objectifs: parse(objF), prieres: await heuresDuJour(parse(priereF), now),
   });
   const subs = notif.subscriptions ?? [];
   log(`${messages.length} notification(s) à envoyer, ${subs.length} appareil(s)`);

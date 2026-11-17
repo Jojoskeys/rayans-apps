@@ -5,17 +5,25 @@ import { hifzCount, ouverturesCount, revisionCount, todayISO } from "../../aujou
 import { isDone, itemsForDay, type RoutineData } from "../../aujourdhui/src/core/routine.ts";
 import { displayCourses, type FacData } from "../../aujourdhui/src/core/fac.ts";
 import { slot, type CourseChange } from "../../aujourdhui/src/core/ics.ts";
+import { nettoyerBilan, notificationsBilan, type Prieres } from "../../aujourdhui/src/core/bilan.ts";
+import { journee, nettoyerObjectifs } from "../../aujourdhui/src/core/objectifs.ts";
 
-export interface Prefs { cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number }
-export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19 };
+export interface Prefs {
+  cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number;
+  /** Adhkar après Fajr et entre Asr et Maghrib ; bilan du matin et du soir ; citations du jour. */
+  adhkar: boolean; bilan: boolean; citations: boolean;
+}
+export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true };
 
 export interface VeilleurState {
   /** Dernier passage (ms). */
   lastRun: number;
   /** Clés déjà notifiées (« matin|2026-11-17 », « rappel|2026-11-17|r1 », « cours|uid|salle|valeur »…). */
   sent: string[];
+  /** Rappels du bilan, des adhkar et des citations déjà envoyés au téléphone (« 2026-11-17|matin »…). */
+  bilan?: string[];
 }
-export const EMPTY_STATE: VeilleurState = { lastRun: 0, sent: [] };
+export const EMPTY_STATE: VeilleurState = { lastRun: 0, sent: [], bilan: [] };
 
 export interface Message { title: string; body: string; url: string; tag: string }
 
@@ -30,6 +38,11 @@ export interface Inputs {
   revision?: unknown;
   hifz?: unknown;
   ouvertures?: unknown;
+  /** Fichiers d'Aujourd'hui (bilan, objectifs), déchiffrés. */
+  bilan?: unknown;
+  objectifs?: unknown;
+  /** Heures de prière du jour (calculées par main.ts avec le code de Rayan's Prière), ou null. */
+  prieres?: Prieres | null;
 }
 
 const DAY = 86_400_000;
@@ -108,8 +121,23 @@ export function plan(i: Inputs): { messages: Message[]; state: VeilleurState } {
     if (left.total > 0) once(`soir|${day}`, { title: "Il reste des révisions", body: left.text, url: "./", tag: "soir" });
   }
 
+  // 5. Bilan, adhkar et citations : mêmes moments et mêmes textes que sur le PC (heures de prière de Rayan's Prière).
+  let bilanEnvoyes = i.state.bilan ?? [];
+  if (i.bilan !== undefined && (prefs.adhkar || prefs.bilan || prefs.citations)) {
+    const b = nettoyerBilan(i.bilan);
+    const reglages = { ...b.reglages, actif: b.reglages.actif && prefs.bilan, adhkar: b.reglages.adhkar && prefs.adhkar, citations: b.reglages.citations && prefs.citations };
+    const res = notificationsBilan({ ...b, reglages, envoyes: bilanEnvoyes }, now, i.prieres ?? null);
+    bilanEnvoyes = res.data.envoyes;
+    const obj = i.objectifs ? nettoyerObjectifs(i.objectifs).jours[journee(now)] ?? [] : [];
+    for (const m of res.messages) {
+      const corps = m.titre.startsWith("Bonjour") && obj.length ? `${m.corps}\nObjectifs : ${obj.map((o) => o.titre).join(" · ")}` : m.corps;
+      const tag = m.titre.startsWith("Adhkar") ? "adhkar" : m.titre.startsWith("Bilan") ? "bilan" : m.titre.startsWith("Bonjour") ? "bonjour" : "citation";
+      out.push({ title: m.titre, body: corps, url: "./aujourdhui/", tag });
+    }
+  }
+
   // On ne garde que les clés des 3 derniers jours.
   const keep = [day, todayISO(now - DAY), todayISO(now - 2 * DAY)];
   const pruned = [...sent].filter((k) => k.startsWith("cours|") || keep.some((d) => k.includes(`|${d}`)));
-  return { messages: out, state: { lastRun: now, sent: pruned.slice(-500) } };
+  return { messages: out, state: { lastRun: now, sent: pruned.slice(-500), bilan: bilanEnvoyes } };
 }

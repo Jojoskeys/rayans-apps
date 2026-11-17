@@ -1,11 +1,12 @@
 # Veilleur de Rayan's Mobile (installé dans le dépôt privé des données par veilleur/configurer.ps1).
-# Toutes les 20 minutes de 7 h à 22 h (heure de Paris) : met à jour l'emploi du temps ADE et envoie les
-# notifications à l'iPhone. Le code vient du dépôt public rayans-apps ; les données restent chiffrées ici.
+# Toutes les 20 minutes de 6 h à 23 h environ (heure de Paris), et toutes les 30 minutes plus tôt pour le rappel
+# d'après Fajr en été : met à jour l'emploi du temps ADE et envoie les notifications à l'iPhone. Le code vient du dépôt public rayans-apps ; les données restent chiffrées ici.
 name: Veilleur
 
 on:
   schedule:
     - cron: '*/20 5-21 * * *'
+    - cron: '*/30 2-4 * * *'
   workflow_dispatch:
 
 permissions:
@@ -29,6 +30,7 @@ jobs:
             veilleur
             mobile/src/shared
             aujourdhui/src/core
+            priere/src/core
       - uses: actions/setup-node@v4
         with:
           node-version: 24

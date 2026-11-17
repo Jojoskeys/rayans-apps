@@ -66,3 +66,53 @@ test("fac : emploi du temps du dernier téléchargement, mails et échéances de
   assert.deepEqual(m.mails.map((x: any) => x.id), ["m1"]);
   assert.deepEqual(m.deadlines.map((x: any) => x.id), ["d2", "d1"]);
 });
+
+test("Objectifs du jour : case cochée d'un côté, objectif remplacé de l'autre", async () => {
+  const { mergeObjectifs } = await import("../src/shared/merge.ts");
+  const o = (id: string, fait = false) => ({ id, domaine: "sante", titre: id, detail: "", mesure: null, facile: false, fait });
+  const reglages = { domaines: ["foi", "etudes", "ecran", "sante"], nombre: 3 };
+  const base = { jours: { "2026-11-17": [o("eau"), o("marche"), o("fajr")] }, envoyes: [], reglages };
+  // PC : « eau » cochée. iPhone : rien changé ce jour-là, mais le lendemain préparé.
+  const pc = { ...base, jours: { "2026-11-17": [o("eau", true), o("marche"), o("fajr")] } };
+  const tel = { ...base, jours: { ...base.jours, "2026-11-18": [o("lit")] } };
+  const m = mergeObjectifs(base, pc, tel);
+  assert.equal(m.jours["2026-11-17"][0].fait, true);
+  assert.deepEqual(m.jours["2026-11-18"].map((x: { id: string }) => x.id), ["lit"]);
+  // Les deux ont changé la même journée : la liste locale est gardée, les cases cochées des deux côtés aussi.
+  const a = { ...base, jours: { "2026-11-17": [o("eau", true), o("marche"), o("fajr")] } };
+  const b = { ...base, jours: { "2026-11-17": [o("eau"), o("marche"), o("fajr", true)] } };
+  const ab = mergeObjectifs(base, a, b);
+  assert.deepEqual(ab.jours["2026-11-17"].map((x: { fait: boolean }) => x.fait), [true, false, true]);
+});
+
+test("Bilan : matin et soir les plus récents, liste prévue cochée des deux côtés, adhkar", async () => {
+  const { mergeBilan } = await import("../src/shared/merge.ts");
+  const reglages = {};
+  const prevu = [{ id: "p1", texte: "Réviser", fait: false }, { id: "p2", texte: "Appeler maman", fait: false }];
+  const base = { jours: { "2026-11-18": { prevu } }, envoyes: [], reglages };
+  // PC : bilan du matin et p1 coché ; iPhone : p2 coché et adhkar as-sabâh.
+  const pc = { ...base, jours: { "2026-11-18": { prevu: [{ ...prevu[0], fait: true }, prevu[1]], matin: { humeur: 4, ressenti: "Bien", at: 2 } } } };
+  const tel = { ...base, jours: { "2026-11-18": { prevu: [prevu[0], { ...prevu[1], fait: true }], adhkar: { sabah: 5 } } } };
+  const m = mergeBilan(base, pc, tel).jours["2026-11-18"];
+  assert.deepEqual(m.prevu.map((p: { fait: boolean }) => p.fait), [true, true]);
+  assert.equal(m.matin.ressenti, "Bien");
+  assert.equal(m.adhkar.sabah, 5);
+  // Adhkar décoché sur un appareil après synchro : décoché partout.
+  const coche = { jours: { "2026-11-18": { adhkar: { masa: 9 } } }, envoyes: [], reglages };
+  const decoche = { jours: { "2026-11-18": {} }, envoyes: [], reglages };
+  assert.equal(mergeBilan(coche, decoche, coche).jours["2026-11-18"].adhkar, undefined);
+  // Deux bilans du soir : le plus récent l'emporte.
+  const s1 = { jours: { "2026-11-17": { soir: { humeur: 3, journee: "PC", ressenti: "", at: 10 } } }, envoyes: [], reglages };
+  const s2 = { jours: { "2026-11-17": { soir: { humeur: 5, journee: "iPhone", ressenti: "", at: 20 } } }, envoyes: [], reglages };
+  assert.equal(mergeBilan(undefined, s1, s2).jours["2026-11-17"].soir.journee, "iPhone");
+});
+
+test("Objectifs : deux listes différentes pour le même jour → les deux appareils gardent la même", async () => {
+  const { mergeObjectifs } = await import("../src/shared/merge.ts");
+  const o = (id: string, fait = false) => ({ id, domaine: "sante", titre: id, detail: "", mesure: null, facile: false, fait });
+  const pc = { jours: { "2026-11-17": [o("eau", true), o("marche")] }, envoyes: [], reglages: {} };
+  const tel = { jours: { "2026-11-17": [o("lit"), o("fruit")] }, envoyes: [], reglages: {} };
+  const surPc = mergeObjectifs(undefined, pc, tel);
+  const surTel = mergeObjectifs(undefined, tel, pc);
+  assert.deepEqual(surPc.jours, surTel.jours);
+});

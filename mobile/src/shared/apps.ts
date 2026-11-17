@@ -9,7 +9,7 @@ export interface MobileApp {
 }
 
 export const APPS: MobileApp[] = [
-  { id: "aujourdhui", name: "Aujourd'hui", tagline: "Ma journée, cours, échéances", icon: "☀", color: "#E3A33B", files: ["routine", "fac"] },
+  { id: "aujourdhui", name: "Aujourd'hui", tagline: "Ma journée, cours, échéances", icon: "☀", color: "#E3A33B", files: ["routine", "fac", "objectifs", "bilan"] },
   { id: "revision", name: "Révision", tagline: "Cartes et fiches de cours", icon: "▣", color: "#5B8DEF", files: ["revision"] },
   { id: "hifz", name: "Hifz", tagline: "Mémorisation du Coran", icon: "☾", color: "#D9B25F", files: ["hifz"] },
   { id: "priere", name: "Prière", tagline: "Horaires du jour", icon: "◷", color: "#4FC08D", files: ["priere"] },

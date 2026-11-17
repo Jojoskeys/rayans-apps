@@ -87,6 +87,10 @@ export function objectifsView(): ObjectifsView {
   };
 }
 
+/** Pour la synchronisation avec l'iPhone : texte actuel, et remplacement par la version fusionnée. */
+export const objectifsText = () => JSON.stringify(data);
+export function applyObjectifsText(text: string) { commit(nettoyerObjectifs(JSON.parse(text))); ctx.changed(); }
+
 export function setupObjectifs(c: Ctx) {
   ctx = c;
   load();

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 declare const __BUILD__: string;
 import { readPlain, store, syncApp } from "../shared/sync.ts";
 
-interface Prefs { cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number }
-const DEFAULT: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19 };
+interface Prefs { cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number; adhkar: boolean; bilan: boolean; citations: boolean }
+const DEFAULT: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true };
 type NotifData = { subscriptions: { endpoint: string; keys: { p256dh: string; auth: string }; appareil: string; added: number }[]; prefs: Prefs };
 
 const supported = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
@@ -78,10 +78,10 @@ export function Notifications() {
   return (
     <section className="carte notifs">
       <h2>Notifications</h2>
-      <p>Envoyées par le veilleur en ligne, même quand ton PC est éteint : il vérifie ADE et tes rappels toutes les 20 minutes, de 7 h à 22 h.</p>
+      <p>Envoyées par le veilleur en ligne, même quand ton PC est éteint : il vérifie ADE et tes rappels toutes les 20 minutes, de 6 h à 23 h (et plus tôt pour Fajr en été). Les heures des adhkar viennent de Rayan's Prière.</p>
       {on ? (
         <>
-          {([["cours", "Changements de cours (salle, horaire, annulation)"], ["rappels", "Rappels de Ma journée"], ["matin", "Résumé du matin"], ["soir", "Rappel du soir s'il reste des révisions"]] as const).map(([k, label]) => (
+          {([["cours", "Changements de cours (salle, horaire, annulation)"], ["rappels", "Rappels de Ma journée"], ["matin", "Résumé du matin"], ["soir", "Rappel du soir s'il reste des révisions"], ["adhkar", "Adhkar : après Fajr, et entre Asr et Maghrib"], ["bilan", "Bilan : ressenti du matin, bilan du soir (17 h 30)"], ["citations", "Citation du jour (8 h et 12 h 30)"]] as const).map(([k, label]) => (
             <label key={k} className="case"><input type="checkbox" checked={data.prefs[k]} onChange={(e) => setPref({ [k]: e.target.checked })} /><span>{label}</span></label>
           ))}
           <div className="ligne heures">

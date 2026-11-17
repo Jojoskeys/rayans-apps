@@ -93,6 +93,76 @@ export function mergeRoutine(base: Obj | undefined, local: Obj, remote: Obj): Ob
   };
 }
 
+// ----- Rayan's Aujourd'hui : objectifs du jour ----------------------------------------------------------
+// Par journée : si un seul côté a changé la liste (objectif remplacé, case cochée), il l'emporte ; si les deux
+// ont changé, la liste du côté qui l'a créée en premier est gardée, et une case cochée d'un côté reste cochée.
+
+const memeJson = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+export function mergeObjectifs(base: Obj | undefined, local: Obj, remote: Obj): Obj {
+  const jours: Obj = {};
+  for (const j of new Set([...Object.keys(local.jours ?? {}), ...Object.keys(remote.jours ?? {})])) {
+    const b = base?.jours?.[j], l = local.jours?.[j], r = remote.jours?.[j];
+    if (!l || !r) { jours[j] = l ?? r; continue; }
+    if (memeJson(l, r) || memeJson(b, r)) { jours[j] = l; continue; }
+    if (memeJson(b, l)) { jours[j] = r; continue; }
+    // Les deux ont changé : liste choisie de la même façon sur chaque appareil (pour que tous convergent),
+    // et une case cochée d'un côté reste cochée.
+    const cle = (x: Obj[]) => x.map((o) => o.id).join("|");
+    const liste = (cle(l) <= cle(r) ? l : r) as Obj[];
+    const faits = new Set([...l, ...r].filter((o: Obj) => o.fait).map((o: Obj) => o.id));
+    jours[j] = liste.map((o) => ({ ...o, fait: !!o.fait || faits.has(o.id) }));
+  }
+  return {
+    jours,
+    envoyes: unionBy(local.envoyes ?? [], remote.envoyes ?? [], (x: string) => x),
+    reglages: mergeSettings(base?.reglages, local.reglages ?? {}, remote.reglages ?? {}),
+  };
+}
+
+// ----- Rayan's Aujourd'hui : bilan et adhkar -------------------------------------------------------------
+// Par jour : matin et soir, le plus récent l'emporte ; liste prévue réunie par id (case cochée d'un côté gardée) ;
+// adhkar cochés réunis.
+
+export function mergeBilan(base: Obj | undefined, local: Obj, remote: Obj): Obj {
+  const jours: Obj = {};
+  const recent = (a?: Obj, b?: Obj) => (!a ? b : !b ? a : (a.at ?? 0) >= (b.at ?? 0) ? a : b);
+  for (const j of new Set([...Object.keys(local.jours ?? {}), ...Object.keys(remote.jours ?? {})])) {
+    const b = base?.jours?.[j] ?? {}, l = local.jours?.[j] ?? {}, r = remote.jours?.[j] ?? {};
+    const out: Obj = {};
+    const matin = recent(l.matin, r.matin), soir = recent(l.soir, r.soir);
+    if (matin) out.matin = matin;
+    if (soir) out.soir = soir;
+    if (l.prevu || r.prevu) {
+      // La liste vient du dernier bilan du soir ; les cases cochées des deux côtés sont gardées.
+      const textes = (x?: Obj[]) => JSON.stringify((x ?? []).map((p) => p.texte));
+      const deuxChanges = !memeJson(b.prevu, r.prevu) && !memeJson(b.prevu, l.prevu);
+      const liste: Obj[] = (deuxChanges ? (textes(l.prevu) <= textes(r.prevu) ? l.prevu ?? r.prevu : r.prevu ?? l.prevu) : memeJson(b.prevu, r.prevu) ? l.prevu : r.prevu) ?? [];
+      const coches = (x?: Obj[]) => new Map((x ?? []).map((p) => [p.id, !!p.fait]));
+      const lb = coches(b.prevu), ll = coches(l.prevu), lr = coches(r.prevu);
+      out.prevu = liste.map((p) => {
+        const a = ll.get(p.id), c = lr.get(p.id), o = lb.get(p.id);
+        const fait = a !== undefined && a !== o ? a : c !== undefined && c !== o ? c : (a ?? c ?? p.fait);
+        return { ...p, fait };
+      });
+    }
+    // Adhkar : pour chaque moment, le côté qui a changé depuis la base l'emporte (coché ou décoché).
+    const ad: Obj = {};
+    for (const m of ["sabah", "masa"]) {
+      const lv = l.adhkar?.[m], rv = r.adhkar?.[m], bv = b.adhkar?.[m];
+      const v = lv !== bv ? lv : rv;
+      if (v) ad[m] = v;
+    }
+    if (Object.keys(ad).length) out.adhkar = ad;
+    jours[j] = out;
+  }
+  return {
+    jours,
+    envoyes: unionBy(local.envoyes ?? [], remote.envoyes ?? [], (x: string) => x),
+    reglages: mergeSettings(base?.reglages, local.reglages ?? {}, remote.reglages ?? {}),
+  };
+}
+
 // ----- Rayan's Chrono --------------------------------------------------------------------------------
 
 export function mergeChrono(base: Obj | undefined, local: Obj, remote: Obj): Obj {
@@ -153,6 +223,8 @@ export const MERGERS: Record<string, (base: Obj | undefined, local: Obj, remote:
   revision: mergeRevision,
   hifz: mergeHifz,
   routine: mergeRoutine,
+  objectifs: mergeObjectifs,
+  bilan: mergeBilan,
   chrono: mergeChrono,
   priere: mergeWhole,
   ouvertures: mergeOuvertures,

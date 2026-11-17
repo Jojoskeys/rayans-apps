@@ -88,6 +88,10 @@ export function bilanView(): BilanView {
   };
 }
 
+/** Pour la synchronisation avec l'iPhone : texte actuel, et remplacement par la version fusionnée. */
+export const bilanText = () => JSON.stringify(data);
+export function applyBilanText(text: string) { commit(nettoyerBilan(JSON.parse(text))); ctx.changed(); }
+
 export function setupBilan(c: Ctx) {
   ctx = c;
   load();
