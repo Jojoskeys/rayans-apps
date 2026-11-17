@@ -16,6 +16,7 @@ async function loadData(): Promise<NotifData> {
   try { const d = t ? JSON.parse(t) : {}; return { subscriptions: d.subscriptions ?? [], prefs: { ...DEFAULT, ...(d.prefs ?? {}) } }; } catch { return { subscriptions: [], prefs: { ...DEFAULT } }; }
 }
 function saveData(d: NotifData) { store.save("notifications", JSON.stringify(d)); }
+const within = <T,>(p: Promise<T>, ms: number, what: string) => Promise.race([p, new Promise<T>((_, ko) => setTimeout(() => ko(new Error(what)), ms))]);
 
 export function Notifications() {
   const [data, setData] = useState<NotifData | null>(null);
@@ -23,9 +24,13 @@ export function Notifications() {
   const [msg, setMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  // Préparé à l'avance : sur iPhone, l'abonnement doit partir tout de suite après le toucher (sinon il ne répond jamais).
+  const [reg, setReg] = useState<ServiceWorkerRegistration | null>(null);
+  const [vapid, setVapid] = useState<string | null | undefined>(undefined);
   useEffect(() => {
     void loadData().then(setData);
-    if (supported()) void navigator.serviceWorker.ready.then((r) => r.pushManager.getSubscription()).then((s) => setEndpoint(s?.endpoint ?? null));
+    void readPlain("vapid-public").then((t) => setVapid(t ? JSON.parse(t).publicKey : null)).catch(() => setVapid(null));
+    if (supported()) void navigator.serviceWorker.ready.then((r) => { setReg(r); return r.pushManager.getSubscription(); }).then((s) => setEndpoint(s?.endpoint ?? null));
   }, []);
 
   if (!supported()) {
@@ -37,22 +42,23 @@ export function Notifications() {
   const activate = async () => {
     setBusy(true); setMsg(null);
     try {
-      if ((await Notification.requestPermission()) !== "granted") throw new Error("notifications refusées. Autorise-les dans Réglages → Notifications → Rayan.");
-      const pub = await readPlain("vapid-public");
-      if (!pub) throw new Error("le veilleur en ligne n'est pas encore configuré (script à lancer une fois sur le PC).");
-      const reg = await navigator.serviceWorker.ready;
-      const sub = (await reg.pushManager.getSubscription()) ?? await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(JSON.parse(pub).publicKey) as BufferSource });
+      if (!reg) throw new Error("l'app n'est pas encore prête (service hors ligne en cours d'installation). Ferme-la complètement, rouvre-la et réessaie.");
+      if (!vapid) throw new Error(vapid === null ? "clé des notifications introuvable : vérifie que la synchro marche, puis rouvre l'app." : "chargement en cours, réessaie dans 2 secondes.");
+      // Premier appel après le toucher : c'est lui qui affiche la demande d'autorisation d'iOS.
+      const sub = (await reg.pushManager.getSubscription()) ?? await within(reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(vapid) as BufferSource }), 30_000, "iOS n'a pas répondu à la demande d'abonnement");
       const j = sub.toJSON() as { endpoint: string; keys: { p256dh: string; auth: string } };
       const d = await loadData();
       const next = { ...d, subscriptions: [...d.subscriptions.filter((s) => s.endpoint !== j.endpoint), { endpoint: j.endpoint, keys: j.keys, appareil: "iPhone", added: Date.now() }] };
       saveData(next); setData(next); setEndpoint(j.endpoint);
-      await syncApp("notifications");
+      await within(syncApp("notifications"), 30_000, "envoi au dépôt trop long (il repartira à la prochaine synchro)");
       setMsg("✓ Notifications activées. Les prochaines arriveront au passage du veilleur (toutes les 20 min, de 7 h à 22 h).");
-    } catch (e) { setMsg(`✗ ${String((e as Error).message ?? e)}`); } finally { setBusy(false); }
+    } catch (e) {
+      const m = String((e as Error).message ?? e);
+      setMsg(`✗ ${/denied|not allowed|permission/i.test(m) || Notification.permission === "denied" ? "notifications refusées. Autorise-les dans Réglages → Notifications → Rayan, puis réessaie." : m}`);
+    } finally { setBusy(false); }
   };
   const deactivate = async () => {
-    const reg = await navigator.serviceWorker.ready;
-    const s = await reg.pushManager.getSubscription();
+    const s = await reg?.pushManager.getSubscription();
     await s?.unsubscribe();
     const d = await loadData();
     const next = { ...d, subscriptions: d.subscriptions.filter((x) => x.endpoint !== endpoint) };
@@ -60,7 +66,7 @@ export function Notifications() {
     setMsg("Notifications désactivées sur ce téléphone.");
   };
   const setPref = (p: Partial<Prefs>) => { const next = { ...data, prefs: { ...data.prefs, ...p } }; setData(next); saveData(next); };
-  const test = async () => { const reg = await navigator.serviceWorker.ready; await reg.showNotification("Rayan's Mobile", { body: "Les notifications s'affichent bien sur ce téléphone.", icon: "icon.png" }); };
+  const test = async () => { await reg?.showNotification("Rayan's Mobile", { body: "Les notifications s'affichent bien sur ce téléphone.", icon: "icon.png" }); };
 
   return (
     <section className="carte notifs">
