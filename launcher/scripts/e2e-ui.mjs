@@ -136,6 +136,9 @@ try {
     await shot("01-catalogue-vide");
     demo("add");
     await click("//header//button[contains(., 'Actualiser')]", "bouton Actualiser");
+    // Les tuiles compactes sont l'affichage par défaut ; le parcours vérifie les grandes cartes (versions, erreurs).
+    await waitFor(`${CARD}//button[contains(., "Installer")]`, "tuile Rayan's Chrono avec « Installer »");
+    await click("//button[@aria-label='Grandes cartes']", "affichage en grandes cartes");
     await waitFor(btn("Installer"), "carte Rayan's Chrono avec « Installer »");
     await sleep(600);
     await shot("02-nouvelle-application");

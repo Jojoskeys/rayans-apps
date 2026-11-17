@@ -938,3 +938,6 @@ kbd {
 .app-list .tile-actions .actions { margin: 0; }
 .recent-launches { margin-top: 28px; }
 .recent-launches h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 10px; }
+.tile-dot.error { background: #ef4444; }
+.tile-btn { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: 99px; border: 0; cursor: pointer; font: 600 12px/1 inherit; background: var(--accent-grad, var(--accent)); color: var(--accent-ink); }
+.tile-btn:hover { filter: brightness(1.1); }

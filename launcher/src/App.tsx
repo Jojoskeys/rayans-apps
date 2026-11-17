@@ -698,6 +698,11 @@ function AppTiles({ apps, refresh, onOpen, onToast, reorder }: { apps: AppView[]
     e.stopPropagation();
     api.launch(a.id).then(() => onToast(`${a.name} se lance…`)).catch((err) => onToast(toErrorInfo(err).message));
   };
+  // Installation ou mise à jour : l'erreur éventuelle est rapportée par le cœur (point rouge, détail dans la fiche).
+  const installer = (a: AppView) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    api.install(a.id).catch(() => {});
+  };
   return (
     <div className={liste ? "app-list" : "tiles"}>
       {apps.map((a, i) => (
@@ -718,7 +723,8 @@ function AppTiles({ apps, refresh, onOpen, onToast, reorder }: { apps: AppView[]
           <div className="tile-icon">
             <AppIcon app={a} refresh={refresh} size={liste ? Math.round(prefs.iconSize * 0.75) : prefs.iconSize} />
             {a.running && <span className="tile-dot running" title="En cours d'exécution" />}
-            {!a.running && a.updateAvailable && <span className="tile-dot" title={`Mise à jour ${a.availableVersion}`} />}
+            {!a.running && a.lastError && <span className="tile-dot error" title={`${a.lastError.message} (détail dans la fiche)`} />}
+            {!a.running && !a.lastError && a.updateAvailable && <span className="tile-dot" title={`Mise à jour ${a.availableVersion}`} />}
           </div>
           <div className="tile-text">
             <b>{reorder && i < 9 ? <kbd className="tile-key">{i + 1}</kbd> : null}{a.name}</b>
@@ -728,7 +734,11 @@ function AppTiles({ apps, refresh, onOpen, onToast, reorder }: { apps: AppView[]
           <FavStar app={a} className="tile-star" />
           {liste ? (
             <div className="tile-actions" onClick={(e) => e.stopPropagation()}><Actions app={a} compact /></div>
-          ) : a.installedVersion && !a.task ? (
+          ) : a.task ? null : !a.installedVersion && a.inCatalog ? (
+            <button className="tile-btn" onClick={installer(a)} title={`Installer ${a.name}`}><Icon name="download" size={13} /> Installer</button>
+          ) : a.updateAvailable && !a.running ? (
+            <button className="tile-btn" onClick={installer(a)} title={`Mettre à jour vers ${a.availableVersion}`}><Icon name="update" size={13} /> Mettre à jour</button>
+          ) : a.installedVersion && !a.running ? (
             <button className="tile-play" onClick={lancer(a)} title={`Lancer ${a.name}`} aria-label={`Lancer ${a.name}`}><Icon name="play" size={14} /></button>
           ) : null}
         </article>
