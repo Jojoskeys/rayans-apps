@@ -1,0 +1,90 @@
+{
+  "slug": "psycho-asch-conformisme",
+  "titre": "L'expérience d'Asch",
+  "style": "psycho",
+  "version": 2,
+  "statut": "validé et publié le 2026-11-18",
+  "marque": "@lapsychofacile",
+  "legende": "Tu suivrais le groupe même en sachant qu'il a tort ? L'expérience de Solomon Asch (1951) : 3 personnes sur 4 ont cédé au moins une fois. Et il existe un antidote.\n\nEnvoie-la à quelqu'un qui suit toujours le groupe.",
+  "hashtags": [
+    "#psychologie",
+    "#psychologiesociale",
+    "#asch",
+    "#conformisme",
+    "#apprendre",
+    "#cerveau"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "asch_accroche",
+      "accents": {
+        "fausse,": "impact",
+        "fait.": "flash"
+      },
+      "texte": "Tu donnerais une réponse que tu sais fausse, juste pour faire comme les autres ? Trois personnes sur quatre l'ont fait. Regarde.",
+      "voix": "[curious] Tu donnerais une réponse que tu sais fausse… juste pour faire comme les autres ? [pause] [excited] Trois personnes sur quatre l'ont fait. [whispers] Regarde."
+    },
+    {
+      "type": "narration",
+      "scene": "asch_test",
+      "accents": {
+        "1951.": "impact",
+        "B.": "flash"
+      },
+      "texte": "1951. Le psychologue Solomon Asch invite des étudiants à un test de vision. À gauche, une ligne. À droite, trois lignes : A, B et C. Laquelle a la même longueur ? C'est évident : la B.",
+      "voix": "[calm] 1951. Le psychologue Solomon Asch invite des étudiants à un test de vision. À gauche, une ligne. À droite, trois lignes : A, B et C. Laquelle a la même longueur ? [laughs softly] C'est évident : la B."
+    },
+    {
+      "type": "narration",
+      "scene": "asch_groupe",
+      "accents": {
+        "complices.": "impact",
+        "dernier.": "battement"
+      },
+      "texte": "Mais dans la salle, tous les autres sont des complices. Un par un, ils donnent la même mauvaise réponse : la A. Et toi, tu parles en dernier.",
+      "voix": "[mysterious] Mais dans la salle… tous les autres sont des complices. [suspenseful] Un par un, ils donnent la même mauvaise réponse : la A. [whispers] Et toi… tu parles en dernier."
+    },
+    {
+      "type": "narration",
+      "scene": "asch_resultats",
+      "accents": {
+        "tiers": "pop",
+        "75": "impact"
+      },
+      "texte": "Résultat : environ un tiers des réponses ont suivi le groupe. Et 75 % des participants ont cédé au moins une fois. Ils voyaient la bonne réponse. Ils ont quand même dit A.",
+      "voix": "[serious] Résultat : environ un tiers des réponses ont suivi le groupe. [shocked] Et 75 % des participants ont cédé au moins une fois. [pause] Ils voyaient la bonne réponse. [disappointed] Ils ont quand même dit A."
+    },
+    {
+      "type": "narration",
+      "scene": "asch_allie",
+      "accents": {
+        "l'antidote.": "flash",
+        "5": "impact"
+      },
+      "texte": "Mais Asch a trouvé l'antidote. Il suffit qu'une seule personne réponde B avec toi, et le suivisme tombe à environ 5 %.",
+      "voix": "[excited] Mais Asch a trouvé l'antidote. Il suffit qu'une seule personne réponde B avec toi… et le suivisme tombe à environ 5 %."
+    },
+    {
+      "type": "narration",
+      "scene": "asch_fin",
+      "accents": {
+        "dis-le.": "impact"
+      },
+      "texte": "Alors quand tu vois quelque chose de juste, dis-le. Tu es peut-être le B qui libère les autres.",
+      "voix": "[softly] Alors quand tu vois quelque chose de juste… [firmly] dis-le. [warmly] Tu es peut-être le B qui libère les autres."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "envoie": "pop"
+      },
+      "texte": "Abonne-toi pour comprendre comment ton cerveau te manipule, une expérience à la fois. Et envoie cette vidéo à quelqu'un qui suit toujours le groupe.",
+      "voix": "[excited] Abonne-toi pour comprendre comment ton cerveau te manipule, une expérience à la fois. [playfully] Et envoie cette vidéo à quelqu'un qui suit toujours le groupe."
+    }
+  ],
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "titre_youtube": "Tu suivrais le groupe même s'il a tort ? L'expérience d'Asch"
+}

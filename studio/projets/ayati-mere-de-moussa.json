@@ -1,0 +1,202 @@
+{
+  "slug": "ayati-mere-de-moussa",
+  "titre": "La mère de Moussa",
+  "style": "ayati",
+  "version": 2,
+  "statut": "validé et publié le 2026-11-18",
+  "marque": "@ayati142",
+  "recitateur": "Nasser_Alqatami_128kbps",
+  "sourates": {
+    "28": "Sourate Al-Qasas",
+    "20": "Sourate Ta-Ha"
+  },
+  "legende": "Pharaon faisait tuer les nouveau-nés… et Allah lui a fait élever, dans son propre palais, l'enfant qu'il redoutait. L'histoire de la mère de Moussa, sourate Al-Qasas (28:4-13) et Ta-Ha (20:39).\n\nAbonne-toi pour la suite de l'histoire de Moussa.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#rappel",
+    "#quran",
+    "#histoiredesprophetes"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "palais_nuit",
+      "ref": "28:4-6",
+      "titre": {
+        "mot": "élever",
+        "texte": "L'enfant qu'il redoutait"
+      },
+      "accents": {
+        "égorger": "impact",
+        "élever,": "flash"
+      },
+      "texte": "Pharaon faisait égorger les nouveau-nés pour empêcher une seule chose. Et Allah lui a fait élever, dans son propre palais, l'enfant qu'il redoutait. Voici comment.",
+      "voix": "[mysterious] Pharaon faisait égorger les nouveau-nés… pour empêcher une seule chose. [pause] [dramatic tone] Et Allah lui a fait élever, dans son propre palais… l'enfant qu'il redoutait. [whispers] Voici comment."
+    },
+    {
+      "type": "narration",
+      "scene": "village_nuit",
+      "ref": "28:4",
+      "accents": {
+        "garçon": "impact",
+        "filles.": "pop:Moon"
+      },
+      "texte": "Égypte. Pharaon est un tyran. Chez les Bani Israïl, il fait égorger chaque garçon qui naît, et il laisse vivre les filles.",
+      "voix": "[serious] Égypte. [pause] Pharaon est un tyran. Chez les Bani Israïl, il fait égorger chaque garçon qui naît… [sad] et il laisse vivre les filles."
+    },
+    {
+      "type": "narration",
+      "scene": "lampe",
+      "accents": {},
+      "texte": "Mais Allah dit :",
+      "voix": "[calm] Mais Allah dit :"
+    },
+    {
+      "type": "verset",
+      "scene": "lampe",
+      "ref": "28:5"
+    },
+    {
+      "type": "narration",
+      "scene": "lampe",
+      "accents": {
+        "garçon.": "pop:Baby",
+        "trahir.": "battement"
+      },
+      "texte": "Cette nuit-là, une femme des Bani Israïl met au monde un garçon. Elle sait ce que les soldats font aux garçons. Chaque pleur du bébé peut le trahir.",
+      "voix": "[softly] Cette nuit-là, une femme des Bani Israïl met au monde un garçon. [nervous] Elle sait ce que les soldats font aux garçons. [whispers] Chaque pleur du bébé… peut le trahir."
+    },
+    {
+      "type": "narration",
+      "scene": "calligraphie",
+      "accents": {
+        "d'impensable.": "flash"
+      },
+      "texte": "Alors Allah lui inspire quelque chose d'impensable.",
+      "voix": "[pause] Alors Allah lui inspire… [dramatic tone] quelque chose d'impensable."
+    },
+    {
+      "type": "verset",
+      "scene": "calligraphie",
+      "ref": "28:7"
+    },
+    {
+      "type": "narration",
+      "scene": "coffre_nuit",
+      "ref": "20:39",
+      "titre": {
+        "mot": "fleuve.",
+        "texte": "Dans le fleuve"
+      },
+      "accents": {
+        "fleuve.": "whoosh",
+        "lâchent.": "impact"
+      },
+      "texte": "Jeter son bébé dans le fleuve. Pour le sauver. Imagine ses mains qui ferment le coffre… qui le posent sur l'eau… et qui le lâchent.",
+      "voix": "[intense] Jeter son bébé dans le fleuve. [pause] Pour le sauver. [softly] Imagine ses mains qui ferment le coffre… qui le posent sur l'eau… [whispers] et qui le lâchent."
+    },
+    {
+      "type": "narration",
+      "scene": "matin_vide",
+      "ref": "28:10",
+      "accents": {
+        "vide.": "battement",
+        "raffermi": "flash"
+      },
+      "texte": "Le Coran dit qu'au matin, son cœur était vide. Elle a failli révéler que c'était son fils. Mais Allah a raffermi son cœur.",
+      "voix": "[sad] Le Coran dit qu'au matin, son cœur était vide. [nervous] Elle a failli révéler que c'était son fils. [pause] [calm] Mais Allah a raffermi son cœur."
+    },
+    {
+      "type": "narration",
+      "scene": "berge",
+      "ref": "28:11",
+      "accents": {
+        "Suis-le.": "pop:Eye"
+      },
+      "texte": "Elle dit à sa sœur : « Suis-le. » La petite marche le long du fleuve, cachée, les yeux sur le coffre.",
+      "voix": "[firmly] Elle dit à sa sœur : « Suis-le. » [whispers] La petite marche le long du fleuve, cachée, les yeux sur le coffre."
+    },
+    {
+      "type": "narration",
+      "scene": "palais_aube",
+      "ref": "28:8",
+      "titre": {
+        "mot": "Pharaon.",
+        "texte": "Chez Pharaon"
+      },
+      "accents": {
+        "Pharaon.": "impact",
+        "mains.": "zoom"
+      },
+      "texte": "Et le fleuve le dépose… chez Pharaon. Ses gens le recueillent. Le bébé qu'il voulait tuer est entre ses mains.",
+      "voix": "[suspenseful] Et le fleuve le dépose… [dramatic tone] chez Pharaon. Ses gens le recueillent. [pause] Le bébé qu'il voulait tuer… est entre ses mains."
+    },
+    {
+      "type": "narration",
+      "scene": "palais_interieur",
+      "ref": "28:9 · 20:39",
+      "accents": {
+        "tuez": "impact",
+        "amour": "pop:Heart"
+      },
+      "texte": "Mais sa femme dit : « Ne le tuez pas. Il pourrait nous être utile, ou nous l'adopterons comme enfant. » Allah avait mis sur ce bébé un amour venu de Lui.",
+      "voix": "[urgent] Mais sa femme dit : « Ne le tuez pas. Il pourrait nous être utile, ou nous l'adopterons comme enfant. » [warmly] Allah avait mis sur ce bébé un amour venu de Lui."
+    },
+    {
+      "type": "narration",
+      "scene": "palais_interieur",
+      "ref": "28:12",
+      "accents": {
+        "refuse": "secousse",
+        "l'autre.": "secousse",
+        "s'avance": "pop:Footprints"
+      },
+      "texte": "Mais le bébé refuse toutes les nourrices. Une. Après. L'autre. Et là, une petite fille s'avance : « Voulez-vous que je vous indique une famille qui s'occupera de lui ? »",
+      "voix": "[frustrated] Mais le bébé refuse toutes les nourrices. Une. Après. L'autre. [pause] [curious] Et là, une petite fille s'avance : « Voulez-vous que je vous indique une famille qui s'occupera de lui ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "retour",
+      "titre": {
+        "mot": "mère.",
+        "texte": "Chez sa mère"
+      },
+      "accents": {
+        "mère.": "flash"
+      },
+      "texte": "Elle les mène… chez sa propre mère.",
+      "voix": "[emotional] Elle les mène… [pause] chez sa propre mère."
+    },
+    {
+      "type": "verset",
+      "scene": "retour",
+      "ref": "28:13"
+    },
+    {
+      "type": "narration",
+      "scene": "retour",
+      "titre": {
+        "mot": "perd",
+        "texte": "Il ne le perd jamais"
+      },
+      "texte": "Ce que tu confies à Allah, Il ne le perd jamais. Même quand ça ressemble à un fleuve qui emporte tout.",
+      "voix": "[warmly] Ce que tu confies à Allah, Il ne le perd jamais. [softly] Même quand ça ressemble à un fleuve qui emporte tout."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "abonne-toi": "pop",
+        "like,": "pop",
+        "partage-la.": "pop"
+      },
+      "texte": "Si cette histoire t'a touché, abonne-toi pour la suite de l'histoire de Moussa, like, et partage-la. Le Prophète, paix et salut sur lui, a dit : celui qui indique un bien a la même récompense que celui qui le fait.",
+      "voix": "[warmly] Si cette histoire t'a touché, abonne-toi pour la suite de l'histoire de Moussa, like, et partage-la. [calm] Le Prophète, paix et salut sur lui, a dit : celui qui indique un bien a la même récompense que celui qui le fait."
+    }
+  ],
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "titre_youtube": "Pharaon a élevé l'enfant qu'il redoutait… L'histoire de la mère de Moussa"
+}
