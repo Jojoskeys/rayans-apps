@@ -4,39 +4,9 @@ import { StrictMode, useCallback, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { mountChrome } from "../shared/chrome.ts";
 import "./telecommande.css";
+import { appel, ecrireConfig, INJOIGNABLE, lireConfig, normaliserAdresse, quand, taille, type Config } from "../shared/pc.ts";
 
-// ----- Connexion au PC ------------------------------------------------------------------------------
-
-interface Config { adresse: string; code: string }
-const CLE = "rm-telecommande";
-const lireConfig = (): Config | null => { try { const c = JSON.parse(localStorage.getItem(CLE) ?? "null"); return c?.adresse && c?.code ? c : null; } catch { return null; } };
-const ecrireConfig = (c: Config | null) => { try { if (c) localStorage.setItem(CLE, JSON.stringify(c)); else localStorage.removeItem(CLE); } catch { /* stockage indisponible */ } };
-
-const normaliserAdresse = (a: string) => {
-  let s = a.trim().replace(/\/+$/, "");
-  if (!s) return s;
-  if (!/^https?:\/\//i.test(s)) s = "https://" + s;
-  return s.replace(/^http:\/\//i, "https://");
-};
-
-const INJOIGNABLE = "PC injoignable. Vérifie : Tailscale activé sur l'iPhone (icône VPN), PC allumé, et Rayan's Télécommande lancée sur le PC (elle démarre quand ta session Windows est ouverte).";
-
-async function appel<T = Record<string, unknown>>(cfg: Config, chemin: string, options: { methode?: string; corps?: unknown; brut?: boolean; timeout?: number } = {}): Promise<T> {
-  let r: Response;
-  try {
-    r = await fetch(cfg.adresse + chemin, {
-      method: options.methode ?? (options.corps !== undefined ? "POST" : "GET"),
-      headers: { Authorization: `Bearer ${cfg.code}`, ...(options.corps !== undefined ? { "Content-Type": "application/json" } : {}) },
-      body: options.corps !== undefined ? JSON.stringify(options.corps) : undefined,
-      signal: AbortSignal.timeout(options.timeout ?? 15_000),
-      cache: "no-store",
-    });
-  } catch { throw new Error(INJOIGNABLE); }
-  if (options.brut && r.ok) return r as unknown as T;
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(r.status === 401 ? "Code incorrect : retape le code affiché sur le PC (Réglages ci-dessous)." : r.status === 403 && /Tailscale/.test(j.erreur ?? "") ? "Accès refusé : l'iPhone doit être connecté à Tailscale avec le même compte que le PC." : j.erreur ?? `erreur ${r.status}`);
-  return j as T;
-}
+// ----- Connexion au PC : voir shared/pc.ts (partagée avec la tuile Studio) ----------------------------
 
 /** Envoi d'un fichier avec progression (XMLHttpRequest : fetch ne donne pas la progression de l'envoi). */
 function envoyerFichier(cfg: Config, f: File, progression: (p: number) => void): Promise<{ nom: string }> {
@@ -68,8 +38,6 @@ function enregistrer(f: File) {
   setTimeout(() => URL.revokeObjectURL(u), 60_000);
 }
 
-const taille = (o: number) => o < 1024 ? `${o} o` : o < 1024 ** 2 ? `${(o / 1024).toFixed(0)} Ko` : o < 1024 ** 3 ? `${(o / 1024 ** 2).toFixed(1)} Mo` : `${(o / 1024 ** 3).toFixed(1)} Go`;
-const quand = (t: number) => new Date(t).toLocaleString("fr-FR", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 const duree = (ms: number) => { const m = Math.floor(ms / 60_000); return m < 60 ? `${m} min` : m < 1440 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")}` : `${Math.floor(m / 1440)} j ${Math.floor((m % 1440) / 60)} h`; };
 
 // ----- Interface ------------------------------------------------------------------------------------

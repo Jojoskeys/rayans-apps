@@ -11,6 +11,8 @@ GitHub Pages : **https://jojoskeys.github.io/rayans-apps/**
 | Prière | horaires calculés sur le téléphone, réglages | notifications |
 | Chrono | minuteur, projets, historique, export CSV | mini-fenêtre, notifications |
 | Ouvertures | répertoire et entraînement sur les positions déjà analysées | import Chess.com, analyse Stockfish |
+| Télécommande | piloter le PC, fichiers, presse-papiers (via Tailscale) | Rayan's Télécommande |
+| Studio | regarder les vidéos à valider et répondre « C'est bon » / « À corriger » (via la Télécommande, même adresse et même code) | les vidéos et les réponses (lues par Claude) |
 
 Chaque app réutilise le code de l'app Windows (interface et règles de calcul) ; seule la couche « processus
 principal » est remplacée par une version qui travaille dans le navigateur (`src/apps/*.tsx`).

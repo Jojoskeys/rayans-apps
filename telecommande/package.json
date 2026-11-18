@@ -1,7 +1,7 @@
 {
   "name": "rayans-telecommande",
   "productName": "Rayans Telecommande",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Rayan's Télécommande : piloter le PC depuis l'iPhone (et envoyer des fichiers dans les deux sens) à travers Tailscale",
   "main": "dist-app/main.cjs",
   "license": "MIT",
