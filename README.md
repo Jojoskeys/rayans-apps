@@ -20,6 +20,7 @@ application dans `.github/workflows/`.
 | Rayan's Garmin | [`garmin/`](garmin/) | — (compilé sur le PC, copié par USB) | Forerunner 165 : cadran avec la prochaine prière, champ de course « objectif 5 km », compteur de tractions et de pompes |
 | Rayan's Télécommande | [`telecommande/`](telecommande/) | `telecommande.yml` | Piloter le PC depuis l'iPhone à travers Tailscale (état, verrouillage, redémarrage, applis, fichiers dans les deux sens, presse-papiers, Wi-Fi, scénarios) ; tuile « Télécommande » dans Rayan's Mobile |
 | Rayan's Journal | [`journal/`](journal/) | `journal.yml` | Journal d'activité horodaté (applis, fenêtres, fichiers, session) et archive chiffrée des conversations WhatsApp, Telegram, Discord, Instagram, Messenger |
+| Rayan's Studio | [`studio/`](studio/) | — (outil local, Python + Remotion) | Vidéos verticales pour TikTok, YouTube Shorts et Reels (compte-a, Compte B) : versets vérifiés et récitation synchronisée, voix ElevenLabs, animations, sous-titres mot par mot |
 
 Chaque push sur `main` qui touche une application la publie dans le catalogue de Rayan's Launcher (voir « Publication automatique depuis GitHub » dans [`launcher/README.md`](launcher/README.md)). Les paquets restent aussi téléchargeables dans l'onglet **Actions**, section **Artifacts**.
 
