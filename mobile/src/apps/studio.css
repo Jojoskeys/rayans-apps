@@ -1,0 +1,16 @@
+/* Tuile Studio : s'appuie sur telecommande.css (mêmes couleurs, cartes et boutons). */
+.fiche { border-top: 1px solid var(--bord); padding-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+.carte > .fiche:first-of-type { border-top: 0; padding-top: 0; }
+.titre-carte + .fiche { border-top: 0; padding-top: 0; }
+.entete { font: inherit; color: inherit; background: none; border: 0; padding: 0; display: flex; align-items: center; gap: 10px; text-align: left; width: 100%; }
+.entete .texte b { white-space: normal; font-weight: 600; }
+.corps { display: flex; flex-direction: column; gap: 10px; }
+.corps video { width: 100%; max-height: 72vh; border-radius: 12px; background: #000; aspect-ratio: 9 / 16; object-fit: contain; }
+.note { background: var(--panneau-2); border-radius: 10px; padding: 10px 12px; font-size: 14.5px; }
+.legende { white-space: pre-wrap; font-size: 14px; margin-top: 8px !important; }
+details summary { color: var(--texte-2); font-size: 14px; cursor: pointer; }
+.citation { display: block; white-space: pre-wrap; margin-top: 6px; padding-left: 10px; border-left: 3px solid var(--bord); color: var(--texte); }
+.bouton.vert { background: var(--vert); }
+.bouton.orange { background: var(--orange); color: #1B1406; }
+.puce.orange { color: var(--orange); background: color-mix(in srgb, var(--orange) 16%, transparent); }
+.centre { text-align: center; color: var(--texte-2); margin: 0; }

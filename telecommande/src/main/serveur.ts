@@ -13,6 +13,7 @@ import { codeValide, LimiteEssais, ORIGINES } from "../core/securite.ts";
 import { nomDepuisUrl, nomLibre, nomSur, resoudre, type Racine } from "../core/chemins.ts";
 import { profilValide } from "../core/wifi.ts";
 import type { Donnees } from "../core/donnees.ts";
+import * as studio from "../core/studio.ts";
 import * as sys from "./systeme.ts";
 import { etatTailscale, PORT } from "./tailscale.ts";
 
@@ -40,6 +41,8 @@ const dossiersUtilisateur = (): Racine[] => {
 };
 
 export const dossierReception = () => path.join(app.getPath("downloads"), "Depuis le téléphone");
+/** Vidéos du Studio déposées par Claude pour validation (voir core/studio.ts). */
+export const dossierStudio = () => path.join(app.getPath("videos"), "Rayan's Studio", "A valider");
 
 class ErreurHttp extends Error { code: number; constructor(code: number, message: string) { super(message); this.code = code; } }
 
@@ -272,6 +275,29 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           const el = d.boite.find((e) => e.id === b.id);
           if (el) { fs.rmSync(path.join(ctx.dossierBoite, el.id), { force: true }); d.boite = d.boite.filter((e) => e !== el); ctx.changeBoite(); }
           return envoyer(200, { ok: true });
+        }
+
+        case "GET /api/studio":
+          return envoyer(200, { videos: studio.lister(dossierStudio()) });
+
+        case "GET /api/studio/video": {
+          const p = studio.cheminVideo(dossierStudio(), url.searchParams.get("id") ?? "");
+          if (!p) throw new ErreurHttp(404, "vidéo introuvable");
+          res.writeHead(200, { ...entetesCors, "Content-Type": "video/mp4", "Content-Length": String(fs.statSync(p).size), "Cache-Control": "no-store" });
+          await pipeline(fs.createReadStream(p), res);
+          return;
+        }
+
+        case "POST /api/studio/retour": {
+          const b = await lireJson(req);
+          const id = String(b.id ?? "");
+          let r: studio.Retour;
+          try { r = studio.ajouterRetour(dossierStudio(), id, Number(b.version), String(b.verdict ?? ""), String(b.commentaire ?? "")); }
+          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
+          const titre = studio.lister(dossierStudio()).find((v) => v.id === id)?.titre ?? id;
+          ctx.journaliser(r.verdict === "ok" ? "Vidéo validée" : "Vidéo à corriger", titre);
+          ctx.alerte("Rayan's Studio", r.verdict === "ok" ? `Validée : ${titre}` : `À corriger : ${titre}\n${r.commentaire.slice(0, 200)}`);
+          return envoyer(200, { ok: true, retour: r });
         }
 
         case "GET /api/journal": {
