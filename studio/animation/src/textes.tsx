@@ -243,7 +243,7 @@ export const CarteVerset: React.FC<{ segments: Segment[] }> = ({ segments }) => 
           );
         })}
         <div style={{ fontFamily: POLICE, fontSize: 30, color: "rgba(255,255,255,0.55)", marginTop: 18 }}>
-          Trad. M. Hamidullah · récitation as-Sudais
+          Trad. M. Hamidullah · {v.recitateur ?? "récitation as-Sudais"}
         </div>
       </div>
     </AbsoluteFill>

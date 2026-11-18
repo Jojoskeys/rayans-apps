@@ -36,6 +36,22 @@ Chaque segment est une `narration` (texte lu par la voix) ou un `verset` (`ref` 
   `zoom`, `pop`, ou `pop:Icone` (une icône de lucide.dev qui surgit, par exemple `pop:Heart`).
 - `titre` : `{"mot": "...", "texte": "..."}`, un gros titre qui claque sur ce mot.
 
+## Récitation libre de droits (obligatoire pour publier)
+
+Les enregistrements des grands récitateurs (as-Sudais, Alafasy…) sont protégés : YouTube a bloqué le
+premier Short Ayati sur une revendication « Abderrahmane Soudaiss ». Pour publier, le projet utilise
+`"recitation": "libre"` :
+
+1. Récitation complète de la sourate sous licence CC0 (par ex. Al-Qasas sur Wikimedia Commons,
+   « Chapter 28, Al-Qasas (Murattal) », auteur Atcovi, CC0), à télécharger dans `cache/libre/`.
+2. `python recitation_libre.py cache/libre/<fichier>.mp3 28:7 <début> <fin> [<coupe début> <coupe fin>]`
+   découpe le verset (et retire une répétition si besoin), le transcrit en local (faster-whisper) et cale
+   chaque mot uthmani sur la voix → `cache/libre/28-7.mp3` et `28-7.json`.
+3. Avant de publier, envoyer en privé sur YouTube : l'étape « Vérifications » doit afficher
+   « Droits d'auteur : aucun problème détecté ».
+
+YouTube Shorts : 3 minutes maximum.
+
 ## Règles Ayati
 
 - Texte arabe, traduction et récitation viennent de quran.com, jamais réécrits.

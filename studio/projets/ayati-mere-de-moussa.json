@@ -50,18 +50,6 @@
     {
       "type": "narration",
       "scene": "lampe",
-      "accents": {},
-      "texte": "Mais Allah dit :",
-      "voix": "[calm] Mais Allah dit :"
-    },
-    {
-      "type": "verset",
-      "scene": "lampe",
-      "ref": "28:5"
-    },
-    {
-      "type": "narration",
-      "scene": "lampe",
       "accents": {
         "garçon.": "pop:Baby",
         "trahir.": "battement"
@@ -198,5 +186,7 @@
     }
   ],
   "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
-  "titre_youtube": "Pharaon a élevé l'enfant qu'il redoutait… L'histoire de la mère de Moussa"
+  "titre_youtube": "Pharaon a élevé l'enfant qu'il redoutait… L'histoire de la mère de Moussa",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0)"
 }

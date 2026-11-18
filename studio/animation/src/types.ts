@@ -5,6 +5,7 @@ export type Verset = {
   fr: string;
   ref: string;
   sourate: string;
+  recitateur?: string;
   minutage: [number, number, number][]; // [index du mot, frame début, frame fin]
 };
 

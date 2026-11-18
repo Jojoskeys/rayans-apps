@@ -447,7 +447,8 @@ const Lampe: React.FC<SceneProps> = ({ plan }) => {
   const soldats = quand(plan, "soldats", 0, 220);
   const pleur = quand(plan, "pleur", 0, 300);
   const trahir = quand(plan, "trahir", 0, 330);
-  const lumiere = interpolate(f, [favoriser, favoriser + 30, femme], [0, 1, 0.3], clamp);
+  // la lumière ne monte que si le plan contient « favoriser » (verset 28:5 lu) ; sinon reste douce
+  const lumiere = femme > favoriser + 31 ? interpolate(f, [favoriser, favoriser + 30, femme], [0, 1, 0.3], clamp) : 0.3;
   const ombre = interpolate(f, [soldats, soldats + 90], [-500, 1500], clamp);
   const berce = f >= pleur && f < trahir + 30 ? Math.sin((f - pleur) / 2) * 4 : 0;
   return (

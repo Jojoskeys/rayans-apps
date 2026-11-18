@@ -28,8 +28,8 @@ FPS = 30
 TRADUCTION_HAMIDULLAH = 31
 RECITATION_QURANCOM = 3          # Abdur-Rahman as-Sudais : minutage mot à mot disponible
 VOIX_BROUILLON = "fr-FR-RemyMultilingualNeural"
-PAUSE = 0.30                     # silence entre deux segments (s)
-PAUSE_VERSET = 0.6
+PAUSE = 0.25                     # silence entre deux segments (s)
+PAUSE_VERSET = 0.45
 VOLUME_SFX = 0.22                # bruitages, par rapport à la voix
 VOLUME_RECITATION = 0.6         # récitation, par rapport à la voix
 
@@ -309,21 +309,26 @@ def fabriquer(chemin_projet, rendre=True):
     pub.mkdir(parents=True, exist_ok=True)
     style = projet.get("style", "ayati")
 
-    t, pistes, segs, cues, moteurs = 0.6, [], [], [], set()   # 0,6 s d'image avant la première phrase
+    t, pistes, segs, cues, moteurs = 0.4, [], [], [], set()   # 0,4 s d'image avant la première phrase
     fr = lambda s: int(round(s * FPS))
     recits = [s.get("texte", "") if s["type"] == "narration" else "" for s in projet["segments"]]
     for n_seg, seg in enumerate(projet["segments"]):
         out = {"type": seg["type"], "scene": seg["scene"], "ref": seg.get("ref")}
         if seg["type"] == "verset":
             v = verset(seg["ref"])
-            audio = CACHE / v["audio"]
+            audio, minutage, recitateur = CACHE / v["audio"], v["minutage"], "as-Sudais"
+            if projet.get("recitation") == "libre":   # récitation libre de droits (recitation_libre.py)
+                nom = seg["ref"].replace(":", "-")
+                libre = json.loads((CACHE / "libre" / f"{nom}.json").read_text(encoding="utf-8"))
+                audio, minutage = CACHE / "libre" / f"{nom}.mp3", libre["minutage"]
+                recitateur = projet.get("recitateur_nom", "récitation libre (CC0)")
             d = duree(audio)
-            out["verset"] = {"arabe": v["mots"], "fr": v["fr"], "ref": seg["ref"],
+            out["verset"] = {"arabe": v["mots"], "fr": v["fr"], "ref": seg["ref"], "recitateur": recitateur,
                              "sourate": projet.get("sourates", {}).get(seg["ref"].split(":")[0], "Sourate"),
-                             "minutage": [[i, fr(t + a), fr(t + b)] for i, a, b in v["minutage"]]}
+                             "minutage": [[i, fr(t + a), fr(t + b)] for i, a, b in minutage]}
             fin = t + d + PAUSE_VERSET
             cues.append({"frame": fr(t), "type": "flash_doux"})
-            print(f"  verset {seg['ref']} : {d:.1f} s (as-Sudais)")
+            print(f"  verset {seg['ref']} : {d:.1f} s ({recitateur})")
         else:
             avant = " ".join(x for x in recits[max(0, n_seg - 2):n_seg] if x)
             apres = next((x for x in recits[n_seg + 1:] if x), "")
@@ -351,7 +356,7 @@ def fabriquer(chemin_projet, rendre=True):
         out["debut"], out["fin"] = fr(t), fr(fin)
         segs.append(out)
         t = fin
-    t += 0.8
+    t += 0.6
     total = fr(t)
 
     # ---- audio : voix + récitations + bruitages + ambiance
