@@ -23,9 +23,9 @@ export const Camera: React.FC<{ cues: Cue[]; children: React.ReactNode; derive?:
       x += a * Math.sin(d * 2.1);
       y += a * Math.cos(d * 2.7);
     } else if (c.type === "secousse") {
-      const a = 16 * Math.exp(-d / 7);
-      x += a * Math.sin(d * 3.3);
-      rot += 0.6 * Math.exp(-d / 7) * Math.sin(d * 2.2);
+      const a = 9 * Math.exp(-d / 8);   // plus doux : pas de saut d'une image à l'autre (QA « flash »)
+      x += a * Math.sin(d * 1.5);
+      rot += 0.35 * Math.exp(-d / 8) * Math.sin(d * 1.1);
     } else if (c.type === "battement") {
       s += 0.035 * (Math.exp(-(((d - 2) / 3) ** 2)) + 0.8 * Math.exp(-(((d - 11) / 3) ** 2)));
     } else if (c.type === "zoom") {

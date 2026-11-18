@@ -26,10 +26,22 @@ def lettres(s):
     return re.sub(r"[^ء-ي]", "", s)
 
 
+def refs_de(ref):
+    """'105:1-5' -> ['105:1', ..., '105:5'] ; '28:7' -> ['28:7']"""
+    s, a = ref.split(":")
+    if "-" in a:
+        d, f = map(int, a.split("-"))
+        return [f"{s}:{i}" for i in range(d, f + 1)]
+    return [ref]
+
+
 def mots_uthmani(ref):
-    v = requests.get(f"https://api.quran.com/api/v4/verses/by_key/{ref}", timeout=30,
-                     params={"words": "true", "word_fields": "text_uthmani"}).json()["verse"]
-    return [w["text_uthmani"] for w in v["words"] if w["char_type_name"] == "word"]
+    mots = []
+    for r in refs_de(ref):
+        v = requests.get(f"https://api.quran.com/api/v4/verses/by_key/{r}", timeout=30,
+                         params={"words": "true", "word_fields": "text_uthmani"}).json()["verse"]
+        mots += [w["text_uthmani"] for w in v["words"] if w["char_type_name"] == "word"]
+    return mots
 
 
 def main():

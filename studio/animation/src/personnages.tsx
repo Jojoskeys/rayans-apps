@@ -5,7 +5,7 @@
 import React from "react";
 import { useCurrentFrame } from "remotion";
 
-export type Role = "pharaon" | "soldat" | "mere" | "reine" | "fille" | "servante";
+export type Role = "pharaon" | "soldat" | "mere" | "reine" | "fille" | "servante" | "chef" | "vieil";
 
 export const Silhouette: React.FC<{
   x: number;
@@ -27,7 +27,7 @@ export const Silhouette: React.FC<{
   const bob = marche ? Math.abs(Math.sin(pas)) * h * 0.012 : Math.sin(f / 30 + phase) * h * 0.003;
   const sway = marche ? Math.sin(pas) * 1.6 : Math.sin(f / 45 + phase) * 0.6;
   const k = h / 100; // unité
-  const larg = role === "pharaon" ? 15 : role === "soldat" ? 13 : role === "fille" ? 10 : 11.5;
+  const larg = role === "pharaon" || role === "chef" ? 15 : role === "soldat" ? 13 : role === "fille" ? 10 : 11.5;
   const hautTete = agenouille ? 38 : 0;
   const yTete = 10 + hautTete;
   const ourlet = agenouille ? 70 : 100;
@@ -57,6 +57,21 @@ export const Silhouette: React.FC<{
           <>
             <circle cx={0} cy={yTete} r={6.2} />
             <path d={`M-7,${yTete - 1} Q0,${yTete - 13} 7,${yTete - 1} Z`} />
+          </>
+        );
+      case "chef": // casque à cimier, cape
+        return (
+          <>
+            <circle cx={0} cy={yTete} r={6.5} />
+            <path d={`M-7.5,${yTete} Q0,${yTete - 14} 7.5,${yTete} Z`} />
+            <path d={`M-1.5,${yTete - 11} Q4,${yTete - 26} 12,${yTete - 20} Q5,${yTete - 15} 1.5,${yTete - 9} Z`} />
+          </>
+        );
+      case "vieil": // turban
+        return (
+          <>
+            <circle cx={0} cy={yTete} r={6.3} />
+            <ellipse cx={0} cy={yTete - 4} rx={8.5} ry={5.5} />
           </>
         );
       case "reine":
@@ -96,7 +111,7 @@ export const Silhouette: React.FC<{
           <path d={`M${larg},${yTete - 40} L${larg + 2},${yTete - 50} L${larg + 4},${yTete - 40} Z`} />
         </g>
       ) : null}
-      {role === "pharaon" ? <path d={`M${-larg},${yTete + 20} L${-larg * 1.4},${ourlet} L${larg * 1.4},${ourlet} L${larg},${yTete + 20} Z`} opacity={0.85} /> : null}
+      {role === "pharaon" || role === "chef" ? <path d={`M${-larg},${yTete + 20} L${-larg * 1.4},${ourlet} L${larg * 1.4},${ourlet} L${larg},${yTete + 20} Z`} opacity={0.85} /> : null}
     </>
   );
 

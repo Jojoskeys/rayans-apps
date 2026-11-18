@@ -1,0 +1,157 @@
+{
+  "slug": "ayati-elephant",
+  "titre": "L'armée de l'éléphant",
+  "titre_youtube": "Une armée d'éléphants contre la Kaaba… L'histoire de la sourate Al-Fil",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Copyright Free Sadaqah)",
+  "accroche": "Une armée d'éléphants contre la Kaaba",
+  "sourates": {
+    "105": "Sourate Al-Fil"
+  },
+  "sources": [
+    "Coran 105:1-5 (texte et traduction Hamidullah : quran.com)",
+    "Sîra d'Ibn Hichâm (d'après Ibn Ishâq) : l'église d'Abraha à Sanaa, la fuite dans les montagnes, les chameaux et la réponse d'Abdel-Mouttalib, l'éléphant qui s'agenouille",
+    "Année de l'Éléphant = année de naissance du Prophète : avis de la majorité des historiens (formulé ainsi)"
+  ],
+  "legende": "Une armée d'éléphants marche sur La Mecque pour détruire la Kaaba… et personne ne peut l'arrêter. L'histoire de la sourate Al-Fil (105).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#alfil",
+    "#kaaba",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "fil_marche",
+      "ref": "Sîra",
+      "accents": {
+        "éléphants,": "impact",
+        "ciel.": "whoosh"
+      },
+      "texte": "Une armée, avec des éléphants, marche sur La Mecque pour détruire la Kaaba. Personne ne peut l'arrêter. Personne… sauf ce qui va venir du ciel."
+    },
+    {
+      "type": "narration",
+      "scene": "fil_sanaa",
+      "ref": "Sîra · Ibn Hichâm",
+      "accents": {
+        "Abraha.": "impact",
+        "église,": "pop"
+      },
+      "texte": "Son chef s'appelle Abraha. Il gouverne le Yémen. Il a construit une immense église, pour que les Arabes viennent en pèlerinage chez lui, et plus à La Mecque."
+    },
+    {
+      "type": "narration",
+      "scene": "fil_armee",
+      "ref": "Sîra · Ibn Hichâm",
+      "titre": {
+        "mot": "géant.",
+        "texte": "Un éléphant géant"
+      },
+      "accents": {
+        "armée,": "whoosh",
+        "géant.": "impact"
+      },
+      "texte": "Mais les Arabes continuent d'aller à la Kaaba. Alors Abraha lève une armée, et place devant elle un éléphant géant."
+    },
+    {
+      "type": "narration",
+      "scene": "fil_mecque",
+      "ref": "Sîra · Ibn Hichâm",
+      "accents": {
+        "montagnes.": "whoosh"
+      },
+      "texte": "À La Mecque, personne ne peut se battre contre une telle armée. Les habitants quittent la ville et montent se réfugier dans les montagnes."
+    },
+    {
+      "type": "narration",
+      "scene": "fil_chameaux",
+      "ref": "Sîra · Ibn Hichâm",
+      "accents": {
+        "chameaux": "pop",
+        "célèbre": "battement"
+      },
+      "texte": "Les soldats ont pris les chameaux d'Abdel-Mouttalib, le grand-père du Prophète. Il va les réclamer à Abraha. Et il lui dit cette phrase restée célèbre :"
+    },
+    {
+      "type": "narration",
+      "scene": "fil_chameaux",
+      "ref": "Sîra · Ibn Hichâm",
+      "titre": {
+        "mot": "Seigneur",
+        "texte": "La Maison a un Seigneur"
+      },
+      "texte": "« Je suis le maître de mes chameaux. La Maison a un Seigneur qui la protégera. »"
+    },
+    {
+      "type": "narration",
+      "scene": "fil_elephant",
+      "ref": "Sîra · Ibn Hichâm",
+      "accents": {
+        "s'agenouille.": "impact",
+        "frappent,": "secousse",
+        "poussent…": "secousse"
+      },
+      "texte": "Au matin, l'armée se met en marche. Mais l'éléphant de tête s'agenouille. Ils le frappent, ils le poussent… il refuse d'avancer vers la Kaaba."
+    },
+    {
+      "type": "narration",
+      "scene": "fil_oiseaux",
+      "titre": {
+        "mot": "d'oiseaux.",
+        "texte": "Des oiseaux par volées"
+      },
+      "accents": {
+        "soudain,": "battement",
+        "d'oiseaux.": "impact"
+      },
+      "texte": "Et soudain, le ciel se remplit d'oiseaux."
+    },
+    {
+      "type": "verset",
+      "scene": "fil_oiseaux",
+      "ref": "105:1-5"
+    },
+    {
+      "type": "narration",
+      "scene": "fil_aube",
+      "ref": "Sîra",
+      "titre": {
+        "mot": "l'Éléphant.",
+        "texte": "L'année de l'Éléphant"
+      },
+      "texte": "Cette année-là, on l'appela l'année de l'Éléphant. Et selon la plupart des historiens, c'est cette même année que naquit le Prophète Muhammad, paix et salut sur lui."
+    },
+    {
+      "type": "narration",
+      "scene": "fil_aube",
+      "accents": {
+        "disparu.": "impact"
+      },
+      "texte": "Abraha voulait détruire la Maison d'Allah. C'est lui qui a disparu. La Maison a un Seigneur."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "abonne-toi": "pop",
+        "partage-la.": "pop"
+      },
+      "texte": "Si cette histoire t'a touché, abonne-toi pour ne pas rater les prochaines, et partage-la."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  }
+}

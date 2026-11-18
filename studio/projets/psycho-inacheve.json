@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-inacheve",
+  "titre": "L'effet de l'inachevé",
+  "titre_youtube": "Pourquoi ce que tu n'as pas fini t'empêche de dormir ?",
+  "serie": "Pourquoi tu… #3",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "accroche": "Ton cerveau déteste ce qui n'est pas fini",
+  "sources": [
+    "Zeigarnik, B. (1927). Über das Behalten von erledigten und unerledigten Handlungen. Psychologische Forschung, 9, 1-85 : tâches interrompues mieux rappelées que les tâches terminées ; l'anecdote des serveurs est l'origine racontée de l'idée",
+    "Ovsiankina, M. (1928). Die Wiederaufnahme unterbrochener Handlungen. Psychologische Forschung, 11, 302-379 : tendance spontanée à reprendre une tâche interrompue",
+    "Ghibellini, R. & Meier, B. (2025). The hypothesis of the Zeigarnik effect: a meta-analysis. Humanities and Social Sciences Communications : pas d'avantage de mémoire général, mais la tendance à reprendre l'inachevé est confirmée (d'où la formulation nuancée du script)",
+    "Masicampo, E. J. & Baumeister, R. F. (2011). Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals. Journal of Personality and Social Psychology, 101(4), 667-683 : faire un plan précis réduit les pensées intrusives liées à un but inachevé"
+  ],
+  "legende": "La série que tu n'as pas finie, le message auquel tu n'as pas répondu… Ton cerveau garde l'inachevé ouvert. L'astuce pour le refermer avant de dormir, validée par la recherche.\n\nToi aussi tu ne peux pas t'arrêter au milieu d'un épisode ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#faitspsychologiques",
+    "#sommeil",
+    "#procrastination",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_episode",
+      "accents": {
+        "finie": "impact",
+        "terminée": "whoosh"
+      },
+      "texte": "Pourquoi la série que tu n'as pas finie te trotte dans la tête… et pas celle que tu as terminée ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_serveur",
+      "accents": {
+        "serveurs.": "pop",
+        "réglée,": "pop",
+        "oubliée.": "whoosh"
+      },
+      "texte": "Dans les années 1920, une psychologue remarque un truc bizarre chez les serveurs. Ils se souviennent parfaitement des commandes pas encore payées. Mais une fois la note réglée, la commande est oubliée."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_onglets",
+      "accents": {
+        "ouvert,": "pop",
+        "reprendre.": "impact"
+      },
+      "texte": "Ton cerveau garde l'inachevé ouvert, comme un onglet qu'il n'arrive pas à fermer. Les études récentes nuancent l'effet sur la mémoire, mais confirment le plus important : on ressent une envie forte de reprendre."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_cliffhanger",
+      "titre": {
+        "mot": "moment.",
+        "texte": "L'effet de l'inachevé"
+      },
+      "accents": {
+        "moment.": "flash"
+      },
+      "texte": "Les séries le savent très bien. C'est pour ça que l'épisode coupe toujours au pire moment."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_papier",
+      "accents": {
+        "L'astuce,": "flash",
+        "papier.": "pop:NotebookPen",
+        "fermer.": "impact"
+      },
+      "texte": "L'astuce, si ça t'empêche de dormir : écris la prochaine étape sur un papier. Une étude montre que faire un plan précis suffit à calmer ton cerveau. L'onglet peut enfin se fermer."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi aussi, tu es incapable de t'arrêter au milieu d'un épisode ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  }
+}

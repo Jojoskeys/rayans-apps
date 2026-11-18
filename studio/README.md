@@ -68,8 +68,24 @@ défaut) ou dans `ELEVENLABS_VOICE_ID`.
   entre crochets, champ `voix` des segments) rendait la voix instable d'une phrase à l'autre.
 - Chaque phrase est générée avec la phrase d'avant et d'après (`previous_text` / `next_text`) et une graine
   fixe : même voix et même intonation sur toute la vidéo.
-- Les vrais trous entre deux mots (> 0,65 s) sont ramenés à `blanc_max` (0,45 s), avec de courts fondus, et
-  les sous-titres sont recalés.
+- Les vrais trous entre deux mots (> 0,65 s) sont ramenés à `blanc_max` (0,45 s). La coupe se fait dans le
+  silence mesuré : la fin de phrase s'éteint, l'inspiration ajoutée par ElevenLabs avant la phrase suivante
+  est retirée (plus de souffle tranché). Les sous-titres sont recalés.
+- Mots arabes : aucune voix ElevenLabs ne dit le ق (Qâroûn) ni Allah « à l'arabe » au milieu d'une phrase
+  française (6 voix testées, modèles v2 et v3). Coller le mot généré à part casse l'intonation (refusé par
+  Rayan) : c'est désactivé (`"coller_mots_arabes": true` pour le réactiver).
+
+## Voix lue par un humain (option, non utilisée)
+
+Par défaut tout est automatique (Paul K). Option pour une prononciation arabe parfaite :
+`"enregistrement": "enregistrements/<slug>.m4a"` dans le projet. Le texte est lu en une prise (pause d'1 s
+entre les paragraphes). La fabrique :
+1. transforme sa voix en Paul K (ElevenLabs speech-to-speech, `eleven_multilingual_sts_v2`) : sa
+   prononciation et son intonation sont gardées (`"transformer_voix": false` pour garder sa propre voix) ;
+2. transcrit en local (faster-whisper) et retrouve chaque mot du script (difflib) ; les mots non reconnus
+   (noms arabes) sont placés entre leurs voisins ;
+3. découpe phrase par phrase et applique le même nettoyage des blancs.
+N'importe quel format audio est accepté (le nom compte, pas l'extension).
 - Réglages facultatifs dans `.env` : `ELEVENLABS_STABILITY`, `ELEVENLABS_STYLE`, `ELEVENLABS_VITESSE` (1.1).
 
 ## Comptes

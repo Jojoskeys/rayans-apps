@@ -9,7 +9,7 @@ import type { SceneProps } from "./types";
 import { clamp, H, prog, quand, rnd, W } from "./outils";
 
 // ------------------------------------------------------------------ briques
-const Ciel: React.FC<{ id: string; stops: [number, string][] }> = ({ id, stops }) => (
+export const Ciel: React.FC<{ id: string; stops: [number, string][] }> = ({ id, stops }) => (
   <>
     <defs>
       <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
@@ -22,7 +22,7 @@ const Ciel: React.FC<{ id: string; stops: [number, string][] }> = ({ id, stops }
   </>
 );
 
-const Halo: React.FC<{ id: string; x: number; y: number; r: number; c: string; o?: number }> = ({ id, x, y, r, c, o = 1 }) => (
+export const Halo: React.FC<{ id: string; x: number; y: number; r: number; c: string; o?: number }> = ({ id, x, y, r, c, o = 1 }) => (
   <>
     <defs>
       <radialGradient id={id}>
@@ -35,7 +35,7 @@ const Halo: React.FC<{ id: string; x: number; y: number; r: number; c: string; o
   </>
 );
 
-const Etoiles: React.FC<{ n: number; bas: number; graine: string }> = ({ n, bas, graine }) => {
+export const Etoiles: React.FC<{ n: number; bas: number; graine: string }> = ({ n, bas, graine }) => {
   const f = useCurrentFrame();
   return (
     <g>
@@ -50,7 +50,7 @@ const Etoiles: React.FC<{ n: number; bas: number; graine: string }> = ({ n, bas,
   );
 };
 
-const Fleuve: React.FC<{ y: number; haut: string; bas: string; refletX?: number; reflet?: string; graine: string; vitesse?: number }> = ({
+export const Fleuve: React.FC<{ y: number; haut: string; bas: string; refletX?: number; reflet?: string; graine: string; vitesse?: number }> = ({
   y,
   haut,
   bas,
@@ -85,7 +85,7 @@ const Fleuve: React.FC<{ y: number; haut: string; bas: string; refletX?: number;
   );
 };
 
-const Roseaux: React.FC<{ x0: number; x1: number; base: number; h: number; c: string; n: number; graine: string }> = ({
+export const Roseaux: React.FC<{ x0: number; x1: number; base: number; h: number; c: string; n: number; graine: string }> = ({
   x0,
   x1,
   base,
@@ -114,7 +114,7 @@ const Roseaux: React.FC<{ x0: number; x1: number; base: number; h: number; c: st
   );
 };
 
-const Palmier: React.FC<{ x: number; sol: number; h: number; c: string; incl?: number; phase?: number }> = ({ x, sol, h, c, incl = 0.12, phase = 0 }) => {
+export const Palmier: React.FC<{ x: number; sol: number; h: number; c: string; incl?: number; phase?: number }> = ({ x, sol, h, c, incl = 0.12, phase = 0 }) => {
   const f = useCurrentFrame();
   const vent = Math.sin(f / 35 + phase) * 0.04;
   const tx = x + (incl + vent) * h;
@@ -137,7 +137,7 @@ const Palmier: React.FC<{ x: number; sol: number; h: number; c: string; incl?: n
   );
 };
 
-const Brume: React.FC<{ y: number; c: string; o?: number; graine: string; n?: number }> = ({ y, c, o = 0.35, graine, n = 6 }) => {
+export const Brume: React.FC<{ y: number; c: string; o?: number; graine: string; n?: number }> = ({ y, c, o = 0.35, graine, n = 6 }) => {
   const f = useCurrentFrame();
   return (
     <g>
@@ -155,7 +155,7 @@ const Brume: React.FC<{ y: number; c: string; o?: number; graine: string; n?: nu
   );
 };
 
-const Poussieres: React.FC<{ n: number; c: string; graine: string; haut?: number; bas?: number }> = ({ n, c, graine, haut = 0, bas = H }) => {
+export const Poussieres: React.FC<{ n: number; c: string; graine: string; haut?: number; bas?: number }> = ({ n, c, graine, haut = 0, bas = H }) => {
   const f = useCurrentFrame();
   return (
     <g>
@@ -170,7 +170,7 @@ const Poussieres: React.FC<{ n: number; c: string; graine: string; haut?: number
   );
 };
 
-const Rayons: React.FC<{ x: number; y: number; c: string; o?: number }> = ({ x, y, c, o = 0.18 }) => {
+export const Rayons: React.FC<{ x: number; y: number; c: string; o?: number }> = ({ x, y, c, o = 0.18 }) => {
   const f = useCurrentFrame();
   return (
     <g opacity={o} style={{ mixBlendMode: "screen" }}>
@@ -190,7 +190,7 @@ const Rayons: React.FC<{ x: number; y: number; c: string; o?: number }> = ({ x, 
   );
 };
 
-const Flamme: React.FC<{ x: number; y: number; t?: number; graine: string }> = ({ x, y, t = 1, graine }) => {
+export const Flamme: React.FC<{ x: number; y: number; t?: number; graine: string }> = ({ x, y, t = 1, graine }) => {
   const f = useCurrentFrame();
   const fl = 1 + 0.12 * Math.sin(f / 2.3 + rnd(graine) * 9) + 0.08 * Math.sin(f / 1.3);
   const pen = Math.sin(f / 4 + rnd(graine) * 5) * 5 * t;
@@ -203,7 +203,7 @@ const Flamme: React.FC<{ x: number; y: number; t?: number; graine: string }> = (
   );
 };
 
-const Maisons: React.FC<{ sol: number; c: string; graine: string; fenetres?: number[]; echelle?: number }> = ({ sol, c, graine, fenetres = [], echelle = 1 }) => {
+export const Maisons: React.FC<{ sol: number; c: string; graine: string; fenetres?: number[]; echelle?: number }> = ({ sol, c, graine, fenetres = [], echelle = 1 }) => {
   const f = useCurrentFrame();
   const blocs: React.ReactNode[] = [];
   let x = -60;
@@ -224,7 +224,7 @@ const Maisons: React.FC<{ sol: number; c: string; graine: string; fenetres?: num
   return <g>{blocs}</g>;
 };
 
-const Palais: React.FC<{ base: number; c: string; x?: number; echelle?: number; torches?: boolean }> = ({ base, c, x = W / 2, echelle = 1, torches = true }) => {
+export const Palais: React.FC<{ base: number; c: string; x?: number; echelle?: number; torches?: boolean }> = ({ base, c, x = W / 2, echelle = 1, torches = true }) => {
   const s = echelle;
   const pylone = (cx: number) => (
     <g>
@@ -300,7 +300,7 @@ const Travelling: React.FC<{ duree: number; de?: number; a?: number; dx?: number
 // ------------------------------------------------------------------ scènes (v3 : l'image suit chaque phrase)
 
 /** Caméra à étapes : [frame, zoom, décalage x, décalage y], interpolés en douceur. */
-const Cadre: React.FC<{ cles: [number, number, number, number][]; children: React.ReactNode }> = ({ cles, children }) => {
+export const Cadre: React.FC<{ cles: [number, number, number, number][]; children: React.ReactNode }> = ({ cles, children }) => {
   const f = useCurrentFrame();
   const fr = cles.map((c) => c[0]);
   const v = (i: number) => (cles.length > 1 ? interpolate(f, fr, cles.map((c) => c[i]), { ...clamp, easing: Easing.inOut(Easing.cubic) }) : cles[0][i]);
@@ -314,7 +314,7 @@ const Cadre: React.FC<{ cles: [number, number, number, number][]; children: Reac
 };
 
 /** Coffre avec couvercle qui s'ouvre (lumière dorée, on ne voit jamais l'enfant). */
-const Coffre2: React.FC<{ x: number; y: number; t: number; ouvert?: number; flotte?: boolean; rot?: number }> = ({ x, y, t, ouvert = 0, flotte = true, rot = 0 }) => {
+export const Coffre2: React.FC<{ x: number; y: number; t: number; ouvert?: number; flotte?: boolean; rot?: number }> = ({ x, y, t, ouvert = 0, flotte = true, rot = 0 }) => {
   const f = useCurrentFrame();
   const bob = flotte ? Math.sin(f / 14) * 6 * t : 0;
   const r = flotte ? Math.sin(f / 19) * 3 + rot : rot;
@@ -343,7 +343,7 @@ const Coffre2: React.FC<{ x: number; y: number; t: number; ouvert?: number; flot
   );
 };
 
-const Fondu: React.FC<{ de: number; a: number; children: React.ReactNode; inverse?: boolean }> = ({ de, a, children, inverse }) => {
+export const Fondu: React.FC<{ de: number; a: number; children: React.ReactNode; inverse?: boolean }> = ({ de, a, children, inverse }) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [de, a], inverse ? [1, 0] : [0, 1], clamp);
   return o <= 0 ? null : <g opacity={o}>{children}</g>;

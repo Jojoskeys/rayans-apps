@@ -1,0 +1,108 @@
+{
+  "slug": "psycho-effet-spectateur",
+  "titre": "L'effet spectateur",
+  "titre_youtube": "Plus il y a de monde, moins on t'aide : l'effet spectateur",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "accroche": "Plus il y a de monde, moins on t'aide",
+  "sources": [
+    "Darley, J. M. & Latané, B. (1968). Bystander intervention in emergencies: diffusion of responsibility. Journal of Personality and Social Psychology, 8(4), 377-383 : crise d'épilepsie simulée par un enregistrement ; seul : 85 % alertent avant la fin de la crise ; avec 4 autres témoins supposés : 31 %",
+    "Conseil « désigner une personne précise » : recommandation classique tirée de ces travaux (formulée comme un conseil, sans chiffre)"
+  ],
+  "legende": "Si tu fais un malaise dans une rue bondée, tu as moins de chances qu'on t'aide que dans une rue presque vide. L'effet spectateur, prouvé en 1968 par Darley et Latané… et comment s'en protéger.\n\nEnvoie-la à quelqu'un qui dit toujours « quelqu'un d'autre va le faire ».",
+  "hashtags": [
+    "#psychologie",
+    "#psychologiesociale",
+    "#effetspectateur",
+    "#apprendre",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "ps_rue",
+      "accents": {
+        "bondée,": "whoosh",
+        "vide.": "impact",
+        "prouvé.": "pop"
+      },
+      "texte": "Si tu fais un malaise dans une rue bondée, tu as moins de chances qu'on t'aide… que dans une rue presque vide. Ça paraît fou. Et pourtant, c'est prouvé."
+    },
+    {
+      "type": "narration",
+      "scene": "ps_labo",
+      "accents": {
+        "1968.": "impact",
+        "interphone.": "pop",
+        "crise": "battement",
+        "enregistrement.": "pop"
+      },
+      "texte": "1968. Les psychologues John Darley et Bibb Latané installent des étudiants dans des cabines séparées. Ils discutent par interphone. Et d'un coup, l'une des voix se met à faire une crise d'épilepsie. En réalité, c'est un enregistrement. Mais les participants ne le savent pas."
+    },
+    {
+      "type": "narration",
+      "scene": "ps_resultats",
+      "accents": {
+        "85": "impact"
+      },
+      "texte": "Quand le participant croit être le seul à l'entendre, 85 % vont chercher de l'aide avant la fin de la crise."
+    },
+    {
+      "type": "narration",
+      "scene": "ps_resultats",
+      "accents": {
+        "31": "impact"
+      },
+      "texte": "Quand il croit que quatre autres personnes l'entendent aussi… seulement 31 %."
+    },
+    {
+      "type": "narration",
+      "scene": "ps_diffusion",
+      "titre": {
+        "mot": "spectateur.",
+        "texte": "L'effet spectateur"
+      },
+      "accents": {
+        "spectateur.": "flash",
+        "responsabilité.": "impact"
+      },
+      "texte": "C'est l'effet spectateur. Chacun se dit : quelqu'un d'autre va s'en occuper. Les psychologues appellent ça la diffusion de la responsabilité."
+    },
+    {
+      "type": "narration",
+      "scene": "ps_antidote",
+      "accents": {
+        "L'antidote,": "flash",
+        "personne.": "pop",
+        "rouge,": "impact"
+      },
+      "texte": "L'antidote, si un jour tu as besoin d'aide : ne crie pas « aidez-moi ». Choisis une personne. « Toi, en veste rouge, appelle les secours. »"
+    },
+    {
+      "type": "narration",
+      "scene": "ps_premier",
+      "accents": {
+        "premier.": "impact"
+      },
+      "texte": "Et si tu es témoin, sois celui qui bouge en premier. Souvent, les autres suivent."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "envoie": "pop"
+      },
+      "texte": "Abonne-toi pour comprendre ce qui se passe vraiment dans ta tête. Et envoie ça à quelqu'un qui dit toujours : quelqu'un d'autre va le faire."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  }
+}

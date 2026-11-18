@@ -4,9 +4,14 @@ import type { Plan, Timeline } from "./types";
 import { clamp, regrouperPlans } from "./outils";
 import { ScenesAyati } from "./ayati";
 import { ScenesPsycho } from "./psycho";
+import { ScenesFil } from "./fil";
+import { ScenesQadr } from "./qadr";
+import { ScenesSpectateur } from "./spectateur";
+import { ScenesPourquoi } from "./pourquoi";
+import { ScenesQasas } from "./qasas";
 import { Cta } from "./cta";
 import { Camera, Eclairs, Grain, Progression, Surgissements, Vignette } from "./effets";
-import { CarteVerset, Marque, References, SousTitres, Titres } from "./textes";
+import { Accroche, CarteVerset, Marque, References, SousTitres, Titres } from "./textes";
 
 const POLICES: [string, string, string][] = [
   ["Montserrat", "polices/Montserrat-ExtraBold.ttf", "800"],
@@ -34,7 +39,7 @@ const FONDU = 12;
 const Plan_: React.FC<{ plan: Plan; t: Timeline; premier: boolean }> = ({ plan, t, premier }) => {
   const f = useCurrentFrame();
   const o = premier ? 1 : interpolate(f, [0, FONDU], [0, 1], clamp);
-  const Scene = plan.scene === "cta" ? null : (t.style === "ayati" ? ScenesAyati : ScenesPsycho)[plan.scene];
+  const Scene = plan.scene === "cta" ? null : (t.style === "ayati" ? { ...ScenesAyati, ...ScenesFil, ...ScenesQadr, ...ScenesQasas } : { ...ScenesPsycho, ...ScenesSpectateur, ...ScenesPourquoi })[plan.scene];
   return (
     <AbsoluteFill style={{ opacity: o }}>
       {plan.scene === "cta" ? (
@@ -50,7 +55,7 @@ const Plan_: React.FC<{ plan: Plan; t: Timeline; premier: boolean }> = ({ plan, 
 
 const ySous = (style: Timeline["style"]) => (scene: string) => {
   if (scene === "cta") return 1500;
-  if (style === "psycho") return 1570;
+  if (style === "psycho") return ({ ps_rue: 1000, ps_diffusion: 1730 } as Record<string, number>)[scene] ?? 1570;
   return { lampe: 1330, palais_interieur: 1290, berge: 1180, retour: 1180 }[scene] ?? 1240;
 };
 
@@ -71,6 +76,7 @@ export const Video: React.FC<Timeline> = (t) => {
       <Grain force={t.style === "ayati" ? 0.1 : 0.05} />
       <CarteVerset segments={t.segments} />
       {t.style === "ayati" ? <References segments={t.segments} /> : null}
+      <Accroche texte={t.accroche} fin={Math.min(105, ...t.segments.filter((x) => x.titre).map((x) => x.titre!.frame - 6))} />
       <Titres segments={t.segments} />
       <Surgissements cues={t.cues} y={t.style === "ayati" ? 640 : 1300} />
       <SousTitres segments={t.segments} y={ySous(t.style)} />

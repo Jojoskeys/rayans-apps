@@ -1,0 +1,125 @@
+{
+  "slug": "ayati-tour-pharaon",
+  "titre": "La tour de Pharaon",
+  "titre_youtube": "Pharaon a fait construire une tour pour monter voir le Dieu de Moussa…",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "accroche": "Il voulait monter jusqu'au ciel",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:38-40 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (déjà validée par YouTube sur la vidéo de la mère de Moussa)"
+  ],
+  "legende": "« Je ne vous connais pas d'autre divinité que moi. » Pharaon ordonne à Hâmân de lui bâtir une tour pour monter jusqu'au Dieu de Moussa… L'histoire de la sourate Al-Qasas (28:38-40).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#pharaon",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "tp_tour",
+      "ref": "28:38",
+      "accents": {
+        "tour…": "impact",
+        "Moussa.": "whoosh"
+      },
+      "texte": "Pharaon a fait construire une tour… pour monter voir le Dieu de Moussa."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "ref": "28:38",
+      "titre": {
+        "mot": "moi.",
+        "texte": "« Pas d'autre divinité que moi »"
+      },
+      "accents": {
+        "notables,": "pop",
+        "moi.": "impact"
+      },
+      "texte": "Devant ses notables, il déclare : « Je ne vous connais pas d'autre divinité que moi. »"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_briques",
+      "ref": "28:38",
+      "accents": {
+        "Hâmân": "pop",
+        "feu": "whoosh",
+        "tour.": "impact"
+      },
+      "texte": "Puis il donne un ordre à Hâmân : « Allume le feu sur l'argile, et construis-moi une tour. Peut-être que je monterai jusqu'au Dieu de Moussa. »"
+    },
+    {
+      "type": "verset",
+      "scene": "tp_briques",
+      "ref": "28:38"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_orgueil",
+      "ref": "28:39",
+      "accents": {
+        "d'orgueil": "battement",
+        "jamais": "impact"
+      },
+      "texte": "Lui et ses soldats s'enflent d'orgueil sur la terre, sans aucun droit. Ils pensent qu'ils ne reviendront jamais vers Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_mer",
+      "ref": "28:40",
+      "titre": {
+        "mot": "flots.",
+        "texte": "Jetés dans les flots"
+      },
+      "accents": {
+        "saisit,": "secousse",
+        "flots.": "impact"
+      },
+      "texte": "Alors Allah les saisit, lui et ses soldats, et les jette dans les flots."
+    },
+    {
+      "type": "verset",
+      "scene": "tp_mer",
+      "ref": "28:40"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "accents": {
+        "ciel": "whoosh",
+        "mer.": "impact",
+        "injustes.": "battement"
+      },
+      "texte": "L'homme qui voulait monter jusqu'au ciel a fini au fond de la mer. Regarde quelle a été la fin des injustes."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "abonne-toi": "pop",
+        "partage-la.": "pop"
+      },
+      "texte": "Si cette histoire t'a touché, abonne-toi pour ne pas rater les prochaines, et partage-la."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  }
+}

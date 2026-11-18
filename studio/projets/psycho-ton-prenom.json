@@ -1,0 +1,83 @@
+{
+  "slug": "psycho-ton-prenom",
+  "titre": "L'effet cocktail party",
+  "titre_youtube": "Pourquoi tu entends ton prénom au milieu du bruit ?",
+  "serie": "Pourquoi tu… #2",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "accroche": "Ton cerveau écoute à ta place",
+  "sources": [
+    "Cherry, E. C. (1953). Some experiments on the recognition of speech, with one and with two ears. Journal of the Acoustical Society of America, 25(5), 975-979 : origine du « cocktail party problem »",
+    "Moray, N. (1959). Attention in dichotic listening: affective cues and the influence of instructions. Quarterly Journal of Experimental Psychology, 11(1), 56-60 : dans l'oreille ignorée, presque rien n'est retenu, mais environ un tiers des participants entendent leur propre prénom"
+  ],
+  "legende": "Tu n'écoutais pas, et pourtant tu as entendu ton prénom au milieu du brouhaha. Ton cerveau trie tous les sons… et laisse toujours passer ce qui te concerne.\n\nÇa t'est déjà arrivé de te retourner en croyant qu'on t'appelait ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#attention",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_brouhaha",
+      "accents": {
+        "prénom": "flash",
+        "même": "impact"
+      },
+      "texte": "Pourquoi tu entends ton prénom au milieu d'un brouhaha… alors que tu n'écoutais même pas ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_filtre",
+      "accents": {
+        "trie": "whoosh",
+        "jette": "pop:Trash2",
+        "prénom.": "impact"
+      },
+      "texte": "Ton cerveau trie en permanence tous les sons autour de toi. Il en jette presque tout. Mais certains mots passent le filtre quoi qu'il arrive. Le premier de la liste : ton prénom."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_oreilles",
+      "accents": {
+        "1959.": "impact",
+        "oreille,": "pop:Headphones",
+        "tiers": "impact"
+      },
+      "texte": "1959. Un chercheur fait écouter deux messages différents, un dans chaque oreille, et demande d'en ignorer un. Dans l'oreille ignorée, presque rien n'est retenu… sauf le prénom. Environ un tiers des gens l'entendent quand même."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_veille",
+      "titre": {
+        "mot": "party.",
+        "texte": "L'effet cocktail party"
+      },
+      "accents": {
+        "party.": "flash",
+        "toi.": "battement"
+      },
+      "texte": "C'est l'effet cocktail party. Même quand tu ne fais pas attention, une partie de ton cerveau reste de garde… et guette tout ce qui parle de toi."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'est déjà arrivé de te retourner parce que tu croyais qu'on t'appelait ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  }
+}

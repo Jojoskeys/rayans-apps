@@ -148,7 +148,7 @@ export const References: React.FC<{ segments: Segment[] }> = ({ segments }) => {
           letterSpacing: 2,
         }}
       >
-        Coran {s.ref}
+        {/^\d/.test(s.ref ?? "") ? `Coran ${s.ref}` : s.ref}
       </div>
     </div>
   );
@@ -163,11 +163,28 @@ export const CarteVerset: React.FC<{ segments: Segment[] }> = ({ segments }) => 
   const o = interpolate(f, [s.debut - 10, s.debut + 10, s.fin - 10, s.fin], [0, 1, 1, 0], clamp);
   const debutMot = (i: number) => v.minutage.find((m) => m[0] === i)?.[1] ?? Infinity;
   const finMot = (i: number) => v.minutage.find((m) => m[0] === i)?.[2] ?? Infinity;
-  const phrases = v.fr.replace(/ ([!?:;»”])/g, " $1").replace(/“ /g, "“ ").split(/(?<=[.!?»”])\s+/);
+  const phrases = (v.parties ? "" : v.fr).replace(/ ([!?:;»”])/g, " $1").replace(/“ /g, "“ ").split(/(?<=[.!?»”])\s+/);
   const duree = s.fin - s.debut;
+  // Verset long : arabe et traduction plus petits pour que les deux blocs ne se chevauchent pas.
+  const long = !v.parties && v.arabe.length > 18;
+  const taillFr = !v.parties && v.fr.length > 200 ? 40 : 48;
+  // Suite de versets : on n'affiche que le verset en cours de récitation, avec sa traduction.
+  let mots = v.arabe.map((m, i) => [m, i] as [string, number]);
+  let fr = v.fr;
+  let titre = v.ref;
+  let debutPartie = s.debut;
+  if (v.parties && v.parties.length) {
+    let idx = 0;
+    for (const m of v.minutage) if (m[1] <= f) idx = Math.max(idx, m[0]);
+    const p = v.parties.find((x) => idx >= x.de && idx < x.a) ?? v.parties[0];
+    mots = mots.slice(p.de, p.a);
+    fr = p.fr;
+    titre = `${v.ref.split(":")[0]}:${p.num}`;
+    debutPartie = Math.min(...v.minutage.filter((m) => m[0] === p.de).map((m) => m[1]), f);
+  }
   return (
     <AbsoluteFill style={{ opacity: o }}>
-      <AbsoluteFill style={{ background: "rgba(3,6,16,0.62)" }} />
+      <AbsoluteFill style={{ background: "rgba(3,6,16,0.5)" }} />
       <div style={{ position: "absolute", top: 230, width: "100%", textAlign: "center" }}>
         <span
           style={{
@@ -179,7 +196,7 @@ export const CarteVerset: React.FC<{ segments: Segment[] }> = ({ segments }) => 
             textTransform: "uppercase",
           }}
         >
-          {v.sourate} · {v.ref}
+          {v.sourate} · {titre}
         </span>
         <div style={{ width: interpolate(f - s.debut, [0, duree], [0, 560], clamp), height: 3, background: OR, margin: "18px auto 0", boxShadow: `0 0 16px ${OR}` }} />
       </div>
@@ -196,7 +213,7 @@ export const CarteVerset: React.FC<{ segments: Segment[] }> = ({ segments }) => 
           gap: "6px 22px",
         }}
       >
-        {v.arabe.map((mot, i) => {
+        {mots.map(([mot, i]) => {
           const a = debutMot(i);
           const b = finMot(i);
           const actif = f >= a && f < b + 4;
@@ -207,8 +224,8 @@ export const CarteVerset: React.FC<{ segments: Segment[] }> = ({ segments }) => 
               key={i}
               style={{
                 fontFamily: "Amiri Quran",
-                fontSize: 86,
-                lineHeight: 1.9,
+                fontSize: v.parties ? 108 : long ? 66 : 86,
+                lineHeight: long ? 1.75 : 1.9,
                 color: actif ? OR : passe ? "#fff" : "rgba(255,255,255,0.28)",
                 textShadow: actif ? `0 0 34px ${OR}` : "0 4px 12px rgba(0,0,0,0.8)",
                 transform: `scale(${actif ? 1 + 0.08 * e : 1})`,
@@ -221,7 +238,12 @@ export const CarteVerset: React.FC<{ segments: Segment[] }> = ({ segments }) => 
         })}
       </div>
       <div style={{ position: "absolute", bottom: 300, left: 80, right: 80, textAlign: "center" }}>
-        {phrases.map((p, k) => {
+        {v.parties ? (
+          <span style={{ fontFamily: POLICE, fontWeight: 600, fontSize: 50, lineHeight: 1.4, color: "#fff", textShadow: "0 4px 14px rgba(0,0,0,0.9)", opacity: interpolate(f, [debutPartie - 4, debutPartie + 10], [0, 1], clamp) }}>
+            « {fr.replace(/ ([!?:;»”])/g, " $1")} »
+          </span>
+        ) : null}
+        {(v.parties ? [] : phrases).map((p, k) => {
           const t0 = s.debut + 12 + (k * duree * 0.7) / Math.max(1, phrases.length);
           return (
             <span
@@ -229,7 +251,7 @@ export const CarteVerset: React.FC<{ segments: Segment[] }> = ({ segments }) => 
               style={{
                 fontFamily: POLICE,
                 fontWeight: 600,
-                fontSize: 48,
+                fontSize: taillFr,
                 lineHeight: 1.4,
                 color: "#fff",
                 opacity: interpolate(f, [t0, t0 + 15], [0, 1], clamp),
@@ -268,3 +290,37 @@ export const Marque: React.FC<{ texte?: string | null }> = ({ texte }) =>
       {texte}
     </div>
   ) : null;
+
+/** Accroche lisible dès la toute première image (miniature, lecture sans le son), jusqu'à ~3,5 s. */
+export const Accroche: React.FC<{ texte?: string | null; fin: number }> = ({ texte, fin }) => {
+  const f = useCurrentFrame();
+  if (!texte || f > fin) return null;
+  const o = interpolate(f, [fin - 12, fin], [1, 0], clamp);
+  const mots = texte.toUpperCase().split(" ");
+  return (
+    <div style={{ position: "absolute", top: 300, left: 60, right: 60, display: "flex", justifyContent: "center", opacity: o }}>
+      <div
+        style={{
+          background: "rgba(5,6,12,0.78)",
+          borderRadius: 28,
+          padding: "26px 34px",
+          textAlign: "center",
+          fontFamily: POLICE,
+          fontWeight: 800,
+          fontSize: 96,
+          lineHeight: 1.05,
+          color: "#fff",
+          letterSpacing: 1,
+          boxShadow: "0 18px 60px rgba(0,0,0,0.55)",
+        }}
+      >
+        {mots.map((m, i) => (
+          <span key={i} style={{ color: i >= mots.length - 2 ? OR : "#fff" }}>
+            {m}
+            {i < mots.length - 1 ? " " : ""}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};

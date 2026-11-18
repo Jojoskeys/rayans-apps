@@ -1,0 +1,145 @@
+{
+  "slug": "ayati-qaroun",
+  "titre": "Qâroûn",
+  "titre_youtube": "L'homme le plus riche de son peuple… la terre l'a englouti. L'histoire de Qâroûn",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "accroche": "La terre l'a englouti, lui et sa maison",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:76-82 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (déjà validée par YouTube sur la vidéo de la mère de Moussa)"
+  ],
+  "legende": "Ses clés étaient si lourdes qu'il fallait une bande d'hommes forts pour les porter. Il disait : « Je l'ai obtenu grâce à mon savoir. » L'histoire de Qâroûn, sourate Al-Qasas (28:76-82).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#qaroun",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qr_cles",
+      "ref": "28:76",
+      "accents": {
+        "lourdes": "impact",
+        "englouti.": "secousse"
+      },
+      "texte": "Ses clés étaient si lourdes qu'il fallait une bande d'hommes forts pour les porter. Et un jour, la terre l'a englouti. Lui… et sa maison."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_tresor",
+      "ref": "28:76",
+      "titre": {
+        "mot": "Qâroûn.",
+        "texte": "Qâroûn"
+      },
+      "accents": {
+        "Qâroûn.": "impact",
+        "opprime": "battement",
+        "immenses.": "pop"
+      },
+      "texte": "Il s'appelle Qâroûn. Il est du peuple de Moussa, mais il opprime les siens. Et Allah lui a donné des trésors immenses."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_conseil",
+      "ref": "28:76-77",
+      "accents": {
+        "préviennent": "whoosh",
+        "bien.": "pop"
+      },
+      "texte": "Les gens de son peuple le préviennent : « Ne te réjouis pas avec arrogance. Fais le bien, comme Allah t'a fait du bien. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_conseil",
+      "ref": "28:78",
+      "titre": {
+        "mot": "savoir.",
+        "texte": "« Grâce à mon savoir »"
+      },
+      "accents": {
+        "savoir.": "impact"
+      },
+      "texte": "Sa réponse : « Tout ça, je l'ai obtenu grâce à mon savoir. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_cortege",
+      "ref": "28:79",
+      "accents": {
+        "apparat.": "whoosh",
+        "reçu": "pop"
+      },
+      "texte": "Un jour, il sort devant son peuple dans tout son apparat. Et ceux qui aiment cette vie soupirent : « Si seulement on avait ce qu'a reçu Qâroûn ! »"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_cortege",
+      "ref": "28:80",
+      "accents": {
+        "meilleure.": "impact"
+      },
+      "texte": "Mais ceux qui ont reçu le savoir répondent : « La récompense d'Allah est meilleure. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_engloutie",
+      "accents": {
+        "Alors…": "battement"
+      },
+      "texte": "Alors…"
+    },
+    {
+      "type": "verset",
+      "scene": "qr_engloutie",
+      "ref": "28:81"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_lendemain",
+      "ref": "28:82",
+      "accents": {
+        "veille,": "whoosh",
+        "aussi.": "impact"
+      },
+      "texte": "Et ceux qui, la veille, rêvaient d'être à sa place disent : « Si Allah ne nous avait pas fait grâce, Il nous aurait engloutis nous aussi. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_lendemain",
+      "accents": {
+        "Allah.": "battement",
+        "instant.": "impact"
+      },
+      "texte": "Ce que tu possèdes, ce n'est pas ton savoir qui te l'a donné. C'est Allah. Et Il peut le reprendre en un instant."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "abonne-toi": "pop",
+        "partage-la.": "pop"
+      },
+      "texte": "Si cette histoire t'a touché, abonne-toi pour ne pas rater les prochaines, et partage-la."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  }
+}

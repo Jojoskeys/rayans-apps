@@ -7,6 +7,7 @@ export type Verset = {
   sourate: string;
   recitateur?: string;
   minutage: [number, number, number][]; // [index du mot, frame début, frame fin]
+  parties?: { num: number; de: number; a: number; fr: string }[] | null; // suite de versets : un à la fois
 };
 
 export type Segment = {
@@ -32,6 +33,7 @@ export type Timeline = {
   cues: Cue[];
   audio: string;
   brouillon?: boolean;
+  accroche?: string | null;
 };
 
 /** Un « plan » = segments consécutifs qui partagent le même décor. */

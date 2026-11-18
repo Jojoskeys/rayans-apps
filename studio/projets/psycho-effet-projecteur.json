@@ -1,0 +1,90 @@
+{
+  "slug": "psycho-effet-projecteur",
+  "titre": "L'effet projecteur",
+  "titre_youtube": "Pourquoi tu crois que tout le monde t'a remarqué ? L'effet projecteur",
+  "serie": "Pourquoi tu… #1",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "accroche": "Personne n'a vu ta tache. Vraiment.",
+  "sources": [
+    "Gilovich, T., Medvec, V. H. & Savitsky, K. (2000). The spotlight effect in social judgment. Journal of Personality and Social Psychology, 78(2), 211-222 : étudiants de Cornell entrant dans une salle avec un t-shirt jugé gênant (Barry Manilow) ; ils estiment qu'environ la moitié des présents l'ont remarqué ; en réalité environ un quart (≈ 23 %)"
+  ],
+  "legende": "Tu penses que tout le monde a vu ta tache, ton bafouillage, ta gaffe ? Une étude de Cornell montre qu'on surestime d'environ deux fois l'attention que les autres nous portent.\n\nÇa t'arrive de repenser à une gêne d'il y a des années ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#faitspsychologiques",
+    "#anxietesociale",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_tache",
+      "accents": {
+        "t-shirt": "pop:Shirt",
+        "personne.": "impact"
+      },
+      "texte": "Tu crois que tout le monde a vu la tache sur ton t-shirt ? En vrai… presque personne."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_salle",
+      "accents": {
+        "Cornell,": "pop",
+        "gênant,": "secousse",
+        "pleine.": "whoosh"
+      },
+      "texte": "À l'université Cornell, des chercheurs ont fait porter à des étudiants un t-shirt vraiment gênant, avec la tête d'un chanteur ringard. Puis ils les ont fait entrer dans une salle pleine."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_jauge",
+      "accents": {
+        "moitié": "impact",
+        "quart.": "impact"
+      },
+      "texte": "Les étudiants étaient sûrs que la moitié de la salle l'avait remarqué. En réalité ? À peine un quart."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_projecteur",
+      "titre": {
+        "mot": "projecteur.",
+        "texte": "L'effet projecteur"
+      },
+      "accents": {
+        "projecteur.": "flash",
+        "leur.": "pop"
+      },
+      "texte": "C'est l'effet projecteur. Tu vis ta journée sous ton propre projecteur… mais les autres sont bien trop occupés sous le leur."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_boucle",
+      "accents": {
+        "oublié.": "whoosh",
+        "boucle.": "battement"
+      },
+      "texte": "Ta gaffe d'hier, ton bafouillage en classe : les autres l'ont déjà oublié. Toi seul la repasses en boucle."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'arrive de repenser à une gêne d'il y a des années ? Réponds OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  }
+}
