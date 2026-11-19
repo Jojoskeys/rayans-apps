@@ -74,7 +74,7 @@
 </main>
 <script>
 const $ = (s) => document.querySelector(s);
-let donnees = { videos: [], categories: {}, travail: {} }, onglet = "decider", dernierTravail = "";
+let donnees = { videos: [], categories: {}, travail: {} }, onglet = "pratique", dernierTravail = "";
 
 function el(tag, attrs = {}, ...enfants) {
   const e = document.createElement(tag);
@@ -93,7 +93,10 @@ async function api(chemin, corps) {
   return j;
 }
 
+const pratique = (v) => v.etat === "analysee" && ["oui", "en-partie"].includes(v.fiche?.faisable)
+  && v.fiche?.securite?.verdict !== "danger";
 const ONGLETS = [
+  ["pratique", "Pratique", pratique],
   ["decider", "À décider", (v) => v.etat === "analysee"],
   ["validee", "Validées", (v) => v.etat === "validee"],
   ["appliquee", "Appliquées", (v) => v.etat === "appliquee"],
