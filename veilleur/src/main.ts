@@ -5,12 +5,14 @@
 // RAYANS_CLE, et réécrit chiffré. Il n'écrit JAMAIS de donnée personnelle dans le journal (dépôt public du code).
 //
 // Variables : RAYANS_CLE, VAPID_PUBLIC, VAPID_PRIVATE, GITHUB_TOKEN, GITHUB_REPOSITORY ; RAYANS_GH_API pour les tests.
+// Facultative (vidéos en ligne) : VIDEOS_COMPTES ; RAYANS_YT pour les tests.
 import webpush from "web-push";
 import { decrypt, encrypt, isEncrypted, unb64 } from "../../mobile/src/shared/e2e.ts";
 import { mergeText } from "../../mobile/src/shared/merge.ts";
 import { parseIcs } from "../../aujourdhui/src/core/ics.ts";
 import { applyFetch, prune, sanitizeFac, type FacData } from "../../aujourdhui/src/core/fac.ts";
 import { sanitizeRoutine } from "../../aujourdhui/src/core/routine.ts";
+import { lireComptes, telechargerFlux, videosEnLigne } from "./videos.ts";
 import { DEFAULT_PREFS, EMPTY_STATE, plan, type Prefs, type VeilleurState } from "./plan.ts";
 
 const env = (k: string) => { const v = process.env[k]; if (!v) throw new Error(`variable ${k} manquante`); return v; };
@@ -67,6 +69,16 @@ async function heuresDuJour(priere: unknown, now: number) {
   }
 }
 
+/** Vidéos sorties depuis peu (flux publics YouTube). Sans le secret, ou si YouTube ne répond pas : rien, sans bloquer le reste. */
+async function videos(now: number) {
+  const out = [];
+  for (const c of lireComptes(process.env.VIDEOS_COMPTES ?? "")) {
+    try { out.push(...videosEnLigne(c, await telechargerFlux(c.youtube, process.env.RAYANS_YT), now)); }
+    catch (e) { log(`flux YouTube indisponible : ${String((e as Error).message).slice(0, 80)}`); }
+  }
+  return out;
+}
+
 async function main() {
   const now = Date.now();
   const [facF, routineF, revF, hifzF, ouvF, notifF, stateF, bilanF, objF, priereF, sportF] = await Promise.all(["fac", "routine", "revision", "hifz", "ouvertures", "notifications", "veilleur", "bilan", "objectifs", "priere", "sport"].map(pull));
@@ -95,6 +107,7 @@ async function main() {
     routine: routineF ? sanitizeRoutine(parse(routineF)) : undefined,
     revision: parse(revF), hifz: parse(hifzF), ouvertures: parse(ouvF),
     bilan: parse(bilanF), objectifs: parse(objF), sport: parse(sportF), prieres: await heuresDuJour(parse(priereF), now), priere: parse(priereF),
+    videos: prefs.videos ? await videos(now) : [],
   });
   const subs = notif.subscriptions ?? [];
   log(`${messages.length} notification(s) à envoyer, ${subs.length} appareil(s)`);

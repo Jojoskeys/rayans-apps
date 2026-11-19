@@ -340,4 +340,42 @@ function Fiche({ cfg, video: v, ouverte, apres, erreur }: { cfg: Config; video: 
 }
 
 mountChrome([]);
-createRoot(document.getElementById("racine")!).render(<StrictMode><App /></StrictMode>);
+const NOM_RESEAU: Record<string, string> = { tiktok: "TikTok", youtube: "YouTube", instagram: "Instagram", facebook: "Facebook" };
+
+/**
+ * Ouvert depuis la notification « vidéo en ligne » du veilleur : les liens publics de la vidéo (dans l'adresse),
+ * à partager à la famille et aux amis. Ne passe pas par le PC.
+ */
+function EnLigne({ q }: { q: URLSearchParams }) {
+  const titre = q.get("en-ligne") || "Ma nouvelle vidéo";
+  const liens = q.getAll("l").map((x) => { const i = x.indexOf("~"); return { reseau: x.slice(0, i), url: x.slice(i + 1) }; }).filter((l) => /^https:\/\//.test(l.url));
+  const [info, setInfo] = useState<string | null>(null);
+  const texte = (ls: typeof liens) => [`Ma nouvelle vidéo est en ligne : « ${titre} »`, "Un like, un commentaire ou un partage m'aide beaucoup 🙏", "", ...ls.map((l) => `${NOM_RESEAU[l.reseau] ?? l.reseau} : ${l.url}`)].join("\n");
+  const envoyer = async (ls: typeof liens) => {
+    const t = texte(ls);
+    if (navigator.share) { try { await navigator.share({ title: titre, text: t }); return; } catch (e) { if ((e as Error).name === "AbortError") return; } }
+    try { await navigator.clipboard.writeText(t); setInfo("Message copié : colle-le dans WhatsApp, Messages…"); } catch { setInfo("Copie impossible : appuie longuement sur un lien pour le copier."); }
+  };
+  return (
+    <div className="tc">
+      <div className="titre-carte"><h1>En ligne 🎉</h1><a className="lien accent" href="./">Studio</a></div>
+      <section className="carte">
+        <h2>{titre}</h2>
+        {liens.length ? <>
+          <button className="bouton vert" onClick={() => void envoyer(liens)}>Partager à ma famille et mes amis</button>
+          <ul className="liste">{liens.map((l) => (
+            <li key={l.url}>
+              <span className="texte"><b>{NOM_RESEAU[l.reseau] ?? l.reseau}</b><small><a href={l.url} target="_blank" rel="noreferrer">{/\/(shorts|video|reel)\//.test(l.url) ? "Ouvrir la vidéo" : "Voir le compte"}</a></small></span>
+              <button className="lien accent" onClick={() => void envoyer([l])}>Partager</button>
+            </li>
+          ))}</ul>
+          {info && <p className="petit">{info}</p>}
+          <p className="petit">Le message contient le titre et les liens ; YouTube se regarde même sans l'appli.</p>
+        </> : <p>Aucun lien dans la notification.</p>}
+      </section>
+    </div>
+  );
+}
+
+const q = new URLSearchParams(location.search);
+createRoot(document.getElementById("racine")!).render(<StrictMode>{q.has("en-ligne") ? <EnLigne q={q} /> : <App />}</StrictMode>);
