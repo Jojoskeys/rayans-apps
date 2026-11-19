@@ -1,0 +1,21 @@
+/* Tuile Bonnes affaires : s'appuie sur telecommande.css (couleurs, cartes, boutons). */
+.offre { display: flex; gap: 12px; border-top: 1px solid var(--bord); padding-top: 12px; }
+.carte > .offre:first-of-type, .titre-carte + .offre { border-top: 0; padding-top: 0; }
+.offre .vignette { flex: none; width: 88px; height: 88px; border-radius: 10px; object-fit: cover; background: var(--panneau-2); display: grid; place-items: center; font-size: 11px; color: var(--texte-3); text-align: center; }
+.offre .infos { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.offre .infos a { color: inherit; font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+.offre .site { font-size: 12.5px; color: var(--texte-2); }
+.offre .prix { font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+.offre .prix b { font-size: 17px; }
+.offre .prix s { color: var(--texte-3); font-size: 13px; }
+.offre .remise { color: var(--vert); font-weight: 700; }
+.offre .ou { font-size: 13px; color: var(--texte-2); }
+.pastille { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 1px 8px; border-radius: 99px; border: 1px solid currentColor; }
+.pastille.sur { color: var(--vert); }
+.pastille.verif { color: var(--orange); }
+.pastille.mefi { color: var(--rouge); }
+.raisons { list-style: none; margin: 4px 0 0; padding: 0; font-size: 13px; color: var(--texte-2); display: flex; flex-direction: column; gap: 2px; }
+.raisons .bon::before { content: "+ "; color: var(--vert); font-weight: 700; }
+.raisons .mauvais::before { content: "− "; color: var(--orange); font-weight: 700; }
+.plus-de-detail { font: inherit; font-size: 13px; color: var(--accent); background: none; border: 0; padding: 0; text-align: left; }
+.bandeau-demo { margin: 0; padding: 10px 14px; border-radius: 12px; border: 1px dashed var(--orange); color: var(--texte-2); font-size: 14px; }

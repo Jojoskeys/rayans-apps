@@ -93,3 +93,14 @@ seules les annonces livrables restent, si possible avec la protection acheteur d
 
 Chaque offre affiche aussi la photo de l'annonce (eBay la donne ; pour un import, colonne `photo` avec une
 adresse `https://`). Colonnes d'import en plus : `vendeurNote` (% d'avis positifs), `vendeurAvis`.
+
+## Sur l'iPhone : tuile « Bonnes affaires »
+
+À chaque lancement, l'app dépose aussi le classement dans `Documents\Rayan's Bonnes Affaires\offres.json`.
+Rayan's Télécommande le lit (adresse `GET /api/bonnes-affaires`, en lecture seule) et la tuile
+« Bonnes affaires » de Rayan's Mobile l'affiche : « Mes choix » avec photo, prix, remise, avis et raisons,
+puis les autres offres. Un appui sur l'annonce l'ouvre sur le site.
+
+- Il faut que la Télécommande soit associée (tuile Télécommande) et à jour (Rayan's Launcher).
+- La tuile montre le dernier classement calculé sur le PC : relancer `npm start` pour le mettre à jour.
+- Après `npm run demo`, la tuile affiche un bandeau « données d'exemple ».

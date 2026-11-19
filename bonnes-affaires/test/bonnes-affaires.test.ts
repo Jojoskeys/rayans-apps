@@ -155,3 +155,16 @@ test("photo : eBay et import, seulement en https", () => {
   assert.equal(versAnnonce({ titre: "a", prix: 1, lien: "u", image: "https://x.invalid/a.jpg" }, "f")?.photo, "https://x.invalid/a.jpg");
   assert.equal(versAnnonce({ titre: "a", prix: 1, lien: "u", photo: "javascript:alert(1)" }, "f")?.photo, undefined);
 });
+
+test("partage : le classement est déposé pour la tuile de l'iPhone", async () => {
+  const { deposer } = await import("../src/partage.ts");
+  const { readFileSync } = await import("node:fs");
+  const reglages: Reglages = { ...base, recherches: [{ nom: "Écran", mots: "ecran", categorie: "electronique", prixHabituel: 300 }] };
+  const offres = classer([annonce("Ecran 4K", 120, { photo: "https://exemple.invalid/p.jpg" })], reglages);
+  const fichier = deposer(offres, true, mkdtempSync(join(tmpdir(), "ba-partage-")));
+  const lu = JSON.parse(readFileSync(fichier, "utf8"));
+  assert.equal(lu.demo, true);
+  assert.equal(lu.offres[0].titre, "Ecran 4K");
+  assert.equal(lu.offres[0].photo, "https://exemple.invalid/p.jpg");
+  assert.equal(lu.offres[0].choix, true);
+});
