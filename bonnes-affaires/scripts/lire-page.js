@@ -1,0 +1,20 @@
+// Lecteurs de page pour le relevé sur demande (voir README, « Relevé sur demande »).
+// Claude exécute l'un des deux dans son navigateur intégré, sur une page de recherche déjà ouverte, après
+// avoir remplacé NOM (fichier d'import, ex. lbc-switch-rennes) et RECHERCHE (nom exact dans reglages.json).
+// Ils ne font que lire ce que la page affiche déjà : aucune requête en plus, aucun compte.
+
+// Leboncoin : annonces de la page (titre, prix, lien, code postal, position, livrable, photo).
+const s = (window.__NEXT_DATA__ || JSON.parse(document.getElementById("__NEXT_DATA__").textContent)).props.pageProps.searchData;
+"BA1|NOM|RECHERCHE|" + JSON.stringify(s.ads.filter((a) => a.price?.[0] > 0).map((a) => [
+  a.subject.slice(0, 70), a.price[0], a.url.split("/ad/")[1], a.location.zipcode, a.location.lat, a.location.lng,
+  a.attributes.some((x) => x.key === "shipping_type" && x.value !== "face_to_face") ? 1 : 0,
+  (a.images?.urls?.[0] || "").split("/images/")[1]?.split("?")[0] || "",
+]));
+
+// Vinted : 60 premières annonces (titre, prix protection acheteur comprise, identifiant, état, taille, photo).
+const v = [...document.querySelectorAll('a[data-testid$="--overlay-link"]')].slice(0, 60).map((a) => {
+  const m = (a.getAttribute("title") || "").match(/^(.*?), Marque: ([^,]*), (?:État: ([^,]*), )?(?:Taille: ([^,]*), )?([\d.]+) €, ([\d.]+) €/);
+  const img = (a.closest('[data-testid$="--container"]') || a.parentElement)?.querySelector("img")?.src || "";
+  return m ? [m[1].slice(0, 70), +m[6], a.href.split("/items/")[1].split("?")[0].split("-")[0], m[3] || "", m[4] || "", img] : null;
+}).filter(Boolean);
+"BA1|NOM|RECHERCHE|" + JSON.stringify(v);
