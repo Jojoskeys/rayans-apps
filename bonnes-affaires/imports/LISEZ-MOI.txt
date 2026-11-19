@@ -1,0 +1,3 @@
+Déposez ici des fichiers .json ou .csv d'annonces (Vinted, Leboncoin, Facebook, Back Market...).
+Ils sont lus à chaque lancement et ne partent jamais dans le dépôt.
+Colonnes CSV : site;titre;prix;port;lien;codePostal;livrable
