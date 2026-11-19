@@ -15,6 +15,7 @@ import { profilValide } from "../core/wifi.ts";
 import type { Donnees } from "../core/donnees.ts";
 import * as studio from "../core/studio.ts";
 import * as papiers from "../core/papiers.ts";
+import * as favoris from "../core/favoris.ts";
 import { abonnementValide, ErreurRappel } from "../core/minuteurs.ts";
 import type { Push } from "./push.ts";
 import * as sys from "./systeme.ts";
@@ -52,6 +53,8 @@ export const dossierScripts = () => path.join(app.getPath("videos"), "Rayan's St
 export const fichierIdees = () => path.join(app.getPath("videos"), "Rayan's Studio", "idees.json");
 /** Photos de documents envoyées depuis la tuile Papiers (voir core/papiers.ts). */
 export const dossierPapiers = () => path.join(app.getPath("documents"), "Rayan's Papiers");
+/** Liens et vidéos envoyés depuis la tuile Favoris, lus par l'app Python favoris/ (voir core/favoris.ts). */
+export const dossierFavoris = () => path.join(app.getPath("documents"), "Rayan's Favoris");
 
 class ErreurHttp extends Error { code: number; constructor(code: number, message: string) { super(message); this.code = code; } }
 
@@ -341,6 +344,37 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           const b = await lireJson(req);
           try { studio.supprimerIdee(fichierIdees(), String(b.id ?? "")); }
           catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
+          return envoyer(200, { ok: true });
+        }
+
+        // ----- Rayan's Favoris : liens et vidéos à analyser par Claude -----
+        case "GET /api/favoris":
+          return envoyer(200, favoris.resume(dossierFavoris()));
+
+        case "POST /api/favoris": {
+          const b = await lireJson(req);
+          try { favoris.deposerLien(dossierFavoris(), String(b.lien ?? ""), String(b.note ?? "")); }
+          catch (e) { if (e instanceof favoris.ErreurFavori) throw new ErreurHttp(e.code, e.message); throw e; }
+          ctx.journaliser("Favori reçu du téléphone");
+          return envoyer(200, { ok: true });
+        }
+
+        case "POST /api/favoris/video": {
+          const ext = favoris.VIDEOS[String(req.headers["content-type"] ?? "").split(";")[0].trim().toLowerCase()];
+          if (!ext) throw new ErreurHttp(415, "envoie une vidéo (MP4, MOV ou WebM)");
+          if (Number(req.headers["content-length"]) > favoris.TAILLE_MAX) throw new ErreurHttp(413, "vidéo trop lourde (500 Mo au plus)");
+          const dir = path.join(dossierFavoris(), "a-deposer");
+          fs.mkdirSync(dir, { recursive: true });
+          const chemin = path.join(dir, `iphone-${Date.now()}.${ext}`), tmp = chemin + ".partiel";
+          let n = 0;
+          try {
+            await pipeline(req, async function* (source) { for await (const m of source) { n += (m as Buffer).length; if (n > favoris.TAILLE_MAX) throw new ErreurHttp(413, "vidéo trop lourde (500 Mo au plus)"); yield m; } }, fs.createWriteStream(tmp));
+            fs.renameSync(tmp, chemin);
+          } catch (e) { fs.rmSync(tmp, { force: true }); throw e; }
+          let note = String(req.headers["x-nom-fichier"] ?? ""); // en-tête déjà autorisé : ici, la note de Rayan
+          try { note = decodeURIComponent(note); } catch { /* note brute */ }
+          if (note) fs.writeFileSync(chemin + ".note.txt", note.slice(0, 500), "utf8");
+          ctx.journaliser("Vidéo de favori reçue du téléphone");
           return envoyer(200, { ok: true });
         }
 

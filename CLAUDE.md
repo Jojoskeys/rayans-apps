@@ -2,7 +2,7 @@
 
 - Réponds en français, simplement, sans jargon.
 - Une app par dossier ; la liste et le rôle de chaque app sont dans `README.md` (ne relis pas tout le dépôt pour t'orienter).
-- Branche de travail : `studio`, publiée en avance rapide sur `main`. Ne commite, ne pousse et ne publie rien sans le feu vert de Rayan.
+- Branche de travail : `studio`, publiée en avance rapide sur `main`. Une tâche finie et testée : commite et pousse (`studio` puis `main`) sans demander, en ne prenant que ses propres fichiers. Ne publie rien sur les réseaux sociaux sans le feu vert de Rayan.
 - Dépôt public : rien de personnel dans le code, les commits ou les messages (noms, adresses, jetons, chemins privés).
 - N'ouvre jamais `node_modules/`, `dist/`, `out/`, `target/` ni les fichiers générés ou verrouillés (`package-lock.json`, `Cargo.lock`) sauf demande précise.
 - Lis seulement la partie d'un fichier dont tu as besoin ; préfère la recherche (Grep) à la lecture complète.

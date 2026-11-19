@@ -27,6 +27,10 @@ Remotion est gratuit pour un usage personnel ou une entreprise de 3 personnes ma
 
 ## Écrire un script (`projets/<slug>.json`)
 
+Avant d'écrire, relis `inspirations.md` (dans Vidéos\Rayan's Studio) : Rayan's Favoris y range ce qui fait
+marcher les vidéos de religion et de psychologie que Rayan a gardées, et dépose les idées tirées des vidéos
+qui ont bien marché dans la boîte à idées (`python a_valider.py idees`). On s'inspire de la forme, jamais du texte.
+
 Chaque segment est une `narration` (texte lu par la voix) ou un `verset` (`ref` comme `28:7`).
 
 - `scene` : le décor (Ayati : `palais_nuit`, `village_nuit`, `lampe`, `calligraphie`, `coffre_nuit`,

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rayan's Favoris</title>
+<style>
+  :root {
+    --fond: #fbf7f8; --carte: #ffffff; --texte: #2b2326; --doux: #7a6c71; --ligne: #eadfe3;
+    --accent: #c95b7f; --accent-doux: #f6e3ea; --vert: #2f8a5b; --orange: #b7711b; --rouge: #c0392b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --fond: #1b1719; --carte: #252023; --texte: #f1e9ec; --doux: #a8989e; --ligne: #3a3236;
+            --accent: #e48aa8; --accent-doux: #3b2830; --vert: #5cc48e; --orange: #e0a252; --rouge: #ef7565; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fond); color: var(--texte); font: 15px/1.5 "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 20px 16px 60px; }
+  h1 { font-size: 22px; margin: 0 0 4px; } h1 span { color: var(--accent); }
+  .sous { color: var(--doux); margin: 0 0 18px; }
+  .boite { background: var(--carte); border: 1px solid var(--ligne); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+  .ligne { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  input[type=text] { flex: 1; min-width: 200px; padding: 9px 11px; border: 1px solid var(--ligne); border-radius: 8px; background: var(--fond); color: var(--texte); font: inherit; }
+  button { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--ligne); background: var(--carte); color: var(--texte); font: inherit; cursor: pointer; }
+  button.plein { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.vert { background: var(--vert); border-color: var(--vert); color: #fff; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  #depot { border: 2px dashed var(--ligne); border-radius: 10px; padding: 14px; text-align: center; color: var(--doux); margin-top: 10px; }
+  #depot.dessus { border-color: var(--accent); background: var(--accent-doux); }
+  #message { min-height: 1.5em; margin-top: 8px; color: var(--doux); }
+  nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 18px 0 12px; }
+  nav button { border-radius: 999px; padding: 5px 12px; font-size: 14px; }
+  nav button.actif { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .carte { background: var(--carte); border: 1px solid var(--ligne); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .tete { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .titre { font-weight: 600; }
+  .meta { color: var(--doux); font-size: 13px; }
+  .pastille { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; margin-right: 4px; background: var(--accent-doux); color: var(--accent); }
+  .sur { background: color-mix(in srgb, var(--vert) 15%, transparent); color: var(--vert); }
+  .prudence { background: color-mix(in srgb, var(--orange) 15%, transparent); color: var(--orange); }
+  .danger { background: color-mix(in srgb, var(--rouge) 15%, transparent); color: var(--rouge); }
+  h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--doux); margin: 12px 0 4px; }
+  ul { margin: 0; padding-left: 20px; }
+  pre { white-space: pre-wrap; background: var(--fond); border: 1px solid var(--ligne); border-radius: 8px; padding: 10px; font: 13px/1.45 Consolas, monospace; margin: 0; }
+  .images { display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; }
+  .images img { height: 120px; border-radius: 6px; }
+  .actions { margin-top: 12px; }
+  .vide { color: var(--doux); text-align: center; padding: 30px 0; }
+  a { color: var(--accent); }
+  .alerte { color: var(--rouge); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Rayan's <span>Favoris</span></h1>
+  <p class="sous">Tes vidéos enregistrées, triées et vérifiées. Rien n'est appliqué tant que tu n'as pas cliqué sur « Valider ».</p>
+
+  <div class="boite">
+    <div class="ligne">
+      <input type="text" id="lien" placeholder="Colle un lien TikTok ou Instagram">
+      <input type="text" id="note" placeholder="Une note pour Claude (facultatif)" style="max-width:280px">
+      <button class="plein" id="ajouter">Ajouter</button>
+    </div>
+    <div id="depot">Glisse une vidéo ici (mp4, mov, webm)</div>
+    <div class="ligne" style="margin-top:10px">
+      <button id="recuperer">Télécharger et transcrire ce qui attend</button>
+      <span class="meta">Ensuite, dans Claude Code : <b>/favoris</b> pour l'analyse.</span>
+    </div>
+    <div id="message"></div>
+  </div>
+
+  <nav id="onglets"></nav>
+  <div id="liste"></div>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+let donnees = { videos: [], categories: {}, travail: {} }, onglet = "decider", dernierTravail = "";
+
+function el(tag, attrs = {}, ...enfants) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v);
+  }
+  for (const c of enfants.flat()) if (c != null && c !== false) e.append(c instanceof Node ? c : String(c));
+  return e;
+}
+const dire = (t) => { $("#message").textContent = t; };
+
+async function api(chemin, corps) {
+  const r = await fetch(chemin, corps === undefined ? {} : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corps) });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.erreur || r.statusText);
+  return j;
+}
+
+const ONGLETS = [
+  ["decider", "À décider", (v) => v.etat === "analysee"],
+  ["validee", "Validées", (v) => v.etat === "validee"],
+  ["appliquee", "Appliquées", (v) => v.etat === "appliquee"],
+  ["recette", "Recettes", (v) => v.categorie === "recette"],
+  ["inspiration", "Inspiration Studio", (v) => !!v.fiche?.inspiration],
+  ["attente", "En attente", (v) => ["a_recuperer", "a_analyser"].includes(v.etat)],
+  ["refusee", "Refusées", (v) => v.etat === "refusee"],
+  ["ignoree", "Ignorées", (v) => v.etat === "ignoree"],
+  ["erreur", "Erreurs", (v) => v.etat === "erreur"],
+];
+
+function dessiner() {
+  const nav = $("#onglets"); nav.replaceChildren();
+  for (const [id, nom, filtre] of ONGLETS) {
+    const n = donnees.videos.filter(filtre).length;
+    nav.append(el("button", { class: id === onglet ? "actif" : "", onclick: () => { onglet = id; dessiner(); } }, `${nom} (${n})`));
+  }
+  const filtre = ONGLETS.find((o) => o[0] === onglet)[2];
+  const liste = donnees.videos.filter(filtre);
+  $("#liste").replaceChildren(...(liste.length ? liste.map(carte) : [el("p", { class: "vide" }, "Rien ici pour l'instant.")]));
+  const t = donnees.travail || {};
+  $("#recuperer").disabled = !!t.en_cours;
+  if (t.message && t.message !== dernierTravail) { dernierTravail = t.message; dire(t.message); }
+}
+
+const NOMS_STATS = { view_count: "vues", like_count: "j'aime", comment_count: "commentaires", repost_count: "partages", channel_follower_count: "abonnés" };
+function stats(s) {
+  if (!s) return "";
+  const n = (x) => x >= 1e6 ? (x / 1e6).toFixed(1).replace(/\.0$/, "") + " M" : x >= 1e3 ? (x / 1e3).toFixed(1).replace(/\.0$/, "") + " k" : String(x);
+  return Object.entries(s).filter(([k]) => NOMS_STATS[k]).map(([k, x]) => `${n(x)} ${NOMS_STATS[k]}`).join(" · ");
+}
+
+function puces(titre, liste, classe) {
+  if (!liste || !liste.length) return null;
+  return [el("h3", {}, titre), el("ul", classe ? { class: classe } : {}, liste.map((x) => el("li", {}, x)))];
+}
+
+function carte(v) {
+  const f = v.fiche || {}, s = f.securite || {}, r = f.reflexion || {};
+  const titre = v.titre || f.resume?.slice(0, 80) || v.id;
+  const lien = v.lien ? el("a", { href: v.lien, target: "_blank", rel: "noopener noreferrer" }, "voir la vidéo") : null;
+  const etiquettes = [
+    f.categorie && el("span", { class: "pastille" }, donnees.categories[f.categorie] || f.categorie),
+    s.verdict && el("span", { class: "pastille " + s.verdict }, { sur: "Sûr", prudence: "Prudence", danger: "Danger" }[s.verdict]),
+    f.faisable && el("span", { class: "pastille" }, "Faisable : " + f.faisable),
+  ];
+  const note = el("input", { type: "text", placeholder: "Une précision pour Claude (facultatif)" });
+  const decider = async (choix) => {
+    try { await api("/api/decider", { id: v.id, choix, note: note.value }); await charger(); }
+    catch (e) { dire(e.message); }
+  };
+  const copier = f.prompt ? el("button", { onclick: async (e) => { await navigator.clipboard.writeText(f.prompt); e.target.textContent = "Copié ✓"; } }, "Copier le prompt") : null;
+
+  return el("div", { class: "carte" },
+    el("div", { class: "tete" },
+      el("div", {}, el("div", { class: "titre" }, titre),
+        el("div", { class: "meta" }, [v.plateforme, v.auteur, v.collection && "collection « " + v.collection + " »", v.duree && v.duree + " s"].filter(Boolean).join(" · "), " ", lien)),
+      el("div", {}, etiquettes)),
+    f.resume && el("p", {}, f.resume),
+    stats(v.stats) && el("p", { class: "meta" }, stats(v.stats)),
+    f.pour_rayan && [el("h3", {}, "Pour toi"), el("p", {}, f.pour_rayan)],
+    f.inspiration && [el("h3", {}, "Inspiration pour " + ({ ayati: "Ayati", psycho: "La Psycho Facile" }[f.inspiration.compte] || "le Studio")
+        + (f.inspiration.a_marche ? " — idée ajoutée au Studio" : " — n'a pas assez marché pour être reprise")),
+      el("p", {}, f.inspiration.pourquoi), el("p", {}, el("b", {}, "Idée : "), f.inspiration.idee)],
+    puces("Ce qui est dit", f.points),
+    s.verdict && [el("h3", {}, "Sécurité — double vérification"),
+      el("ul", {}, el("li", {}, "1re : ", s.verification_1 || ""), el("li", {}, "2e : ", s.verification_2 || ""))],
+    puces("Alertes", s.alertes, "alerte"),
+    puces("Pour", r.pour), puces("Contre", r.contre),
+    r.avis && [el("h3", {}, "Mon avis"), el("p", {}, r.avis)],
+    f.pourquoi && [el("h3", {}, "Faisable ?"), el("p", {}, f.pourquoi)],
+    puces("Ce que je ferai si tu valides", f.actions),
+    f.recette && [el("h3", {}, "Recette"), el("ul", {}, (f.recette.ingredients || []).map((i) => el("li", {}, i))),
+      el("ol", {}, (f.recette.etapes || []).map((i) => el("li", {}, i)))],
+    f.prompt && [el("h3", {}, "Prompt"), el("pre", {}, f.prompt)],
+    v.etat === "erreur" && el("p", { class: "alerte" }, v.erreur || "Erreur inconnue"),
+    v.note_claude && el("p", { class: "meta" }, "Claude : " + v.note_claude),
+    v.images?.length && el("div", { class: "images" }, v.images.map((i) => el("img", { src: "/images/" + encodeURIComponent(i), alt: "" }))),
+    v.etat === "analysee" && el("div", { class: "actions" },
+      el("div", { class: "ligne" }, note,
+        el("button", { class: "vert", onclick: () => decider("validee"), ...(s.verdict === "danger" || f.faisable === "non" ? { disabled: "" } : {}) }, "Valider"),
+        el("button", { onclick: () => decider("refusee") }, "Refuser"), copier)),
+    ["validee", "refusee"].includes(v.etat) && el("div", { class: "actions ligne" },
+      el("button", { onclick: () => decider("analysee") }, "Remettre à décider"), copier),
+  );
+}
+
+async function charger() {
+  try { donnees = await api("/api/liste"); dessiner(); } catch (e) { dire("Page injoignable : " + e.message); }
+}
+
+$("#ajouter").onclick = async () => {
+  try { const r = await api("/api/ajouter", { lien: $("#lien").value, note: $("#note").value }); dire(r.message); $("#lien").value = $("#note").value = ""; await charger(); }
+  catch (e) { dire(e.message); }
+};
+$("#recuperer").onclick = async () => { await api("/api/recuperer", {}); dire("C'est parti…"); await charger(); };
+
+const depot = $("#depot");
+depot.ondragover = (e) => { e.preventDefault(); depot.classList.add("dessus"); };
+depot.ondragleave = () => depot.classList.remove("dessus");
+depot.ondrop = async (e) => {
+  e.preventDefault(); depot.classList.remove("dessus");
+  for (const f of e.dataTransfer.files) {
+    dire(`Envoi de ${f.name}…`);
+    const r = await fetch("/api/deposer", { method: "POST", headers: { "X-Nom": encodeURIComponent(f.name) }, body: f });
+    const j = await r.json(); dire(j.message || j.erreur);
+  }
+};
+
+charger();
+setInterval(() => { if (donnees.travail?.en_cours) charger(); }, 2500);
+</script>
+</body>
+</html>
