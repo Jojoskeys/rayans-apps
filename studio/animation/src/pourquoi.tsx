@@ -9,11 +9,11 @@ import type { SceneProps } from "./types";
 import { clamp, H, prog, quand, ressort, rnd, W } from "./outils";
 import { Bonhomme, COULEURS, FOND, JAUNE, P, ROUGE, Scene, Sol } from "./spectateur";
 
-const GRIS = "#8A8FB8";
-const BLEU_NUIT = "#2A2F70";
-const ENCRE = "#10132e";
+export const GRIS = "#8A8FB8";
+export const BLEU_NUIT = "#2A2F70";
+export const ENCRE = "#10132e";
 
-const Pastille: React.FC<{ x: number; y: number; texte: string; s?: number; fond?: string; couleur?: string; taille?: number; o?: number }> = ({
+export const Pastille: React.FC<{ x: number; y: number; texte: string; s?: number; fond?: string; couleur?: string; taille?: number; o?: number }> = ({
   x, y, texte, s = 1, fond = JAUNE, couleur = ENCRE, taille = 44, o = 1,
 }) => {
   const l = texte.length * taille * 0.62 + 70;
@@ -26,7 +26,7 @@ const Pastille: React.FC<{ x: number; y: number; texte: string; s?: number; fond
 };
 
 /** Bulle de pensée ou de parole au-dessus d'un personnage. */
-const Bulle: React.FC<{ x: number; y: number; l?: number; h?: number; o?: number; fond?: string; children?: React.ReactNode }> = ({
+export const Bulle: React.FC<{ x: number; y: number; l?: number; h?: number; o?: number; fond?: string; children?: React.ReactNode }> = ({
   x, y, l = 200, h = 120, o = 1, fond = "#fff", children,
 }) => (
   <g opacity={o}>
@@ -44,7 +44,7 @@ const Gribouillis: React.FC<{ x: number; y: number; l: number; c?: string; grain
   </g>
 );
 
-const Fo: React.FC<{ x: number; y: number; t: number; children: React.ReactNode; s?: number; r?: number }> = ({ x, y, t, children, s = 1, r = 0 }) => (
+export const Fo: React.FC<{ x: number; y: number; t: number; children: React.ReactNode; s?: number; r?: number }> = ({ x, y, t, children, s = 1, r = 0 }) => (
   <foreignObject x={x - t / 2} y={y - t / 2} width={t} height={t}>
     <div style={{ width: t, height: t, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${s}) rotate(${r}deg)` }}>{children}</div>
   </foreignObject>
@@ -346,7 +346,7 @@ const Veille: React.FC<SceneProps> = ({ plan }) => {
 };
 
 // =============================================================== #3 L'inachevé
-const Ecran: React.FC<{ x: number; y: number; l: number; h: number; children?: React.ReactNode; o?: number }> = ({ x, y, l, h, children, o = 1 }) => (
+export const Ecran: React.FC<{ x: number; y: number; l: number; h: number; children?: React.ReactNode; o?: number }> = ({ x, y, l, h, children, o = 1 }) => (
   <g opacity={o}>
     <rect x={x - l / 2 - 16} y={y - h / 2 - 16} width={l + 32} height={h + 32} rx={28} fill="#0B0E26" />
     <rect x={x - l / 2} y={y - h / 2} width={l} height={h} rx={16} fill={BLEU_NUIT} />
@@ -672,7 +672,7 @@ const Voix: React.FC<SceneProps> = ({ plan }) => {
 };
 
 // =============================================================== #5 Le ver d'oreille
-const Notes: React.FC<{ x: number; y: number; r: number; n: number; o?: number; c?: string }> = ({ x, y, r, n, o = 1, c = JAUNE }) => {
+export const Notes: React.FC<{ x: number; y: number; r: number; n: number; o?: number; c?: string }> = ({ x, y, r, n, o = 1, c = JAUNE }) => {
   const f = useCurrentFrame();
   return (
     <g opacity={o}>

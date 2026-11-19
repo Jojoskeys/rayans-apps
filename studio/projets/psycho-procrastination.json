@@ -1,0 +1,96 @@
+{
+  "slug": "psycho-procrastination",
+  "titre": "La procrastination",
+  "titre_youtube": "Pourquoi tu repousses tout à demain ? (ce n'est pas de la paresse)",
+  "serie": "Pourquoi tu… #6",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ce n'est pas de la paresse",
+  "sources": [
+    "Steel, P. (2007). The nature of procrastination: A meta-analytic and theoretical review of quintessential self-regulatory failure. Psychological Bulletin, 133(1), 65-94 : selon les estimations, 80 à 95 % des étudiants procrastinent (« jusqu'à 95 % »)",
+    "Sirois, F. & Pychyl, T. (2013). Procrastination and the priority of short-term mood regulation. Social and Personality Psychology Compass, 7(2), 115-127 : la procrastination sert à fuir une émotion désagréable liée à la tâche (se sentir mieux tout de suite)",
+    "Hershfield, H. E. et al. (2009). Neural correlates of individual differences in relating to the future self. Social Cognitive and Affective Neuroscience, 4(1), 85-92 : penser à soi dans 10 ans active le cerveau d'une façon plus proche de penser à un inconnu qu'à soi maintenant",
+    "Gollwitzer, P. M. & Sheeran, P. (2006). Implementation intentions and goal achievement: A meta-analysis of effects and processes. Advances in Experimental Social Psychology, 38, 69-119 : un plan « quand, où, quoi » aide nettement à passer à l'action (94 études)"
+  ],
+  "legende": "Tu repousses toujours à demain, même ce qui prend dix minutes ? Ce n'est pas de la paresse : ton cerveau fuit une émotion… et il prend ton « toi de demain » pour un inconnu. L'astuce qui marche est en fin de vidéo.\n\nTu as repoussé quelque chose aujourd'hui ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#procrastination",
+    "#motivation",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_pr_demain",
+      "accents": {
+        "demain…": "whoosh",
+        "dix": "impact"
+      },
+      "texte": "Pourquoi tu repousses toujours à demain… même ce qui ne prend que dix minutes ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pr_stats",
+      "accents": {
+        "seul.": "pop",
+        "95": "flash"
+      },
+      "texte": "Tu n'es pas seul. D'après une grande analyse de 2007, jusqu'à 95 % des étudiants procrastinent."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pr_fuite",
+      "titre": {
+        "mot": "paresse.",
+        "texte": "Ce n'est pas de la paresse"
+      },
+      "accents": {
+        "paresse.": "impact",
+        "fuite": "whoosh",
+        "suite.": "pop"
+      },
+      "texte": "Et ce n'est pas de la paresse. Pour les chercheurs, c'est une fuite : la tâche te met mal à l'aise… alors ton cerveau choisit ce qui te fait du bien, tout de suite."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pr_futur",
+      "accents": {
+        "Pire": "impact",
+        "inconnu.": "flash",
+        "travail.": "pop"
+      },
+      "texte": "Pire : quand tu penses à toi dans dix ans, ton cerveau réagit un peu comme s'il pensait… à un inconnu. Alors tu lui laisses le travail."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pr_plan",
+      "accents": {
+        "L'astuce": "pop",
+        "heures,": "pop",
+        "bureau,": "pop",
+        "vraiment": "impact"
+      },
+      "texte": "L'astuce : ne dis pas « je le ferai plus tard ». Dis : « demain, à dix heures, à mon bureau, j'ouvre le document. » Un plan aussi précis aide vraiment à passer à l'action."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as repoussé quelque chose aujourd'hui ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

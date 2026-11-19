@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-livre-lumiere",
+  "titre": "Des lumières pour les gens",
+  "titre_youtube": "Le Livre de Moussa : des lumières, un guide, une miséricorde",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Le Livre donné à Moussa",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:43 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Après la chute de Pharaon, Allah donne le Livre à Moussa : des preuves qui éclairent les gens, un guide et une miséricorde, pour qu'ils se souviennent. Sourate Al-Qasas (28:43).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#guidee",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:43",
+      "accents": {
+        "Pharaon,": "impact",
+        "noir.": "pop",
+        "lumière.": "flash"
+      },
+      "texte": "Après la fin de Pharaon, Allah n'a pas laissé les gens dans le noir. Il leur a donné une lumière."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_mer",
+      "ref": "28:40",
+      "titre": {
+        "mot": "engloutis.",
+        "texte": "Des lumières pour les gens"
+      },
+      "accents": {
+        "engloutis.": "impact",
+        "disparu.": "pop"
+      },
+      "texte": "Pharaon et son armée ont été engloutis. Les anciennes générations avaient disparu."
+    },
+    {
+      "type": "verset",
+      "scene": "hira_lumiere",
+      "ref": "28:43"
+    },
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:43",
+      "accents": {
+        "Livre": "pop",
+        "lumières": "flash",
+        "souviennent.": "battement"
+      },
+      "texte": "« Nous avons donné le Livre à Moussa, après avoir fait périr les premières générations, comme des lumières pour les gens, un guide et une miséricorde, afin qu'ils se souviennent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "épreuve,": "impact",
+        "guide.": "flash",
+        "Coran": "pop"
+      },
+      "texte": "Après chaque épreuve, Allah envoie un guide. La Torah pour le peuple de Moussa, le Coran pour nous."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "perdu": "pop",
+        "lumière": "flash",
+        "l'ouvrir.": "battement"
+      },
+      "texte": "Tu te sens perdu ? La lumière est déjà là. Il suffit de l'ouvrir."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

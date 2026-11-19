@@ -1,0 +1,107 @@
+{
+  "slug": "ayati-messager-avant",
+  "titre": "Jamais sans prévenir",
+  "titre_youtube": "Allah ne punit jamais un peuple sans l'avoir prévenu",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Jamais sans avertissement",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:59 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Allah ne détruit jamais une cité avant d'y avoir envoyé un messager pour réciter Ses versets. Et Il ne la détruit que si ses habitants sont injustes. Sourate Al-Qasas (28:59).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#justice",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "ref": "28:59",
+      "accents": {
+        "détruites…": "impact",
+        "prévenue.": "flash"
+      },
+      "texte": "Toutes ces cités détruites… Aucune ne l'a été sans avoir été prévenue."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_lendemain",
+      "ref": "28:59",
+      "titre": {
+        "mot": "règle",
+        "texte": "Jamais sans prévenir"
+      },
+      "accents": {
+        "disparu.": "pop",
+        "règle": "flash",
+        "jamais.": "battement"
+      },
+      "texte": "Le Coran raconte beaucoup de peuples qui ont disparu. Mais il rappelle une règle d'Allah, qui ne change jamais."
+    },
+    {
+      "type": "verset",
+      "scene": "ks_lecon",
+      "ref": "28:59"
+    },
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:59",
+      "accents": {
+        "messager": "flash",
+        "versets.": "pop",
+        "injustes.": "impact"
+      },
+      "texte": "« Ton Seigneur ne fait pas périr les cités avant d'avoir envoyé dans leur capitale un messager qui leur récite Nos versets. Et Nous ne faisons périr les cités que si leurs habitants sont injustes. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "justice": "flash",
+        "avant.": "pop",
+        "avertissement": "battement"
+      },
+      "texte": "C'est la justice d'Allah : Il avertit avant. Et le Coran, aujourd'hui, est cet avertissement pour nous."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "rappel": "pop",
+        "chance.": "flash"
+      },
+      "texte": "Chaque rappel que tu entends est une chance. Ne la laisse pas passer."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

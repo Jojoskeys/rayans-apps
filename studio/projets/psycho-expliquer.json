@@ -1,0 +1,94 @@
+{
+  "slug": "psycho-expliquer",
+  "titre": "Apprendre en expliquant",
+  "titre_youtube": "Pourquoi tu retiens mieux quand tu dois l'expliquer à quelqu'un ?",
+  "serie": "Pourquoi tu… #22",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le meilleur moyen de réviser",
+  "sources": [
+    "Nestojko, J. F., Bui, D. C., Kornell, N. & Bjork, E. L. (2014). Expecting to teach enhances learning and organization of knowledge in free recall of text passages. Memory & Cognition, 42(7), 1038-1048 : les étudiants qui pensaient devoir enseigner le texte s'en souvenaient mieux et de façon plus organisée",
+    "Fiorella, L. & Mayer, R. E. (2013). The relative benefits of learning by teaching and teaching expectancy. Contemporary Educational Psychology, 38(4), 281-288 : expliquer vraiment (en vidéo) aide encore plus que s'y attendre"
+  ],
+  "legende": "Tu révises mieux en expliquant à un ami qu'en relisant tes cours. Même juste croire que tu vas devoir l'expliquer change la façon dont ton cerveau range les infos.\n\nTu révises en expliquant à quelqu'un ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#etudes",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ex_accroche",
+      "accents": {
+        "retiens": "pop",
+        "l'expliquer": "impact"
+      },
+      "texte": "Pourquoi tu retiens mieux un cours quand tu dois l'expliquer à quelqu'un ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ex_etude",
+      "titre": {
+        "mot": "l'enseigner",
+        "texte": "Apprendre en expliquant"
+      },
+      "accents": {
+        "2014,": "pop",
+        "test": "pop",
+        "l'enseigner": "impact",
+        "mieux.": "flash"
+      },
+      "texte": "En 2014, des chercheurs ont donné le même texte à deux groupes d'étudiants. Aux uns : « il y aura un test ». Aux autres : « vous devrez l'enseigner ». Les seconds s'en souvenaient mieux."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ex_range",
+      "accents": {
+        "range": "whoosh",
+        "l'essentiel,": "pop",
+        "idées.": "impact"
+      },
+      "texte": "Quand tu sais que tu vas expliquer, ton cerveau range les informations autrement : il cherche l'essentiel, et les liens entre les idées."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ex_vrai",
+      "accents": {
+        "vrai,": "pop",
+        "plus.": "flash"
+      },
+      "texte": "Et expliquer pour de vrai, à voix haute, aide encore plus."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ex_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "examen,": "pop",
+        "chaise.": "impact"
+      },
+      "texte": "L'astuce : avant un examen, explique ton cours à quelqu'un. Ou même à ta chaise."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu révises en expliquant à quelqu'un ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

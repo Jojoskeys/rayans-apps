@@ -1,0 +1,95 @@
+{
+  "slug": "psycho-illusion-frequence",
+  "titre": "L'illusion de fréquence",
+  "titre_youtube": "Pourquoi tu vois partout la voiture que tu viens d'acheter ?",
+  "serie": "Pourquoi tu… #17",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Il n'y en a pas plus qu'avant",
+  "sources": [
+    "Zwicky, A. (2006). « Just between Dr. Language and I ». Language Log : le linguiste nomme l'« illusion de fréquence » (on croit qu'une chose est devenue fréquente juste après l'avoir remarquée)",
+    "Simons, D. J. & Chabris, C. F. (1999). Gorillas in our midst: Sustained inattentional blindness for dynamic events. Perception, 28(9), 1059-1074 : environ la moitié des gens qui comptent des passes ne voient pas une personne déguisée en gorille traverser la scène",
+    "Nickerson, R. S. (1998). Confirmation bias: A ubiquitous phenomenon in many guises. Review of General Psychology, 2(2), 175-220 : on retient surtout ce qui confirme ce qu'on pense déjà"
+  ],
+  "legende": "Tu achètes une voiture, et d'un coup tu la vois partout. Un mot nouveau, et tu l'entends partout. Il n'y en a pas plus qu'avant : c'est ton cerveau qui a changé de filtre.\n\nÇa t'est déjà arrivé ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_if_accroche",
+      "accents": {
+        "voiture…": "pop",
+        "partout": "impact"
+      },
+      "texte": "Pourquoi, dès que tu achètes une voiture… tu la vois partout ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_if_nom",
+      "titre": {
+        "mot": "fréquence.",
+        "texte": "L'illusion de fréquence"
+      },
+      "accents": {
+        "qu'avant.": "impact",
+        "fréquence.": "flash",
+        "2006.": "pop"
+      },
+      "texte": "Il n'y en a pas plus qu'avant. Ça a un nom : l'illusion de fréquence. Le linguiste Arnold Zwicky l'a baptisée en 2006."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_if_filtre",
+      "accents": {
+        "trie": "whoosh",
+        "filtre…": "pop",
+        "même": "impact"
+      },
+      "texte": "Ton cerveau trie sans arrêt ce que tu vois. Ce qui compte pour toi passe le filtre… le reste, tu ne le remarques même pas."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_if_gorille",
+      "accents": {
+        "1999,": "pop",
+        "moitié": "flash",
+        "gorille": "impact",
+        "passes.": "pop"
+      },
+      "texte": "En 1999, dans une expérience célèbre, environ la moitié des gens n'ont pas vu un gorille traverser une vidéo. Ils étaient occupés à compter des passes."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_if_confirme",
+      "accents": {
+        "partout": "pop",
+        "raison.": "impact"
+      },
+      "texte": "Et à chaque fois que tu la revois, ton cerveau se dit : « tu vois, elle est partout ». Il ne compte que les fois où il a raison."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'est déjà arrivé, avec une voiture, un mot ou une chanson ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

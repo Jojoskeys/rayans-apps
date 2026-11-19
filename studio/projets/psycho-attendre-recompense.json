@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-attendre-recompense",
+  "titre": "Savoir attendre",
+  "titre_youtube": "Pourquoi c'est si dur d'attendre une récompense ?",
+  "serie": "Pourquoi tu… #43",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Un bonbon maintenant ou deux plus tard ?",
+  "sources": [
+    "Mischel, W., Ebbesen, E. B. & Zeiss, A. R. (1972). Cognitive and attentional mechanisms in delay of gratification. Journal of Personality and Social Psychology, 21(2), 204-218 : les enfants qui détournaient leur attention de la friandise (jeu, chanson, regarder ailleurs) attendaient beaucoup plus longtemps",
+    "Watts, T. W., Duncan, G. J. & Quan, H. (2018). Revisiting the marshmallow test. Psychological Science, 29(7), 1159-1177 : le lien avec la réussite plus tard est plus faible qu'on le pensait"
+  ],
+  "legende": "Un bonbon maintenant, ou deux si tu attends. Les enfants qui ont réussi à attendre avaient un secret simple : ils ne regardaient pas le bonbon. Une astuce qui marche aussi pour toi.\n\nTu arrives à attendre ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#volonte",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ar_accroche",
+      "accents": {
+        "d'attendre…": "pop",
+        "devant": "impact"
+      },
+      "texte": "Pourquoi c'est si dur d'attendre… quand une récompense est juste devant toi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ar_test",
+      "titre": {
+        "mot": "deux.",
+        "texte": "Un ou deux ?"
+      },
+      "accents": {
+        "friandise": "pop",
+        "deux.": "flash"
+      },
+      "texte": "Dans les années 70, des chercheurs ont mis des enfants seuls face à une friandise : « Tu peux la manger maintenant. Ou, si tu attends, tu en auras deux. »"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ar_secret",
+      "accents": {
+        "secret": "flash",
+        "regardaient": "impact",
+        "ailleurs.": "whoosh"
+      },
+      "texte": "Ceux qui tenaient le plus longtemps avaient un secret : ils ne regardaient pas la friandise. Ils chantaient, jouaient, regardaient ailleurs."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ar_honnete",
+      "accents": {
+        "Attention": "pop",
+        "faible.": "impact"
+      },
+      "texte": "Attention : on a longtemps dit que ce test prédisait toute la vie. Des études récentes montrent que le lien est bien plus faible."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ar_astuce",
+      "accents": {
+        "l'astuce": "pop",
+        "volonté": "flash",
+        "yeux.": "impact"
+      },
+      "texte": "Mais l'astuce reste valable : ta volonté marche mieux… quand la tentation n'est pas sous tes yeux."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu aurais attendu pour avoir deux bonbons ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

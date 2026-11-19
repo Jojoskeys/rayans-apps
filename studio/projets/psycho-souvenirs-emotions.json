@@ -1,0 +1,84 @@
+{
+  "slug": "psycho-souvenirs-emotions",
+  "titre": "Les souvenirs émotionnels",
+  "titre_youtube": "Pourquoi tu te souviens mieux des moments forts en émotions ?",
+  "serie": "Pourquoi tu… #46",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "L'émotion grave le souvenir",
+  "sources": [
+    "Cahill, L. & McGaugh, J. L. (1995). A novel demonstration of enhanced memory associated with emotional arousal. Consciousness and Cognition, 4(4), 410-421 : la même histoire illustrée, racontée de façon émouvante, est mieux retenue deux semaines plus tard",
+    "McGaugh, J. L. (2004). The amygdala modulates the consolidation of memories of emotionally arousing experiences. Annual Review of Neuroscience, 27, 1-28 : l'amygdale renforce l'enregistrement des souvenirs chargés d'émotion"
+  ],
+  "legende": "Ton premier jour d'école, une grosse peur, un fou rire : tu t'en souviens des années plus tard. Le reste disparaît. Ton cerveau grave mieux ce qui l'a ému.\n\nTon souvenir le plus fort, c'est un bon ou un mauvais ? Dis-le en commentaire 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#memoire",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_em_accroche",
+      "accents": {
+        "années…": "pop",
+        "mardi": "impact"
+      },
+      "texte": "Pourquoi tu te souviens de certains moments pendant des années… et pas de ce que tu as mangé mardi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_em_etude",
+      "titre": {
+        "mot": "émouvante.",
+        "texte": "L'émotion grave le souvenir"
+      },
+      "accents": {
+        "1995,": "pop",
+        "émouvante.": "flash",
+        "retenue.": "impact"
+      },
+      "texte": "En 1995, des chercheurs ont raconté la même histoire à deux groupes. Pour l'un, une version neutre. Pour l'autre, une version émouvante. Deux semaines après, la version émouvante était bien mieux retenue."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_em_amygdale",
+      "accents": {
+        "émotion": "pop",
+        "l'amygdale,": "flash",
+        "l'enregistrement.": "impact"
+      },
+      "texte": "La raison : quand tu ressens une émotion forte, une petite zone du cerveau, l'amygdale, donne un coup de pouce à l'enregistrement."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_em_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "histoire,": "flash",
+        "touche.": "impact"
+      },
+      "texte": "L'astuce pour réviser : relie ce que tu apprends à une histoire, une image, quelque chose qui te touche."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ton souvenir le plus ancien, il est joyeux ou triste ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

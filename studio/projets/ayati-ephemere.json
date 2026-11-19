@@ -1,0 +1,106 @@
+{
+  "slug": "ayati-ephemere",
+  "titre": "Ce qui dure",
+  "titre_youtube": "Tout ce que tu as est éphémère… sauf ça",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Ce qui est auprès d'Allah dure",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:60-61 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Le téléphone, la voiture, les vêtements, les likes… Le Coran le dit : tout ce qu'on t'a donné est une jouissance passagère. Ce qui est auprès d'Allah est meilleur et dure plus longtemps. Sourate Al-Qasas (28:60).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#rappel",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qr_tresor",
+      "ref": "28:60",
+      "accents": {
+        "likes…": "pop",
+        "fin.": "impact"
+      },
+      "texte": "Ton téléphone, tes vêtements, tes likes… Tout ce que tu as aujourd'hui a une date de fin."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_cles",
+      "ref": "28:60",
+      "titre": {
+        "mot": "clairement,",
+        "texte": "Ce qui dure"
+      },
+      "accents": {
+        "clairement,": "pop"
+      },
+      "texte": "Allah nous le dit clairement, dans la sourate Al-Qasas."
+    },
+    {
+      "type": "verset",
+      "scene": "qr_tresor",
+      "ref": "28:60"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:60",
+      "accents": {
+        "jouissance": "pop",
+        "meilleur,": "flash",
+        "durable.": "battement"
+      },
+      "texte": "« Tout ce qui vous a été donné n'est que jouissance de la vie d'ici-bas, et sa parure. Ce qui est auprès d'Allah est meilleur, et plus durable. Ne réfléchissez-vous donc pas ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_engloutie",
+      "ref": "28:76-81",
+      "accents": {
+        "lourdes": "impact",
+        "rien.": "secousse"
+      },
+      "texte": "Qâroûn avait des clés si lourdes qu'il fallait des hommes forts pour les porter. Il ne lui en reste rien."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "Profite": "pop",
+        "dure": "flash",
+        "fais.": "battement"
+      },
+      "texte": "Profite de ce que tu as, sans oublier ce qui dure : ta prière, ta bonté, le bien que tu fais."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

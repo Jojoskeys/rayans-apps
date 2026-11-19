@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-dormir-retenir",
+  "titre": "Dormir pour retenir",
+  "titre_youtube": "Pourquoi tu retiens mieux après avoir dormi ?",
+  "serie": "Pourquoi tu… #23",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau révise la nuit",
+  "sources": [
+    "Jenkins, J. G. & Dallenbach, K. M. (1924). Obliviscence during sleep and waking. The American Journal of Psychology, 35(4), 605-612 : on oublie moins après une période de sommeil qu'après la même durée éveillé",
+    "Diekelmann, S. & Born, J. (2010). The memory function of sleep. Nature Reviews Neuroscience, 11(2), 114-126 : pendant le sommeil, le cerveau rejoue et consolide ce qui a été appris"
+  ],
+  "legende": "Tu apprends le soir, tu dors… et le lendemain tu retiens mieux que si tu étais resté éveillé. Pendant ton sommeil, ton cerveau rejoue ce que tu as appris.\n\nTu révises la veille au soir ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#sommeil",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_dr_accroche",
+      "accents": {
+        "leçon…": "pop",
+        "dormi": "impact"
+      },
+      "texte": "Pourquoi tu retiens mieux une leçon… après avoir dormi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dr_etude",
+      "titre": {
+        "mot": "sommeil,",
+        "texte": "Ton cerveau révise la nuit"
+      },
+      "accents": {
+        "1924,": "pop",
+        "sommeil,": "flash",
+        "éveillé.": "impact"
+      },
+      "texte": "Dès 1924, des chercheurs l'avaient remarqué : après quelques heures de sommeil, on oublie moins qu'après le même temps passé éveillé."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dr_rejoue",
+      "accents": {
+        "rejoue": "whoosh",
+        "range": "pop",
+        "terme.": "impact"
+      },
+      "texte": "Aujourd'hui, on sait pourquoi : pendant que tu dors, ton cerveau rejoue ce que tu as appris dans la journée… et le range dans ta mémoire à long terme."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dr_nuit",
+      "accents": {
+        "blanche": "impact",
+        "l'inverse": "flash"
+      },
+      "texte": "Une nuit blanche avant un examen, c'est donc l'inverse de ce qu'il faut."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dr_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "dors.": "whoosh",
+        "travail.": "flash"
+      },
+      "texte": "L'astuce : révise le soir, puis dors. Ton cerveau finit le travail."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu fais des nuits blanches avant les examens ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

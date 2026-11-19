@@ -1,0 +1,137 @@
+{
+  "slug": "psycho-ben-franklin",
+  "titre": "L'effet Ben Franklin",
+  "titre_youtube": "Pourquoi demander un service fait que les gens t'apprécient plus ?",
+  "serie": "Pourquoi tu… #33",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Demande-lui un service",
+  "sources": [
+    "Jecker, J. & Landy, D. (1969). Liking a person as a function of doing him a favour. Human Relations, 22(4), 371-378 : les participants à qui le chercheur avait demandé personnellement de lui rendre son argent l'appréciaient davantage que les autres",
+    "Franklin, B. (vers 1771). Autobiographie : l'anecdote du livre rare emprunté à un rival politique, devenu ensuite un ami"
+  ],
+  "legende": "Tu veux qu'on t'apprécie ? Rendre service, c'est bien. Mais demander un petit service, c'est encore plus fort. Benjamin Franklin l'avait remarqué, et une expérience de 1969 l'a confirmé.\n\nTu oses demander des services ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#relations",
+    "#confiance",
+    "#faitspsychologiques",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "t'apprécient": "pop",
+        "service": "impact"
+      },
+      "texte": "Pourquoi les gens t'apprécient plus… quand c'est toi qui leur demandes un service ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« tu peux m'aider ? »",
+          "mot": "demandes"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "rival": "impact",
+        "flatter,": "pop",
+        "livre": "flash"
+      },
+      "texte": "Benjamin Franklin avait un rival qui ne l'aimait pas. Au lieu de le flatter, il lui a demandé de lui prêter un livre rare.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "BookOpen",
+            "mot": "livre",
+            "texte": "un livre rare"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "Franklin.",
+        "texte": "L'effet Ben Franklin"
+      },
+      "accents": {
+        "accepté…": "pop",
+        "amis.": "flash"
+      },
+      "texte": "Le rival a accepté… et ils sont devenus amis. On appelle ça l'effet Ben Franklin.",
+      "visuel": {
+        "perso": {
+          "nb": 2,
+          "jaunes": 2,
+          "mot": "amis"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "1969,": "pop",
+        "service": "pop",
+        "davantage": "flash"
+      },
+      "texte": "En 1969, une expérience l'a testé : les gens à qui on avait demandé un service personnel appréciaient davantage celui qui l'avait demandé.",
+      "visuel": {
+        "annee": "1969",
+        "barres": [
+          {
+            "texte": "sans service",
+            "valeur": 0.45,
+            "mot": "appréciaient"
+          },
+          {
+            "texte": "après un service",
+            "valeur": 0.8,
+            "mot": "davantage"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "l'aide,": "pop",
+        "l'aime": "flash",
+        "ose": "impact"
+      },
+      "texte": "Ton cerveau se dit : « si je l'aide, c'est que je l'aime bien ». Alors ose demander un petit service.",
+      "visuel": {
+        "perso": {
+          "bulle": "« je l'aide… donc je l'aime bien »",
+          "mot": "cerveau",
+          "jaunes": 1
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu oses demander des services ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

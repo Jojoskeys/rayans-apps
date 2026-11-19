@@ -1,0 +1,119 @@
+{
+  "slug": "ayati-retour-promis",
+  "titre": "La promesse du retour",
+  "titre_youtube": "Chassé de sa ville… Allah lui a promis qu'il reviendrait",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il reviendra",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:85 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Contexte : d'après Sahih al-Bukhari (n° 4773), Ibn Abbas explique que « le lieu de retour » de ce verset est La Mecque. Selon les commentateurs (Ibn Kathir), il est descendu pendant l'Hégire, sur la route de Médine.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Obligé de quitter La Mecque, la ville qu'il aimait, le Prophète ﷺ reçoit sur la route une promesse : « Celui qui t'a prescrit le Coran te ramènera là où tu veux retourner. » Huit ans plus tard, il revenait. Sourate Al-Qasas (28:85).\n\nAbonne-toi pour d'autres histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#hijra",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "fil_mecque",
+      "ref": "28:85",
+      "accents": {
+        "quitter": "whoosh",
+        "monde.": "battement",
+        "promesse.": "flash"
+      },
+      "texte": "Il a dû quitter la ville qu'il aimait le plus au monde. Et sur la route, Allah lui a fait une promesse."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_routes",
+      "titre": {
+        "mot": "Mecque",
+        "texte": "La promesse du retour"
+      },
+      "accents": {
+        "Mecque": "pop",
+        "nuit": "whoosh",
+        "désert.": "battement"
+      },
+      "texte": "La Mecque ne voulait plus de lui. Le Prophète ﷺ part de nuit vers Médine, à travers le désert."
+    },
+    {
+      "type": "narration",
+      "scene": "kc_fuite",
+      "ref": "28:85",
+      "accents": {
+        "ville.": "pop",
+        "Kaaba.": "battement"
+      },
+      "texte": "C'était sa ville. Celle de son enfance, celle de la Kaaba. Il la laissait derrière lui."
+    },
+    {
+      "type": "verset",
+      "scene": "hira_nuit",
+      "ref": "28:85"
+    },
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:85",
+      "accents": {
+        "prescrit": "pop",
+        "ramènera": "flash",
+        "retourner.": "battement"
+      },
+      "texte": "« Celui qui t'a prescrit le Coran te ramènera certainement là où tu veux retourner. »"
+    },
+    {
+      "type": "narration",
+      "scene": "fil_aube",
+      "accents": {
+        "Abbas,": "pop",
+        "Huit": "impact",
+        "revenait.": "flash"
+      },
+      "texte": "D'après Ibn Abbas, ce lieu de retour, c'est La Mecque. Huit ans plus tard, le Prophète ﷺ y revenait."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "perdu": "impact",
+        "ramener…": "whoosh",
+        "moment.": "battement"
+      },
+      "texte": "Ce que tu as perdu pour Allah n'est jamais vraiment perdu. Il sait te ramener… au bon moment."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "slug": "psycho-premiere-nuit",
+  "titre": "L'effet première nuit",
+  "titre_youtube": "Pourquoi tu dors mal la première nuit dans un nouvel endroit ?",
+  "serie": "Pourquoi tu… #36",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Une moitié de ton cerveau monte la garde",
+  "sources": [
+    "Tamaki, M., Bang, J. W., Watanabe, T. & Sasaki, Y. (2016). Night watch in one brain hemisphere during sleep associated with the first-night effect in humans. Current Biology, 26(9), 1190-1194 : la première nuit dans un lieu inconnu, l'hémisphère gauche reste plus en alerte et réagit plus aux sons inhabituels",
+    "Agnew, H. W., Webb, W. B. & Williams, R. L. (1966). The first night effect: An EEG study of sleep. Psychophysiology, 2(3), 263-266 : description de l'« effet première nuit » en laboratoire"
+  ],
+  "legende": "Hôtel, chez des amis, en voyage : la première nuit, tu dors mal. Ce n'est pas le lit. Une partie de ton cerveau reste éveillée pour surveiller. Des chercheurs l'ont vu en 2016.\n\nTu dors mal la première nuit ailleurs ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#sommeil",
+    "#cerveau",
+    "#voyage",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "mal": "impact",
+        "nouvel": "pop"
+      },
+      "texte": "Pourquoi tu dors mal la première nuit dans un nouvel endroit ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "BedDouble",
+            "mot": "nuit",
+            "texte": "nouveau lit"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "première",
+        "texte": "L'effet première nuit"
+      },
+      "accents": {
+        "première": "flash",
+        "1960.": "pop"
+      },
+      "texte": "Ça a un nom : l'effet première nuit. Les chercheurs en sommeil le connaissent depuis les années 1960.",
+      "visuel": {
+        "annee": "1966"
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "2016,": "pop",
+        "moitié": "flash",
+        "profondément": "impact"
+      },
+      "texte": "En 2016, une équipe a découvert pourquoi : pendant cette première nuit, une moitié de ton cerveau dort moins profondément que l'autre.",
+      "visuel": {
+        "annee": "2016",
+        "icones": [
+          {
+            "nom": "Brain",
+            "mot": "moitié",
+            "texte": "une moitié veille"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "gauche.": "pop",
+        "alerte,": "impact",
+        "danger.": "secousse"
+      },
+      "texte": "C'est le côté gauche. Il reste en alerte, et il réagit plus aux bruits inhabituels… pour te réveiller vite en cas de danger.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Ear",
+            "mot": "bruits",
+            "texte": "bruits"
+          },
+          {
+            "nom": "BellRing",
+            "mot": "alerte",
+            "texte": "alerte"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "sentinelle": "flash",
+        "familier,": "pop",
+        "étranger.": "impact"
+      },
+      "texte": "Comme une sentinelle qui monte la garde. L'astuce : emporte un objet familier, ton oreiller ou ton plaid, pour que l'endroit paraisse moins étranger.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "ShieldCheck",
+            "mot": "sentinelle",
+            "texte": "la sentinelle"
+          },
+          {
+            "nom": "Heart",
+            "mot": "familier",
+            "texte": "objet familier"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu dors mal la première nuit ailleurs ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

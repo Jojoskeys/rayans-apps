@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-horoscope",
+  "titre": "L'effet Barnum",
+  "titre_youtube": "Pourquoi ton horoscope a l'air de parler de toi ?",
+  "serie": "Pourquoi tu… #37",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le même texte pour tout le monde",
+  "sources": [
+    "Forer, B. R. (1949). The fallacy of personal validation: A classroom demonstration of gullibility. Journal of Abnormal and Social Psychology, 44(1), 118-123 : des étudiants ont jugé « leur » portrait personnalisé exact à 4,26 sur 5, alors que tous avaient reçu le même texte"
+  ],
+  "legende": "En 1949, un professeur a donné à chaque étudiant son « portrait personnalisé ». Ils l'ont trouvé très juste : 4,26 sur 5. Sauf que tout le monde avait reçu exactement le même texte. L'effet Barnum.\n\nTu lis ton horoscope ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ho_accroche",
+      "accents": {
+        "horoscope…": "pop",
+        "toi": "impact"
+      },
+      "texte": "Pourquoi ton horoscope… a l'air de parler exactement de toi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_test",
+      "accents": {
+        "1949,": "pop",
+        "personnalisé.": "flash"
+      },
+      "texte": "En 1949, un professeur a fait passer un test de personnalité à ses étudiants. Une semaine plus tard, chacun reçoit son portrait personnalisé."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_note",
+      "titre": {
+        "mot": "même",
+        "texte": "L'effet Barnum"
+      },
+      "accents": {
+        "juste": "pop",
+        "4,26": "flash",
+        "même": "impact"
+      },
+      "texte": "Ils le trouvent très juste : 4,26 sur 5 en moyenne. Le problème ? Tout le monde avait reçu exactement le même texte."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_phrases",
+      "accents": {
+        "vagues": "pop",
+        "apprécié.": "whoosh",
+        "réservé.": "impact"
+      },
+      "texte": "Le secret : des phrases vagues qui vont à tout le monde. « Tu as un grand besoin d'être apprécié. » « Tu es parfois extraverti, parfois réservé. »"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_astuce",
+      "accents": {
+        "Barnum.": "flash",
+        "parfaitement…": "pop",
+        "monde.": "impact"
+      },
+      "texte": "Ça s'appelle l'effet Barnum. La prochaine fois qu'un texte semble te connaître parfaitement… demande-toi s'il ne marcherait pas pour tout le monde."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu lis ton horoscope ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

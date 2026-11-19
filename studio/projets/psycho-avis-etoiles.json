@@ -1,0 +1,143 @@
+{
+  "slug": "psycho-avis-etoiles",
+  "titre": "La preuve sociale",
+  "titre_youtube": "Pourquoi tu choisis ce que les autres ont déjà choisi ?",
+  "serie": "Pourquoi tu… #41",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le succès attire le succès",
+  "sources": [
+    "Salganik, M. J., Dodds, P. S. & Watts, D. J. (2006). Experimental study of inequality and unpredictability in an artificial cultural market. Science, 311(5762), 854-856 : quand on voit le nombre de téléchargements des autres, les chansons populaires deviennent encore plus populaires, et le succès devient en partie une question de hasard",
+    "Cialdini, R. B. (1984). Influence: The Psychology of Persuasion. William Morrow : la « preuve sociale »"
+  ],
+  "legende": "Entre deux restos, tu prends celui qui est plein. Entre deux chansons, celle qui a le plus de vues. En 2006, une expérience avec 14 000 personnes a montré à quel point ça change tout.\n\nTu regardes les avis avant d'acheter ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#reseauxsociaux",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "choisis": "pop",
+        "autres": "impact"
+      },
+      "texte": "Pourquoi tu choisis presque toujours ce que les autres ont déjà choisi ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Store",
+            "mot": "choisis",
+            "texte": "resto vide"
+          },
+          {
+            "nom": "Users",
+            "mot": "autres",
+            "texte": "resto plein"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2006,": "pop",
+        "inconnues.": "pop",
+        "14": "flash"
+      },
+      "texte": "En 2006, des chercheurs ont créé un site de musique avec des chansons inconnues. Environ 14 000 personnes pouvaient les écouter et les télécharger.",
+      "visuel": {
+        "annee": "2006",
+        "chiffre": {
+          "texte": "14 000",
+          "mot": "14",
+          "sous": "participants"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "téléchargée.": "pop",
+        "non.": "impact"
+      },
+      "texte": "Certains voyaient combien de fois chaque chanson avait été téléchargée. D'autres, non.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Download",
+            "mot": "téléchargée",
+            "texte": "« 1 200 téléchargements »"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "titre": {
+        "mot": "populaires",
+        "texte": "La preuve sociale"
+      },
+      "accents": {
+        "visibles,": "pop",
+        "plus.": "flash",
+        "hasard.": "impact"
+      },
+      "texte": "Quand les chiffres étaient visibles, les chansons déjà populaires le devenaient encore plus. Et le succès devenait en partie… une question de hasard.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "chiffres cachés",
+            "valeur": 0.4,
+            "mot": "visibles"
+          },
+          {
+            "texte": "chiffres visibles",
+            "valeur": 0.85,
+            "mot": "plus"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "tout": "pop",
+        "vrai.": "impact"
+      },
+      "texte": "Ton cerveau pense : « si tout le monde l'aime, c'est sûrement bien ». Pratique… mais pas toujours vrai.",
+      "visuel": {
+        "perso": {
+          "bulle": "« tout le monde l'aime, donc… »",
+          "mot": "cerveau"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu regardes les avis avant de choisir ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

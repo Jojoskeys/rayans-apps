@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-prix-99",
+  "titre": "Les prix en ,99",
+  "titre_youtube": "Pourquoi un prix à 9,99 € te paraît beaucoup moins cher que 10 € ?",
+  "serie": "Pourquoi tu… #21",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Un centime qui change tout",
+  "sources": [
+    "Thomas, M. & Morwitz, V. (2005). Penny wise and pound foolish: The left-digit effect in price cognition. Journal of Consumer Research, 32(1), 54-64 : quand le premier chiffre à gauche change (2,99 contre 3,00), le prix paraît nettement plus bas ; pas quand seul le chiffre de droite change"
+  ],
+  "legende": "9,99 € ou 10 € : un seul centime, mais ton cerveau voit « 9 » contre « 10 ». C'est l'effet du chiffre de gauche, et les magasins le savent très bien.\n\nTu t'es déjà fait avoir ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#argent",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_99_accroche",
+      "accents": {
+        "9,99": "pop",
+        "10": "impact"
+      },
+      "texte": "Pourquoi un prix à 9,99 euros te paraît beaucoup moins cher que 10 euros ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_gauche",
+      "titre": {
+        "mot": "premier",
+        "texte": "L'effet du chiffre de gauche"
+      },
+      "accents": {
+        "gauche": "whoosh",
+        "premier": "pop",
+        "10.": "impact"
+      },
+      "texte": "Ton cerveau lit les prix de gauche à droite… et il s'arrête presque au premier chiffre. 9, c'est moins que 10."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_etude",
+      "accents": {
+        "2005,": "pop",
+        "3.": "impact",
+        "différence.": "whoosh",
+        "gauche": "flash"
+      },
+      "texte": "En 2005, des chercheurs l'ont montré : 2,99 paraît nettement moins cher que 3. Mais entre 3,60 et 3,59… presque aucune différence. Seul le chiffre de gauche compte."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_magasins",
+      "accents": {
+        "magasins": "pop",
+        "partout.": "impact"
+      },
+      "texte": "Et les magasins le savent très bien. C'est pour ça que tu vois des 99 partout."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "10.": "flash"
+      },
+      "texte": "L'astuce : arrondis toujours au-dessus. 9,99, c'est 10."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu t'es déjà fait avoir par un prix en 99 ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

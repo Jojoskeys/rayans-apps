@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-femme-pharaon",
+  "titre": "Elle l'a sauvé",
+  "titre_youtube": "Dans le palais de Pharaon, une femme a dit : « Ne le tuez pas »",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Au cœur du palais du tyran",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:9 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Quand le bébé Moussa arrive au palais, la femme de Pharaon dit : « Il sera une joie pour mon œil et pour le tien. Ne le tuez pas. » Ils ne pressentaient rien. Sourate Al-Qasas (28:9).\n\nPartage-la à quelqu'un qui doute que le bien puisse naître partout.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#foi",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:9",
+      "accents": {
+        "tyran": "impact",
+        "sauver": "flash",
+        "bébé.": "pop"
+      },
+      "texte": "Dans le palais du pire tyran de son époque, une femme s'est levée pour sauver un bébé."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "ref": "28:8",
+      "titre": {
+        "mot": "fleuve",
+        "texte": "Elle l'a sauvé"
+      },
+      "accents": {
+        "fleuve": "whoosh",
+        "palais.": "pop"
+      },
+      "texte": "Le bébé avait été confié au fleuve par sa mère. Les gens de Pharaon le recueillent et l'amènent au palais."
+    },
+    {
+      "type": "verset",
+      "scene": "hira_lumiere",
+      "ref": "28:9"
+    },
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:9",
+      "accents": {
+        "joie": "flash",
+        "tuez": "impact",
+        "rien.": "battement"
+      },
+      "texte": "« Et la femme de Pharaon dit : il sera une joie pour mon œil et pour le tien. Ne le tuez pas. Il pourrait nous être utile, ou nous le prendrons pour fils. » Et ils ne pressentaient rien."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "garçons": "impact",
+        "grandir": "pop",
+        "maison.": "battement"
+      },
+      "texte": "Pharaon tuait les garçons pour éviter sa chute. Et Allah a fait grandir celui qui le ferait tomber… dans sa propre maison."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "non,": "impact",
+        "voix": "flash",
+        "histoire.": "battement"
+      },
+      "texte": "Même entouré de mal, tu peux être celle ou celui qui dit : non, pas ça. Une seule voix peut changer une histoire."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

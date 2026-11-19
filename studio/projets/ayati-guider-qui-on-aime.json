@@ -1,0 +1,117 @@
+{
+  "slug": "ayati-guider-qui-on-aime",
+  "titre": "Tu ne guides pas qui tu aimes",
+  "titre_youtube": "« Tu ne guides pas celui que tu aimes » : un verset qui soulage",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Ce n'est pas toi qui guides",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:56 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Contexte : d'après Sahih al-Bukhari (n° 4772) et Sahih Muslim (n° 24), ce verset est descendu au sujet d'Abou Talib, l'oncle du Prophète ﷺ, mort sans avoir embrassé l'islam.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Le Prophète ﷺ aimait son oncle Abou Talib, qui l'avait protégé toute sa vie. Il voulait tant qu'il croie… Et ce verset est descendu : « Tu ne guides pas celui que tu aimes, c'est Allah qui guide. » Sourate Al-Qasas (28:56).\n\nPartage-le à quelqu'un qui s'inquiète pour un proche.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#guidee",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "ref": "28:56",
+      "accents": {
+        "oncle": "pop",
+        "croire…": "battement",
+        "inquiets.": "flash"
+      },
+      "texte": "Il aimait son oncle plus que tout. Il voulait tant le voir croire… Et Allah lui a révélé une phrase qui soulage tous les cœurs inquiets."
+    },
+    {
+      "type": "narration",
+      "scene": "fil_mecque",
+      "titre": {
+        "mot": "Abou",
+        "texte": "Tu ne guides pas qui tu aimes"
+      },
+      "accents": {
+        "protégé": "battement",
+        "peuple.": "impact"
+      },
+      "texte": "Abou Talib, l'oncle du Prophète ﷺ, l'avait élevé et protégé toute sa vie, contre tout son peuple."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "accents": {
+        "mort,": "impact",
+        "triste.": "battement"
+      },
+      "texte": "Mais jusqu'à sa mort, il n'a pas embrassé l'islam. Et le Prophète ﷺ en était profondément triste."
+    },
+    {
+      "type": "verset",
+      "scene": "qp_priere",
+      "ref": "28:56"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_pardon",
+      "ref": "28:56",
+      "accents": {
+        "aimes.": "battement",
+        "guide": "flash",
+        "guidés.": "pop"
+      },
+      "texte": "« Tu ne guides pas celui que tu aimes. C'est Allah qui guide qui Il veut. Et Il connaît mieux ceux qui sont bien guidés. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "accents": {
+        "meilleur": "flash",
+        "cœur": "battement",
+        "peux": "impact"
+      },
+      "texte": "Si même le meilleur des hommes ne pouvait pas mettre la foi dans le cœur de ceux qu'il aimait… toi non plus, tu ne le peux pas."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "douceur,": "pop",
+        "dou'as.": "battement",
+        "décourage": "impact"
+      },
+      "texte": "Ton rôle, c'est de transmettre avec douceur, et de faire des dou'as. Le reste appartient à Allah. Alors ne te décourage pas."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

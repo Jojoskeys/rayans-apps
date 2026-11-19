@@ -1,0 +1,161 @@
+{
+  "slug": "psycho-temps-file",
+  "titre": "Le temps qui file",
+  "titre_youtube": "Pourquoi les semaines passent de plus en plus vite ?",
+  "serie": "Pourquoi tu… #38",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "La routine raccourcit tes souvenirs",
+  "sources": [
+    "Avni-Babad, D. & Ritov, I. (2003). Routine and the perception of time. Journal of Experimental Psychology: General, 132(4), 543-550 : une période routinière paraît plus courte quand on y repense, une période pleine de nouveautés paraît plus longue",
+    "Wittmann, M. & Lehnhoff, S. (2005). Age effects in perception of time. Psychological Reports, 97(3), 921-935 : beaucoup de gens disent que les années passent plus vite en vieillissant"
+  ],
+  "legende": "Les vacances passent en un éclair… mais quand tu y repenses, elles paraissent longues. Et une semaine de routine ? L'inverse. Ton cerveau mesure le temps avec les souvenirs nouveaux.\n\nTu trouves que le temps passe trop vite ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#temps",
+    "#memoire",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "semaines": "pop",
+        "vite": "whoosh"
+      },
+      "texte": "Pourquoi les semaines passent de plus en plus vite ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "CalendarDays",
+            "mot": "semaines",
+            "texte": "lundi… déjà dimanche"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "souvenirs",
+        "texte": "Le temps des souvenirs"
+      },
+      "accents": {
+        "montre.": "pop",
+        "souvenirs": "flash",
+        "nouveaux.": "impact"
+      },
+      "texte": "Ton cerveau ne mesure pas le temps avec une montre. Quand tu repenses à une période, il compte les souvenirs nouveaux.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Watch",
+            "mot": "montre",
+            "texte": "pas la montre"
+          },
+          {
+            "nom": "Images",
+            "mot": "souvenirs",
+            "texte": "les souvenirs"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "routine,": "pop",
+        "peu": "impact",
+        "courte.": "whoosh"
+      },
+      "texte": "Une semaine de routine, toujours les mêmes trajets, les mêmes journées… laisse très peu de souvenirs. Alors elle paraît courte.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "routine",
+            "valeur": 0.25,
+            "mot": "courte",
+            "rouge": true
+          },
+          {
+            "texte": "nouveautés",
+            "valeur": 0.8,
+            "mot": "courte"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "2003": "pop",
+        "routinière,": "pop",
+        "courte": "impact"
+      },
+      "texte": "Une étude de 2003 l'a montré : plus une période est routinière, plus elle semble courte quand on y repense.",
+      "visuel": {
+        "annee": "2003",
+        "pastilles": [
+          {
+            "texte": "routine = temps qui file",
+            "mot": "routinière"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "ralentir": "flash",
+        "chemin,": "pop",
+        "plat,": "pop",
+        "vu.": "pop"
+      },
+      "texte": "Pour ralentir le temps, ajoute de la nouveauté : un autre chemin, un nouveau plat, un endroit jamais vu.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Map",
+            "mot": "chemin",
+            "texte": "un autre chemin"
+          },
+          {
+            "nom": "Soup",
+            "mot": "plat",
+            "texte": "un nouveau plat"
+          },
+          {
+            "nom": "MapPin",
+            "mot": "endroit",
+            "texte": "un nouvel endroit"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu trouves que le temps passe trop vite ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

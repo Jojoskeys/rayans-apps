@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-option-defaut",
+  "titre": "L'option par défaut",
+  "titre_youtube": "Pourquoi tu gardes l'option qu'on a choisie pour toi ?",
+  "serie": "Pourquoi tu… #39",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tu ne changes presque jamais",
+  "sources": [
+    "Johnson, E. J. & Goldstein, D. (2003). Do defaults save lives? Science, 302(5649), 1338-1339 : dans les pays où il faut cocher pour être donneur d'organes, le consentement va d'environ 4 à 28 % ; là où il faut cocher pour refuser, environ 86 à presque 100 %",
+    "Samuelson, W. & Zeckhauser, R. (1988). Status quo bias in decision making. Journal of Risk and Uncertainty, 1(1), 7-59 : on préfère garder la situation actuelle"
+  ],
+  "legende": "Les abonnements qui se renouvellent tout seuls, les réglages par défaut de ton téléphone… tu ne les changes presque jamais. Et entre deux pays voisins, une simple case cochée change tout pour le don d'organes.\n\nTu as un abonnement que tu n'utilises plus ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_od_accroche",
+      "accents": {
+        "l'option": "pop",
+        "place": "impact"
+      },
+      "texte": "Pourquoi tu gardes presque toujours l'option qu'on a choisie… à ta place ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_pays",
+      "accents": {
+        "cocher": "pop",
+        "28": "impact"
+      },
+      "texte": "Le don d'organes : dans certains pays, il faut cocher une case pour être donneur. Là, seulement 4 à 28 % des gens le sont."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_inverse",
+      "titre": {
+        "mot": "défaut.",
+        "texte": "L'option par défaut"
+      },
+      "accents": {
+        "refuser.": "whoosh",
+        "100": "flash",
+        "défaut.": "impact"
+      },
+      "texte": "Dans d'autres, il faut cocher pour refuser. Et là… entre 86 et presque 100 % sont donneurs. Juste à cause de la case par défaut."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_pourquoi",
+      "accents": {
+        "effort,": "pop",
+        "rien.": "impact"
+      },
+      "texte": "Changer demande un effort, et une décision. Garder ce qui est là… ne demande rien."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_astuce",
+      "accents": {
+        "mois,": "pop",
+        "abonnements": "flash",
+        "toi.": "impact"
+      },
+      "texte": "L'astuce : une fois par mois, vérifie tes abonnements et tes réglages. Ce sont peut-être d'autres qui ont choisi pour toi."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu as un abonnement que tu n'utilises plus ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

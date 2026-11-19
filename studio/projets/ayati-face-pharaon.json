@@ -1,0 +1,118 @@
+{
+  "slug": "ayati-face-pharaon",
+  "titre": "Face à Pharaon",
+  "titre_youtube": "« Ce n'est que de la magie ! » La réponse de Moussa à Pharaon",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Les injustes ne réussiront pas",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:36-37 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Moussa arrive devant Pharaon avec des signes clairs. La cour répond : « Ce n'est que de la magie inventée. » Et Moussa répond calmement : « Mon Seigneur sait mieux… Les injustes ne réussiront pas. » Sourate Al-Qasas (28:36-37).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "palais_interieur",
+      "ref": "28:36",
+      "accents": {
+        "puissant": "impact",
+        "claires.": "flash",
+        "moque": "secousse"
+      },
+      "texte": "Il arrive devant le roi le plus puissant de son temps, avec des preuves claires. Et on se moque de lui."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_routes",
+      "ref": "28:35-36",
+      "titre": {
+        "mot": "palais",
+        "texte": "Face à Pharaon"
+      },
+      "accents": {
+        "palais": "whoosh",
+        "signes": "flash"
+      },
+      "texte": "Moussa et son frère Haroun vont au palais de Pharaon, avec les signes qu'Allah leur a donnés."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "ref": "28:36",
+      "accents": {
+        "magie": "impact",
+        "ancêtres": "pop"
+      },
+      "texte": "Mais Pharaon et ses ministres répondent : « Ce n'est que de la magie inventée. Jamais nos ancêtres n'ont entendu parler de ça. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_baton",
+      "ref": "28:37",
+      "accents": {
+        "s'énerve": "pop",
+        "débat.": "whoosh"
+      },
+      "texte": "Moussa ne s'énerve pas. Il ne cherche pas à gagner le débat. Il répond simplement :"
+    },
+    {
+      "type": "verset",
+      "scene": "mf_arbre",
+      "ref": "28:37"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_mission",
+      "ref": "28:37",
+      "accents": {
+        "guidée,": "flash",
+        "fin.": "battement",
+        "réussiront": "impact"
+      },
+      "texte": "« Mon Seigneur sait mieux qui est venu avec la vraie guidée, et à qui reviendra la meilleure fin. Les injustes ne réussiront pas. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "crier.": "impact",
+        "calmement…": "pop",
+        "Allah.": "battement"
+      },
+      "texte": "Quand on se moque de ta foi, tu n'as pas besoin de crier. Dis la vérité, calmement… et laisse la fin de l'histoire à Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

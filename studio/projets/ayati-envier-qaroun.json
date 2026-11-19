@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-envier-qaroun",
+  "titre": "Ceux qui l'enviaient",
+  "titre_youtube": "« Si seulement j'avais ce qu'il a… » La réponse du Coran",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Envier quelqu'un ? Réfléchis encore",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:79-82 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Qâroûn sort devant son peuple dans tout son luxe. Certains disent : « Si seulement on avait la même chose ! » Ceux qui avaient la science répondent : « La récompense d'Allah est meilleure. » Le lendemain, tout avait changé. Sourate Al-Qasas (28:79-82).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#rappel",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qr_cortege",
+      "ref": "28:79-82",
+      "accents": {
+        "richesses,": "pop",
+        "place.": "impact",
+        "l'être.": "flash"
+      },
+      "texte": "Ils le regardaient passer, avec ses richesses, et ils rêvaient d'être à sa place. Le lendemain, ils remerciaient Allah de ne pas l'être."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_cortege",
+      "ref": "28:79",
+      "titre": {
+        "mot": "luxe.",
+        "texte": "Ceux qui l'enviaient"
+      },
+      "accents": {
+        "luxe.": "pop",
+        "seulement": "impact",
+        "immense.": "flash"
+      },
+      "texte": "Qâroûn sort devant son peuple, dans tout son luxe. Ceux qui aimaient la vie d'ici-bas disent : « Si seulement nous avions ce qu'il a reçu ! Il a vraiment une chance immense. »"
+    },
+    {
+      "type": "verset",
+      "scene": "qr_conseil",
+      "ref": "28:80"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_conseil",
+      "ref": "28:80",
+      "accents": {
+        "science": "flash",
+        "meilleure,": "impact",
+        "patients": "battement"
+      },
+      "texte": "Mais ceux qui avaient reçu la science disent : « Malheur à vous ! La récompense d'Allah est meilleure, pour celui qui croit et fait le bien. Et seuls les patients l'obtiennent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_lendemain",
+      "ref": "28:81-82",
+      "accents": {
+        "englouti": "secousse",
+        "grâce": "flash"
+      },
+      "texte": "Le lendemain, la terre avait englouti Qâroûn et sa maison. Et ceux qui l'enviaient disaient : « Sans la grâce d'Allah, nous aurions été engloutis aussi. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "d'envier": "pop",
+        "partie": "impact"
+      },
+      "texte": "Avant d'envier la vie de quelqu'un, souviens-toi : tu ne vois qu'une petite partie de son histoire."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

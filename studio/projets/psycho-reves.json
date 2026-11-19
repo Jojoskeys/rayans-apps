@@ -1,0 +1,142 @@
+{
+  "slug": "psycho-reves",
+  "titre": "Se souvenir de ses rêves",
+  "titre_youtube": "Pourquoi certains se souviennent de leurs rêves… et d'autres jamais ?",
+  "serie": "Pourquoi tu… #37",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tu rêves, mais tu oublies",
+  "sources": [
+    "Eichenlaub, J.-B., Nicolas, A., Daltrozzo, J., Redouté, J., Costes, N. & Ruby, P. (2014). Resting brain activity varies with dream recall frequency between subjects. Neuropsychopharmacology, 39(7), 1594-1602 : les personnes qui se souviennent souvent de leurs rêves ont une activité plus forte dans certaines zones (jonction temporo-pariétale)",
+    "Eichenlaub, J.-B. et al. (2014). Brain reactivity differentiates subjects with high and low dream recall frequencies during both sleep and wakefulness. Cerebral Cortex, 24(5), 1206-1215 : elles se réveillent plus souvent brièvement la nuit (environ deux fois plus de temps éveillé)"
+  ],
+  "legende": "Tout le monde rêve, chaque nuit. Mais certains s'en souviennent presque tous les matins, et d'autres jamais. Une équipe de Lyon a trouvé une partie de la réponse : les micro-réveils.\n\nTu te souviens de tes rêves ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#reves",
+    "#sommeil",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "rêves": "pop",
+        "jamais": "impact"
+      },
+      "texte": "Pourquoi certains se souviennent de leurs rêves presque tous les matins… et d'autres jamais ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "CloudMoon",
+            "mot": "rêves",
+            "texte": "rêves"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "tout": "flash",
+        "oublient,": "impact"
+      },
+      "texte": "D'abord : tout le monde rêve, chaque nuit. Ceux qui disent ne jamais rêver… oublient, simplement.",
+      "visuel": {
+        "perso": {
+          "bulle": "« je ne rêve jamais »",
+          "mot": "disent"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "2014,": "pop",
+        "Lyon": "pop",
+        "jamais.": "pop"
+      },
+      "texte": "En 2014, une équipe de Lyon a comparé des gens qui se souviennent souvent de leurs rêves, et d'autres presque jamais.",
+      "visuel": {
+        "annee": "2014",
+        "perso": {
+          "nb": 10,
+          "jaunes": 5,
+          "mot": "souvent"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "titre": {
+        "mot": "réveillent",
+        "texte": "Les micro-réveils"
+      },
+      "accents": {
+        "réveillent": "flash",
+        "brièvement.": "pop",
+        "deux": "impact"
+      },
+      "texte": "Ceux qui s'en souviennent se réveillent plus souvent pendant la nuit, très brièvement. Environ deux fois plus de temps éveillé.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "peu de souvenirs",
+            "valeur": 0.35,
+            "mot": "réveillent"
+          },
+          {
+            "texte": "beaucoup",
+            "valeur": 0.7,
+            "mot": "deux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "micro-réveils": "pop",
+        "immobile": "flash",
+        "bouger.": "impact"
+      },
+      "texte": "Ces micro-réveils laissent le temps de ranger le rêve en mémoire. L'astuce : en te réveillant, reste immobile et repense à ton rêve avant de bouger.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "ne bouge pas tout de suite",
+            "mot": "immobile"
+          },
+          {
+            "texte": "repense à ton rêve",
+            "mot": "repense"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu te souviens de tes rêves ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "slug": "psycho-fomo",
+  "titre": "La peur de rater",
+  "titre_youtube": "Pourquoi tu as peur de rater quelque chose ?",
+  "serie": "Pourquoi tu… #35",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "La peur de rater a un nom",
+  "sources": [
+    "Przybylski, A. K., Murayama, K., DeHaan, C. R. & Gladwell, V. (2013). Motivational, emotional, and behavioral correlates of fear of missing out. Computers in Human Behavior, 29(4), 1841-1848 : la « peur de rater » (FOMO) est plus forte chez les jeunes et liée à plus d'usage des réseaux, y compris en conduisant ou en cours, et à une humeur plus basse"
+  ],
+  "legende": "Tu regardes les stories des autres et tu as l'impression de rater ta vie ? Ça a un nom : la peur de rater, ou FOMO. Et plus tu scrolles, plus elle grandit.\n\nTu ressens souvent la peur de rater ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#reseauxsociaux",
+    "#fomo",
+    "#bienetre",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "s'amuse…": "pop",
+        "toi": "impact"
+      },
+      "texte": "Pourquoi tu as l'impression que tout le monde s'amuse… sauf toi ?",
+      "visuel": {
+        "perso": {
+          "icone": "Smartphone",
+          "mot": "s'amuse"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "FOMO.",
+        "texte": "La peur de rater"
+      },
+      "accents": {
+        "rater": "impact",
+        "FOMO.": "flash",
+        "2013.": "pop"
+      },
+      "texte": "Ça a un nom : la peur de rater quelque chose. En anglais, FOMO. Des chercheurs l'ont mesurée en 2013.",
+      "visuel": {
+        "annee": "2013",
+        "chiffre": {
+          "texte": "FOMO",
+          "mot": "FOMO"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "jeunes.": "pop",
+        "réseaux,": "pop",
+        "volant.": "impact"
+      },
+      "texte": "Elle est plus forte chez les jeunes. Et ceux qui la ressentent le plus vont plus souvent sur les réseaux, même en cours… ou au volant.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Smartphone",
+            "mot": "réseaux",
+            "texte": "réseaux"
+          },
+          {
+            "nom": "School",
+            "mot": "cours",
+            "texte": "en cours"
+          },
+          {
+            "nom": "Car",
+            "mot": "volant",
+            "texte": "au volant"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "meilleurs": "flash",
+        "compares": "impact",
+        "entière.": "pop"
+      },
+      "texte": "Le piège : sur les réseaux, tu vois les meilleurs moments des autres… et tu les compares à ta vie entière.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "leurs meilleurs moments",
+            "valeur": 0.85,
+            "mot": "meilleurs"
+          },
+          {
+            "texte": "toute ta vie",
+            "valeur": 0.5,
+            "mot": "entière"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "basse.": "impact",
+        "pose": "pop",
+        "vrai.": "flash"
+      },
+      "texte": "Et elle est liée à une humeur plus basse. Alors pose ton téléphone : tu ne rates rien de vrai.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "pose",
+          "bulle": "« je ne rate rien »"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu ressens souvent la peur de rater ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "slug": "psycho-file-a-cote",
+  "titre": "La file d'à côté",
+  "titre_youtube": "Pourquoi la file d'à côté avance toujours plus vite ?",
+  "serie": "Pourquoi tu… #9",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Elle n'avance pas plus vite",
+  "sources": [
+    "Redelmeier, D. A. & Tibshirani, R. J. (1999). Why cars in the next lane seem to go faster. Nature, 401, 35 : avec deux voies à la même vitesse moyenne, on passe plus de temps à être doublé qu'à doubler, et la plupart des conducteurs jugent l'autre voie plus rapide",
+    "Kahneman, D. & Tversky, A. (1979). Prospect theory: An analysis of decision under risk. Econometrica, 47(2), 263-291 : une perte pèse plus lourd qu'un gain de même taille (aversion à la perte)"
+  ],
+  "legende": "Au supermarché, sur la route, au péage : l'autre file avance toujours plus vite. Sauf qu'en vrai… non. Ton cerveau compte mal, et il déteste se faire doubler.\n\nTu changes de file quand ça bouchonne ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#faitspsychologiques",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_fi_accroche",
+      "accents": {
+        "file": "pop",
+        "vite": "whoosh"
+      },
+      "texte": "Pourquoi tu as toujours l'impression que la file d'à côté avance plus vite ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fi_etude",
+      "titre": {
+        "mot": "même",
+        "texte": "Même vitesse"
+      },
+      "accents": {
+        "1999,": "pop",
+        "même": "impact",
+        "rapide.": "flash"
+      },
+      "texte": "En 1999, des chercheurs ont montré à des conducteurs deux voies qui roulaient à la même vitesse moyenne. Et pourtant, la plupart trouvaient l'autre voie plus rapide."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fi_temps",
+      "accents": {
+        "secondes.": "whoosh",
+        "minutes": "pop",
+        "long.": "impact"
+      },
+      "texte": "Quand ta file avance, tu doubles plein de voitures en quelques secondes. Quand elle bloque, tu passes de longues minutes à te faire doubler. Et ton cerveau retient… le moment le plus long."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fi_perte",
+      "accents": {
+        "mal": "impact",
+        "lourd": "pop",
+        "perte.": "flash"
+      },
+      "texte": "En plus, perdre fait plus mal que gagner fait plaisir. Se faire doubler pèse plus lourd que doubler : c'est l'aversion à la perte."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fi_conseil",
+      "accents": {
+        "changes": "whoosh",
+        "rien.": "impact",
+        "tienne.": "pop"
+      },
+      "texte": "Résultat : tu changes de file… et tu ne gagnes presque rien. La prochaine fois, reste dans la tienne."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu changes de file quand ça bouchonne ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

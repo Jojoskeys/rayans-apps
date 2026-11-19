@@ -1,0 +1,158 @@
+{
+  "slug": "psycho-deadline",
+  "titre": "La magie de la deadline",
+  "titre_youtube": "Pourquoi tu travailles mieux avec une date limite ?",
+  "serie": "Pourquoi tu… #52",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Fixe-toi plusieurs petites dates",
+  "sources": [
+    "Ariely, D. & Wertenbroch, K. (2002). Procrastination, deadlines, and performance: Self-control by precommitment. Psychological Science, 13(3), 219-224 : des étudiants avec trois dates limites régulières imposées faisaient de meilleurs devoirs que ceux qui avaient une seule date à la fin ; choisir soi-même ses dates aidait aussi, un peu moins"
+  ],
+  "legende": "Sans date limite, tu repousses. Avec une date limite, tu fonces… la veille. Une expérience montre que plusieurs petites dates régulières donnent un meilleur travail qu'une seule grande.\n\nTu travailles mieux la veille du rendu ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#productivite",
+    "#etudes",
+    "#procrastination",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "travailler…": "pop",
+        "veille": "impact"
+      },
+      "texte": "Pourquoi tu ne commences vraiment à travailler… que la veille de la date limite ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "CalendarClock",
+            "mot": "veille",
+            "texte": "la veille"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2002,": "pop",
+        "fin.": "pop",
+        "régulières.": "flash"
+      },
+      "texte": "En 2002, des chercheurs ont donné trois devoirs à des étudiants. Un groupe devait tout rendre à la fin. Un autre avait trois dates, régulières.",
+      "visuel": {
+        "annee": "2002",
+        "icones": [
+          {
+            "nom": "Flag",
+            "mot": "fin",
+            "texte": "1 date"
+          },
+          {
+            "nom": "CalendarDays",
+            "mot": "trois",
+            "texte": "3 dates"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "meilleurs",
+        "texte": "Plusieurs petites dates"
+      },
+      "accents": {
+        "meilleurs": "flash",
+        "eux-mêmes": "pop"
+      },
+      "texte": "Ceux qui avaient trois dates limites ont rendu de meilleurs devoirs. Et ceux qui avaient choisi eux-mêmes leurs dates s'en sortaient aussi mieux.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "1 date à la fin",
+            "valeur": 0.45,
+            "mot": "meilleurs",
+            "rouge": true
+          },
+          {
+            "texte": "dates choisies",
+            "valeur": 0.62,
+            "mot": "eux-mêmes"
+          },
+          {
+            "texte": "3 dates imposées",
+            "valeur": 0.8,
+            "mot": "meilleurs"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "jour": "pop",
+        "maintenant": "flash",
+        "adore": "pop"
+      },
+      "texte": "Une date limite transforme un « un jour » en « maintenant ». Et ton cerveau adore ce qui est maintenant.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "« un jour » → « maintenant »",
+            "mot": "maintenant"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "étapes,": "pop",
+        "date.": "flash",
+        "quelqu'un.": "pop"
+      },
+      "texte": "L'astuce : coupe ton gros projet en petites étapes, chacune avec sa date. Et dis-les à quelqu'un.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "ListOrdered",
+            "mot": "étapes",
+            "texte": "petites étapes"
+          },
+          {
+            "nom": "Users",
+            "mot": "quelqu'un",
+            "texte": "dis-le"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu travailles mieux la veille du rendu ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

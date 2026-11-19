@@ -1,0 +1,96 @@
+{
+  "slug": "psycho-frissons-musique",
+  "titre": "Les frissons en musique",
+  "titre_youtube": "Pourquoi certaines musiques te donnent des frissons ?",
+  "serie": "Pourquoi tu… #13",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau sent le moment arriver",
+  "sources": [
+    "Blood, A. J. & Zatorre, R. J. (2001). Intensely pleasurable responses to music correlate with activity in brain regions implicated in reward and emotion. PNAS, 98(20), 11818-11823 : pendant les frissons, les zones du plaisir et de la récompense s'activent (les mêmes que pour la nourriture)",
+    "Salimpoor, V. N., Benovoy, M., Larcher, K., Dagher, A. & Zatorre, R. J. (2011). Anatomically distinct dopamine release during anticipation and experience of peak emotion to music. Nature Neuroscience, 14(2), 257-262 : de la dopamine est libérée au moment du frisson, et aussi juste avant, pendant l'attente",
+    "Sloboda, J. A. (1991). Music structure and emotional response: Some empirical findings. Psychology of Music, 19(2), 110-120 : les frissons viennent souvent de changements inattendus (nouvelle harmonie, montée, entrée soudaine)",
+    "Colver, M. C. & El-Alayli, A. (2016). Getting aesthetic chills from music: The connection between openness to experience and frisson. Psychology of Music, 44(3), 413-427 : les personnes très ouvertes aux nouvelles expériences ont plus souvent des frissons"
+  ],
+  "legende": "Une voix qui monte, un silence, un instrument qui entre d'un coup… et tu as des frissons. Ton cerveau libère de la dopamine au moment du frisson, et même quelques secondes avant.\n\nTu as déjà eu des frissons en musique ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#musique",
+    "#cerveau",
+    "#frissons",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_fr_accroche",
+      "accents": {
+        "frissons…": "flash",
+        "littéralement": "impact"
+      },
+      "texte": "Pourquoi certaines musiques te donnent des frissons… littéralement ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fr_cerveau",
+      "titre": {
+        "mot": "plaisir",
+        "texte": "Le circuit du plaisir"
+      },
+      "accents": {
+        "2001,": "pop",
+        "plaisir": "flash",
+        "nourriture.": "pop"
+      },
+      "texte": "En 2001, des chercheurs ont observé le cerveau de gens au moment de leurs frissons. Les zones qui s'allument sont celles du plaisir et de la récompense. Les mêmes que pour la nourriture."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fr_dopamine",
+      "accents": {
+        "dopamine.": "impact",
+        "frisson…": "flash",
+        "avant,": "whoosh"
+      },
+      "texte": "En 2011, une autre équipe a mesuré la dopamine. Elle est libérée au moment du frisson… et même quelques secondes avant, quand ton cerveau sent que le grand moment arrive."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fr_surprise",
+      "accents": {
+        "surprise": "flash",
+        "monte,": "whoosh",
+        "silence,": "pop",
+        "coup.": "impact"
+      },
+      "texte": "Le frisson vient souvent d'une surprise : une voix qui monte, un silence, un instrument qui entre d'un coup."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fr_ouverts",
+      "accents": {
+        "autant.": "pop",
+        "ouvertes": "flash"
+      },
+      "texte": "Tout le monde n'en a pas autant. Les personnes très ouvertes aux nouvelles expériences en ont plus souvent."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu as déjà eu des frissons en écoutant une musique ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

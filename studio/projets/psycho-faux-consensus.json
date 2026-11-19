@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-faux-consensus",
+  "titre": "Le faux consensus",
+  "titre_youtube": "Pourquoi tu crois que tout le monde pense comme toi ?",
+  "serie": "Pourquoi tu… #54",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tout le monde ne pense pas comme toi",
+  "sources": [
+    "Ross, L., Greene, D. & House, P. (1977). The « false consensus effect »: An egocentric bias in social perception and attribution processes. Journal of Experimental Social Psychology, 13(3), 279-301 : les étudiants qui acceptaient de porter une pancarte pensaient qu'environ 62 % des autres accepteraient aussi ; ceux qui refusaient pensaient qu'environ 67 % refuseraient"
+  ],
+  "legende": "Tu penses que ton avis est l'avis normal, celui de la plupart des gens. Eux aussi. Des chercheurs l'ont montré avec une pancarte ridicule. Ça s'appelle le faux consensus.\n\nTu as déjà été surpris que les autres ne pensent pas comme toi ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_fc_accroche",
+      "accents": {
+        "plupart": "pop",
+        "toi": "impact"
+      },
+      "texte": "Pourquoi tu as l'impression que la plupart des gens… pensent comme toi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_pancarte",
+      "accents": {
+        "1977,": "pop",
+        "pancarte": "impact",
+        "Joe": "flash"
+      },
+      "texte": "En 1977, des chercheurs ont demandé à des étudiants de se promener sur le campus avec une grande pancarte : « Mangez chez Joe »."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_resultat",
+      "titre": {
+        "mot": "majorité.",
+        "texte": "Le faux consensus"
+      },
+      "accents": {
+        "62": "flash",
+        "67": "flash",
+        "majorité.": "impact"
+      },
+      "texte": "Ceux qui acceptaient pensaient que 62 % des autres accepteraient aussi. Ceux qui refusaient pensaient que 67 % refuseraient. Chacun se croyait dans la majorité."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_pourquoi",
+      "accents": {
+        "idées,": "pop",
+        "normal.": "impact"
+      },
+      "texte": "Tu passes ta vie avec tes propres idées, et souvent avec des gens qui te ressemblent. Alors ton avis te paraît normal."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "vraiment": "flash",
+        "surpris.": "impact"
+      },
+      "texte": "L'astuce : avant de dire « tout le monde pense ça », demande vraiment autour de toi. Tu risques d'être surpris."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu as déjà été surpris qu'on ne pense pas comme toi ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

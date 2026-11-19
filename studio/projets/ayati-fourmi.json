@@ -1,0 +1,132 @@
+{
+  "slug": "ayati-fourmi",
+  "titre": "Souleymane et la fourmi",
+  "titre_youtube": "Une fourmi a parlé… et Souleymane a souri. La vallée des fourmis",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Une fourmi a parlé",
+  "sourates": {
+    "27": "Sourate An-Naml"
+  },
+  "sources": [
+    "Coran 27:16-19 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 27, An-Naml (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : Souleymane n'est jamais montré, ni son armée de près ; on voit la vallée, les rangs au loin et les fourmis."
+  ],
+  "legende": "Souleymane avance avec ses armées de djinns, d'hommes et d'oiseaux. Dans une vallée, une petite fourmi crie aux autres : « Rentrez vite, sinon ils vont vous écraser sans s'en rendre compte. » Et Souleymane l'entend… Sourate An-Naml (27:16-19).\n\nAbonne-toi pour la suite : la huppe et la reine de Saba.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#souleymane",
+    "#annaml",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "sf_fourmi",
+      "ref": "27:18",
+      "accents": {
+        "immense": "impact",
+        "fourmi": "pop",
+        "siennes.": "battement"
+      },
+      "texte": "Une armée immense avance. Et une toute petite fourmi prend la parole pour sauver les siennes."
+    },
+    {
+      "type": "narration",
+      "scene": "sf_royaume",
+      "ref": "27:16",
+      "titre": {
+        "mot": "Souleymane",
+        "texte": "Souleymane et la fourmi"
+      },
+      "accents": {
+        "Daoud.": "pop",
+        "oiseaux,": "whoosh",
+        "chose.": "battement"
+      },
+      "texte": "Souleymane a hérité de son père Daoud. Allah lui a appris le langage des oiseaux, et lui a donné de toute chose."
+    },
+    {
+      "type": "narration",
+      "scene": "sf_armee",
+      "ref": "27:17",
+      "accents": {
+        "djinns,": "impact",
+        "oiseaux,": "whoosh",
+        "rangs.": "pop"
+      },
+      "texte": "Un jour, ses armées sont rassemblées : des djinns, des hommes, des oiseaux, tous en rangs."
+    },
+    {
+      "type": "narration",
+      "scene": "sf_vallee",
+      "ref": "27:18",
+      "accents": {
+        "Fourmis.": "pop",
+        "Rentrez": "whoosh",
+        "écrasent": "impact"
+      },
+      "texte": "Ils arrivent à la Vallée des Fourmis. Et une fourmi s'écrie : « Ô fourmis ! Rentrez chez vous, que Souleymane et ses armées ne vous écrasent pas sans s'en rendre compte ! »"
+    },
+    {
+      "type": "narration",
+      "scene": "sf_sourire",
+      "ref": "27:19",
+      "accents": {
+        "sourit,": "flash",
+        "puissant…": "impact",
+        "Seigneur.": "battement"
+      },
+      "texte": "Souleymane l'entend. Il sourit, amusé par ses paroles. Et au lieu de se sentir puissant… il se tourne vers son Seigneur."
+    },
+    {
+      "type": "verset",
+      "scene": "sf_sourire",
+      "ref": "27:19"
+    },
+    {
+      "type": "narration",
+      "scene": "sf_doua",
+      "ref": "27:19",
+      "accents": {
+        "remercier": "battement",
+        "parents.": "pop",
+        "miséricorde,": "flash"
+      },
+      "texte": "« Seigneur, permets-moi de Te remercier pour le bienfait dont Tu m'as comblé, moi et mes parents. Que je fasse le bien qui Te plaît. Et fais-moi entrer, par Ta miséricorde, parmi Tes serviteurs vertueux. »"
+    },
+    {
+      "type": "narration",
+      "scene": "sf_lecon",
+      "accents": {
+        "fourmi…": "pop",
+        "remerciant": "battement",
+        "remercier.": "flash"
+      },
+      "texte": "Un roi qui entend une fourmi… et qui répond en remerciant Allah. Plus Allah te donne, plus tu as de raisons de Le remercier."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "Saba.": "battement"
+      },
+      "texte": "Abonne-toi : la suite, c'est la huppe et la reine de Saba."
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-rire-contagieux",
+  "titre": "Le rire contagieux",
+  "titre_youtube": "Pourquoi tu rigoles quand quelqu'un rigole, même sans savoir pourquoi ?",
+  "serie": "Pourquoi tu… #35",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "On rit 30 fois plus à plusieurs",
+  "sources": [
+    "Provine, R. R. & Fischer, K. R. (1989). Laughing, smiling, and talking: Relation to sleeping and social context in humans. Ethology, 83(4), 295-305 : on rit environ 30 fois plus en compagnie que seul",
+    "Provine, R. R. (1992). Contagious laughter: Laughter is a sufficient stimulus for laughs and smiles. Bulletin of the Psychonomic Society, 30(1), 1-4 : entendre un rire enregistré suffit à faire rire ou sourire",
+    "Scott, S. K., Lavan, N., Chen, S. & McGettigan, C. (2014). The social life of laughter. Trends in Cognitive Sciences, 18(12), 618-620 : le rire sert surtout à créer et renforcer les liens"
+  ],
+  "legende": "Tu ne sais même pas pourquoi ils rient… et tu ris quand même. Le rire est contagieux : on rit environ 30 fois plus à plusieurs que seul. Parce que le rire, ce n'est pas d'abord pour les blagues.\n\nTu as un fou rire facile ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#rire",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ri_accroche",
+      "accents": {
+        "rire": "pop",
+        "pourquoi": "impact"
+      },
+      "texte": "Pourquoi tu te mets à rire quand quelqu'un rit… même sans savoir pourquoi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ri_trente",
+      "titre": {
+        "mot": "30",
+        "texte": "Le rire contagieux"
+      },
+      "accents": {
+        "30": "flash",
+        "seul.": "impact"
+      },
+      "texte": "Des chercheurs ont suivi des gens au quotidien : on rit environ 30 fois plus quand on est avec d'autres que quand on est seul."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ri_enregistre",
+      "accents": {
+        "enregistré": "pop",
+        "sourire.": "flash",
+        "fond.": "whoosh"
+      },
+      "texte": "Et même un rire enregistré suffit à te faire rire ou sourire. C'est pour ça que les vieilles séries mettaient des rires en fond."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ri_lien",
+      "accents": {
+        "lien.": "flash",
+        "ensemble,": "pop",
+        "bien": "battement"
+      },
+      "texte": "Le rire sert surtout à créer du lien. C'est un signal : « on est ensemble, tout va bien »."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ri_astuce",
+      "accents": {
+        "rapprocher": "pop",
+        "lui.": "flash"
+      },
+      "texte": "Alors si tu veux te rapprocher de quelqu'un… ris avec lui."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu as un fou rire facile ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

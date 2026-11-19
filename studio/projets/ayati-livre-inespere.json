@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-livre-inespere",
+  "titre": "Un Livre inespéré",
+  "titre_youtube": "Il ne s'attendait pas à recevoir le Coran… une miséricorde",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il ne l'avait pas demandé",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:86-87 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Le Prophète ﷺ ne s'attendait pas à recevoir un Livre. Il n'avait rien demandé. « Ce n'est qu'une miséricorde de ton Seigneur. » Le Coran est un cadeau, pour lui… et pour nous. Sourate Al-Qasas (28:86-87).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#coran",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "hira_grotte",
+      "ref": "28:86",
+      "accents": {
+        "demandé.": "pop",
+        "attendait": "impact",
+        "Coran.": "flash"
+      },
+      "texte": "Il ne l'avait pas demandé. Il ne s'y attendait pas. Et pourtant, c'est à lui qu'Allah a confié le Coran."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "ref": "28:86",
+      "titre": {
+        "mot": "Prophète",
+        "texte": "Un Livre inespéré"
+      },
+      "accents": {
+        "Hira,": "pop",
+        "Mecque.": "battement"
+      },
+      "texte": "Le Prophète ﷺ se retirait dans la grotte de Hira, loin du bruit de La Mecque."
+    },
+    {
+      "type": "verset",
+      "scene": "hira_lumiere",
+      "ref": "28:86"
+    },
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:86",
+      "accents": {
+        "n'espérais": "pop",
+        "miséricorde": "flash",
+        "jamais": "impact"
+      },
+      "texte": "« Tu n'espérais pas que le Livre te soit révélé. Ce n'est qu'une miséricorde de ton Seigneur. Ne soutiens donc jamais ceux qui le rejettent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:87",
+      "accents": {
+        "détournent": "whoosh",
+        "Appelle": "battement"
+      },
+      "texte": "« Et qu'ils ne te détournent pas des versets d'Allah, après qu'ils ont été descendus vers toi. Appelle à ton Seigneur. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "toi,": "pop",
+        "miséricorde": "flash",
+        "verset.": "battement"
+      },
+      "texte": "Ce Livre est arrivé jusqu'à toi, quatorze siècles plus tard. C'est aussi une miséricorde pour toi. Ouvre-le aujourd'hui, même pour un seul verset."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

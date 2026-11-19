@@ -1,0 +1,154 @@
+{
+  "slug": "psycho-desordre-stress",
+  "titre": "Le désordre et le stress",
+  "titre_youtube": "Pourquoi ranger ta chambre te calme ?",
+  "serie": "Pourquoi tu… #58",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton désordre te parle",
+  "sources": [
+    "Saxbe, D. E. & Repetti, R. (2010). No place like home: Home tours correlate with daily patterns of mood and cortisol. Personality and Social Psychology Bulletin, 36(1), 71-81 : les femmes qui décrivaient leur maison comme encombrée avaient un taux de cortisol qui baissait moins bien au fil de la journée et une humeur plus déprimée",
+    "McMains, S. & Kastner, S. (2011). Interactions of top-down and bottom-up mechanisms in human visual cortex. Journal of Neuroscience, 31(2), 587-597 : plusieurs objets dans le champ de vision se font concurrence pour l'attention"
+  ],
+  "legende": "Ta chambre en bazar, et tu te sens toi aussi en bazar ? Des chercheurs ont trouvé un lien entre maison encombrée et hormone du stress. Et ton cerveau dépense de l'énergie à ignorer chaque objet qui traîne.\n\nTu te sens mieux après avoir rangé ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#rangement",
+    "#stress",
+    "#bienetre",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "calme…": "flash",
+        "rangé": "pop"
+      },
+      "texte": "Pourquoi tu te sens plus calme… juste après avoir rangé ta chambre ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Shirt",
+            "mot": "rangé",
+            "texte": "avant"
+          },
+          {
+            "nom": "Sparkles",
+            "mot": "calme",
+            "texte": "après"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2010,": "pop",
+        "visiter": "pop",
+        "stress": "impact"
+      },
+      "texte": "En 2010, des chercheuses ont demandé à des familles de faire visiter leur maison, puis ont mesuré l'hormone du stress pendant plusieurs jours.",
+      "visuel": {
+        "annee": "2010",
+        "icones": [
+          {
+            "nom": "House",
+            "mot": "maison",
+            "texte": "la visite"
+          },
+          {
+            "nom": "TestTube",
+            "mot": "stress",
+            "texte": "le cortisol"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "encombrée",
+        "texte": "Le stress du désordre"
+      },
+      "accents": {
+        "encombrée": "impact",
+        "moins": "pop",
+        "basse.": "flash"
+      },
+      "texte": "Celles qui décrivaient leur maison comme encombrée avaient une hormone du stress qui baissait moins bien dans la journée, et une humeur plus basse.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "maison calme",
+            "valeur": 0.4,
+            "mot": "moins"
+          },
+          {
+            "texte": "maison encombrée",
+            "valeur": 0.75,
+            "mot": "moins",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "attention.": "pop",
+        "l'énergie": "impact",
+        "ignorer.": "whoosh"
+      },
+      "texte": "Et chaque objet qui traîne attire un peu ton attention. Ton cerveau dépense de l'énergie à les ignorer.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Brain",
+            "mot": "énergie",
+            "texte": "attention dispersée"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "tout": "pop",
+        "bureau": "flash",
+        "merci.": "pop"
+      },
+      "texte": "L'astuce : pas besoin de tout ranger. Dégage juste ton bureau avant de travailler. Ton cerveau te dira merci.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "bureau",
+          "icone": "Sparkles"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu te sens mieux après avoir rangé ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

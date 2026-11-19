@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-juger-autres",
+  "titre": "L'erreur d'attribution",
+  "titre_youtube": "Pourquoi tu juges les autres plus durement que toi-même ?",
+  "serie": "Pourquoi tu… #55",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Toi, tu avais une bonne raison",
+  "sources": [
+    "Jones, E. E. & Harris, V. A. (1967). The attribution of attitudes. Journal of Experimental Social Psychology, 3(1), 1-24 : même en sachant qu'un auteur avait été obligé de défendre une opinion, les lecteurs pensaient qu'il y croyait vraiment",
+    "Ross, L. (1977). The intuitive psychologist and his shortcomings. Advances in Experimental Social Psychology, 10, 173-220 : l'erreur fondamentale d'attribution"
+  ],
+  "legende": "Quelqu'un te coupe la route : « quel idiot ». Tu coupes la route : « j'étais pressé ». On juge les autres sur ce qu'ils font, et soi-même sur ses raisons. L'erreur fondamentale d'attribution.\n\nTu t'es reconnu ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#relations",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ja_accroche",
+      "accents": {
+        "retard,": "pop",
+        "organisé…": "impact",
+        "bouchons": "whoosh"
+      },
+      "texte": "Pourquoi quand quelqu'un est en retard, c'est qu'il est mal organisé… et quand c'est toi, c'est à cause des bouchons ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ja_nom",
+      "titre": {
+        "mot": "d'attribution",
+        "texte": "L'erreur d'attribution"
+      },
+      "accents": {
+        "d'attribution": "flash",
+        "caractère.": "impact",
+        "circonstances.": "pop"
+      },
+      "texte": "Ça s'appelle l'erreur fondamentale d'attribution : on explique les actes des autres par leur caractère. Et les nôtres par les circonstances."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ja_etude",
+      "accents": {
+        "1967,": "pop",
+        "obligé": "impact",
+        "vraiment.": "flash"
+      },
+      "texte": "En 1967, des chercheurs ont fait lire un texte à des étudiants, en leur disant que l'auteur avait été obligé de le défendre. Ils pensaient quand même… qu'il y croyait vraiment."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ja_pourquoi",
+      "accents": {
+        "raisons.": "pop",
+        "vois": "impact"
+      },
+      "texte": "Tu connais tes raisons. Celles des autres, tu ne les vois pas."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ja_astuce",
+      "accents": {
+        "juger": "pop",
+        "aussi.": "flash"
+      },
+      "texte": "L'astuce : avant de juger quelqu'un, cherche une raison qui pourrait t'arriver à toi aussi."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu t'es reconnu dans cette vidéo ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

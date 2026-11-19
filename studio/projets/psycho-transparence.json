@@ -1,0 +1,145 @@
+{
+  "slug": "psycho-transparence",
+  "titre": "L'illusion de transparence",
+  "titre_youtube": "Pourquoi tu crois que tout le monde voit ton stress ?",
+  "serie": "Pourquoi tu… #23",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton stress se voit moins que tu crois",
+  "sources": [
+    "Gilovich, T., Savitsky, K. & Medvec, V. H. (1998). The illusion of transparency: Biased assessments of others' ability to read one's emotional states. Journal of Personality and Social Psychology, 75(2), 332-346 : on surestime à quel point les autres voient nos émotions (mensonge, dégoût, stress)",
+    "Savitsky, K. & Gilovich, T. (2003). The illusion of transparency and the alleviation of speech anxiety. Journal of Experimental Social Psychology, 39(6), 618-625 : les orateurs à qui l'on explique cette illusion sont moins stressés et font un meilleur discours"
+  ],
+  "legende": "Tu parles devant la classe, tu as l'impression que tout le monde voit ton stress… En vrai, presque personne ne le remarque. Et le simple fait de le savoir t'aide à mieux parler.\n\nParler en public te stresse ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#prisedeparole",
+    "#stress",
+    "#confiance",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "stress": "impact",
+        "autres": "pop"
+      },
+      "texte": "Pourquoi tu as l'impression que tout le monde voit ton stress quand tu parles devant les autres ?",
+      "visuel": {
+        "perso": {
+          "nb": 8,
+          "jaunes": 1,
+          "mot": "stress"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "transparence.",
+        "texte": "L'illusion de transparence"
+      },
+      "accents": {
+        "transparence.": "flash",
+        "visage…": "pop",
+        "réalité.": "impact"
+      },
+      "texte": "Ça a un nom : l'illusion de transparence. On croit que nos émotions se lisent sur notre visage… bien plus qu'en réalité.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Eye",
+            "mot": "lisent",
+            "texte": "« ils voient tout »"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "1998,": "pop",
+        "mensonges": "pop",
+        "vraiment.": "impact"
+      },
+      "texte": "En 1998, des chercheurs l'ont mesuré. Les gens pensaient que leur stress ou leurs mensonges seraient repérés bien plus souvent qu'ils ne l'étaient vraiment.",
+      "visuel": {
+        "annee": "1998",
+        "barres": [
+          {
+            "texte": "ce que tu crois",
+            "valeur": 0.85,
+            "mot": "pensaient",
+            "rouge": true
+          },
+          {
+            "texte": "ce qu'ils voient",
+            "valeur": 0.35,
+            "mot": "vraiment"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "2003,": "pop",
+        "moins": "flash",
+        "meilleur.": "impact"
+      },
+      "texte": "Et le meilleur : en 2003, on a simplement expliqué cette illusion à des orateurs. Résultat, ils étaient moins stressés… et leur discours était jugé meilleur.",
+      "visuel": {
+        "annee": "2003",
+        "pastilles": [
+          {
+            "texte": "moins stressés",
+            "mot": "moins"
+          },
+          {
+            "texte": "discours meilleur",
+            "mot": "meilleur"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "sais": "pop",
+        "moins": "flash"
+      },
+      "texte": "Alors maintenant que tu le sais : ton stress se voit beaucoup moins que tu ne crois.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "moins",
+          "bulle": "« personne ne voit »"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Parler en public, ça te stresse ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

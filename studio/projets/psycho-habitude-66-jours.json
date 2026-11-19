@@ -1,0 +1,152 @@
+{
+  "slug": "psycho-habitude-66-jours",
+  "titre": "66 jours pour une habitude",
+  "titre_youtube": "Combien de temps faut-il vraiment pour prendre une habitude ?",
+  "serie": "Pourquoi tu… #47",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Pas 21 jours",
+  "sources": [
+    "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W. & Wardle, J. (2010). How are habits formed: Modelling habit formation in the real world. European Journal of Social Psychology, 40(6), 998-1009 : il fallait en moyenne 66 jours (de 18 à 254 selon les personnes) pour qu'un geste devienne automatique ; rater un jour ne changeait presque rien"
+  ],
+  "legende": "On entend partout « 21 jours pour une habitude ». Une étude de Londres a suivi des gens au quotidien : en moyenne, il en faut 66. Et bonne nouvelle : rater un jour ne gâche rien.\n\nTu essaies de prendre une habitude en ce moment ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#habitudes",
+    "#motivation",
+    "#developpementpersonnel",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "temps": "pop",
+        "habitude": "impact"
+      },
+      "texte": "Combien de temps faut-il vraiment pour prendre une habitude ?",
+      "visuel": {
+        "chiffre": {
+          "texte": "21 jours ?",
+          "mot": "temps"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2010,": "pop",
+        "l'eau,": "pop",
+        "fruit,": "pop",
+        "sport.": "pop"
+      },
+      "texte": "En 2010, une équipe de Londres a suivi des gens qui voulaient prendre une nouvelle habitude : boire de l'eau, manger un fruit, faire du sport.",
+      "visuel": {
+        "annee": "2010",
+        "icones": [
+          {
+            "nom": "GlassWater",
+            "mot": "eau",
+            "texte": "de l'eau"
+          },
+          {
+            "nom": "Apple",
+            "mot": "fruit",
+            "texte": "un fruit"
+          },
+          {
+            "nom": "Dumbbell",
+            "mot": "sport",
+            "texte": "du sport"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "soixante-six",
+        "texte": "66 jours"
+      },
+      "accents": {
+        "soixante-six": "flash",
+        "automatique.": "pop",
+        "vingt": "impact"
+      },
+      "texte": "Résultat : en moyenne, il a fallu soixante-six jours pour que le geste devienne automatique. Pas vingt et un.",
+      "visuel": {
+        "chiffre": {
+          "texte": "66 jours",
+          "mot": "soixante-six",
+          "sous": "en moyenne"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "18": "pop",
+        "250": "flash"
+      },
+      "texte": "Et ça variait énormément : de 18 jours pour certains… à plus de 250 pour d'autres.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "le plus rapide",
+            "valeur": 0.07,
+            "mot": "18"
+          },
+          {
+            "texte": "moyenne",
+            "valeur": 0.26,
+            "mot": "250"
+          },
+          {
+            "texte": "le plus long",
+            "valeur": 1.0,
+            "mot": "250"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "rater": "pop",
+        "grave.": "pop",
+        "Continue.": "flash"
+      },
+      "texte": "Bonne nouvelle : rater un jour ne changeait presque rien. Alors si tu as raté hier, ce n'est pas grave. Continue.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "Continue",
+          "bulle": "« j'ai raté hier, je reprends »"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu essaies de prendre une habitude en ce moment ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

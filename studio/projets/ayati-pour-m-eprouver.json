@@ -1,0 +1,107 @@
+{
+  "slug": "ayati-pour-m-eprouver",
+  "titre": "Pour m'éprouver",
+  "titre_youtube": "Il venait de recevoir un trône… et il a dit : « C'est une épreuve »",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Quand tout te réussit",
+  "sourates": {
+    "27": "Sourate An-Naml"
+  },
+  "sources": [
+    "Coran 27:38-40 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 27, An-Naml (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière."
+  ],
+  "legende": "Le trône de la reine de Saba arrive en un clin d'œil devant Souleymane. Sa réaction ? « Ceci est une grâce de mon Seigneur, pour m'éprouver : serai-je reconnaissant ou ingrat ? » Sourate An-Naml (27:40).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#gratitude",
+    "#annaml",
+    "#saba",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "sh_saba",
+      "ref": "27:40",
+      "accents": {
+        "trône": "impact",
+        "clin": "whoosh",
+        "l'épreuve.": "flash"
+      },
+      "texte": "Un trône immense arrive devant lui en un clin d'œil. Et sa première pensée, c'est : je suis mis à l'épreuve."
+    },
+    {
+      "type": "narration",
+      "scene": "sf_royaume",
+      "ref": "27:38-40",
+      "titre": {
+        "mot": "Souleymane",
+        "texte": "Pour m'éprouver"
+      },
+      "accents": {
+        "Saba.": "battement",
+        "cligne": "whoosh"
+      },
+      "texte": "Souleymane avait demandé qu'on lui apporte le trône de la reine de Saba. Celui qui avait une science du Livre le lui apporte avant qu'il ne cligne des yeux."
+    },
+    {
+      "type": "verset",
+      "scene": "sh_saba",
+      "ref": "27:40"
+    },
+    {
+      "type": "narration",
+      "scene": "sf_royaume",
+      "ref": "27:40",
+      "accents": {
+        "grâce": "flash",
+        "m'éprouver": "battement",
+        "ingrat": "impact"
+      },
+      "texte": "« Ceci est une grâce de mon Seigneur, pour m'éprouver : serai-je reconnaissant, ou ingrat ? Celui qui est reconnaissant l'est pour lui-même. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "malheur.": "battement",
+        "succès": "flash"
+      },
+      "texte": "On pense souvent que l'épreuve, c'est le malheur. Le Coran montre que le succès aussi est une épreuve."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "santé,": "pop",
+        "remercies": "flash"
+      },
+      "texte": "Ton travail, ta santé, ce qui marche pour toi : la question est la même. Est-ce que tu remercies ?"
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels du Coran, et partage cette vidéo."
+    }
+  ]
+}

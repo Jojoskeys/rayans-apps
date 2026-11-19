@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-tu-netais-pas-la",
+  "titre": "Tu n'étais pas là",
+  "titre_youtube": "Comment le Prophète ﷺ connaissait-il l'histoire de Moussa ?",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il n'était pas là… et pourtant il savait",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:44-46 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Le Prophète ﷺ n'était pas au Mont Sinaï, ni à Madyan. Il ne savait ni lire ni écrire. Et pourtant, il racontait l'histoire de Moussa avec tous ses détails. Le Coran donne la réponse. Sourate Al-Qasas (28:44-46).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#coran",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "mf_vallee",
+      "ref": "28:44-46",
+      "accents": {
+        "Sinaï.": "impact",
+        "Madyan.": "pop",
+        "détail.": "flash"
+      },
+      "texte": "Il n'était pas au Mont Sinaï. Il n'était pas à Madyan. Et pourtant, il racontait tout, avec chaque détail."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "ref": "28:44",
+      "titre": {
+        "mot": "Prophète",
+        "texte": "Tu n'étais pas là"
+      },
+      "accents": {
+        "ouest,": "pop",
+        "témoins.": "impact"
+      },
+      "texte": "Allah dit à Son Prophète : « Tu n'étais pas sur le versant ouest, quand Nous avons confié les ordres à Moussa. Tu n'étais pas parmi les témoins. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_routes",
+      "ref": "28:45",
+      "accents": {
+        "Madyan,": "pop",
+        "versets.": "battement"
+      },
+      "texte": "« Tu ne vivais pas non plus chez les gens de Madyan, à leur réciter Nos versets. »"
+    },
+    {
+      "type": "verset",
+      "scene": "mf_arbre",
+      "ref": "28:46"
+    },
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:46",
+      "accents": {
+        "appelé.": "impact",
+        "miséricorde": "flash",
+        "avant": "battement"
+      },
+      "texte": "« Et tu n'étais pas au flanc du Mont quand Nous avons appelé. Mais c'est une miséricorde de ton Seigneur, pour avertir un peuple à qui aucun avertisseur n'était venu avant toi. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "lire.": "impact",
+        "d'Allah.": "flash",
+        "preuves": "battement"
+      },
+      "texte": "Ces récits, il ne les a pas lus dans un livre : il ne savait pas lire. Ils lui sont venus d'Allah. C'est l'une des preuves du Coran."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

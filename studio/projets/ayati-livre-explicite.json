@@ -1,0 +1,114 @@
+{
+  "slug": "ayati-livre-explicite",
+  "titre": "Le Livre clair",
+  "titre_youtube": "Le Coran se présente lui-même en une phrase",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il se présente en une phrase",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:1-3 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "La sourate Al-Qasas s'ouvre ainsi : « Tâ, Sîn, Mîm. Voici les versets du Livre explicite. » Un Livre clair, qui raconte en toute vérité, pour ceux qui croient. Sourate Al-Qasas (28:1-3).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#coran",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "calligraphie",
+      "ref": "28:2",
+      "accents": {
+        "lui-même": "pop",
+        "phrase.": "battement"
+      },
+      "texte": "Comment le Coran se présente-t-il lui-même ? En une seule phrase."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:1",
+      "titre": {
+        "mot": "lettres",
+        "texte": "Le Livre clair"
+      },
+      "accents": {
+        "lettres": "pop",
+        "Allah.": "flash"
+      },
+      "texte": "La sourate Al-Qasas commence par trois lettres : Tâ, Sîn, Mîm. Personne ne sait exactement leur sens, sauf Allah."
+    },
+    {
+      "type": "verset",
+      "scene": "calligraphie",
+      "ref": "28:2"
+    },
+    {
+      "type": "narration",
+      "scene": "calligraphie",
+      "ref": "28:2",
+      "accents": {
+        "versets": "pop",
+        "explicite.": "flash"
+      },
+      "texte": "« Voici les versets du Livre explicite. »"
+    },
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:3",
+      "accents": {
+        "vérité": "flash",
+        "croient.": "battement"
+      },
+      "texte": "Puis Allah dit : « Nous te racontons en toute vérité l'histoire de Moussa et de Pharaon, pour des gens qui croient. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "clair.": "flash",
+        "chacun": "pop"
+      },
+      "texte": "Un Livre clair. Pas réservé aux savants : il parle à chacun qui veut l'écouter."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "aujourd'hui,": "pop",
+        "compris.": "battement"
+      },
+      "texte": "Ouvre-le aujourd'hui, même pour un seul verset. Il a été fait pour être compris."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

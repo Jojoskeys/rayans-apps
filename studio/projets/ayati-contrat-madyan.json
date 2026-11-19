@@ -1,0 +1,119 @@
+{
+  "slug": "ayati-contrat-madyan",
+  "titre": "Un contrat devant Allah",
+  "titre_youtube": "Huit ou dix ans de travail… et Allah pour témoin",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Allah est garant de nos paroles",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:27-28 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "D'après Sahih al-Bukhari (n° 2684), Ibn Abbas rapporte que Moussa a accompli le plus long et le meilleur des deux délais.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Le vieil homme de Madyan propose à Moussa d'épouser une de ses filles, contre huit ans de travail, ou dix s'il le veut. Moussa accepte : « Allah est garant de ce que nous disons. » Sourate Al-Qasas (28:27-28).\n\nAbonne-toi pour d'autres histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:28",
+      "accents": {
+        "papier,": "pop",
+        "parole": "impact",
+        "témoin.": "flash"
+      },
+      "texte": "Un accord sans papier, sans signature. Juste une parole donnée… et Allah pour témoin."
+    },
+    {
+      "type": "narration",
+      "scene": "md_reponse",
+      "ref": "28:27",
+      "titre": {
+        "mot": "marier",
+        "texte": "Un contrat devant Allah"
+      },
+      "accents": {
+        "marier": "pop",
+        "huit": "impact",
+        "dix,": "flash"
+      },
+      "texte": "Le père des deux jeunes femmes dit à Moussa : « Je voudrais te marier à l'une de mes deux filles, si tu travailles pour moi huit ans. Et si tu en fais dix, ce sera de ton plein gré. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:27",
+      "accents": {
+        "difficile.": "pop",
+        "bien.": "battement"
+      },
+      "texte": "« Je ne veux rien t'imposer de difficile. Tu me trouveras, si Allah le veut, parmi les gens de bien. »"
+    },
+    {
+      "type": "verset",
+      "scene": "md_lecon",
+      "ref": "28:28"
+    },
+    {
+      "type": "narration",
+      "scene": "md_lecon",
+      "ref": "28:28",
+      "accents": {
+        "entendu": "pop",
+        "rien.": "impact",
+        "garant": "flash"
+      },
+      "texte": "Moussa répond : « C'est entendu entre toi et moi. Quel que soit le délai que je remplirai, on ne me reprochera rien. Et Allah est garant de ce que nous disons. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "dix": "flash",
+        "plus": "impact"
+      },
+      "texte": "D'après les savants, Moussa a choisi le plus long délai : dix ans. Il a donné plus que ce qu'on lui demandait."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "contrat.": "impact",
+        "témoin…": "battement",
+        "l'est.": "flash"
+      },
+      "texte": "Ta parole, c'est un contrat. Tiens-la, comme si Allah en était témoin… parce qu'Il l'est."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

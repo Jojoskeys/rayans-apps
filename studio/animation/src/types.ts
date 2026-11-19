@@ -19,6 +19,17 @@ export type Segment = {
   mots?: Mot[];
   verset?: Verset;
   titre?: { frame: number; texte: string };
+  visuel?: Visuel;
+};
+
+/** Décor générique : tout vient du script (voir generique.tsx). */
+export type Visuel = {
+  icones?: { nom: string; mot?: string; texte?: string }[];
+  chiffre?: { texte: string; mot?: string; sous?: string };
+  barres?: { texte: string; valeur: number; mot?: string; rouge?: boolean }[];
+  pastilles?: { texte: string; mot?: string; rouge?: boolean }[];
+  perso?: { nb?: number; jaunes?: number; mot?: string; bulle?: string; icone?: string };
+  annee?: string;
 };
 
 export type Cue = { frame: number; type: string; icone?: string | null };

@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-visages-objets",
+  "titre": "La paréidolie",
+  "titre_youtube": "Pourquoi tu vois des visages dans les objets ?",
+  "serie": "Pourquoi tu… #26",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Cette prise te regarde",
+  "sources": [
+    "Wardle, S. G., Taubert, J., Teichmann, L. & Baker, C. I. (2020). Rapid and dynamic processing of face pareidolia in the human brain. Nature Communications, 11, 4518 : le cerveau traite très vite les « faux visages » des objets, d'abord comme de vrais visages",
+    "Liu, J., Li, J., Feng, L., Li, L., Tian, J. & Lee, K. (2014). Seeing Jesus in toast: Neural and behavioral correlates of face pareidolia. Cortex, 53, 60-77 : la zone des visages s'active quand on croit voir un visage"
+  ],
+  "legende": "Une prise qui a l'air surprise, une voiture qui sourit, une maison qui te regarde… Ton cerveau voit des visages partout. Ça a un nom : la paréidolie.\n\nTu en vois souvent ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_vo_accroche",
+      "accents": {
+        "visages": "pop",
+        "nuages": "impact"
+      },
+      "texte": "Pourquoi tu vois des visages dans les prises, les voitures… ou les nuages ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_vo_nom",
+      "titre": {
+        "mot": "paréidolie.",
+        "texte": "La paréidolie"
+      },
+      "accents": {
+        "paréidolie.": "flash",
+        "doué": "pop",
+        "pas.": "impact"
+      },
+      "texte": "Ça a un nom : la paréidolie. Ton cerveau est tellement doué pour repérer les visages… qu'il en voit même là où il n'y en a pas."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_vo_vite",
+      "accents": {
+        "2020,": "pop",
+        "vite,": "whoosh",
+        "visages.": "impact"
+      },
+      "texte": "En 2020, des chercheurs ont montré que ces faux visages sont traités très vite, presque comme de vrais visages."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_vo_pourquoi",
+      "accents": {
+        "n'existe": "pop",
+        "vraiment.": "impact"
+      },
+      "texte": "Une explication : mieux vaut voir un visage qui n'existe pas… que rater quelqu'un qui te regarde vraiment."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_vo_normal",
+      "accents": {
+        "surprise,": "flash",
+        "travail.": "pop"
+      },
+      "texte": "Alors si une prise électrique a l'air surprise, rassure-toi : c'est ton cerveau qui fait bien son travail."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu vois souvent des visages dans les objets ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

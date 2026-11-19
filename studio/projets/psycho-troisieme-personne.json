@@ -1,0 +1,91 @@
+{
+  "slug": "psycho-troisieme-personne",
+  "titre": "Se parler à la 3e personne",
+  "titre_youtube": "Pourquoi te parler à toi-même par ton prénom te calme ?",
+  "serie": "Pourquoi tu… #58",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Parle-toi comme à un ami",
+  "sources": [
+    "Kross, E. et al. (2014). Self-talk as a regulatory mechanism: How you do it matters. Journal of Personality and Social Psychology, 106(2), 304-324 : avant de parler en public, se parler avec son prénom ou « tu » plutôt que « je » diminuait l'anxiété et améliorait la performance"
+  ],
+  "legende": "Avant un oral, dis-toi « Rayan, tu vas y arriver » plutôt que « je vais y arriver ». Ça a l'air bizarre, mais des chercheurs l'ont testé : utiliser ton prénom réduit le stress.\n\nTu te parles à toi-même ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#stress",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_tp_accroche",
+      "accents": {
+        "prénom…": "pop",
+        "oral": "impact"
+      },
+      "texte": "Pourquoi te parler à toi-même avec ton prénom… peut te calmer avant un oral ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_tp_etude",
+      "accents": {
+        "2014,": "pop",
+        "discours": "impact",
+        "prénom": "flash"
+      },
+      "texte": "En 2014, des chercheurs ont demandé à des gens de préparer un discours en quelques minutes. Les uns se parlaient avec « je ». Les autres, avec leur prénom ou « tu »."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_tp_resultat",
+      "titre": {
+        "mot": "prénom",
+        "texte": "Parle-toi comme à un ami"
+      },
+      "accents": {
+        "moins": "pop",
+        "meilleur.": "flash"
+      },
+      "texte": "Ceux qui utilisaient leur prénom étaient moins anxieux. Et leur discours était jugé meilleur."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_tp_pourquoi",
+      "accents": {
+        "distance.": "whoosh",
+        "ami.": "pop",
+        "sage.": "flash"
+      },
+      "texte": "Utiliser ton prénom te met un peu à distance. Tu te parles comme tu parlerais à un ami. Et pour un ami, tu es plus calme et plus sage."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_tp_astuce",
+      "accents": {
+        "stresses,": "pop",
+        "prénom.": "flash"
+      },
+      "texte": "L'astuce : la prochaine fois que tu stresses, remplace « je » par ton prénom."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu te parles à toi-même quand tu stresses ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

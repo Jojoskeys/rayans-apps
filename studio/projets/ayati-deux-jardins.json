@@ -1,0 +1,133 @@
+{
+  "slug": "ayati-deux-jardins",
+  "titre": "Les deux jardins",
+  "titre_youtube": "Il pensait que ses jardins ne périraient jamais… Les deux jardins (Al-Kahf)",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il a oublié de dire deux mots",
+  "sourates": {
+    "18": "Sourate Al-Kahf"
+  },
+  "sources": [
+    "Coran 18:32-44 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 18, Al-Kahf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : les deux hommes sont des silhouettes sans visage ; on voit surtout les jardins."
+  ],
+  "legende": "Deux jardins de vignes, des palmiers, un ruisseau, des récoltes qui ne manquent jamais… Il disait : « Ceci ne périra jamais. » Il avait oublié deux mots. Sourate Al-Kahf (18:32-44).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#alkahf",
+    "#mashaallah",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "kj_ruine",
+      "ref": "18:42",
+      "accents": {
+        "magnifiques.": "pop",
+        "jour": "impact",
+        "regret.": "battement"
+      },
+      "texte": "Il avait deux jardins magnifiques. Un seul jour a suffi… et il ne lui restait que ses mains, qu'il tordait de regret."
+    },
+    {
+      "type": "narration",
+      "scene": "kj_jardins",
+      "ref": "18:32-33",
+      "titre": {
+        "mot": "hommes.",
+        "texte": "Les deux jardins"
+      },
+      "accents": {
+        "vignes,": "pop",
+        "palmiers,": "pop",
+        "ruisseau": "whoosh",
+        "jamais.": "battement"
+      },
+      "texte": "Allah donne l'exemple de deux hommes. L'un a deux jardins de vignes, entourés de palmiers, avec des champs entre les deux et un ruisseau au milieu. Les récoltes ne manquent jamais."
+    },
+    {
+      "type": "narration",
+      "scene": "kj_orgueil",
+      "ref": "18:34-36",
+      "accents": {
+        "biens": "pop",
+        "moi.": "impact",
+        "périr.": "battement"
+      },
+      "texte": "Il dit à son compagnon : « J'ai plus de biens que toi, et plus de monde derrière moi. » Puis il entre dans son jardin et dit : « Je ne pense pas que ceci puisse jamais périr. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kj_compagnon",
+      "ref": "18:37-38",
+      "accents": {
+        "terre": "whoosh",
+        "Seigneur.": "battement"
+      },
+      "texte": "Son compagnon lui répond : « Renies-tu Celui qui t'a créé de terre ? Moi, c'est Allah qui est mon Seigneur. »"
+    },
+    {
+      "type": "verset",
+      "scene": "kj_mashaallah",
+      "ref": "18:39"
+    },
+    {
+      "type": "narration",
+      "scene": "kj_mashaallah",
+      "ref": "18:39",
+      "accents": {
+        "jardin,": "pop",
+        "volonté": "battement",
+        "puissance": "impact"
+      },
+      "texte": "« En entrant dans ton jardin, pourquoi n'as-tu pas dit : telle est la volonté d'Allah, il n'y a de puissance que par Allah ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "kj_ruine",
+      "ref": "18:42",
+      "accents": {
+        "détruite.": "impact",
+        "ravagées.": "secousse",
+        "Seigneur": "battement"
+      },
+      "texte": "Et sa récolte est détruite. Ses vignes sont ravagées. Il se tord les mains de regret : « Si seulement je n'avais associé personne à mon Seigneur ! »"
+    },
+    {
+      "type": "narration",
+      "scene": "kj_lecon",
+      "ref": "18:39",
+      "accents": {
+        "Allah.": "battement",
+        "belle": "pop",
+        "Mâ": "flash"
+      },
+      "texte": "Ce que tu as, tu ne le tiens que par Allah. Alors la prochaine fois que tu regardes une belle chose qui est à toi, dis : Mâ châ'Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres histoires de la sourate Al-Kahf, et partage celle-ci."
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "slug": "ayati-younous",
+  "titre": "Younous et le poisson",
+  "titre_youtube": "Avalé par un poisson… et sauvé par ses invocations. Younous",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Dans le ventre d'un poisson",
+  "sourates": {
+    "37": "Sourate As-Saffat"
+  },
+  "sources": [
+    "Coran 37:139-148 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 37, As-Saaffat (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : Younous n'est jamais montré ; on voit le bateau, la mer, le grand poisson (de loin), la plage et la plante de courge."
+  ],
+  "legende": "Il quitte son peuple sans attendre, monte sur un bateau trop chargé… Le tirage au sort le désigne, il est jeté à la mer, et un poisson l'avale. Ce qui l'a sauvé ? Il faisait partie de ceux qui glorifient Allah. Sourate As-Saffat (37:139-148).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#younous",
+    "#yunus",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "yn_ventre",
+      "ref": "37:142-144",
+      "accents": {
+        "poisson,": "impact",
+        "noir.": "whoosh",
+        "chose.": "battement"
+      },
+      "texte": "Avalé par un poisson, au fond de la mer, dans le noir. Ce qui l'a sauvé tient en une seule chose."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_bateau",
+      "ref": "37:139-140",
+      "titre": {
+        "mot": "Younous",
+        "texte": "Younous et le poisson"
+      },
+      "accents": {
+        "messagers": "battement",
+        "bateau,": "whoosh"
+      },
+      "texte": "Younous était un des messagers d'Allah. Un jour, il s'enfuit vers un bateau, plein à craquer."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_tirage",
+      "ref": "37:141",
+      "accents": {
+        "sort…": "pop",
+        "désigne.": "impact",
+        "mer.": "whoosh"
+      },
+      "texte": "En mer, il faut alléger le bateau. On tire au sort… et le sort le désigne. Il est jeté à la mer."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_poisson",
+      "ref": "37:142",
+      "accents": {
+        "poisson": "impact"
+      },
+      "texte": "Et un grand poisson l'avale."
+    },
+    {
+      "type": "verset",
+      "scene": "yn_ventre",
+      "ref": "37:143-144"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_ventre",
+      "ref": "37:143-144",
+      "accents": {
+        "glorifient": "flash",
+        "Résurrection.": "battement"
+      },
+      "texte": "« S'il n'avait pas été de ceux qui glorifient Allah, il serait resté dans son ventre jusqu'au jour de la Résurrection. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_plage",
+      "ref": "37:145-146",
+      "accents": {
+        "rejeter": "whoosh",
+        "épuisé.": "battement",
+        "courge,": "pop"
+      },
+      "texte": "Alors Allah le fait rejeter sur une terre nue, épuisé. Et Il fait pousser au-dessus de lui une plante de courge, pour l'abriter."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_peuple",
+      "ref": "37:147-148",
+      "accents": {
+        "cent": "impact",
+        "croient,": "flash"
+      },
+      "texte": "Puis Il l'envoie vers cent mille personnes, ou plus. Et ils croient, tous."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "sauvé,": "pop",
+        "l'épreuve.": "impact",
+        "difficiles.": "battement"
+      },
+      "texte": "Ce qui l'a sauvé, ce sont les fois où il se souvenait d'Allah avant l'épreuve. Ce que tu fais dans les jours faciles te sert dans les jours difficiles."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour les prochaines histoires du Coran, et partage celle-ci."
+    }
+  ]
+}

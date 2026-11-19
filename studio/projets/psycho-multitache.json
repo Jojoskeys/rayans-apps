@@ -1,0 +1,160 @@
+{
+  "slug": "psycho-multitache",
+  "titre": "Le piège du multitâche",
+  "titre_youtube": "Pourquoi faire plusieurs choses à la fois te rend moins efficace ?",
+  "serie": "Pourquoi tu… #49",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau ne fait qu'une chose à la fois",
+  "sources": [
+    "Ophir, E., Nass, C. & Wagner, A. D. (2009). Cognitive control in media multitaskers. PNAS, 106(37), 15583-15587 : les grands « multitâches » étaient plus gênés par les distractions et plus lents pour passer d'une tâche à l'autre",
+    "Rubinstein, J. S., Meyer, D. E. & Evans, J. E. (2001). Executive control of cognitive processes in task switching. Journal of Experimental Psychology: Human Perception and Performance, 27(4), 763-797 : chaque changement de tâche coûte du temps"
+  ],
+  "legende": "Musique, téléphone, devoirs, série en fond… tu as l'impression d'être efficace. En vrai, ton cerveau passe d'une tâche à l'autre, et chaque passage coûte du temps. Les plus multitâches s'en sortent même moins bien.\n\nTu fais plusieurs choses à la fois ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#concentration",
+    "#etudes",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "efficace": "pop",
+        "trois": "pop",
+        "l'inverse": "impact"
+      },
+      "texte": "Pourquoi tu as l'impression d'être efficace en faisant trois choses à la fois… alors que c'est l'inverse ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Smartphone",
+            "mot": "trois",
+            "texte": "téléphone"
+          },
+          {
+            "nom": "BookOpen",
+            "mot": "trois",
+            "texte": "devoirs"
+          },
+          {
+            "nom": "Tv",
+            "mot": "trois",
+            "texte": "série"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "saute",
+        "texte": "Le coût du changement"
+      },
+      "accents": {
+        "deux": "pop",
+        "saute": "whoosh",
+        "temps.": "impact"
+      },
+      "texte": "Ton cerveau ne fait pas vraiment deux choses en même temps. Il saute de l'une à l'autre… et chaque saut coûte un peu de temps.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "chaque changement = du temps perdu",
+            "mot": "saut",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "2009,": "pop",
+        "souvent": "pop",
+        "rarement.": "pop"
+      },
+      "texte": "En 2009, des chercheurs de Stanford ont comparé des gens qui font souvent plusieurs choses à la fois, et d'autres qui en font rarement.",
+      "visuel": {
+        "annee": "2009",
+        "perso": {
+          "nb": 10,
+          "jaunes": 5,
+          "mot": "souvent"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "Surprise": "impact",
+        "distraits…": "pop",
+        "lents": "flash"
+      },
+      "texte": "Surprise : les grands multitâches étaient plus distraits… et plus lents pour passer d'une tâche à l'autre.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "peu multitâches",
+            "valeur": 0.45,
+            "mot": "lents"
+          },
+          {
+            "texte": "très multitâches",
+            "valeur": 0.75,
+            "mot": "lents",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "seule": "flash",
+        "pièce.": "pop",
+        "vite.": "flash"
+      },
+      "texte": "L'astuce : une seule chose à la fois, et le téléphone dans une autre pièce. Tu finiras plus vite.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Target",
+            "mot": "seule",
+            "texte": "une chose"
+          },
+          {
+            "nom": "DoorClosed",
+            "mot": "pièce",
+            "texte": "téléphone ailleurs"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu fais plusieurs choses à la fois ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

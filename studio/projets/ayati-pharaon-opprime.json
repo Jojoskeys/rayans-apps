@@ -1,0 +1,129 @@
+{
+  "slug": "ayati-pharaon-opprime",
+  "titre": "Ceux qu'on écrasait",
+  "titre_youtube": "Pharaon écrasait un peuple entier… Allah avait un autre plan",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Le plus fort n'a pas le dernier mot",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:3-6 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Pharaon se croyait tout-puissant. Il divisait son peuple, écrasait les plus faibles, tuait leurs fils. Mais Allah voulait faire de ces opprimés des dirigeants et des héritiers. Sourate Al-Qasas (28:3-6).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#pharaon",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "ref": "28:4-5",
+      "accents": {
+        "tout-puissant.": "impact",
+        "faibles.": "secousse",
+        "plan": "battement"
+      },
+      "texte": "Il se croyait tout-puissant. Il écrasait les plus faibles. Mais Allah avait un autre plan pour eux."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "ref": "28:3",
+      "titre": {
+        "mot": "Pharaon.",
+        "texte": "Ceux qu'on écrasait"
+      },
+      "accents": {
+        "vérité,": "pop",
+        "Pharaon.": "impact"
+      },
+      "texte": "Allah nous raconte, en toute vérité, l'histoire de Moussa et de Pharaon. Pour ceux qui croient."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_orgueil",
+      "ref": "28:4",
+      "accents": {
+        "arrogant": "impact",
+        "divisé": "whoosh",
+        "fils,": "secousse"
+      },
+      "texte": "Pharaon était arrogant sur terre. Il avait divisé son peuple en groupes, pour en écraser un : il tuait leurs fils, et laissait vivre leurs femmes."
+    },
+    {
+      "type": "narration",
+      "scene": "village_nuit",
+      "ref": "28:4",
+      "accents": {
+        "force.": "pop",
+        "Rien.": "battement"
+      },
+      "texte": "Ce peuple n'avait aucune force. Aucune armée. Rien."
+    },
+    {
+      "type": "verset",
+      "scene": "qp_priere",
+      "ref": "28:5"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_pardon",
+      "ref": "28:5",
+      "accents": {
+        "favoriser": "flash",
+        "dirigeants,": "impact",
+        "héritiers.": "battement"
+      },
+      "texte": "« Mais Nous voulions favoriser ceux qui avaient été écrasés sur terre, et faire d'eux des dirigeants, et faire d'eux les héritiers. »"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_mer",
+      "ref": "28:6",
+      "accents": {
+        "Pharaon,": "impact",
+        "redoutaient.": "secousse"
+      },
+      "texte": "« Et faire voir à Pharaon, à Hâmân et à leurs soldats… exactement ce qu'ils redoutaient. »"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "accents": {
+        "fort": "impact",
+        "mot.": "pop",
+        "finie.": "battement"
+      },
+      "texte": "Le plus fort d'aujourd'hui n'a pas forcément le dernier mot. Si tu es écrasé, ne crois pas que ton histoire est finie."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "slug": "psycho-apprendre-dormir",
+  "titre": "Apprendre avant de dormir",
+  "titre_youtube": "Pourquoi tu retiens mieux ce que tu apprends juste avant de dormir ?",
+  "serie": "Pourquoi tu… #24",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau révise pendant la nuit",
+  "sources": [
+    "Gais, S., Lucas, B. & Born, J. (2006). Sleep after learning aids memory recall. Learning & Memory, 13(3), 259-262 : un vocabulaire appris juste avant de dormir est mieux retenu qu'appris le matin, à temps égal",
+    "Diekelmann, S. & Born, J. (2010). The memory function of sleep. Nature Reviews Neuroscience, 11(2), 114-126 : pendant le sommeil, le cerveau « rejoue » et consolide ce qui a été appris"
+  ],
+  "legende": "Réviser le soir avant de dormir, ce n'est pas une mauvaise idée : pendant la nuit, ton cerveau rejoue ce que tu as appris et le range. Ce que tu apprends juste avant de dormir tient mieux.\n\nTu révises le soir ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#etudes",
+    "#sommeil",
+    "#memoire",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "retiens": "pop",
+        "dormir": "whoosh"
+      },
+      "texte": "Pourquoi tu retiens mieux ce que tu apprends juste avant de dormir ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "BookOpen",
+            "mot": "apprends",
+            "texte": "réviser"
+          },
+          {
+            "nom": "Moon",
+            "mot": "dormir",
+            "texte": "dormir"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "rejoue",
+        "texte": "La nuit, ton cerveau révise"
+      },
+      "accents": {
+        "dors,": "pop",
+        "rejoue": "flash",
+        "mémoire.": "impact"
+      },
+      "texte": "Pendant que tu dors, ton cerveau ne se repose pas complètement. Il rejoue ce que tu as appris dans la journée… et il le range dans ta mémoire.",
+      "visuel": {
+        "perso": {
+          "icone": "Brain",
+          "mot": "rejoue"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "2006,": "pop",
+        "soir,": "pop",
+        "matin.": "pop"
+      },
+      "texte": "En 2006, des chercheurs ont fait apprendre du vocabulaire. Un groupe l'apprenait le soir, juste avant de dormir. L'autre, le matin.",
+      "visuel": {
+        "annee": "2006",
+        "icones": [
+          {
+            "nom": "Moon",
+            "mot": "soir",
+            "texte": "le soir"
+          },
+          {
+            "nom": "Sun",
+            "mot": "matin",
+            "texte": "le matin"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "Même": "pop",
+        "dormi": "whoosh",
+        "mieux.": "flash"
+      },
+      "texte": "Même temps sans dormir ou presque, même mots. Mais ceux qui avaient dormi juste après se souvenaient mieux.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "matin",
+            "valeur": 0.5,
+            "mot": "Mais"
+          },
+          {
+            "texte": "avant de dormir",
+            "valeur": 0.85,
+            "mot": "mieux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "soir…": "pop",
+        "sommeil": "impact",
+        "travail.": "flash"
+      },
+      "texte": "Alors révise un peu le soir… puis va dormir. Et surtout, ne remplace pas ton sommeil par des révisions : c'est lui qui fait le travail.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "réviser, puis dormir",
+            "mot": "révise"
+          },
+          {
+            "texte": "pas de nuit blanche",
+            "mot": "sommeil",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu révises le soir ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

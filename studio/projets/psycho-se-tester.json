@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-se-tester",
+  "titre": "Se tester pour retenir",
+  "titre_youtube": "Pourquoi te tester t'aide plus que relire tes cours ?",
+  "serie": "Pourquoi tu… #52",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Relire ne suffit pas",
+  "sources": [
+    "Roediger, H. L. & Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. Psychological Science, 17(3), 249-255 : une semaine après, les étudiants qui s'étaient testés retenaient environ 61 % du texte, contre environ 40 % pour ceux qui l'avaient relu"
+  ],
+  "legende": "Relire tes fiches cinq fois donne l'impression de tout savoir. Mais une semaine plus tard… Des chercheurs ont comparé : se tester fait retenir bien plus que relire.\n\nTu te testes ou tu relis ? Dis-le en commentaire 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#etudes",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_te_accroche",
+      "accents": {
+        "questions": "pop",
+        "relire": "impact"
+      },
+      "texte": "Pourquoi te poser des questions sur ton cours… t'aide plus que le relire ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_te_etude",
+      "accents": {
+        "2006,": "pop",
+        "relisaient.": "whoosh",
+        "mémoire.": "flash"
+      },
+      "texte": "En 2006, des chercheurs ont fait apprendre un texte à des étudiants. Certains le relisaient. D'autres essayaient de le réciter de mémoire."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_te_resultat",
+      "titre": {
+        "mot": "61",
+        "texte": "Se tester pour retenir"
+      },
+      "accents": {
+        "semaine": "pop",
+        "61": "flash",
+        "40": "impact"
+      },
+      "texte": "Une semaine plus tard : ceux qui s'étaient testés retenaient environ 61 %. Ceux qui avaient relu, environ 40 %."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_te_pourquoi",
+      "accents": {
+        "facilité,": "pop",
+        "piège.": "impact",
+        "renforce.": "flash"
+      },
+      "texte": "Relire donne une impression de facilité, mais c'est un piège. Chercher dans ta mémoire, c'est ça qui la renforce."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_te_astuce",
+      "accents": {
+        "ferme": "pop",
+        "souviens.": "flash",
+        "vérifie.": "impact"
+      },
+      "texte": "L'astuce : ferme ton cahier, et essaie d'écrire tout ce dont tu te souviens. Puis vérifie."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu révises en relisant ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

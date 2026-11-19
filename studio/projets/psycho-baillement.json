@@ -1,0 +1,97 @@
+{
+  "slug": "psycho-baillement",
+  "titre": "Le bâillement contagieux",
+  "titre_youtube": "Pourquoi tu bâilles quand quelqu'un bâille ?",
+  "serie": "Pourquoi tu… #7",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tu vas peut-être bâiller",
+  "sources": [
+    "Provine, R. R. (1986). Yawning as a stereotyped action pattern and releasing stimulus. Ethology, 72(2), 109-122 : 55 % des personnes qui regardent une vidéo de bâillements bâillent dans les 5 minutes (« plus d'une sur deux »)",
+    "Provine, R. R. (2005). Yawning. American Scientist, 93(6), 532-539 : lire ou penser au bâillement suffit à en déclencher",
+    "Norscia, I. & Palagi, E. (2011). Yawn contagion and empathy in Homo sapiens. PLoS ONE, 6(12), e28472 : la contagion est la plus forte entre membres de la famille, puis amis, puis connaissances, et la plus faible entre inconnus",
+    "Anderson, J. R. & Meno, P. (2003). Psychological influences on yawning in children. Current Psychology Letters, 11(2) : les jeunes enfants (avant environ 5 ans) n'attrapent presque pas les bâillements",
+    "Joly-Mascheroni, R. M., Senju, A. & Shepherd, A. J. (2008). Dogs catch human yawns. Biology Letters, 4(5), 446-448 : 21 chiens sur 29 ont bâillé en voyant un humain bâiller"
+  ],
+  "legende": "Tu bâilles dès que quelqu'un bâille… et même en lisant ce mot ? Le bâillement se transmet surtout entre proches, les tout-petits n'y sont pas sensibles… et même ton chien peut l'attraper.\n\nTu as bâillé pendant la vidéo ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#faitspsychologiques",
+    "#baillement",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ba_accroche",
+      "accents": {
+        "bâilles": "pop",
+        "moment": "impact"
+      },
+      "texte": "Pourquoi tu bâilles dès que quelqu'un bâille… et peut-être même en ce moment ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ba_video",
+      "accents": {
+        "deux": "flash",
+        "lire": "pop",
+        "mot.": "impact"
+      },
+      "texte": "Dans une expérience, plus d'une personne sur deux a bâillé en regardant une vidéo de bâillements. Et parfois, il suffit même de lire le mot."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ba_proches",
+      "titre": {
+        "mot": "proches",
+        "texte": "Le bâillement contagieux"
+      },
+      "accents": {
+        "hasard.": "impact",
+        "famille,": "pop",
+        "amis…": "pop",
+        "inconnus.": "whoosh"
+      },
+      "texte": "Et ça ne se transmet pas au hasard. Une étude de 2011 montre que le bâillement passe surtout entre proches : d'abord la famille, puis les amis… et beaucoup moins entre inconnus."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ba_enfants",
+      "accents": {
+        "tout-petits,": "pop",
+        "jamais": "impact"
+      },
+      "texte": "Les tout-petits, eux, ne l'attrapent presque jamais avant quatre ou cinq ans. Ça vient en grandissant."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ba_chien",
+      "accents": {
+        "chiens": "pop",
+        "29": "flash",
+        "humain": "impact"
+      },
+      "texte": "Et même les chiens : dans une étude de 2008, 21 chiens sur 29 ont bâillé… en voyant un humain bâiller."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Alors, tu as bâillé pendant cette vidéo ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "slug": "psycho-temps-ralenti",
+  "titre": "Le temps qui ralentit",
+  "titre_youtube": "Pourquoi le temps semble ralentir quand tu as peur ?",
+  "serie": "Pourquoi tu… #29",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tout s'est passé au ralenti",
+  "sources": [
+    "Stetson, C., Fiesta, M. P. & Eagleman, D. M. (2007). Does time really slow down during a frightening event? PLoS ONE, 2(12), e1295 : après une chute libre de 31 m, les gens estimaient sa durée environ 36 % plus longue qu'elle n'était ; mais ils ne voyaient pas plus vite pendant la chute : c'est la mémoire qui « étire » le moment"
+  ],
+  "legende": "Accident, chute, grosse peur : « tout s'est passé au ralenti ». Des chercheurs ont fait tomber des volontaires de 31 mètres pour le vérifier. Le temps ne ralentit pas… c'est ta mémoire.\n\nÇa t'est déjà arrivé ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#memoire",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_tr_accroche",
+      "accents": {
+        "peur,": "impact",
+        "ralenti": "whoosh"
+      },
+      "texte": "Pourquoi, quand tu as très peur, tout semble se passer au ralenti ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_tr_chute",
+      "titre": {
+        "mot": "36",
+        "texte": "Le temps qui ralentit"
+      },
+      "accents": {
+        "2007,": "pop",
+        "31": "impact",
+        "36": "flash"
+      },
+      "texte": "En 2007, des chercheurs ont fait faire une chute libre de 31 mètres à des volontaires, dans un filet. Après, ils estimaient la chute environ 36 % plus longue qu'en vrai."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_tr_test",
+      "accents": {
+        "chiffre": "pop",
+        "mieux.": "impact",
+        "ralenti.": "whoosh"
+      },
+      "texte": "Mais pendant la chute, ils devaient lire un chiffre qui défilait trop vite. Et ils n'y arrivaient pas mieux. Leurs yeux ne voyaient pas au ralenti."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_tr_memoire",
+      "accents": {
+        "mémoire.": "flash",
+        "détails…": "pop",
+        "long.": "impact"
+      },
+      "texte": "En fait, c'est ta mémoire. Quand tu as peur, ton cerveau enregistre beaucoup plus de détails… et en repensant au moment, il paraît plus long."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'est déjà arrivé de vivre un moment au ralenti ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

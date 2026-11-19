@@ -1,0 +1,143 @@
+{
+  "slug": "psycho-poser-questions",
+  "titre": "Poser des questions",
+  "titre_youtube": "Pourquoi les gens t'apprécient plus quand tu poses des questions ?",
+  "serie": "Pourquoi tu… #40",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "La question qui fait aimer",
+  "sources": [
+    "Huang, K., Yeomans, M., Brooks, A. W., Minson, J. & Gino, F. (2017). It doesn't hurt to ask: Question-asking increases liking. Journal of Personality and Social Psychology, 113(3), 430-452 : poser plus de questions, surtout des questions de relance, augmente la sympathie ; lors de speed-datings, ceux qui posaient plus de questions obtenaient plus de deuxièmes rendez-vous"
+  ],
+  "legende": "Tu veux faire bonne impression ? Parle moins de toi et pose des questions. Surtout un type de question précis : la relance. Une étude de Harvard l'a mesuré, jusque dans des speed-datings.\n\nTu poses beaucoup de questions ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#relations",
+    "#communication",
+    "#confiance",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "t'apprécient": "pop",
+        "questions": "flash"
+      },
+      "texte": "Pourquoi les gens t'apprécient plus… quand tu poses des questions ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« et toi, ça s'est passé comment ? »",
+          "mot": "questions"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2017,": "pop",
+        "beaucoup": "pop",
+        "peu.": "pop"
+      },
+      "texte": "En 2017, des chercheurs de Harvard ont fait discuter des inconnus en ligne. Certains devaient poser beaucoup de questions, d'autres très peu.",
+      "visuel": {
+        "annee": "2017",
+        "perso": {
+          "nb": 2,
+          "jaunes": 1,
+          "mot": "beaucoup"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "relance,",
+        "texte": "La question de relance"
+      },
+      "accents": {
+        "appréciés.": "flash",
+        "relance,": "impact",
+        "dire.": "pop"
+      },
+      "texte": "Ceux qui posaient beaucoup de questions étaient plus appréciés. Surtout grâce aux questions de relance, celles qui rebondissent sur ce que l'autre vient de dire.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "« ah bon ? et après ? »",
+            "mot": "relance"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "speed-dating,": "pop",
+        "deuxièmes": "flash"
+      },
+      "texte": "Et en speed-dating, ceux qui posaient plus de questions obtenaient plus de deuxièmes rendez-vous.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Heart",
+            "mot": "rendez-vous",
+            "texte": "2e rendez-vous"
+          }
+        ],
+        "barres": [
+          {
+            "texte": "peu de questions",
+            "valeur": 0.4,
+            "mot": "deuxièmes"
+          },
+          {
+            "texte": "beaucoup",
+            "valeur": 0.75,
+            "mot": "deuxièmes"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "écoutes": "flash",
+        "veut.": "pop"
+      },
+      "texte": "Une bonne question montre que tu écoutes vraiment. Et c'est ça, au fond, que tout le monde veut.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Ear",
+            "mot": "écoutes",
+            "texte": "écouter"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu poses beaucoup de questions ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

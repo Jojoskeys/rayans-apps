@@ -1,0 +1,117 @@
+{
+  "slug": "ayati-haroun",
+  "titre": "Le frère de Moussa",
+  "titre_youtube": "Moussa a demandé à Allah : « Envoie mon frère avec moi »",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il n'a pas eu honte de demander de l'aide",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:33-35 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Avant d'aller voir Pharaon, Moussa dit à Allah : « J'ai peur. Mon frère Haroun parle mieux que moi, envoie-le avec moi. » Et Allah répond : « Nous allons te renforcer par ton frère. » Sourate Al-Qasas (28:33-35).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "mf_arbre",
+      "ref": "28:33-34",
+      "accents": {
+        "difficile": "impact",
+        "simple.": "battement"
+      },
+      "texte": "Allah lui confie la mission la plus difficile de sa vie. Et Moussa répond par une demande toute simple."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_vallee",
+      "ref": "28:33",
+      "titre": {
+        "mot": "Moussa",
+        "texte": "Le frère de Moussa"
+      },
+      "accents": {
+        "tué": "impact",
+        "peur": "battement"
+      },
+      "texte": "Moussa dit : « Seigneur, j'ai tué un des leurs, et j'ai peur qu'ils me tuent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:34",
+      "accents": {
+        "Haroun": "pop",
+        "mieux": "flash",
+        "menteur.": "impact"
+      },
+      "texte": "« Mon frère Haroun parle mieux que moi. Envoie-le avec moi pour m'aider, pour confirmer mes paroles. J'ai peur qu'ils me traitent de menteur. »"
+    },
+    {
+      "type": "verset",
+      "scene": "mf_arbre",
+      "ref": "28:35"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_mission",
+      "ref": "28:35",
+      "accents": {
+        "frère,": "pop",
+        "preuves.": "flash",
+        "vainqueurs.": "impact"
+      },
+      "texte": "Allah répond : « Nous allons te renforcer par ton frère, et vous donner à tous les deux des preuves. Ils ne pourront pas vous atteindre. Vous, et ceux qui vous suivront, serez les vainqueurs. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "peur,": "battement",
+        "d'aide.": "pop",
+        "faiblesse.": "impact"
+      },
+      "texte": "Moussa était un prophète. Et il n'a pas eu honte de dire : j'ai peur, et j'ai besoin d'aide. Demander de l'aide, ce n'est pas une faiblesse."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "soutient…": "pop",
+        "lui.": "battement"
+      },
+      "texte": "Et si tu as un frère, une sœur, un ami qui te soutient… remercie Allah pour lui."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

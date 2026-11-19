@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-donner-heureux",
+  "titre": "Donner rend heureux",
+  "titre_youtube": "Pourquoi dépenser pour les autres rend plus heureux que pour soi ?",
+  "serie": "Pourquoi tu… #50",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le bonheur de donner",
+  "sources": [
+    "Dunn, E. W., Aknin, L. B. & Norton, M. I. (2008). Spending money on others promotes happiness. Science, 319(5870), 1687-1688 : les participants qui devaient dépenser 5 ou 20 dollars pour quelqu'un d'autre étaient plus heureux le soir que ceux qui les dépensaient pour eux-mêmes ; la somme ne changeait rien"
+  ],
+  "legende": "Des chercheurs ont donné de l'argent à des passants : à dépenser pour eux, ou pour quelqu'un d'autre. Le soir, les plus heureux étaient ceux qui avaient donné. Et 5 dollars suffisaient.\n\nTu aimes faire des cadeaux ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#bonheur",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_do_accroche",
+      "accents": {
+        "quelqu'un…": "pop",
+        "toi": "impact"
+      },
+      "texte": "Pourquoi faire plaisir à quelqu'un… te rend plus heureux que te faire plaisir à toi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_do_etude",
+      "accents": {
+        "2008,": "pop",
+        "l'argent": "flash",
+        "d'autre.": "impact"
+      },
+      "texte": "En 2008, des chercheurs ont donné de l'argent à des passants, le matin. Consigne : le dépenser avant le soir. Pour eux-mêmes… ou pour quelqu'un d'autre."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_do_resultat",
+      "titre": {
+        "mot": "autres",
+        "texte": "Le bonheur de donner"
+      },
+      "accents": {
+        "autres": "flash",
+        "5": "pop",
+        "suffisaient.": "impact"
+      },
+      "texte": "Le soir, ceux qui avaient dépensé pour les autres étaient plus heureux. Et la somme ne changeait rien : 5 dollars suffisaient."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_do_pourquoi",
+      "accents": {
+        "lien.": "pop",
+        "utile.": "flash"
+      },
+      "texte": "Faire du bien crée du lien. Et ton cerveau adore se sentir utile."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_do_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "café": "flash",
+        "aussi.": "impact"
+      },
+      "texte": "L'astuce : pas besoin de grand cadeau. Un café offert, un petit mot, un coup de main. Ça marche aussi."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu préfères offrir ou recevoir ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

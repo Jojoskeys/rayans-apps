@@ -1,0 +1,155 @@
+{
+  "slug": "psycho-lire-voix-haute",
+  "titre": "Lire à voix haute",
+  "titre_youtube": "Pourquoi lire à voix haute t'aide à retenir ?",
+  "serie": "Pourquoi tu… #57",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "L'effet de production",
+  "sources": [
+    "MacLeod, C. M., Gopie, N., Hourihan, K. L., Neary, K. R. & Ozubko, J. D. (2010). The production effect: Delineation of a phenomenon. Journal of Experimental Psychology: Learning, Memory, and Cognition, 36(3), 671-685 : les mots lus à voix haute sont mieux retenus que les mots lus en silence",
+    "Forrin, N. D. & MacLeod, C. M. (2018). This time it's personal: The memory benefit of hearing oneself. Memory, 26(4), 574-579 : lire à voix haute pour soi est encore plus efficace qu'écouter quelqu'un lire"
+  ],
+  "legende": "Pour retenir un cours, lis-le à voix haute. Ça paraît bête, mais ça a un nom : l'effet de production. Les mots que tu prononces se distinguent des autres dans ta mémoire.\n\nTu révises à voix haute ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#etudes",
+    "#memoire",
+    "#astuces",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "retiens": "pop",
+        "haute": "flash"
+      },
+      "texte": "Pourquoi tu retiens mieux ce que tu lis à voix haute ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« la mitochondrie… »",
+          "mot": "haute"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2010,": "pop",
+        "haute,": "pop",
+        "silence.": "pop"
+      },
+      "texte": "En 2010, des chercheurs ont fait lire des listes de mots. Certains à voix haute, d'autres en silence. Puis ils ont testé la mémoire.",
+      "visuel": {
+        "annee": "2010",
+        "icones": [
+          {
+            "nom": "Volume2",
+            "mot": "haute",
+            "texte": "à voix haute"
+          },
+          {
+            "nom": "VolumeX",
+            "mot": "silence",
+            "texte": "en silence"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "production.",
+        "texte": "L'effet de production"
+      },
+      "accents": {
+        "mieux": "flash",
+        "production.": "pop"
+      },
+      "texte": "Les mots lus à voix haute étaient mieux retenus. On appelle ça l'effet de production.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "en silence",
+            "valeur": 0.45,
+            "mot": "mieux"
+          },
+          {
+            "texte": "à voix haute",
+            "valeur": 0.75,
+            "mot": "mieux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "prononces": "pop",
+        "l'entends.": "pop",
+        "distingue": "flash"
+      },
+      "texte": "Pourquoi ? Tu ne fais pas que voir le mot : tu le prononces et tu l'entends. Il se distingue des autres dans ta mémoire.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Eye",
+            "mot": "voir",
+            "texte": "voir"
+          },
+          {
+            "nom": "Mic",
+            "mot": "prononces",
+            "texte": "dire"
+          },
+          {
+            "nom": "Ear",
+            "mot": "l'entends",
+            "texte": "entendre"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "propre": "pop",
+        "l'essentiel,": "flash",
+        "ressort.": "impact"
+      },
+      "texte": "Et c'est encore plus efficace quand c'est ta propre voix. L'astuce : lis à voix haute seulement l'essentiel, les mots-clés. Si tout est dit, plus rien ne ressort.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "à voix haute : seulement l'essentiel",
+            "mot": "l'essentiel"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu révises à voix haute ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "slug": "ayati-parure-de-la-vie",
+  "titre": "La parure de la vie",
+  "titre_youtube": "L'argent et les enfants… et ce qui vaut encore mieux",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Ce qui reste vraiment",
+  "sourates": {
+    "18": "Sourate Al-Kahf"
+  },
+  "sources": [
+    "Coran 18:46 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 18, Al-Kahf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière."
+  ],
+  "legende": "« Les biens et les enfants sont la parure de la vie d'ici-bas. Mais les bonnes œuvres qui durent sont meilleures auprès de ton Seigneur. » Sourate Al-Kahf (18:46).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#alkahf",
+    "#akhira",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "kj_jardins",
+      "ref": "18:46",
+      "accents": {
+        "argent,": "pop",
+        "beau…": "flash",
+        "mieux.": "impact"
+      },
+      "texte": "Une belle maison, de l'argent, des enfants. Le Coran dit que c'est beau… et qu'il y a mieux."
+    },
+    {
+      "type": "narration",
+      "scene": "kj_ruine",
+      "ref": "18:32-44",
+      "titre": {
+        "mot": "sourate",
+        "texte": "La parure de la vie"
+      },
+      "accents": {
+        "jardins,": "battement",
+        "perdu": "impact"
+      },
+      "texte": "Juste avant, la sourate raconte l'homme aux deux jardins, qui a tout perdu en une nuit."
+    },
+    {
+      "type": "verset",
+      "scene": "kj_jardins",
+      "ref": "18:46"
+    },
+    {
+      "type": "narration",
+      "scene": "kj_jardins",
+      "ref": "18:46",
+      "accents": {
+        "parure": "pop",
+        "persistent": "flash",
+        "espérance.": "battement"
+      },
+      "texte": "« Les biens et les enfants sont la parure de la vie d'ici-bas. Cependant, les bonnes œuvres qui persistent ont auprès de ton Seigneur une meilleure récompense, et une belle espérance. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "dure": "battement",
+        "secret": "pop",
+        "reste.": "flash"
+      },
+      "texte": "Une parure, c'est beau, mais ça ne dure pas. Une prière, une aumône, un bien fait en secret : ça, ça reste."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "Profite": "pop",
+        "restera": "flash"
+      },
+      "texte": "Profite de ce qu'Allah t'a donné. Et construis aussi ce qui restera après toi."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels du Coran, et partage cette vidéo."
+    }
+  ]
+}

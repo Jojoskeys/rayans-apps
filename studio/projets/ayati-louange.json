@@ -1,0 +1,106 @@
+{
+  "slug": "ayati-louange",
+  "titre": "À Lui la louange",
+  "titre_youtube": "Il sait ce que cache ton cœur… et à Lui la louange",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il sait ce que tu caches",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:69-70 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "« Ton Seigneur sait ce que cachent les poitrines et ce qu'elles montrent. C'est Lui Allah, pas de divinité à part Lui. À Lui la louange, ici-bas et dans l'au-delà. » Sourate Al-Qasas (28:69-70).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#hamd",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:69",
+      "accents": {
+        "caches": "pop",
+        "Lui.": "flash"
+      },
+      "texte": "Ce que tu caches au fond de ton cœur, personne ne le sait. Sauf Lui."
+    },
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:69",
+      "titre": {
+        "mot": "Seigneur",
+        "texte": "À Lui la louange"
+      },
+      "accents": {
+        "cachent": "battement",
+        "montrent.": "pop"
+      },
+      "texte": "« Ton Seigneur sait ce que cachent les poitrines, et ce qu'elles montrent. »"
+    },
+    {
+      "type": "verset",
+      "scene": "kq_levant",
+      "ref": "28:70"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_levant",
+      "ref": "28:70",
+      "accents": {
+        "Lui.": "flash",
+        "louange,": "battement",
+        "ramenés.": "pop"
+      },
+      "texte": "« Et c'est Lui Allah : pas de divinité à part Lui. À Lui la louange, ici-bas comme dans l'au-delà. À Lui le jugement, et c'est vers Lui que vous serez ramenés. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "accents": {
+        "tristesse": "pop",
+        "intention…": "battement",
+        "tout.": "flash"
+      },
+      "texte": "Ta tristesse cachée, ton effort que personne ne voit, ta bonne intention… Allah sait tout."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "difficile,": "pop",
+        "lillah.": "flash"
+      },
+      "texte": "Alors dans le bon comme dans le difficile, dis : Al-hamdou lillah."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

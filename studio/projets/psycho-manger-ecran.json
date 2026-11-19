@@ -1,0 +1,146 @@
+{
+  "slug": "psycho-manger-ecran",
+  "titre": "Manger devant un écran",
+  "titre_youtube": "Pourquoi tu manges plus devant un écran ?",
+  "serie": "Pourquoi tu… #43",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau n'a pas enregistré le repas",
+  "sources": [
+    "Higgs, S. & Woodward, M. (2009). Television watching during lunch increases afternoon snack intake of young women. Appetite, 52(1), 39-43 : celles qui avaient mangé devant la télé se souvenaient moins bien de leur repas et mangeaient plus de biscuits l'après-midi",
+    "Robinson, E. et al. (2013). Eating attentively: a systematic review and meta-analysis of the effect of food intake memory and awareness on eating. American Journal of Clinical Nutrition, 97(4), 728-742 : manger distrait fait manger plus, au repas et plus tard"
+  ],
+  "legende": "Tu manges devant une série… et une heure après, tu as encore faim. Ton cerveau n'a pas bien enregistré ton repas. Une étude l'a montré avec… des biscuits.\n\nTu manges devant un écran ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#alimentation",
+    "#ecrans",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "faim…": "impact",
+        "série": "pop"
+      },
+      "texte": "Pourquoi tu as encore faim… après avoir mangé devant une série ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Tv",
+            "mot": "série",
+            "texte": "la série"
+          },
+          {
+            "nom": "Utensils",
+            "mot": "mangé",
+            "texte": "le repas"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2009,": "pop",
+        "télé,": "pop",
+        "écran.": "pop"
+      },
+      "texte": "En 2009, des chercheuses ont fait déjeuner des jeunes femmes. Les unes devant la télé, les autres sans écran.",
+      "visuel": {
+        "annee": "2009",
+        "perso": {
+          "nb": 10,
+          "jaunes": 5,
+          "mot": "télé"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "biscuits.": "pop",
+        "plus.": "flash"
+      },
+      "texte": "L'après-midi, on leur a proposé des biscuits. Celles qui avaient mangé devant la télé en ont mangé plus.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "sans écran",
+            "valeur": 0.45,
+            "mot": "plus"
+          },
+          {
+            "texte": "devant la télé",
+            "valeur": 0.8,
+            "mot": "plus",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "titre": {
+        "mot": "souvenaient",
+        "texte": "Le repas oublié"
+      },
+      "accents": {
+        "souvenaient": "pop",
+        "repas.": "pop",
+        "mangé.": "impact"
+      },
+      "texte": "Pourquoi ? Elles se souvenaient moins bien de leur repas. Pour leur cerveau, c'était presque comme si elles n'avaient pas vraiment mangé.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Brain",
+            "mot": "souvenaient",
+            "texte": "« quel repas ? »"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "pose": "pop",
+        "assiette.": "flash",
+        "souviendra.": "pop"
+      },
+      "texte": "L'astuce : au moins pour les premières bouchées, pose l'écran. Regarde ton assiette. Ton cerveau s'en souviendra.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "pose",
+          "icone": "Utensils"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu manges souvent devant un écran ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

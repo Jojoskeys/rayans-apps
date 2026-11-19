@@ -1,0 +1,107 @@
+{
+  "slug": "ayati-belle-promesse",
+  "titre": "Une belle promesse",
+  "titre_youtube": "Une belle promesse… ou un plaisir qui passe ? Le choix du Coran",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Tu choisirais quoi ?",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:60-61 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "D'un côté, quelqu'un à qui Allah a fait une belle promesse, qu'il verra s'accomplir. De l'autre, quelqu'un qui a profité de la vie d'ici-bas… puis sera amené devant Lui. Sont-ils pareils ? Sourate Al-Qasas (28:61).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#akhira",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:61",
+      "accents": {
+        "choix.": "impact",
+        "promesse…": "flash",
+        "dure": "pop"
+      },
+      "texte": "Le Coran te met devant un choix. Une belle promesse… ou un plaisir qui ne dure pas."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_tresor",
+      "ref": "28:60",
+      "titre": {
+        "mot": "jouissance",
+        "texte": "Une belle promesse"
+      },
+      "accents": {
+        "jouissance": "pop",
+        "meilleur,": "flash",
+        "durable.": "battement"
+      },
+      "texte": "Ce qui vous a été donné n'est qu'une jouissance de la vie d'ici-bas. Ce qui est auprès d'Allah est meilleur, et plus durable."
+    },
+    {
+      "type": "verset",
+      "scene": "qadr_ciel",
+      "ref": "28:61"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:61",
+      "accents": {
+        "promesse,": "flash",
+        "présente,": "pop",
+        "Résurrection,": "impact"
+      },
+      "texte": "« Celui à qui Nous avons fait une belle promesse, qu'il verra s'accomplir, est-il comme celui à qui Nous avons donné la jouissance de la vie présente, et qui sera ensuite, le Jour de la Résurrection, parmi ceux qu'on amène ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "déçoit": "flash",
+        "si.": "impact"
+      },
+      "texte": "La promesse d'Allah ne déçoit jamais. Un plaisir d'ici-bas, si."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "choix,": "pop",
+        "promesse": "battement"
+      },
+      "texte": "Avant chaque choix, demande-toi : est-ce que ça me rapproche de la promesse ?"
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

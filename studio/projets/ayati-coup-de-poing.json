@@ -1,0 +1,138 @@
+{
+  "slug": "ayati-coup-de-poing",
+  "titre": "Le coup de poing",
+  "titre_youtube": "Un seul coup de poing… et ce que Moussa a fait juste après",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Un seul coup… et tout bascule",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:15-17 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : Moussa n'est jamais montré ; seuls les deux hommes qui se battent apparaissent en silhouettes sans visage."
+  ],
+  "legende": "Il entre en ville sans être vu. Deux hommes se battent, l'un l'appelle au secours… un seul coup de poing, et l'homme tombe. Ce que Moussa a fait juste après est une leçon pour chacun de nous. Sourate Al-Qasas (28:15-17).\n\nAbonne-toi pour la suite de l'histoire de Moussa.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#pardon",
+    "#rappel",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qp_poing",
+      "ref": "28:15",
+      "accents": {
+        "poing…": "impact",
+        "tombe.": "secousse",
+        "leçon": "battement"
+      },
+      "texte": "Un seul coup de poing… et un homme tombe. Ce que Moussa a fait juste après, c'est une leçon pour chacun de nous."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_ville",
+      "ref": "28:14-15",
+      "titre": {
+        "mot": "ville",
+        "texte": "Le coup de poing"
+      },
+      "accents": {
+        "homme.": "pop",
+        "ville": "whoosh"
+      },
+      "texte": "Moussa est devenu un homme. Un jour, il entre dans la ville à un moment où ses habitants ne font pas attention."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_bagarre",
+      "ref": "28:15",
+      "accents": {
+        "battent": "impact",
+        "secours.": "whoosh"
+      },
+      "texte": "Il y trouve deux hommes qui se battent : l'un est de son peuple, l'autre de leurs ennemis. Et l'homme de son peuple l'appelle au secours."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_coup",
+      "ref": "28:15",
+      "accents": {
+        "poing…": "impact",
+        "meurt.": "secousse",
+        "Diable.": "battement"
+      },
+      "texte": "Moussa lui donne un coup de poing… et l'homme meurt. Moussa dit : « Ceci est l'œuvre du Diable. C'est un ennemi, un égareur évident. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_priere",
+      "ref": "28:16",
+      "accents": {
+        "d'excuse.": "pop",
+        "Seigneur.": "battement"
+      },
+      "texte": "Mais il ne cherche pas d'excuse. Il se tourne aussitôt vers son Seigneur."
+    },
+    {
+      "type": "verset",
+      "scene": "qp_priere",
+      "ref": "28:16"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_pardon",
+      "ref": "28:16",
+      "accents": {
+        "pardonne-moi": "battement",
+        "pardonna.": "flash"
+      },
+      "texte": "« Seigneur ! Je me suis fait du tort à moi-même, pardonne-moi ! » Et Il lui pardonna. C'est Lui le Pardonneur, le Miséricordieux."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_promesse",
+      "ref": "28:17",
+      "accents": {
+        "promet": "pop",
+        "jamais": "impact"
+      },
+      "texte": "Alors Moussa promet : « Seigneur, par les bienfaits dont Tu m'as comblé, jamais je ne soutiendrai les criminels. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_lecon",
+      "accents": {
+        "faute,": "pop",
+        "changé.": "impact",
+        "ouverte.": "battement"
+      },
+      "texte": "Il a reconnu sa faute, il a demandé pardon… et il a changé. Quelle que soit ta faute, la porte du pardon reste ouverte."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "courant": "whoosh"
+      },
+      "texte": "Abonne-toi pour la suite : le lendemain, un homme va traverser toute la ville en courant pour prévenir Moussa…"
+    }
+  ]
+}

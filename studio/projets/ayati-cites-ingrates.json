@@ -1,0 +1,116 @@
+{
+  "slug": "ayati-cites-ingrates",
+  "titre": "Les villes ingrates",
+  "titre_youtube": "Ils vivaient dans l'abondance… il ne reste que leurs maisons vides",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il ne reste que des maisons vides",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:57-58 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Des villes riches, où rien ne manquait. Mais leurs habitants étaient ingrats. Aujourd'hui, leurs maisons sont vides, et c'est Allah qui en est l'héritier. Sourate Al-Qasas (28:58).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#gratitude",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "ref": "28:58",
+      "accents": {
+        "marchés…": "pop",
+        "personne": "impact"
+      },
+      "texte": "Des maisons, des rues, des marchés… et plus personne pour y vivre."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_tresor",
+      "ref": "28:57-58",
+      "titre": {
+        "mot": "l'abondance.",
+        "texte": "Les villes ingrates"
+      },
+      "accents": {
+        "l'abondance.": "flash",
+        "partout.": "whoosh",
+        "manquait.": "pop"
+      },
+      "texte": "Ils vivaient dans l'abondance. Les fruits et les richesses arrivaient de partout. Rien ne leur manquait."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_cortege",
+      "ref": "28:58",
+      "accents": {
+        "oublié": "whoosh",
+        "ingrats.": "impact"
+      },
+      "texte": "Mais ils ont oublié d'où venait tout ça. Ils sont devenus ingrats."
+    },
+    {
+      "type": "verset",
+      "scene": "tp_ruines",
+      "ref": "28:58"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_lendemain",
+      "ref": "28:58",
+      "accents": {
+        "périr,": "impact",
+        "aisance": "pop",
+        "hérité.": "battement"
+      },
+      "texte": "« Combien de villes avons-Nous fait périr, qui étaient ingrates dans leur aisance ? Voilà leurs demeures, presque plus habitées après eux. Et c'est Nous qui en avons hérité. »"
+    },
+    {
+      "type": "narration",
+      "scene": "fil_aube",
+      "accents": {
+        "mérites.": "impact",
+        "grâce": "flash"
+      },
+      "texte": "Ce que tu as aujourd'hui, tu ne le gardes pas parce que tu le mérites. Tu le gardes… par la grâce d'Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "remercie,": "battement",
+        "actes.": "pop"
+      },
+      "texte": "Alors remercie, pour ce que tu as. Par ta bouche, et par tes actes."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

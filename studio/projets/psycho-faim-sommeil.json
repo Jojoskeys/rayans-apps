@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-faim-sommeil",
+  "titre": "La faim quand on dort mal",
+  "titre_youtube": "Pourquoi tu as plus faim quand tu as mal dormi ?",
+  "serie": "Pourquoi tu… #16",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ce n'est pas un manque de volonté",
+  "sources": [
+    "Spiegel, K., Tasali, E., Penev, P. & Van Cauter, E. (2004). Sleep curtailment in healthy young men is associated with decreased leptin levels, elevated ghrelin levels, and increased hunger and appetite. Annals of Internal Medicine, 141(11), 846-850 : après deux nuits de 4 heures, ghréline +28 %, leptine -18 %, faim +24 %, envie d'aliments sucrés et féculents encore plus forte",
+    "Greer, S. M., Goldstein, A. N. & Walker, M. P. (2013). The impact of sleep deprivation on food desire in the human brain. Nature Communications, 4, 2259 : après une nuit blanche, l'activité des zones frontales qui aident à décider baisse, et les aliments très caloriques attirent davantage"
+  ],
+  "legende": "Tu as mal dormi et tu as envie de tout manger, surtout du sucré ? Ce n'est pas un manque de volonté : deux nuits courtes suffisent à dérégler tes hormones de la faim.\n\nTu grignotes plus quand tu es fatigué ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#sommeil",
+    "#faim",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_fa_accroche",
+      "accents": {
+        "faim": "pop",
+        "sucré": "impact"
+      },
+      "texte": "Pourquoi tu as plus faim quand tu as mal dormi… et surtout envie de gras et de sucré ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fa_hormones",
+      "titre": {
+        "mot": "28",
+        "texte": "Les hormones de la faim"
+      },
+      "accents": {
+        "4": "pop",
+        "28": "flash",
+        "18": "impact"
+      },
+      "texte": "En 2004, des chercheurs ont fait dormir des jeunes hommes seulement 4 heures, deux nuits de suite. Leur hormone de la faim a grimpé de 28 %. Et celle qui dit « j'ai assez mangé » a baissé de 18 %."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fa_envies",
+      "accents": {
+        "24": "flash",
+        "sucré": "pop",
+        "plus.": "impact"
+      },
+      "texte": "Résultat : 24 % de faim en plus. Et l'envie de sucré et de féculents grimpe encore plus."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fa_cerveau",
+      "accents": {
+        "2013,": "pop",
+        "ralenti…": "whoosh",
+        "tentants.": "impact"
+      },
+      "texte": "En 2013, une autre étude a montré qu'après une nuit blanche, la partie du cerveau qui aide à bien choisir tourne au ralenti… pendant que les aliments riches deviennent plus tentants."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fa_conseil",
+      "accents": {
+        "envies…": "pop",
+        "dormir.": "flash"
+      },
+      "texte": "Alors avant de te battre contre tes envies… commence par dormir."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu grignotes plus quand tu es fatigué ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

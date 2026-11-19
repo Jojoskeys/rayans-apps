@@ -1,0 +1,147 @@
+{
+  "slug": "psycho-ecart-sympathie",
+  "titre": "L'écart de sympathie",
+  "titre_youtube": "Pourquoi tu crois que les autres ne t'ont pas aimé ?",
+  "serie": "Pourquoi tu… #22",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ils t'ont plus apprécié que tu ne crois",
+  "sources": [
+    "Boothby, E. J., Cooney, G., Sandstrom, G. M. & Clark, M. S. (2018). The liking gap in conversations: Do people like us more than we think? Psychological Science, 29(11), 1742-1756 : après une conversation avec un inconnu, on sous-estime systématiquement combien l'autre nous a apprécié ; l'écart dure parfois des mois entre colocataires"
+  ],
+  "legende": "Après une conversation, tu te repasses tout : « j'ai trop parlé », « j'étais bizarre ». En vrai, l'autre t'a plus apprécié que tu ne le crois. Les chercheurs appellent ça l'écart de sympathie.\n\nTu te repasses tes conversations ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#relations",
+    "#confiance",
+    "#anxietesociale",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "conversation,": "pop",
+        "aimé": "impact"
+      },
+      "texte": "Pourquoi, après une conversation, tu as l'impression que l'autre ne t'a pas trop aimé ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« j'ai trop parlé… »",
+          "mot": "impression"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2018,": "pop",
+        "inconnus.": "pop",
+        "apprécié.": "flash"
+      },
+      "texte": "En 2018, des chercheurs ont fait discuter des inconnus. Après, chacun devait dire combien il avait apprécié l'autre… et combien il pensait avoir été apprécié.",
+      "visuel": {
+        "annee": "2018",
+        "perso": {
+          "nb": 2,
+          "jaunes": 2,
+          "mot": "discuter"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "sous-estimait.",
+        "texte": "L'écart de sympathie"
+      },
+      "accents": {
+        "sous-estimait.": "impact",
+        "plus": "flash"
+      },
+      "texte": "Résultat : presque tout le monde se sous-estimait. L'autre les avait plus appréciés qu'ils ne le pensaient.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "ce que tu crois",
+            "valeur": 0.45,
+            "mot": "sous-estimait",
+            "rouge": true
+          },
+          {
+            "texte": "la réalité",
+            "valeur": 0.85,
+            "mot": "plus"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "surveiller": "impact",
+        "silences.": "pop",
+        "pas": "whoosh"
+      },
+      "texte": "Pourquoi ? Pendant la discussion, tu es occupé à te surveiller : ce que tu dis, ta tête, tes silences. L'autre, lui, ne voit pas tout ça.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "MessageCircle",
+            "mot": "dis",
+            "texte": "tes mots"
+          },
+          {
+            "nom": "Smile",
+            "mot": "tête",
+            "texte": "ta tête"
+          },
+          {
+            "nom": "Ellipsis",
+            "mot": "silences",
+            "texte": "tes silences"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "repasses": "pop",
+        "mieux": "flash"
+      },
+      "texte": "Alors la prochaine fois que tu te repasses une conversation… dis-toi que ça s'est sûrement mieux passé que tu ne crois.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "ça s'est mieux passé que tu crois",
+            "mot": "mieux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu te repasses tes conversations ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

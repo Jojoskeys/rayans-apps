@@ -1,0 +1,137 @@
+{
+  "slug": "ayati-huppe-saba",
+  "titre": "La huppe et la reine de Saba",
+  "titre_youtube": "Un oiseau a découvert un royaume entier… La huppe et la reine de Saba",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Un oiseau revient avec une nouvelle",
+  "sourates": {
+    "27": "Sourate An-Naml"
+  },
+  "sources": [
+    "Coran 27:20-28 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 27, An-Naml (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : Souleymane et la reine ne sont pas montrés ; on voit la huppe, le désert, le trône vide de Saba, le soleil et la lettre."
+  ],
+  "legende": "Souleymane passe en revue les oiseaux : la huppe est absente. Elle revient avec une nouvelle sûre : un royaume, une reine, un trône immense… et un peuple qui se prosterne devant le soleil. Sourate An-Naml (27:20-28).\n\nAbonne-toi pour la suite.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#souleymane",
+    "#saba",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "sh_vol",
+      "ref": "27:22",
+      "accents": {
+        "disparu": "whoosh",
+        "royaume": "impact"
+      },
+      "texte": "Un petit oiseau a disparu quelques heures… et il est revenu avec la nouvelle d'un royaume entier."
+    },
+    {
+      "type": "narration",
+      "scene": "sh_revue",
+      "ref": "27:20",
+      "titre": {
+        "mot": "huppe",
+        "texte": "La huppe et la reine de Saba"
+      },
+      "accents": {
+        "revue": "pop",
+        "huppe": "impact"
+      },
+      "texte": "Souleymane passe en revue les oiseaux. « Pourquoi je ne vois pas la huppe ? Est-elle absente ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "sh_revue",
+      "ref": "27:21",
+      "accents": {
+        "sévèrement…": "impact",
+        "claire.": "pop"
+      },
+      "texte": "« Je la punirai sévèrement… à moins qu'elle m'apporte une raison claire. »"
+    },
+    {
+      "type": "narration",
+      "scene": "sh_vol",
+      "ref": "27:22",
+      "accents": {
+        "longtemps.": "whoosh"
+      },
+      "texte": "Mais la huppe n'est pas restée longtemps. Elle arrive et dit :"
+    },
+    {
+      "type": "verset",
+      "scene": "sh_vol",
+      "ref": "27:22"
+    },
+    {
+      "type": "narration",
+      "scene": "sh_saba",
+      "ref": "27:22-23",
+      "accents": {
+        "Saba": "flash",
+        "femme": "pop",
+        "trône": "impact"
+      },
+      "texte": "« J'ai appris ce que tu ne sais pas. Je t'apporte de Saba une nouvelle sûre. Une femme règne sur eux. Elle a reçu de toute chose, et elle a un trône immense. »"
+    },
+    {
+      "type": "narration",
+      "scene": "sh_soleil",
+      "ref": "27:24",
+      "accents": {
+        "soleil,": "flash",
+        "d'Allah.": "battement"
+      },
+      "texte": "« Je l'ai trouvée, elle et son peuple, se prosternant devant le soleil, au lieu d'Allah. »"
+    },
+    {
+      "type": "narration",
+      "scene": "sh_lettre",
+      "ref": "27:27-28",
+      "accents": {
+        "vrai.": "pop",
+        "lettre,": "whoosh",
+        "répondent.": "battement"
+      },
+      "texte": "Souleymane répond : « Nous allons voir si tu dis vrai. Pars avec ma lettre, lance-la devant eux, et regarde ce qu'ils répondent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "sh_lecon",
+      "accents": {
+        "petit": "pop",
+        "royaume.": "impact",
+        "apporter.": "battement"
+      },
+      "texte": "Un tout petit oiseau a changé l'histoire d'un royaume. Ne sous-estime jamais ce que tu peux apporter."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "Saba.": "battement"
+      },
+      "texte": "Abonne-toi pour la suite : la lettre de Souleymane et la reine de Saba."
+    }
+  ]
+}

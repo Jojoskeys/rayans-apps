@@ -1,0 +1,149 @@
+{
+  "slug": "psycho-musique-sport",
+  "titre": "La musique pour le sport",
+  "titre_youtube": "Pourquoi la musique te fait courir plus loin ?",
+  "serie": "Pourquoi tu… #56",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau sent moins l'effort",
+  "sources": [
+    "Terry, P. C., Karageorghis, C. I., Curran, M. L., Martin, O. V. & Parsons-Smith, R. L. (2020). Effects of music in exercise and sport: A meta-analytic review. Psychological Bulletin, 146(2), 91-117 : analyse de 139 études ; la musique améliore l'humeur et la performance, et l'effort paraît plus léger",
+    "Karageorghis, C. I. & Priest, D.-L. (2012). Music in the exercise domain: A review and synthesis. International Review of Sport and Exercise Psychology, 5(1), 44-66 : le tempo idéal se situe souvent autour de 120-140 battements par minute"
+  ],
+  "legende": "Avec ta playlist, tu cours plus loin et ça semble plus facile ? Ce n'est pas dans ta tête… enfin si : ta tête sent moins l'effort. Une grande analyse de 139 études le confirme.\n\nTu fais du sport en musique ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#sport",
+    "#musique",
+    "#motivation",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "loin…": "pop",
+        "musique": "flash"
+      },
+      "texte": "Pourquoi tu cours plus loin… avec de la musique dans les oreilles ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Headphones",
+            "mot": "musique",
+            "texte": "musique"
+          },
+          {
+            "nom": "Footprints",
+            "mot": "cours",
+            "texte": "course"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2020,": "pop",
+        "139": "flash"
+      },
+      "texte": "En 2020, des chercheurs ont rassemblé 139 études sur la musique et le sport.",
+      "visuel": {
+        "annee": "2020",
+        "chiffre": {
+          "texte": "139 études",
+          "mot": "139"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "léger,",
+        "texte": "L'effort plus léger"
+      },
+      "accents": {
+        "léger,": "flash",
+        "meilleure,": "pop",
+        "augmentent": "pop"
+      },
+      "texte": "Résultat : avec de la musique, l'effort paraît plus léger, l'humeur est meilleure, et les performances augmentent un peu.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "effort ressenti sans",
+            "valeur": 0.75,
+            "mot": "léger",
+            "rouge": true
+          },
+          {
+            "texte": "avec musique",
+            "valeur": 0.55,
+            "mot": "léger"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "attention.": "pop",
+        "fatigue.": "impact"
+      },
+      "texte": "Pourquoi ? La musique occupe ton attention. Ton cerveau a moins de place pour écouter les signaux de fatigue.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Brain",
+            "mot": "attention",
+            "texte": "attention occupée"
+          },
+          {
+            "nom": "BatteryLow",
+            "mot": "fatigue",
+            "texte": "fatigue moins sentie"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "rapide,": "pop",
+        "140": "flash",
+        "motivent.": "pop"
+      },
+      "texte": "L'astuce : choisis un rythme rapide, autour de 120 à 140 battements par minute, et des morceaux qui te motivent.",
+      "visuel": {
+        "chiffre": {
+          "texte": "120 – 140 BPM",
+          "mot": "140",
+          "sous": "le bon tempo"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu fais du sport en musique ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

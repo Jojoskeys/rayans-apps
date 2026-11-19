@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-ancrage",
+  "titre": "Le biais d'ancrage",
+  "titre_youtube": "Pourquoi le premier chiffre que tu entends change ta décision ?",
+  "serie": "Pourquoi tu… #34",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le premier chiffre te piège",
+  "sources": [
+    "Tversky, A. & Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. Science, 185(4157), 1124-1131 : après avoir vu sortir 10 sur une roue, les gens estimaient en médiane 25 % de pays africains à l'ONU ; après 65, ils estimaient 45 %"
+  ],
+  "legende": "Une roue tourne et s'arrête sur 10 ou sur 65. Puis on te pose une question qui n'a rien à voir… et ta réponse change selon le chiffre de la roue. Le biais d'ancrage, et comment les vendeurs s'en servent.\n\nTu négocies les prix ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_an_accroche",
+      "accents": {
+        "premier": "pop",
+        "décision": "impact"
+      },
+      "texte": "Pourquoi le premier chiffre que tu entends… influence toute ta décision ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_roue",
+      "accents": {
+        "roue": "whoosh",
+        "10,": "pop",
+        "65.": "pop",
+        "africains": "impact"
+      },
+      "texte": "En 1974, des chercheurs ont fait tourner une roue devant des gens. Elle s'arrêtait sur 10, ou sur 65. Puis ils demandaient : quel pourcentage des pays de l'ONU sont africains ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_resultat",
+      "titre": {
+        "mot": "hasard",
+        "texte": "Le biais d'ancrage"
+      },
+      "accents": {
+        "25": "flash",
+        "45": "flash",
+        "hasard": "impact"
+      },
+      "texte": "Ceux qui avaient vu 10 répondaient environ 25 %. Ceux qui avaient vu 65… environ 45 %. Un chiffre au hasard avait changé leur réponse."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_vente",
+      "accents": {
+        "barré,": "impact",
+        "affaire.": "pop"
+      },
+      "texte": "C'est pour ça qu'on t'affiche d'abord le prix barré, très haut. Le vrai prix te paraît ensuite une bonne affaire."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "toi-même": "flash"
+      },
+      "texte": "L'astuce : avant de voir un prix, décide toi-même combien tu es prêt à payer."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu t'es déjà fait avoir par un prix barré ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "slug": "psycho-idees-douche",
+  "titre": "Les idées sous la douche",
+  "titre_youtube": "Pourquoi tu as tes meilleures idées sous la douche ?",
+  "serie": "Pourquoi tu… #20",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau travaille quand tu ne lui demandes rien",
+  "sources": [
+    "Baird, B., Smallwood, J., Mrazek, M. D., Kam, J. W. Y., Franklin, M. S. & Schooler, J. W. (2012). Inspired by distraction: Mind wandering facilitates creative incubation. Psychological Science, 23(10), 1117-1122 : une pause avec une tâche facile, qui laisse l'esprit vagabonder, améliore les solutions créatives (environ 40 %) par rapport à une tâche difficile ou au repos",
+    "Christoff, K. et al. (2009). Experience sampling during fMRI reveals default network and executive system contributions to mind wandering. PNAS, 106(21), 8719-8724 : pendant la rêverie, le réseau du « mode par défaut » est très actif"
+  ],
+  "legende": "Tu bloques sur un problème toute la journée… et la solution arrive sous la douche. Ce n'est pas magique : ton cerveau travaille mieux quand tu le laisses vagabonder.\n\nTu as tes meilleures idées sous la douche ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#creativite",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "douche…": "whoosh",
+        "jamais": "impact"
+      },
+      "texte": "Pourquoi tes meilleures idées arrivent sous la douche… et jamais devant ton bureau ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "ShowerHead",
+            "mot": "douche",
+            "texte": "douche"
+          },
+          {
+            "nom": "Lightbulb",
+            "mot": "idées",
+            "texte": "idée !"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "vagabonde.",
+        "texte": "L'esprit qui vagabonde"
+      },
+      "accents": {
+        "facile,": "pop",
+        "vagabonde.": "whoosh",
+        "arrière-plan.": "flash"
+      },
+      "texte": "Quand tu fais une tâche facile, comme te laver ou marcher, ton esprit vagabonde. Et pendant ce temps, ton cerveau continue de chercher… en arrière-plan.",
+      "visuel": {
+        "perso": {
+          "bulle": "« … et si ? »",
+          "mot": "vagabonde"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "2012,": "pop",
+        "facile": "pop",
+        "40": "flash"
+      },
+      "texte": "En 2012, des chercheurs ont donné des problèmes créatifs, puis une pause. Ceux dont la pause était une tâche facile ont trouvé environ 40 % de solutions en plus.",
+      "visuel": {
+        "annee": "2012",
+        "chiffre": {
+          "texte": "+ 40 %",
+          "mot": "40",
+          "sous": "de solutions"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "difficile…": "impact",
+        "rien": "pop"
+      },
+      "texte": "Plus que ceux qui faisaient une tâche difficile… et plus que ceux qui se reposaient sans rien faire.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "difficile",
+            "valeur": 0.3,
+            "mot": "difficile"
+          },
+          {
+            "texte": "repos",
+            "valeur": 0.35,
+            "mot": "reposaient"
+          },
+          {
+            "texte": "facile",
+            "valeur": 0.8,
+            "mot": "difficile"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "bloques,": "pop",
+        "marcher,": "pop",
+        "travail.": "flash"
+      },
+      "texte": "Alors quand tu bloques, ne force pas. Va marcher, fais la vaisselle… et laisse ton cerveau faire le travail.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Footprints",
+            "mot": "marcher",
+            "texte": "marcher"
+          },
+          {
+            "nom": "Droplets",
+            "mot": "vaisselle",
+            "texte": "vaisselle"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as tes meilleures idées sous la douche ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

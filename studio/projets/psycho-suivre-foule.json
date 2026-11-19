@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-suivre-foule",
+  "titre": "La preuve sociale",
+  "titre_youtube": "Pourquoi tu choisis le restaurant où il y a déjà du monde ?",
+  "serie": "Pourquoi tu… #25",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Si les autres le font…",
+  "sources": [
+    "Goldstein, N. J., Cialdini, R. B. & Griskevicius, V. (2008). A room with a viewpoint: Using social norms to motivate environmental conservation in hotels. Journal of Consumer Research, 35(3), 472-482 : le message « la plupart des clients réutilisent leur serviette » a fait passer la réutilisation d'environ 35 % à 44 %, et à 49 % avec « les clients de cette chambre »",
+    "Cialdini, R. B. (1984). Influence: The psychology of persuasion : la preuve sociale"
+  ],
+  "legende": "Restaurant vide ou restaurant plein ? Tu choisis le plein, presque sans réfléchir. Des chercheurs ont changé le comportement de clients d'hôtel avec une seule phrase.\n\nTu évites les restos vides ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#influence",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_sf_accroche",
+      "accents": {
+        "monde…": "pop",
+        "vide": "impact"
+      },
+      "texte": "Pourquoi tu choisis le restaurant où il y a déjà du monde… plutôt que celui qui est vide ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_nom",
+      "titre": {
+        "mot": "sociale",
+        "texte": "La preuve sociale"
+      },
+      "accents": {
+        "sociale": "flash",
+        "autres.": "impact"
+      },
+      "texte": "Ça s'appelle la preuve sociale : quand tu ne sais pas quoi faire, tu regardes ce que font les autres."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_hotel",
+      "accents": {
+        "2008,": "pop",
+        "serviette": "whoosh",
+        "44": "flash"
+      },
+      "texte": "En 2008, dans un hôtel, des chercheurs ont mis une petite carte : « la plupart des clients réutilisent leur serviette ». La réutilisation est passée d'environ 35 à 44 %."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_chambre",
+      "accents": {
+        "chambre": "pop",
+        "49": "flash",
+        "suis.": "impact"
+      },
+      "texte": "Et avec « la plupart des clients de cette chambre »… 49 %. Plus les autres te ressemblent, plus tu les suis."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_astuce",
+      "accents": {
+        "raison.": "pop",
+        "toujours.": "impact",
+        "seul": "flash"
+      },
+      "texte": "Ce n'est pas bête : souvent, la foule a raison. Mais pas toujours. Alors demande-toi : est-ce que je le ferais seul ?"
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu évites les restaurants vides ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

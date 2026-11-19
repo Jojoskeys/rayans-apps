@@ -1,0 +1,107 @@
+{
+  "slug": "ayati-allah-choisit",
+  "titre": "C'est Lui qui choisit",
+  "titre_youtube": "« Ton Seigneur crée ce qu'Il veut et Il choisit »",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Tu n'as pas tout choisi",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:68-70 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Ta famille, ton pays, ton époque, ton visage… tu n'as rien choisi de tout ça. « Ton Seigneur crée ce qu'Il veut, et Il choisit. » Un verset qui apaise. Sourate Al-Qasas (28:68).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#qadar",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:68",
+      "accents": {
+        "famille.": "pop",
+        "époque.": "pop",
+        "rien": "impact"
+      },
+      "texte": "Ta famille. Ton pays. Ton époque. Ton visage. Tu n'as rien choisi de tout ça."
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:68",
+      "titre": {
+        "mot": "rappelle",
+        "texte": "C'est Lui qui choisit"
+      },
+      "accents": {
+        "rappelle": "pop"
+      },
+      "texte": "Et Allah le rappelle dans la sourate Al-Qasas."
+    },
+    {
+      "type": "verset",
+      "scene": "qadr_ciel",
+      "ref": "28:68"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:68",
+      "accents": {
+        "crée": "flash",
+        "choisit.": "impact",
+        "Gloire": "battement"
+      },
+      "texte": "« Ton Seigneur crée ce qu'Il veut, et Il choisit. Il ne leur appartient pas de choisir. Gloire à Allah, Il est bien au-dessus de ce qu'ils Lui associent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_levant",
+      "ref": "28:69",
+      "accents": {
+        "cachent": "pop",
+        "montrent.": "battement"
+      },
+      "texte": "« Ton Seigneur sait ce que cachent leurs cœurs, et ce qu'ils montrent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "sagesse.": "flash",
+        "dépend": "pop",
+        "vie.": "battement"
+      },
+      "texte": "Ce que tu n'as pas choisi, Allah l'a choisi pour toi, avec sagesse. Concentre-toi sur ce qui dépend de toi : ce que tu fais de ta vie."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

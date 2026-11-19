@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-contre-la-peur",
+  "titre": "Contre la peur",
+  "titre_youtube": "Allah lui a appris un geste contre la peur",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Un geste contre la peur",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:31-32 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Au mont, Moussa a peur devant le bâton devenu serpent. Allah lui dit : « Approche et n'aie pas peur. » Puis : « Serre ton bras contre toi pour ne pas avoir peur. » Sourate Al-Qasas (28:31-32).\n\nPartage-la à quelqu'un qui a peur en ce moment.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#peur",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "mf_feu",
+      "ref": "28:32",
+      "accents": {
+        "peur,": "impact",
+        "geste": "pop",
+        "simple.": "battement"
+      },
+      "texte": "Face à sa plus grande peur, Allah lui a appris un geste tout simple."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_baton",
+      "ref": "28:31",
+      "titre": {
+        "mot": "serpent",
+        "texte": "Contre la peur"
+      },
+      "accents": {
+        "serpent": "impact",
+        "recule": "whoosh",
+        "sécurité.": "flash"
+      },
+      "texte": "Au mont, le bâton de Moussa devient un serpent qui s'agite. Moussa recule et s'enfuit. Allah l'appelle : « Approche, et n'aie pas peur. Tu es en sécurité. »"
+    },
+    {
+      "type": "verset",
+      "scene": "mf_mission",
+      "ref": "28:32"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_mission",
+      "ref": "28:32",
+      "accents": {
+        "main": "pop",
+        "blanche,": "flash",
+        "peur.": "battement"
+      },
+      "texte": "« Introduis ta main dans l'ouverture de ta tunique : elle sortira blanche, sans aucun mal. Et serre ton bras contre toi pour ne pas avoir peur. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "disparaît": "pop",
+        "debout": "flash"
+      },
+      "texte": "La peur ne disparaît pas toujours. Mais Allah donne de quoi tenir debout face à elle."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "peur": "impact",
+        "foi.": "flash",
+        "sécurité.": "battement"
+      },
+      "texte": "Quand la peur te serre, serre-toi contre ta foi. Respire, et rappelle-toi : « Tu es en sécurité. »"
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

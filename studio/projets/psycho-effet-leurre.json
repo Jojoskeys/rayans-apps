@@ -1,0 +1,157 @@
+{
+  "slug": "psycho-effet-leurre",
+  "titre": "L'effet leurre",
+  "titre_youtube": "Pourquoi tu choisis presque toujours le moyen ?",
+  "serie": "Pourquoi tu… #25",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Une option est là pour te piéger",
+  "sources": [
+    "Huber, J., Payne, J. W. & Puto, C. (1982). Adding asymmetrically dominated alternatives: Violations of regularity and the similarity hypothesis. Journal of Consumer Research, 9(1), 90-98 : ajouter une option « leurre » moins bonne change le choix des gens",
+    "Ariely, D. (2008). Predictably Irrational. HarperCollins : abonnement web seul 59 $, papier seul 125 $, papier + web 125 $ → 84 % choisissent papier + web ; sans l'option « papier seul », 68 % prennent le web seul"
+  ],
+  "legende": "Petit, moyen, grand… et tu prends le moyen, ou l'offre « la plus avantageuse ». Parfois, une des options n'est là que pour te pousser vers une autre. Ça s'appelle l'effet leurre.\n\nTu prends souvent le moyen ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#argent",
+    "#biaiscognitifs",
+    "#marketing",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "trois": "pop",
+        "vendeur": "impact"
+      },
+      "texte": "Pourquoi, quand il y a trois choix, tu prends presque toujours celui que le vendeur voulait ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Coffee",
+            "mot": "trois",
+            "texte": "petit"
+          },
+          {
+            "nom": "Coffee",
+            "mot": "trois",
+            "texte": "moyen"
+          },
+          {
+            "nom": "Coffee",
+            "mot": "trois",
+            "texte": "grand"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "célèbre": "pop",
+        "59": "pop",
+        "125.": "pop",
+        "aussi.": "impact"
+      },
+      "texte": "Un exemple célèbre : un magazine proposait trois abonnements. Internet seul, 59 dollars. Papier seul, 125. Papier plus internet… 125 aussi.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "internet : 59 $",
+            "mot": "59"
+          },
+          {
+            "texte": "papier : 125 $",
+            "mot": "125."
+          },
+          {
+            "texte": "papier + internet : 125 $",
+            "mot": "aussi"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "irrésistible",
+        "texte": "L'effet leurre"
+      },
+      "accents": {
+        "Personne": "impact",
+        "irrésistible": "flash",
+        "84": "flash"
+      },
+      "texte": "Personne ne prend le papier seul. Mais il rend l'offre complète irrésistible : 84 % des gens l'ont choisie.",
+      "visuel": {
+        "chiffre": {
+          "texte": "84 %",
+          "mot": "84",
+          "sous": "papier + internet"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "enlève": "whoosh",
+        "68": "flash",
+        "leurre.": "impact"
+      },
+      "texte": "Et quand on enlève l'option « papier seul »… 68 % prennent l'abonnement le moins cher. L'option inutile était un leurre.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "avec leurre",
+            "valeur": 0.84,
+            "mot": "enlève"
+          },
+          {
+            "texte": "sans leurre",
+            "valeur": 0.32,
+            "mot": "68",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "cache": "pop",
+        "sans": "flash"
+      },
+      "texte": "La prochaine fois, cache l'option du milieu… et demande-toi ce que tu aurais pris sans elle.",
+      "visuel": {
+        "perso": {
+          "bulle": "« et sans cette option ? »",
+          "mot": "demande-toi"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu prends souvent l'option du milieu ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

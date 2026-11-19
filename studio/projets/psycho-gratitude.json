@@ -1,0 +1,173 @@
+{
+  "slug": "psycho-gratitude",
+  "titre": "La liste de gratitude",
+  "titre_youtube": "Pourquoi noter ce qui va bien rend plus heureux ?",
+  "serie": "Pourquoi tu… #53",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Trois lignes par semaine",
+  "sources": [
+    "Emmons, R. A. & McCullough, M. E. (2003). Counting blessings versus burdens: An experimental investigation of gratitude and subjective well-being in daily life. Journal of Personality and Social Psychology, 84(2), 377-389 : les participants qui notaient chaque semaine des choses pour lesquelles ils étaient reconnaissants se sentaient mieux et plus optimistes que ceux qui notaient leurs tracas"
+  ],
+  "legende": "Tu notes tes problèmes, tes devoirs, tes soucis… mais jamais ce qui va bien. Une expérience a demandé à des gens d'écrire chaque semaine quelques choses pour lesquelles ils étaient reconnaissants. Résultat surprenant.\n\nTu as déjà essayé ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#bienetre",
+    "#gratitude",
+    "#developpementpersonnel",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "bien…": "pop",
+        "heureux": "flash"
+      },
+      "texte": "Pourquoi écrire ce qui va bien… rend plus heureux ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "NotebookPen",
+            "mot": "écrire",
+            "texte": "écrire"
+          },
+          {
+            "nom": "Smile",
+            "mot": "heureux",
+            "texte": "plus heureux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2003,": "pop",
+        "tracas,": "pop",
+        "reconnaissants.": "flash"
+      },
+      "texte": "En 2003, des chercheurs ont formé trois groupes. Chaque semaine, les uns notaient des tracas, les autres des événements neutres… et les derniers, cinq choses pour lesquelles ils étaient reconnaissants.",
+      "visuel": {
+        "annee": "2003",
+        "icones": [
+          {
+            "nom": "CloudRain",
+            "mot": "tracas",
+            "texte": "tracas"
+          },
+          {
+            "nom": "Minus",
+            "mot": "neutres",
+            "texte": "neutre"
+          },
+          {
+            "nom": "Heart",
+            "mot": "reconnaissants",
+            "texte": "gratitude"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "gratitude",
+        "texte": "La gratitude"
+      },
+      "accents": {
+        "dix": "pop",
+        "mieux": "flash",
+        "optimiste": "pop"
+      },
+      "texte": "Au bout de dix semaines, le groupe gratitude se sentait mieux dans sa vie et plus optimiste pour la suite.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "tracas",
+            "valeur": 0.4,
+            "mot": "mieux"
+          },
+          {
+            "texte": "neutre",
+            "valeur": 0.5,
+            "mot": "mieux"
+          },
+          {
+            "texte": "gratitude",
+            "valeur": 0.75,
+            "mot": "mieux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "remarque": "pop",
+        "l'entraîner": "flash",
+        "moitié.": "pop"
+      },
+      "texte": "Ton cerveau remarque naturellement ce qui ne va pas. Écrire ce qui va bien, c'est l'entraîner à voir l'autre moitié.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "l'entraîner",
+          "icone": "Sun"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "trois": "flash",
+        "repas,": "pop",
+        "message,": "pop",
+        "soleil.": "pop"
+      },
+      "texte": "L'astuce : ce soir, écris trois choses qui se sont bien passées. Même petites. Un bon repas, un message, un rayon de soleil.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Soup",
+            "mot": "repas",
+            "texte": "un bon repas"
+          },
+          {
+            "nom": "MessageCircle",
+            "mot": "message",
+            "texte": "un message"
+          },
+          {
+            "nom": "Sun",
+            "mot": "soleil",
+            "texte": "du soleil"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as déjà essayé d'écrire ce qui va bien ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

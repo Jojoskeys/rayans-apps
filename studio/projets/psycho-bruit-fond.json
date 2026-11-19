@@ -1,0 +1,90 @@
+{
+  "slug": "psycho-bruit-fond",
+  "titre": "Le bruit de fond",
+  "titre_youtube": "Pourquoi tu as plus d'idées avec un peu de bruit autour de toi ?",
+  "serie": "Pourquoi tu… #44",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le bruit d'un café aide à créer",
+  "sources": [
+    "Mehta, R., Zhu, R. & Cheema, A. (2012). Is noise always bad? Exploring the effects of ambient noise on creative cognition. Journal of Consumer Research, 39(4), 784-799 : un bruit ambiant modéré (environ 70 dB, comme un café) améliore les tâches créatives, alors qu'un bruit fort (85 dB) les gêne"
+  ],
+  "legende": "Silence total ou bruit d'un café ? Pour les tâches créatives, un bruit modéré aide. Trop fort, ça gêne. Des chercheurs ont trouvé le bon niveau : environ 70 décibels.\n\nTu travailles mieux dans un café ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#creativite",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_bf_accroche",
+      "accents": {
+        "d'idées…": "pop",
+        "silencieuse": "impact"
+      },
+      "texte": "Pourquoi tu as parfois plus d'idées… dans un café bruyant que dans une pièce silencieuse ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_bf_etude",
+      "titre": {
+        "mot": "70",
+        "texte": "Le bruit qui aide"
+      },
+      "accents": {
+        "2012,": "pop",
+        "70": "flash",
+        "café.": "impact"
+      },
+      "texte": "En 2012, des chercheurs ont fait faire des tâches créatives avec différents niveaux de bruit. Le gagnant ? Un bruit moyen, environ 70 décibels : celui d'un café."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_bf_pourquoi",
+      "accents": {
+        "distrait": "pop",
+        "large.": "flash"
+      },
+      "texte": "Un petit bruit te distrait juste assez pour penser plus large. Tu sors de tes idées habituelles."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_bf_trop",
+      "accents": {
+        "85": "impact",
+        "calme": "pop"
+      },
+      "texte": "Mais trop fort, à 85 décibels, ça devient gênant. Et pour apprendre par cœur, le calme reste meilleur."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_bf_astuce",
+      "accents": {
+        "idées,": "flash",
+        "silence.": "pop"
+      },
+      "texte": "L'astuce : pour trouver des idées, un fond sonore de café. Pour réviser, le silence."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu travailles mieux dans le bruit ou le silence ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

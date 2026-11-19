@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-sourire",
+  "titre": "Le sourire",
+  "titre_youtube": "Pourquoi sourire peut te rendre (un peu) plus heureux ?",
+  "serie": "Pourquoi tu… #27",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Un petit effet, mais réel",
+  "sources": [
+    "Coles, N. A., Larsen, J. T. & Lench, H. C. (2019). A meta-analysis of the facial feedback literature: Effects of facial feedback on emotional experience are small and variable. Psychological Bulletin, 145(6), 610-651 : l'expression du visage influence un peu ce qu'on ressent (effet petit)",
+    "Coles, N. A. et al. (2022). A multi-lab test of the facial feedback hypothesis by the Many Smiles Collaboration. Nature Human Behaviour, 6(12), 1731-1742 : dans 19 pays, imiter un sourire augmente un peu le sentiment de bonheur"
+  ],
+  "legende": "Sourire quand tu es heureux, évident. Mais l'inverse ? Une grande étude dans 19 pays montre que sourire peut te rendre un peu plus heureux. Un petit effet… mais réel.\n\nTu vas essayer ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#bienetre",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_so_accroche",
+      "accents": {
+        "sourire…": "pop",
+        "heureux": "impact"
+      },
+      "texte": "Pourquoi sourire… peut te rendre un peu plus heureux ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_so_retour",
+      "titre": {
+        "mot": "sens",
+        "texte": "Le retour du visage"
+      },
+      "accents": {
+        "content.": "pop",
+        "sens": "whoosh",
+        "cerveau.": "impact"
+      },
+      "texte": "Tu souris parce que tu es content. Mais ça marche aussi un peu dans l'autre sens : ton visage envoie un message à ton cerveau."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_so_etude",
+      "accents": {
+        "2022,": "pop",
+        "19": "flash",
+        "heureux.": "impact"
+      },
+      "texte": "En 2022, une grande expérience menée dans 19 pays l'a vérifié : en imitant un sourire, les gens se sentaient un peu plus heureux."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_so_honnete",
+      "accents": {
+        "petit.": "impact",
+        "tristesse.": "pop",
+        "ordinaire.": "flash"
+      },
+      "texte": "Attention : l'effet est petit. Un sourire ne guérit pas une vraie tristesse. Mais il peut aider un peu, dans une journée ordinaire."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_so_astuce",
+      "accents": {
+        "suite…": "pop",
+        "sourire.": "flash"
+      },
+      "texte": "Alors, là, tout de suite… essaie de sourire."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu as souri pendant la vidéo ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-fort-et-fiable",
+  "titre": "Fort et digne de confiance",
+  "titre_youtube": "Les deux qualités du meilleur employé, selon le Coran",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Deux qualités suffisent",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:26 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Au puits de Madyan, une des deux jeunes femmes dit à son père : « Engage-le : le meilleur à engager, c'est celui qui est fort et digne de confiance. » Deux qualités, valables pour tout travail. Sourate Al-Qasas (28:26).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#travail",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "md_puits",
+      "ref": "28:26",
+      "accents": {
+        "qualités.": "pop",
+        "relations.": "impact",
+        "meilleures.": "flash"
+      },
+      "texte": "Deux qualités. Pas un diplôme, pas des relations. Juste deux qualités, et le Coran les cite comme les meilleures."
+    },
+    {
+      "type": "narration",
+      "scene": "md_reponse",
+      "ref": "28:23-25",
+      "titre": {
+        "mot": "d'aider",
+        "texte": "Fort et digne de confiance"
+      },
+      "accents": {
+        "d'aider": "pop",
+        "retour.": "battement"
+      },
+      "texte": "Moussa vient d'aider deux jeunes femmes à abreuver leur troupeau, sans rien demander en retour."
+    },
+    {
+      "type": "verset",
+      "scene": "md_ombre",
+      "ref": "28:26"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:26",
+      "accents": {
+        "engage-le": "pop",
+        "fort,": "impact",
+        "confiance.": "flash"
+      },
+      "texte": "L'une d'elles dit à son père : « Ô mon père, engage-le ! Le meilleur à engager, c'est celui qui est fort, et digne de confiance. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_route",
+      "accents": {
+        "Fort": "impact",
+        "honnête": "flash",
+        "regarde.": "battement"
+      },
+      "texte": "Fort : capable de faire le travail. Digne de confiance : honnête quand personne ne regarde."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "étudiant,": "pop",
+        "compétences,": "impact",
+        "l'honnêteté.": "flash"
+      },
+      "texte": "Que tu sois étudiant, employé ou patron, vise ces deux qualités. Les compétences, et l'honnêteté."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

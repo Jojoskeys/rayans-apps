@@ -1,0 +1,129 @@
+{
+  "slug": "psycho-rire-ensemble",
+  "titre": "Le rire est social",
+  "titre_youtube": "Pourquoi tu ris trente fois plus avec les autres ?",
+  "serie": "Pourquoi tu… #48",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Seul, tu ris presque jamais",
+  "sources": [
+    "Provine, R. R. & Fischer, K. R. (1989). Laughing, smiling, and talking: Relation to sleeping and social context in humans. Ethology, 83(4), 295-305 : les gens rient environ 30 fois plus souvent en compagnie que seuls",
+    "Provine, R. R. (1993). Laughter punctuates speech: Linguistic, social and gender contexts of laughter. Ethology, 95(4), 291-298 : la plupart des rires suivent des phrases banales, pas des blagues"
+  ],
+  "legende": "Seul devant une vidéo drôle, tu souris. Avec tes amis, tu exploses de rire. Normal : on rit environ 30 fois plus en groupe. Et la plupart du temps, pas à cause d'une blague.\n\nTu ris plus avec tes amis que seul ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#amitie",
+    "#rire",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "ris": "pop",
+        "seul": "impact"
+      },
+      "texte": "Pourquoi tu ris tellement plus avec tes amis… que tout seul ?",
+      "visuel": {
+        "perso": {
+          "nb": 3,
+          "jaunes": 3,
+          "mot": "amis"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "noter": "pop",
+        "semaine.": "pop"
+      },
+      "texte": "Un chercheur a demandé à des gens de noter chaque fois qu'ils riaient, pendant une semaine.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "NotebookPen",
+            "mot": "noter",
+            "texte": "le carnet"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "trente",
+        "texte": "× 30"
+      },
+      "accents": {
+        "trente": "flash",
+        "seuls.": "pop"
+      },
+      "texte": "Résultat : ils riaient environ trente fois plus souvent quand ils étaient avec d'autres que quand ils étaient seuls.",
+      "visuel": {
+        "chiffre": {
+          "texte": "× 30",
+          "mot": "trente",
+          "sous": "en groupe"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "blague.": "impact",
+        "banales,": "pop",
+        "tard": "flash"
+      },
+      "texte": "Et le plus surprenant : la plupart des rires ne suivent pas une blague. Ils suivent des phrases banales, comme « à plus tard ! ».",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "« bon, à plus tard ! » … haha",
+            "mot": "banales"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "l'humour.": "pop",
+        "ensemble": "flash"
+      },
+      "texte": "Le rire n'est pas d'abord fait pour l'humour. Il sert à dire aux autres : « on est bien ensemble ».",
+      "visuel": {
+        "perso": {
+          "nb": 2,
+          "jaunes": 2,
+          "mot": "ensemble"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu ris plus avec tes amis que seul ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

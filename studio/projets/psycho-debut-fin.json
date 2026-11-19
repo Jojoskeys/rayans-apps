@@ -1,0 +1,167 @@
+{
+  "slug": "psycho-debut-fin",
+  "titre": "Le début et la fin",
+  "titre_youtube": "Pourquoi tu retiens surtout le début et la fin ?",
+  "serie": "Pourquoi tu… #34",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le milieu s'efface",
+  "sources": [
+    "Murdock, B. B. (1962). The serial position effect of free recall. Journal of Experimental Psychology, 64(5), 482-488 : on retient mieux les premiers et les derniers éléments d'une liste, beaucoup moins ceux du milieu",
+    "Glanzer, M. & Cunitz, A. R. (1966). Two storage mechanisms in free recall. Journal of Verbal Learning and Verbal Behavior, 5(4), 351-360 : l'avantage de la fin disparaît si on attend 30 secondes avant de répondre"
+  ],
+  "legende": "Une liste de courses, un cours, un film : tu retiens le début, la fin… et le milieu disparaît. Ça a un nom, et ça change ta façon de réviser.\n\nTu oublies le milieu des cours ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#memoire",
+    "#etudes",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "début": "pop",
+        "fin…": "pop",
+        "milieu": "impact"
+      },
+      "texte": "Pourquoi tu retiens le début et la fin… mais jamais le milieu ?",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "début",
+            "valeur": 0.8,
+            "mot": "début"
+          },
+          {
+            "texte": "milieu",
+            "valeur": 0.3,
+            "mot": "milieu",
+            "rouge": true
+          },
+          {
+            "texte": "fin",
+            "valeur": 0.75,
+            "mot": "fin"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "U.",
+        "texte": "La courbe en U"
+      },
+      "accents": {
+        "1962,": "pop",
+        "liste": "pop",
+        "U.": "flash"
+      },
+      "texte": "En 1962, des gens écoutaient une liste de mots, puis devaient en retrouver le plus possible. Toujours la même forme : un U.",
+      "visuel": {
+        "annee": "1962",
+        "chiffre": {
+          "texte": "U",
+          "mot": "U",
+          "sous": "début et fin retenus"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "début,": "pop",
+        "fraîche.": "flash",
+        "milieu,": "impact"
+      },
+      "texte": "Le début, tu as eu le temps de le répéter dans ta tête. La fin est encore toute fraîche. Le milieu, lui, n'a eu ni l'un ni l'autre.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Repeat",
+            "mot": "répéter",
+            "texte": "répété"
+          },
+          {
+            "nom": "CircleOff",
+            "mot": "milieu",
+            "texte": "oublié"
+          },
+          {
+            "nom": "Sparkles",
+            "mot": "fraîche",
+            "texte": "frais"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "trente": "flash",
+        "avantage.": "impact"
+      },
+      "texte": "Et la fin s'efface vite : il suffit d'attendre trente secondes pour perdre une bonne partie de cet avantage.",
+      "visuel": {
+        "chiffre": {
+          "texte": "30 s",
+          "mot": "trente",
+          "sous": "et la fin s'efface"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "morceaux.": "pop",
+        "débuts": "flash",
+        "fins.": "flash"
+      },
+      "texte": "L'astuce : coupe tes révisions en petits morceaux. Plus de morceaux, ça fait plus de débuts et plus de fins.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Timer",
+            "mot": "morceaux",
+            "texte": "25 min"
+          },
+          {
+            "nom": "Coffee",
+            "mot": "débuts",
+            "texte": "pause"
+          },
+          {
+            "nom": "Timer",
+            "mot": "fins",
+            "texte": "25 min"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu oublies le milieu des cours ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

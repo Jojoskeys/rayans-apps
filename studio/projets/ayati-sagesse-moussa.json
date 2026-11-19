@@ -1,0 +1,105 @@
+{
+  "slug": "ayati-sagesse-moussa",
+  "titre": "La sagesse de Moussa",
+  "titre_youtube": "Allah lui a donné la sagesse… voici pourquoi",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il a reçu la sagesse",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:14 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Quand Moussa devint un homme accompli, Allah lui donna la capacité de juger et une science. Et Il dit pourquoi : « C'est ainsi que Nous récompensons les bienfaisants. » Sourate Al-Qasas (28:14).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#sagesse",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:14",
+      "accents": {
+        "sagesse": "flash",
+        "pourquoi.": "impact"
+      },
+      "texte": "Allah lui a donné la sagesse et le savoir. Et le Coran nous dit exactement pourquoi."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_ville",
+      "ref": "28:14",
+      "titre": {
+        "mot": "grandi.",
+        "texte": "La sagesse de Moussa"
+      },
+      "accents": {
+        "grandi.": "pop",
+        "accompli,": "battement"
+      },
+      "texte": "Moussa a grandi. Il est devenu un homme accompli, dans la force de l'âge."
+    },
+    {
+      "type": "verset",
+      "scene": "qp_priere",
+      "ref": "28:14"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_pardon",
+      "ref": "28:14",
+      "accents": {
+        "juger,": "pop",
+        "science.": "flash",
+        "bienfaisants.": "battement"
+      },
+      "texte": "« Et quand il eut atteint sa maturité, Nous lui donnâmes la faculté de juger, et une science. C'est ainsi que Nous récompensons les bienfaisants. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "d'intelligence.": "pop",
+        "bien.": "flash"
+      },
+      "texte": "La sagesse n'est pas seulement une question d'intelligence. Allah la donne aussi à ceux qui font le bien."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "comprendre": "pop",
+        "bien": "battement"
+      },
+      "texte": "Tu veux comprendre mieux la vie ? Commence par faire le bien autour de toi."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

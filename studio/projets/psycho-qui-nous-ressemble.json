@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-qui-nous-ressemble",
+  "titre": "Ceux qui nous ressemblent",
+  "titre_youtube": "Pourquoi tu apprécies plus vite les gens qui te ressemblent ?",
+  "serie": "Pourquoi tu… #45",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Qui se ressemble s'assemble",
+  "sources": [
+    "Byrne, D. (1961). Interpersonal attraction and attitude similarity. Journal of Abnormal and Social Psychology, 62(3), 713-715 : on apprécie davantage un inconnu qui partage nos opinions",
+    "Montoya, R. M., Horton, R. S. & Kirchner, J. (2008). Is actual similarity necessary for attraction? A meta-analysis of actual and perceived similarity. Journal of Social and Personal Relationships, 25(6), 889-922 : c'est surtout la ressemblance qu'on perçoit qui compte"
+  ],
+  "legende": "Même musique, même humour, mêmes avis… et tu apprécies tout de suite. Des chercheurs l'ont montré dès 1961 : on aime plus les gens qui nous ressemblent. Le piège, c'est de ne plus rencontrer que ceux-là.\n\nTes amis te ressemblent ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#relations",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_qr_accroche",
+      "accents": {
+        "apprécies": "pop",
+        "ressemblent": "impact"
+      },
+      "texte": "Pourquoi tu apprécies plus vite les gens… qui te ressemblent ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_qr_etude",
+      "titre": {
+        "mot": "ressemblaient",
+        "texte": "Qui se ressemble s'assemble"
+      },
+      "accents": {
+        "1961,": "pop",
+        "inconnu.": "pop",
+        "l'appréciaient.": "flash"
+      },
+      "texte": "En 1961, un chercheur a montré à des étudiants les opinions d'un inconnu. Plus elles ressemblaient aux leurs, plus ils l'appréciaient."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_qr_pourquoi",
+      "accents": {
+        "rassure": "pop",
+        "raison.": "impact"
+      },
+      "texte": "Quelqu'un qui pense comme toi te rassure : il confirme que tu as raison. Et tu devines mieux ses réactions."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_qr_percu",
+      "accents": {
+        "imagines": "flash",
+        "vraie.": "impact"
+      },
+      "texte": "Et le plus drôle : c'est surtout la ressemblance que tu imagines qui compte. Pas forcément la vraie."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_qr_astuce",
+      "accents": {
+        "piège": "impact",
+        "différents.": "pop",
+        "plus.": "flash"
+      },
+      "texte": "Le piège : ne fréquenter que des gens comme toi. Parle aussi à ceux qui sont différents. C'est là que tu apprends le plus."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tes amis te ressemblent ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

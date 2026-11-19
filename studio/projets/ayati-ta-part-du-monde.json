@@ -1,0 +1,109 @@
+{
+  "slug": "ayati-ta-part-du-monde",
+  "titre": "N'oublie pas ta part",
+  "titre_youtube": "« N'oublie pas ta part de ce monde » : le conseil donné à Qâroûn",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "L'islam n'interdit pas de profiter",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:76-77 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Avant sa chute, le peuple de Qâroûn lui a donné un conseil parfait : cherche l'au-delà avec ce qu'Allah t'a donné, n'oublie pas ta part de ce monde, et fais le bien comme Allah t'a fait du bien. Sourate Al-Qasas (28:77).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#equilibre",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qr_cles",
+      "ref": "28:76-77",
+      "accents": {
+        "chute,": "impact",
+        "d'équilibre.": "flash",
+        "écouté.": "battement"
+      },
+      "texte": "Avant sa chute, Qâroûn a reçu le meilleur conseil possible. Un conseil d'équilibre. Il ne l'a pas écouté."
+    },
+    {
+      "type": "narration",
+      "scene": "qr_tresor",
+      "ref": "28:76",
+      "titre": {
+        "mot": "Qâroûn",
+        "texte": "N'oublie pas ta part"
+      },
+      "accents": {
+        "riche.": "pop",
+        "arrogants.": "impact"
+      },
+      "texte": "Qâroûn était immensément riche. Les gens de son peuple lui disent : « Ne te réjouis pas avec arrogance, Allah n'aime pas les arrogants. »"
+    },
+    {
+      "type": "verset",
+      "scene": "qr_conseil",
+      "ref": "28:77"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_conseil",
+      "ref": "28:77",
+      "accents": {
+        "Demeure": "flash",
+        "n'oublie": "pop",
+        "bienfaisant": "battement",
+        "désordre": "impact"
+      },
+      "texte": "« Recherche, avec ce qu'Allah t'a donné, la Demeure dernière. Et n'oublie pas ta part de ce monde. Sois bienfaisant, comme Allah a été bienfaisant envers toi. Et ne cherche pas le désordre sur terre. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "interdit.": "pop",
+        "l'au-delà…": "flash",
+        "partager.": "battement"
+      },
+      "texte": "Profiter de ce monde n'est pas interdit. Ce qui compte, c'est de ne pas oublier l'au-delà… et de partager."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "bien.": "pop",
+        "autres.": "flash",
+        "suivi.": "impact"
+      },
+      "texte": "Allah t'a fait du bien. Fais du bien aux autres. C'est ça, le conseil que Qâroûn n'a pas suivi."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

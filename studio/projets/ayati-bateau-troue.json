@@ -1,0 +1,140 @@
+{
+  "slug": "ayati-bateau-troue",
+  "titre": "Le bateau troué",
+  "titre_youtube": "Il a troué le bateau qui les avait accueillis… Moussa et le serviteur savant (1/2)",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Pourquoi trouer ce bateau ?",
+  "sourates": {
+    "18": "Sourate Al-Kahf"
+  },
+  "sources": [
+    "Coran 18:60-73 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 18, Al-Kahf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : ni Moussa ni le serviteur savant ne sont montrés ; on voit le poisson, la mer, le rocher et le bateau."
+  ],
+  "legende": "Moussa marche jusqu'au confluent des deux mers pour rencontrer un serviteur d'Allah qui a reçu une science venant de Lui. Une seule condition : ne poser aucune question. Puis l'homme troue le bateau qui les avait accueillis… Sourate Al-Kahf (18:60-73). Partie 1/2.\n\nAbonne-toi pour la partie 2.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#alkahf",
+    "#patience",
+    "#rappel"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "kb_breche",
+      "ref": "18:71",
+      "accents": {
+        "trou.": "impact",
+        "choqué.": "secousse",
+        "sait.": "battement"
+      },
+      "texte": "Il monte sur un bateau qui l'a accueilli… et il y fait un trou. Moussa est choqué. Mais il ne sait pas encore ce que cet homme sait."
+    },
+    {
+      "type": "narration",
+      "scene": "kb_confluent",
+      "ref": "18:60",
+      "titre": {
+        "mot": "confluent",
+        "texte": "Le bateau troué"
+      },
+      "accents": {
+        "confluent": "whoosh",
+        "années.": "battement"
+      },
+      "texte": "Moussa dit à son jeune compagnon : « Je n'arrêterai pas avant d'avoir atteint le confluent des deux mers, même si je dois marcher des années. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kb_poisson",
+      "ref": "18:61-64",
+      "accents": {
+        "poisson…": "pop",
+        "mer.": "whoosh",
+        "cherchions": "flash"
+      },
+      "texte": "Arrivés là-bas, ils oublient leur poisson… et le poisson file dans la mer. Moussa dit : « Voilà ce que nous cherchions ! » Et ils reviennent sur leurs pas."
+    },
+    {
+      "type": "narration",
+      "scene": "kb_serviteur",
+      "ref": "18:65-66",
+      "accents": {
+        "serviteurs": "battement",
+        "science": "flash",
+        "suivre,": "pop"
+      },
+      "texte": "Ils trouvent un des serviteurs d'Allah, à qui Allah a donné une grâce et une science venant de Lui. Moussa lui demande : « Puis-je te suivre, pour que tu m'apprennes ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "kb_condition",
+      "ref": "18:67-70",
+      "accents": {
+        "patient": "impact",
+        "rien,": "pop"
+      },
+      "texte": "L'homme répond : « Tu ne pourras jamais être patient avec moi. Si tu me suis, ne me questionne sur rien, tant que je ne t'en parle pas. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kb_bateau",
+      "ref": "18:71",
+      "accents": {
+        "bateau.": "whoosh",
+        "brèche.": "impact"
+      },
+      "texte": "Alors ils partent tous les deux, et ils montent sur un bateau. Et l'homme y fait une brèche."
+    },
+    {
+      "type": "verset",
+      "scene": "kb_bateau",
+      "ref": "18:71"
+    },
+    {
+      "type": "narration",
+      "scene": "kb_breche",
+      "ref": "18:71-72",
+      "accents": {
+        "noyer": "secousse",
+        "terrible": "impact",
+        "patient": "battement"
+      },
+      "texte": "Moussa ne se retient pas : « Tu l'as troué pour noyer ses passagers ? Tu as fait une chose terrible ! » L'homme répond : « Ne t'avais-je pas dit que tu ne pourrais pas être patient ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "kb_lecon",
+      "accents": {
+        "malheur": "impact",
+        "sagesse": "flash",
+        "tout.": "pop"
+      },
+      "texte": "Ce qui te paraît être un malheur cache parfois une sagesse que tu ne vois pas encore. Dans la partie 2, l'homme explique tout."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "secrets.": "battement"
+      },
+      "texte": "Abonne-toi pour ne pas rater la partie 2 : le mur et les trois secrets."
+    }
+  ]
+}

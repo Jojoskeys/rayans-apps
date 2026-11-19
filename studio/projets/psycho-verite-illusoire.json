@@ -1,0 +1,149 @@
+{
+  "slug": "psycho-verite-illusoire",
+  "titre": "L'illusion de vérité",
+  "titre_youtube": "Pourquoi tu finis par croire ce que tu entends souvent ?",
+  "serie": "Pourquoi tu… #50",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Répété = vrai ?",
+  "sources": [
+    "Hasher, L., Goldstein, D. & Toppino, T. (1977). Frequency and the conference of referential validity. Journal of Verbal Learning and Verbal Behavior, 16(1), 107-112 : une phrase entendue plusieurs fois est jugée plus vraie",
+    "Fazio, L. K., Brashier, N. M., Payne, B. K. & Marsh, E. J. (2015). Knowledge does not protect against illusory truth. Journal of Experimental Psychology: General, 144(5), 993-1002 : l'effet marche même quand on connaît la bonne réponse"
+  ],
+  "legende": "Une info fausse, répétée encore et encore… et tu finis par la trouver crédible. Même quand tu sais que c'est faux. Ça s'appelle l'illusion de vérité, et c'est l'arme des rumeurs.\n\nTu vérifies les infos avant de les partager ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#fakenews",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "souvent…": "pop",
+        "vraie": "impact"
+      },
+      "texte": "Pourquoi une info que tu entends souvent… finit par te sembler vraie ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Repeat",
+            "mot": "souvent",
+            "texte": "répété"
+          },
+          {
+            "nom": "BadgeCheck",
+            "mot": "vraie",
+            "texte": "« vrai »"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1977,": "pop",
+        "fausses,": "pop",
+        "revenaient": "whoosh"
+      },
+      "texte": "En 1977, des chercheurs ont fait lire des phrases, vraies ou fausses, sur plusieurs semaines. Certaines revenaient plusieurs fois.",
+      "visuel": {
+        "annee": "1977",
+        "perso": {
+          "nb": 1,
+          "bulle": "« vrai ou faux ? »",
+          "mot": "phrases"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "vraies.",
+        "texte": "L'illusion de vérité"
+      },
+      "accents": {
+        "répétées": "pop",
+        "vraies.": "flash",
+        "avant.": "impact"
+      },
+      "texte": "Les phrases répétées étaient jugées plus vraies. Juste parce qu'elles avaient été vues avant.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "vue 1 fois",
+            "valeur": 0.45,
+            "mot": "vraies"
+          },
+          {
+            "texte": "répétée",
+            "valeur": 0.75,
+            "mot": "vraies"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "Pire": "impact",
+        "2015,": "pop",
+        "connais": "flash"
+      },
+      "texte": "Pire : en 2015, une étude a montré que ça marche même quand tu connais la bonne réponse.",
+      "visuel": {
+        "annee": "2015",
+        "pastilles": [
+          {
+            "texte": "même quand tu sais",
+            "mot": "connais",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "familier": "pop",
+        "partout…": "pop",
+        "source.": "flash"
+      },
+      "texte": "Ce qui est familier semble vrai. Alors avant de partager une info que tu as vue partout… vérifie la source.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Search",
+            "mot": "vérifie",
+            "texte": "vérifie"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu vérifies les infos avant de les partager ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

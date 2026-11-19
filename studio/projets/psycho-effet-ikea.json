@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-effet-ikea",
+  "titre": "L'effet IKEA",
+  "titre_youtube": "Pourquoi tu préfères ce que tu as monté toi-même ? L'effet IKEA",
+  "serie": "Pourquoi tu… #14",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Même s'il est un peu bancal",
+  "sources": [
+    "Norton, M. I., Mochon, D. & Ariely, D. (2012). The IKEA effect: When labor leads to love. Journal of Consumer Psychology, 22(3), 453-460 : les personnes qui ont monté une boîte IKEA étaient prêtes à la payer 63 % plus cher qu'une boîte déjà montée ; leurs origamis d'amateur leur semblaient presque aussi précieux que ceux d'experts ; l'effet disparaît si la tâche n'est pas terminée"
+  ],
+  "legende": "Un meuble que tu as monté toi-même, même un peu bancal, te semble plus précieux. Des chercheurs l'ont mesuré : 63 % plus cher ! Mais à une condition…\n\nTu gardes un objet juste parce que tu l'as fait toi-même ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#effetikea",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ik_accroche",
+      "accents": {
+        "toi-même…": "pop",
+        "bancal": "impact"
+      },
+      "texte": "Pourquoi tu préfères un meuble que tu as monté toi-même… même s'il est un peu bancal ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ik_boite",
+      "titre": {
+        "mot": "63",
+        "texte": "L'effet IKEA"
+      },
+      "accents": {
+        "boîte": "pop",
+        "63": "flash",
+        "montée.": "impact"
+      },
+      "texte": "Des chercheurs ont demandé à des gens de monter une simple boîte IKEA. Résultat : ils étaient prêts à la payer 63 % plus cher qu'une boîte déjà montée."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ik_origami",
+      "accents": {
+        "origamis,": "pop",
+        "précieux…": "impact",
+        "expert.": "flash"
+      },
+      "texte": "Avec des origamis, c'est pareil. Les gens trouvaient leur pliage d'amateur presque aussi précieux… que celui d'un expert."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ik_fini",
+      "accents": {
+        "terminé,": "impact",
+        "disparaît.": "whoosh",
+        "réussi.": "flash"
+      },
+      "texte": "Mais attention : si le travail n'est pas terminé, l'effet disparaît. Ce qui compte, c'est d'avoir réussi."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ik_valeur",
+      "accents": {
+        "effort": "impact",
+        "valeur": "flash",
+        "projets.": "pop"
+      },
+      "texte": "Ton effort donne de la valeur à ce que tu fais. Et ça vaut aussi pour tes projets."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu gardes un objet juste parce que tu l'as fait toi-même ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

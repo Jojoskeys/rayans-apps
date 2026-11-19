@@ -15,7 +15,7 @@ const OR_PALE = "#ffe2a0";
 const SABLE = "#3a2616";
 const NUIT = "#0b0a10";
 
-const Dunes: React.FC<{ y: number; c1: string; c2: string }> = ({ y, c1, c2 }) => (
+export const Dunes: React.FC<{ y: number; c1: string; c2: string }> = ({ y, c1, c2 }) => (
   <g>
     <path d={`M0,${y} Q270,${y - 120} 540,${y - 30} T${W},${y - 60} L${W},${H} L0,${H} Z`} fill={c1} />
     <path d={`M0,${y + 160} Q360,${y + 40} 700,${y + 150} T${W},${y + 120} L${W},${H} L0,${H} Z`} fill={c2} />
@@ -23,7 +23,7 @@ const Dunes: React.FC<{ y: number; c1: string; c2: string }> = ({ y, c1, c2 }) =
 );
 
 /** Traces de pas qui avancent (on ne voit jamais celui qui marche). */
-const Pas: React.FC<{ de: [number, number]; a: [number, number]; p: number; n?: number; c?: string; s?: number }> = ({ de, a, p, n = 12, c = OR_PALE, s = 1 }) => (
+export const Pas: React.FC<{ de: [number, number]; a: [number, number]; p: number; n?: number; c?: string; s?: number }> = ({ de, a, p, n = 12, c = OR_PALE, s = 1 }) => (
   <g>
     {Array.from({ length: n }).map((_, i) => {
       const t = i / (n - 1);
@@ -64,7 +64,7 @@ const Puits: React.FC<{ x: number; y: number; s?: number; seau?: number }> = ({ 
   </g>
 );
 
-const Arbre: React.FC<{ x: number; sol: number; s?: number; c?: string; feu?: number }> = ({ x, sol, s = 1, c = "#1a1410", feu = 0 }) => {
+export const Arbre: React.FC<{ x: number; sol: number; s?: number; c?: string; feu?: number }> = ({ x, sol, s = 1, c = "#1a1410", feu = 0 }) => {
   const f = useCurrentFrame();
   return (
     <g transform={`translate(${x} ${sol}) scale(${s})`}>
@@ -78,14 +78,14 @@ const Arbre: React.FC<{ x: number; sol: number; s?: number; c?: string; feu?: nu
   );
 };
 
-const Mont: React.FC<{ y: number; c: string; lisere?: string }> = ({ y, c, lisere = "#6b4a3a" }) => (
+export const Mont: React.FC<{ y: number; c: string; lisere?: string }> = ({ y, c, lisere = "#6b4a3a" }) => (
   <g>
     <path d={`M-100,${y} L260,${y - 520} L380,${y - 440} L560,${y - 760} L760,${y - 420} L1180,${y} Z`} fill={c} />
     <path d={`M260,${y - 520} L380,${y - 440} L560,${y - 760} L760,${y - 420}`} stroke={lisere} strokeWidth={5} fill="none" opacity={0.6} />
   </g>
 );
 
-const Lumiere: React.FC<{ x: number; y: number; r: number; o: number; id: string; c?: string }> = ({ x, y, r, o, id, c = "#fff6d8" }) => (
+export const Lumiere: React.FC<{ x: number; y: number; r: number; o: number; id: string; c?: string }> = ({ x, y, r, o, id, c = "#fff6d8" }) => (
   <g>
     <Halo id={id} x={x} y={y} r={r} c={c} o={o} />
     <circle cx={x} cy={y} r={r * 0.12} fill="#fffdf2" opacity={o} />

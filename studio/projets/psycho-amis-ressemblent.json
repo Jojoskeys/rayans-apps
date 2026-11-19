@@ -1,0 +1,151 @@
+{
+  "slug": "psycho-amis-ressemblent",
+  "titre": "Qui se ressemble s'assemble",
+  "titre_youtube": "Pourquoi tes amis te ressemblent autant ?",
+  "serie": "Pourquoi tu… #59",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Qui se ressemble s'assemble",
+  "sources": [
+    "McPherson, M., Smith-Lovin, L. & Cook, J. M. (2001). Birds of a feather: Homophily in social networks. Annual Review of Sociology, 27, 415-444 : on se lie surtout avec des gens qui nous ressemblent (âge, valeurs, études, loisirs)",
+    "Parkinson, C., Kleinbaum, A. M. & Wheatley, T. (2018). Similar neural responses predict friendship. Nature Communications, 9, 332 : des amis proches ont des réactions cérébrales plus semblables devant les mêmes vidéos"
+  ],
+  "legende": "Même humour, mêmes goûts, mêmes séries… tes amis te ressemblent. Ce n'est pas un hasard : on s'attache surtout à ceux qui nous ressemblent. Et en 2018, on a même vu que des amis proches réagissent pareil… dans leur cerveau.\n\nTes amis te ressemblent ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#amitie",
+    "#relations",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "amis": "pop",
+        "ressemblent": "flash"
+      },
+      "texte": "Pourquoi tes amis te ressemblent autant ?",
+      "visuel": {
+        "perso": {
+          "nb": 3,
+          "jaunes": 3,
+          "mot": "ressemblent"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "l'homophilie.",
+        "texte": "Qui se ressemble s'assemble"
+      },
+      "accents": {
+        "l'homophilie.": "flash",
+        "âge,": "pop",
+        "valeurs,": "pop",
+        "loisirs.": "pop"
+      },
+      "texte": "Ça a un nom : l'homophilie. On se lie plus facilement avec des gens du même âge, avec les mêmes valeurs, les mêmes études, les mêmes loisirs.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Cake",
+            "mot": "âge",
+            "texte": "âge"
+          },
+          {
+            "nom": "Heart",
+            "mot": "valeurs",
+            "texte": "valeurs"
+          },
+          {
+            "nom": "Gamepad2",
+            "mot": "loisirs",
+            "texte": "loisirs"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "2018,": "pop",
+        "vidéos": "pop",
+        "cerveau.": "flash"
+      },
+      "texte": "En 2018, des chercheurs ont montré des vidéos à des étudiants d'une même promo, en observant leur cerveau.",
+      "visuel": {
+        "annee": "2018",
+        "icones": [
+          {
+            "nom": "Tv",
+            "mot": "vidéos",
+            "texte": "les mêmes vidéos"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "amies,": "pop",
+        "même": "flash"
+      },
+      "texte": "Résultat : plus deux personnes étaient amies, plus leurs cerveaux réagissaient de la même façon aux mêmes images.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "inconnus",
+            "valeur": 0.35,
+            "mot": "même"
+          },
+          {
+            "texte": "amis proches",
+            "valeur": 0.8,
+            "mot": "même"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "compris.": "pop",
+        "différents": "flash",
+        "idées.": "pop"
+      },
+      "texte": "C'est rassurant d'être compris. Mais pense aussi à parler avec des gens différents : c'est comme ça qu'on découvre de nouvelles idées.",
+      "visuel": {
+        "perso": {
+          "nb": 4,
+          "jaunes": 2,
+          "mot": "différents"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tes amis te ressemblent beaucoup ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

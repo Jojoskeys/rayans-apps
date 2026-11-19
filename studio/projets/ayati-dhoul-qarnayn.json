@@ -1,0 +1,152 @@
+{
+  "slug": "ayati-dhoul-qarnayn",
+  "titre": "Dhoul-Qarnayn et la muraille",
+  "titre_youtube": "Il a enfermé Gog et Magog derrière une muraille de fer… Dhoul-Qarnayn",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Une muraille de fer et de cuivre",
+  "sourates": {
+    "18": "Sourate Al-Kahf"
+  },
+  "sources": [
+    "Coran 18:83-98 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 18, Al-Kahf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : personne n'est montré ; on voit les routes, le couchant, le levant, les deux montagnes et la muraille."
+  ],
+  "legende": "Allah lui a donné le pouvoir sur terre. Il part vers le Couchant, puis vers le Levant, puis entre deux montagnes, où un peuple lui demande de l'aide contre Gog et Magog. Il refuse leur argent… et bâtit une muraille de fer et de cuivre. Sourate Al-Kahf (18:83-98).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#alkahf",
+    "#dhoulqarnayn",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "kq_muraille",
+      "ref": "18:96-98",
+      "accents": {
+        "fer": "impact",
+        "cuivre": "flash",
+        "miséricorde": "battement"
+      },
+      "texte": "Il a bâti une muraille de fer et de cuivre entre deux montagnes. Et quand on l'a félicité, il a répondu : « C'est une miséricorde de mon Seigneur. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_routes",
+      "ref": "18:83-84",
+      "titre": {
+        "mot": "Dhoul-Qarnayn.",
+        "texte": "Dhoul-Qarnayn"
+      },
+      "accents": {
+        "puissance": "impact",
+        "partout.": "whoosh"
+      },
+      "texte": "Il s'appelle Dhoul-Qarnayn. Allah a affermi sa puissance sur terre, et lui a donné les moyens d'aller partout."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_couchant",
+      "ref": "18:85-88",
+      "accents": {
+        "Couchant.": "whoosh",
+        "puni,": "impact",
+        "récompense.": "battement"
+      },
+      "texte": "Il suit une route jusqu'au Couchant. Là, il trouve un peuple. Et il décide : celui qui fait le mal sera puni, celui qui croit et fait le bien aura la plus belle récompense."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_levant",
+      "ref": "18:89-90",
+      "accents": {
+        "Levant,": "flash",
+        "abri.": "pop"
+      },
+      "texte": "Puis il suit une autre route, jusqu'au Levant, où le soleil se lève sur un peuple sans aucun abri."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_montagnes",
+      "ref": "18:92-94",
+      "accents": {
+        "montagnes.": "impact",
+        "désordre": "secousse",
+        "barrage": "pop"
+      },
+      "texte": "Puis encore une autre, jusqu'à un passage entre deux montagnes. Un peuple lui dit : « Gog et Magog sèment le désordre sur terre. Nous te payerons, si tu construis un barrage entre eux et nous. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_refus",
+      "ref": "18:95",
+      "accents": {
+        "mieux": "battement",
+        "bras.": "pop"
+      },
+      "texte": "Il répond : « Ce que mon Seigneur m'a donné vaut mieux que votre argent. Aidez-moi plutôt avec vos bras. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_forge",
+      "ref": "18:96",
+      "accents": {
+        "fer": "impact",
+        "Soufflez": "whoosh",
+        "brûlant.": "flash",
+        "verse": "impact"
+      },
+      "texte": "« Apportez-moi des blocs de fer ! » Il remplit l'espace entre les deux montagnes. « Soufflez ! » Le fer devient brûlant. « Apportez-moi du cuivre fondu ! » Et il le verse dessus."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_muraille",
+      "ref": "18:97",
+      "accents": {
+        "l'escalader,": "pop",
+        "percer.": "impact"
+      },
+      "texte": "Gog et Magog ne peuvent plus ni l'escalader, ni la percer."
+    },
+    {
+      "type": "verset",
+      "scene": "kq_muraille",
+      "ref": "18:98"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "ref": "18:98",
+      "accents": {
+        "miséricorde": "battement",
+        "pouvoir…": "impact",
+        "grandeur.": "flash"
+      },
+      "texte": "« C'est une miséricorde de mon Seigneur. » Il avait tout le pouvoir… et il a tout rendu à Allah. Voilà la vraie grandeur."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres histoires de la sourate Al-Kahf, et partage celle-ci."
+    }
+  ]
+}

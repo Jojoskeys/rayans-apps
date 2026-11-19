@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-je-le-savais",
+  "titre": "Le biais rétrospectif",
+  "titre_youtube": "Pourquoi tu as l'impression que « tu le savais depuis le début » ?",
+  "serie": "Pourquoi tu… #19",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tu ne le savais pas vraiment",
+  "sources": [
+    "Fischhoff, B. (1975). Hindsight ≠ foresight: The effect of outcome knowledge on judgment under uncertainty. Journal of Experimental Psychology: Human Perception and Performance, 1(3), 288-299 : une fois le résultat connu, on le juge beaucoup plus prévisible qu'il ne l'était",
+    "Fischhoff, B. & Beyth, R. (1975). « I knew it would happen »: Remembered probabilities of once-future things. Organizational Behavior and Human Performance, 13(1), 1-16 : les gens se souviennent avoir été plus sûrs du bon résultat qu'ils ne l'étaient vraiment"
+  ],
+  "legende": "Après coup, tout paraît évident : « je le savais ! ». Sauf que ton cerveau réécrit tes souvenirs. Ça a un nom : le biais rétrospectif.\n\nTu dis souvent « je le savais » ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_js_accroche",
+      "accents": {
+        "fin,": "pop",
+        "début": "impact"
+      },
+      "texte": "Pourquoi, une fois que tu connais la fin, tu as l'impression que tu le savais depuis le début ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_nom",
+      "titre": {
+        "mot": "rétrospectif.",
+        "texte": "Le biais rétrospectif"
+      },
+      "accents": {
+        "rétrospectif.": "flash",
+        "évident.": "impact"
+      },
+      "texte": "Ça a un nom : le biais rétrospectif. Une fois le résultat connu, tout paraît évident."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_etude",
+      "accents": {
+        "1975,": "pop",
+        "prédire": "whoosh",
+        "vraiment.": "impact"
+      },
+      "texte": "En 1975, des chercheurs ont demandé à des gens de prédire des événements. Après coup, ils se souvenaient avoir été bien plus sûrs du bon résultat… qu'ils ne l'étaient vraiment."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_reecrit",
+      "accents": {
+        "réécrit": "whoosh",
+        "doutes.": "impact"
+      },
+      "texte": "Ton cerveau réécrit tes souvenirs avec ce que tu sais maintenant. Et il efface tes doutes."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_astuce",
+      "accents": {
+        "note": "pop",
+        "savais…": "impact",
+        "pas.": "flash"
+      },
+      "texte": "L'astuce : avant une décision, note ce que tu penses vraiment. Plus tard, tu verras ce que tu savais… et ce que tu ne savais pas."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu dis souvent « je le savais » ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

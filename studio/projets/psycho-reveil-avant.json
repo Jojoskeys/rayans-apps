@@ -1,0 +1,94 @@
+{
+  "slug": "psycho-reveil-avant",
+  "titre": "Réveillé avant le réveil",
+  "titre_youtube": "Pourquoi tu te réveilles juste avant ton réveil ?",
+  "serie": "Pourquoi tu… #10",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau a lu l'heure",
+  "sources": [
+    "Born, J., Hansen, K., Marshall, L., Mölle, M. & Fehm, H. L. (1999). Timing the end of nocturnal sleep. Nature, 397, 29-30 : chez les dormeurs qui s'attendaient à être réveillés à 6 h, l'hormone ACTH a commencé à monter vers 4 h 30 ; pas chez ceux qui s'attendaient à 9 h",
+    "Moorcroft, W. H., Kayser, K. H. & Griggs, A. J. (1997). Subjective and objective confirmation of the ability to self-awaken at a self-predetermined time without using external means. Sleep, 20(1), 40-45 : certaines personnes arrivent à se réveiller seules à l'heure choisie (pas toutes, pas à chaque fois)"
+  ],
+  "legende": "Tu te réveilles pile une minute avant ton réveil ? Ce n'est pas un hasard : en 1999, des chercheurs ont vu le corps préparer le réveil 1 h 30 à l'avance… seulement chez ceux qui connaissaient l'heure.\n\nÇa t'arrive ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#sommeil",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_re_accroche",
+      "accents": {
+        "réveil…": "impact",
+        "minute": "pop"
+      },
+      "texte": "Pourquoi tu te réveilles parfois juste avant ton réveil… pile une minute avant ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_re_horloge",
+      "titre": {
+        "mot": "horloge",
+        "texte": "Ton horloge interne"
+      },
+      "accents": {
+        "horloge": "pop",
+        "tourner.": "whoosh"
+      },
+      "texte": "Ton corps a une horloge interne. Et pendant que tu dors, elle continue de tourner."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_re_etude",
+      "accents": {
+        "1999,": "pop",
+        "6": "impact",
+        "monter": "flash",
+        "rien.": "impact"
+      },
+      "texte": "En 1999, des chercheurs ont dit à des dormeurs : « On vous réveille à 6 heures. » Dès 4 h 30, une hormone du réveil a commencé à monter dans leur corps. Chez ceux qui pensaient se lever à 9 heures… rien."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_re_prepare",
+      "accents": {
+        "l'heure,": "pop",
+        "l'avance.": "whoosh",
+        "bien.": "impact"
+      },
+      "texte": "Ton cerveau a enregistré l'heure, et il prépare ton corps à l'avance. Parfois… un peu trop bien."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_re_astuce",
+      "accents": {
+        "clairement": "pop",
+        "coups…": "whoosh",
+        "écoute.": "flash"
+      },
+      "texte": "Alors avant de dormir, dis-toi clairement à quelle heure tu veux te lever. Ça ne marche pas à tous les coups… mais ton cerveau écoute."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'arrive de te réveiller juste avant ton réveil ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "slug": "psycho-espacer",
+  "titre": "Espacer les révisions",
+  "titre_youtube": "Pourquoi réviser un peu chaque jour vaut mieux que tout la veille ?",
+  "serie": "Pourquoi tu… #53",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le bourrage de crâne ne dure pas",
+  "sources": [
+    "Cepeda, N. J., Pashler, H., Vul, E., Wixted, J. T. & Rohrer, D. (2006). Distributed practice in verbal recall tasks: A review and quantitative synthesis. Psychological Bulletin, 132(3), 354-380 : à temps égal, répartir les révisions dans le temps fait mieux retenir que tout faire d'un coup (plus de 300 expériences)",
+    "Ebbinghaus, H. (1885). Über das Gedächtnis : la courbe de l'oubli et l'avantage des répétitions espacées"
+  ],
+  "legende": "Tout réviser la veille marche… pour le lendemain. Une semaine après, presque tout a disparu. Réviser un peu chaque jour, à temps égal, fait retenir beaucoup plus longtemps. Plus de 300 expériences le montrent.\n\nTu révises la veille ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#etudes",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_es_accroche",
+      "accents": {
+        "jour…": "pop",
+        "veille": "impact"
+      },
+      "texte": "Pourquoi réviser un peu chaque jour… vaut mieux que tout réviser la veille ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_es_courbe",
+      "accents": {
+        "1885,": "pop",
+        "l'oubli": "impact",
+        "vite": "whoosh"
+      },
+      "texte": "Dès 1885, un chercheur allemand a mesuré la courbe de l'oubli : ce que tu apprends s'efface très vite les premiers jours."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_es_etude",
+      "titre": {
+        "mot": "espacées,",
+        "texte": "Espacer les révisions"
+      },
+      "accents": {
+        "300": "flash",
+        "espacées,": "pop",
+        "fois.": "impact"
+      },
+      "texte": "En 2006, des chercheurs ont regroupé plus de 300 expériences. À temps égal, réviser en plusieurs fois, espacées, fait retenir bien mieux qu'en une seule fois."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_es_pourquoi",
+      "accents": {
+        "d'oublier,": "pop",
+        "renforce": "flash",
+        "longtemps.": "impact"
+      },
+      "texte": "Chaque fois que tu révises un peu avant d'oublier, ton cerveau renforce le souvenir. Et il dure plus longtemps."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_es_astuce",
+      "accents": {
+        "lendemain,": "pop",
+        "trois": "flash",
+        "semaine": "impact"
+      },
+      "texte": "L'astuce : revois tes cours le lendemain, puis trois jours après, puis une semaine après."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu révises plutôt la veille ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

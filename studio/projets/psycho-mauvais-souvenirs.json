@@ -1,0 +1,143 @@
+{
+  "slug": "psycho-mauvais-souvenirs",
+  "titre": "Le biais de négativité",
+  "titre_youtube": "Pourquoi tu te souviens mieux du négatif ?",
+  "serie": "Pourquoi tu… #18",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Une critique pèse plus que dix compliments",
+  "sources": [
+    "Baumeister, R. F., Bratslavsky, E., Finkenauer, C. & Vohs, K. D. (2001). Bad is stronger than good. Review of General Psychology, 5(4), 323-370 : dans presque tous les domaines étudiés, les événements négatifs ont plus d'effet que les positifs",
+    "Gottman, J. M. (1994). What predicts divorce? Lawrence Erlbaum : dans les couples stables, environ 5 interactions positives pour 1 négative"
+  ],
+  "legende": "Dix compliments, une critique… et c'est la critique qui tourne en boucle le soir. Ton cerveau est réglé comme ça depuis longtemps, et il y a un chiffre à retenir pour compenser.\n\nToi aussi tu repenses surtout aux critiques ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "critique": "impact",
+        "dix": "pop"
+      },
+      "texte": "Pourquoi une seule critique te reste en tête… alors que tu as reçu dix compliments ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« bof… »",
+          "mot": "critique"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "négativité.",
+        "texte": "Le biais de négativité"
+      },
+      "accents": {
+        "négativité.": "flash",
+        "2001,": "pop",
+        "lourd": "impact"
+      },
+      "texte": "Ça a un nom : le biais de négativité. En 2001, des chercheurs ont passé en revue des centaines d'études. Conclusion : le négatif pèse plus lourd que le positif, presque partout.",
+      "visuel": {
+        "annee": "2001",
+        "barres": [
+          {
+            "texte": "positif",
+            "valeur": 0.35,
+            "mot": "positif"
+          },
+          {
+            "texte": "négatif",
+            "valeur": 0.9,
+            "mot": "lourd",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "danger": "impact",
+        "vie.": "secousse",
+        "réglage.": "pop"
+      },
+      "texte": "Pour nos ancêtres, rater un danger pouvait coûter la vie. Rater une bonne nouvelle, beaucoup moins. Ton cerveau a gardé ce réglage.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "TriangleAlert",
+            "mot": "danger",
+            "texte": "danger"
+          },
+          {
+            "nom": "Gift",
+            "mot": "nouvelle,",
+            "texte": "bonne nouvelle"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "cinq": "flash",
+        "négatif.": "pop"
+      },
+      "texte": "Un chiffre à retenir : dans les couples qui durent, il y a environ cinq moments positifs pour un négatif.",
+      "visuel": {
+        "chiffre": {
+          "texte": "5 pour 1",
+          "mot": "cinq",
+          "sous": "positif / négatif"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "vérité.": "impact",
+        "exagère.": "pop"
+      },
+      "texte": "Alors quand une critique te reste en tête, rappelle-toi : ce n'est pas la vérité. C'est juste ton cerveau qui exagère.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "ce n'est pas la vérité",
+            "mot": "vérité"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi aussi tu repenses surtout aux critiques ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

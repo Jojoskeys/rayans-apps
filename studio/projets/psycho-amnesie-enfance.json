@@ -1,0 +1,148 @@
+{
+  "slug": "psycho-amnesie-enfance",
+  "titre": "L'amnésie infantile",
+  "titre_youtube": "Pourquoi tu ne te souviens pas de quand tu étais bébé ?",
+  "serie": "Pourquoi tu… #44",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tes premières années ont disparu",
+  "sources": [
+    "Bauer, P. J. & Larkina, M. (2014). The onset of childhood amnesia in childhood: A prospective investigation of the course and determinants of forgetting of early-life events. Memory, 22(8), 907-924 : des enfants de 3 ans se souvenaient d'événements, mais vers 7-8 ans une grande partie était oubliée",
+    "Rubin, D. C. (2000). The distribution of early childhood memories. Memory, 8(4), 265-269 : les adultes n'ont presque aucun souvenir d'avant 3 ans environ"
+  ],
+  "legende": "Tes premiers pas, tes premiers mots… aucun souvenir. Pourtant, à 3 ans, tu te souvenais de plein de choses. C'est vers 7 ans que ces souvenirs disparaissent : c'est l'amnésie infantile.\n\nQuel est ton plus vieux souvenir ? Dis-le en commentaire 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#memoire",
+    "#enfance",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "rien": "impact",
+        "trois": "pop"
+      },
+      "texte": "Pourquoi tu ne te souviens de rien avant tes trois ans environ ?",
+      "visuel": {
+        "chiffre": {
+          "texte": "0 – 3 ans",
+          "mot": "trois",
+          "sous": "presque aucun souvenir"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "infantile.",
+        "texte": "L'amnésie infantile"
+      },
+      "accents": {
+        "infantile.": "flash",
+        "étonnant,": "pop",
+        "souviennent.": "impact"
+      },
+      "texte": "Ça a un nom : l'amnésie infantile. Et le plus étonnant, c'est que les jeunes enfants, eux, se souviennent.",
+      "visuel": {
+        "perso": {
+          "nb": 1,
+          "jaunes": 1,
+          "bulle": "« je m'en souviens ! »",
+          "mot": "souviennent"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "2014,": "pop",
+        "trois": "pop",
+        "tard.": "whoosh"
+      },
+      "texte": "En 2014, des chercheuses ont parlé avec des enfants de trois ans de ce qu'ils avaient vécu. Puis elles les ont revus des années plus tard.",
+      "visuel": {
+        "annee": "2014",
+        "icones": [
+          {
+            "nom": "Baby",
+            "mot": "trois",
+            "texte": "à 3 ans"
+          },
+          {
+            "nom": "School",
+            "mot": "tard",
+            "texte": "à 7-8 ans"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "cinq": "pop",
+        "sept,": "impact",
+        "disparu.": "whoosh"
+      },
+      "texte": "Vers cinq ou six ans, ils se souvenaient encore de beaucoup de choses. Mais vers sept, huit ans, une grande partie avait disparu.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "à 5-6 ans",
+            "valeur": 0.7,
+            "mot": "cinq"
+          },
+          {
+            "texte": "à 7-8 ans",
+            "valeur": 0.35,
+            "mot": "disparu",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "vite": "pop",
+        "réorganise": "flash",
+        "chantier.": "impact"
+      },
+      "texte": "Le cerveau d'un enfant grandit si vite qu'il réorganise sa mémoire. Les premiers souvenirs ne survivent pas au chantier.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Brain",
+            "mot": "réorganise",
+            "texte": "en travaux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Quel est ton plus vieux souvenir ? Dis-le en commentaire. Abonne-toi pour ne pas rater le prochain épisode. OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

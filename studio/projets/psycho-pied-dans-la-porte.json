@@ -1,0 +1,142 @@
+{
+  "slug": "psycho-pied-dans-la-porte",
+  "titre": "Le pied dans la porte",
+  "titre_youtube": "Pourquoi tu dis oui alors que tu voulais dire non ?",
+  "serie": "Pourquoi tu… #31",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Un petit oui en entraîne un grand",
+  "sources": [
+    "Freedman, J. L. & Fraser, S. C. (1966). Compliance without pressure: The foot-in-the-door technique. Journal of Personality and Social Psychology, 4(2), 195-202 : les habitants qui avaient accepté une petite demande (un autocollant) acceptaient bien plus souvent ensuite d'installer un grand panneau dans leur jardin (environ 76 % contre 17 %)"
+  ],
+  "legende": "Un petit service… puis un plus gros… et tu te retrouves à dire oui à quelque chose que tu aurais refusé direct. Ça s'appelle le pied dans la porte, et c'est mesuré depuis 1966.\n\nTu as du mal à dire non ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#manipulation",
+    "#biaiscognitifs",
+    "#relations",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "oui…": "pop",
+        "refusées": "impact"
+      },
+      "texte": "Pourquoi tu finis par dire oui… à des choses que tu aurais refusées direct ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« euh… d'accord »",
+          "mot": "oui"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1966,": "pop",
+        "panneau,": "impact",
+        "refusé.": "whoosh"
+      },
+      "texte": "En 1966, des chercheurs ont demandé à des habitants d'installer un grand panneau, assez moche, dans leur jardin. Presque tout le monde a refusé.",
+      "visuel": {
+        "annee": "1966",
+        "icones": [
+          {
+            "nom": "Signpost",
+            "mot": "panneau",
+            "texte": "un grand panneau"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "petit",
+        "texte": "Le pied dans la porte"
+      },
+      "accents": {
+        "petit": "pop",
+        "autocollant.": "pop",
+        "oui.": "flash"
+      },
+      "texte": "Mais à d'autres, ils avaient d'abord demandé un tout petit service : coller un petit autocollant. Facile, ils ont dit oui.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Sticker",
+            "mot": "autocollant",
+            "texte": "un autocollant"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "semaines": "pop",
+        "quatre": "flash",
+        "cinq": "impact"
+      },
+      "texte": "Deux semaines plus tard, on leur a demandé le grand panneau. Cette fois, environ trois sur quatre ont accepté. Contre moins d'un sur cinq sans le petit oui.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "sans petit oui",
+            "valeur": 0.17,
+            "mot": "cinq",
+            "rouge": true
+          },
+          {
+            "texte": "après un petit oui",
+            "valeur": 0.76,
+            "mot": "quatre"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "cohérent": "flash",
+        "service": "pop",
+        "suite.": "impact"
+      },
+      "texte": "Après un premier oui, tu veux rester cohérent avec toi-même. Alors quand on te demande « juste un petit service »… méfie-toi de la suite.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "« juste un petit service »",
+            "mot": "service",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as du mal à dire non ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

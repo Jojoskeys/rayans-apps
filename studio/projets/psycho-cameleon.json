@@ -1,0 +1,142 @@
+{
+  "slug": "psycho-cameleon",
+  "titre": "L'effet caméléon",
+  "titre_youtube": "Pourquoi tu imites les gens sans t'en rendre compte ?",
+  "serie": "Pourquoi tu… #39",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tu copies sans le savoir",
+  "sources": [
+    "Chartrand, T. L. & Bargh, J. A. (1999). The chameleon effect: The perception-behavior link and social interaction. Journal of Personality and Social Psychology, 76(6), 893-910 : on imite sans s'en rendre compte les gestes de la personne en face (toucher son visage, bouger le pied), et être imité augmente la sympathie et rend l'échange plus fluide"
+  ],
+  "legende": "Ton ami se touche le visage… et toi aussi, sans le vouloir. On imite les gestes des autres sans s'en rendre compte, et ça rend les gens plus sympathiques. C'est l'effet caméléon.\n\nTu as déjà remarqué que tu imites quelqu'un ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#relations",
+    "#communication",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "imites": "pop",
+        "compte": "impact"
+      },
+      "texte": "Pourquoi tu imites les gestes des gens… sans même t'en rendre compte ?",
+      "visuel": {
+        "perso": {
+          "nb": 2,
+          "jaunes": 2,
+          "mot": "imites"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1999,": "pop",
+        "visage…": "pop",
+        "pied.": "pop"
+      },
+      "texte": "En 1999, des chercheurs ont fait parler des gens avec un complice. Le complice se frottait le visage… ou bougeait le pied.",
+      "visuel": {
+        "annee": "1999",
+        "icones": [
+          {
+            "nom": "Smile",
+            "mot": "visage",
+            "texte": "se frotter le visage"
+          },
+          {
+            "nom": "Footprints",
+            "mot": "pied",
+            "texte": "bouger le pied"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "pareil",
+        "texte": "L'effet caméléon"
+      },
+      "accents": {
+        "pareil": "flash",
+        "visage": "pop",
+        "pied": "pop"
+      },
+      "texte": "Sans le savoir, les participants faisaient pareil : plus de frottements du visage d'un côté, plus de mouvements de pied de l'autre.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "sans le geste",
+            "valeur": 0.3,
+            "mot": "pareil"
+          },
+          {
+            "texte": "avec le geste",
+            "valeur": 0.75,
+            "mot": "pareil"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "imitait": "pop",
+        "sympathique.": "flash"
+      },
+      "texte": "Et dans une autre partie de l'étude, ceux que le complice imitait discrètement le trouvaient plus sympathique.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "sympathique",
+          "bulle": "« il est sympa »"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "comme": "flash",
+        "aimes": "pop"
+      },
+      "texte": "Imiter, c'est une façon de dire « je suis comme toi ». C'est pour ça que tu imites surtout les gens que tu aimes bien.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "« je suis comme toi »",
+            "mot": "comme"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as déjà remarqué que tu imites quelqu'un ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

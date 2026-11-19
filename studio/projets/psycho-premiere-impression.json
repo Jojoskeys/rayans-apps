@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-premiere-impression",
+  "titre": "La première impression",
+  "titre_youtube": "Pourquoi tu juges quelqu'un en une fraction de seconde ?",
+  "serie": "Pourquoi tu… #24",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Un dixième de seconde suffit",
+  "sources": [
+    "Willis, J. & Todorov, A. (2006). First impressions: Making up your mind after a 100-ms exposure to a face. Psychological Science, 17(7), 592-598 : après avoir vu un visage 0,1 seconde, les jugements (confiance, sympathie…) sont déjà très proches de ceux faits sans limite de temps ; plus de temps augmente surtout la confiance dans son jugement"
+  ],
+  "legende": "Un dixième de seconde : c'est le temps qu'il te faut pour te faire une idée de quelqu'un. Et regarder plus longtemps ne change presque rien… à part te rendre plus sûr de toi.\n\nTu te fies à ta première impression ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#relations",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_pi_accroche",
+      "accents": {
+        "idée": "pop",
+        "seconde": "impact"
+      },
+      "texte": "Pourquoi tu te fais une idée de quelqu'un… en moins d'une seconde ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_etude",
+      "titre": {
+        "mot": "dixième",
+        "texte": "Un dixième de seconde"
+      },
+      "accents": {
+        "2006,": "pop",
+        "dixième": "flash",
+        "temps.": "impact"
+      },
+      "texte": "En 2006, des chercheurs ont montré des visages pendant un dixième de seconde. Et les gens les jugeaient déjà presque comme avec tout leur temps."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_confiance",
+      "accents": {
+        "longtemps": "pop",
+        "sûrs": "impact"
+      },
+      "texte": "Regarder plus longtemps ne changeait presque pas leur avis. Ça les rendait juste… plus sûrs d'eux."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_piege",
+      "accents": {
+        "piège": "impact",
+        "juste.": "pop",
+        "défend": "whoosh"
+      },
+      "texte": "Le piège : une première impression n'est pas toujours juste. Mais ton cerveau la défend quand même."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "deuxième": "flash",
+        "autres.": "impact"
+      },
+      "texte": "L'astuce : donne-toi une deuxième chance de juger. Et donne-la aux autres."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu te fies à ta première impression ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

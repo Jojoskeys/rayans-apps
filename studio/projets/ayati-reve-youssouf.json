@@ -1,0 +1,132 @@
+{
+  "slug": "ayati-reve-youssouf",
+  "titre": "Le rêve de Youssouf",
+  "titre_youtube": "Onze étoiles, le soleil et la lune se prosternaient devant lui… Le rêve de Youssouf",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Onze étoiles, le soleil et la lune",
+  "sourates": {
+    "12": "Sourate Youssouf"
+  },
+  "sources": [
+    "Coran 12:3-6 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 12, Yusuf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : ni Youssouf ni son père Yaqoub ne sont montrés ; on voit la nuit, les onze étoiles, le soleil et la lune, et la maison."
+  ],
+  "legende": "Un enfant se réveille et dit à son père : « J'ai vu onze étoiles, le soleil et la lune se prosterner devant moi. » Son père lui répond : « Ne raconte surtout pas ce rêve à tes frères. » Le début du « plus beau des récits ». Sourate Youssouf (12:3-6).\n\nAbonne-toi pour la suite de l'histoire de Youssouf.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#youssouf",
+    "#yusuf",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "yr_etoiles",
+      "ref": "12:3-4",
+      "accents": {
+        "Onze": "flash",
+        "lune…": "battement",
+        "récits": "impact"
+      },
+      "texte": "Onze étoiles, le soleil et la lune… prosternés devant un enfant. C'est le rêve qui ouvre le plus beau des récits du Coran."
+    },
+    {
+      "type": "narration",
+      "scene": "yr_maison",
+      "ref": "12:3",
+      "titre": {
+        "mot": "meilleur",
+        "texte": "Le rêve de Youssouf"
+      },
+      "accents": {
+        "meilleur": "impact",
+        "Youssouf,": "pop"
+      },
+      "texte": "Allah le dit Lui-même : c'est le meilleur des récits. Celui de Youssouf, fils de Yaqoub."
+    },
+    {
+      "type": "narration",
+      "scene": "yr_reveil",
+      "ref": "12:4",
+      "accents": {
+        "matin,": "pop",
+        "père.": "battement"
+      },
+      "texte": "Un matin, le petit Youssouf vient voir son père."
+    },
+    {
+      "type": "verset",
+      "scene": "yr_etoiles",
+      "ref": "12:4"
+    },
+    {
+      "type": "narration",
+      "scene": "yr_etoiles",
+      "ref": "12:4",
+      "accents": {
+        "onze": "flash",
+        "soleil": "pop",
+        "lune.": "pop",
+        "prosterner": "impact"
+      },
+      "texte": "« Ô mon père ! J'ai vu en rêve onze étoiles, et aussi le soleil et la lune. Je les ai vus se prosterner devant moi. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yr_secret",
+      "ref": "12:5",
+      "accents": {
+        "comprend": "battement",
+        "frères.": "impact",
+        "comploter": "secousse"
+      },
+      "texte": "Son père comprend tout de suite. « Ô mon fils, ne raconte pas ce rêve à tes frères. Ils pourraient comploter contre toi. Le Diable est pour l'homme un ennemi déclaré. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yr_promesse",
+      "ref": "12:6",
+      "accents": {
+        "choisira,": "flash",
+        "rêves.": "pop",
+        "bienfait": "battement"
+      },
+      "texte": "« Ton Seigneur te choisira, et t'apprendra l'interprétation des rêves. Il complètera Son bienfait sur toi, comme Il l'a fait avant pour Ibrahim et Ishaq. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yr_lecon",
+      "accents": {
+        "années": "pop",
+        "puits,": "impact",
+        "palais…": "flash",
+        "long.": "battement"
+      },
+      "texte": "Ce rêve, il faudra des années pour qu'il se réalise. Un puits, une prison, un palais… Allah tient toujours Sa promesse. Même quand le chemin est long."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "puits.": "impact"
+      },
+      "texte": "Abonne-toi : la suite, c'est Youssouf au fond du puits."
+    }
+  ]
+}

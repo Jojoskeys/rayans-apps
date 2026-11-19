@@ -1,0 +1,105 @@
+{
+  "slug": "ayati-parole-repetee",
+  "titre": "Encore et encore",
+  "titre_youtube": "Pourquoi le Coran répète-t-il les mêmes rappels ?",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Pourquoi répéter ?",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:51 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Allah dit : « Nous leur avons exposé la Parole, rappel après rappel, afin qu'ils se souviennent. » Le Coran revient sur les mêmes vérités, parce que le cœur oublie. Sourate Al-Qasas (28:51).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#rappel",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "calligraphie",
+      "ref": "28:51",
+      "accents": {
+        "répète-t-il": "pop",
+        "rappels": "battement"
+      },
+      "texte": "Pourquoi le Coran répète-t-il si souvent les mêmes histoires et les mêmes rappels ?"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_nuits",
+      "ref": "28:51",
+      "titre": {
+        "mot": "miséricorde",
+        "texte": "Encore et encore"
+      },
+      "accents": {
+        "miséricorde": "flash",
+        "sourate.": "pop"
+      },
+      "texte": "Moussa, le Jour dernier, la miséricorde d'Allah… On les retrouve de sourate en sourate."
+    },
+    {
+      "type": "verset",
+      "scene": "qadr_nuits",
+      "ref": "28:51"
+    },
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:51",
+      "accents": {
+        "Parole,": "pop",
+        "rappel": "battement",
+        "souviennent.": "flash"
+      },
+      "texte": "« Nous leur avons exposé la Parole, rappel après rappel, afin qu'ils se souviennent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "oublie.": "impact",
+        "patience.": "flash"
+      },
+      "texte": "Ce n'est pas qu'on ne sait pas. C'est qu'on oublie. Alors Allah nous le redit, avec patience."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "jamais": "pop",
+        "moment.": "battement"
+      },
+      "texte": "Un rappel que tu as déjà entendu n'est jamais de trop. Il arrive peut-être pile au bon moment."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

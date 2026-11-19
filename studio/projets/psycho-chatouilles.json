@@ -1,0 +1,95 @@
+{
+  "slug": "psycho-chatouilles",
+  "titre": "Se chatouiller soi-même",
+  "titre_youtube": "Pourquoi tu ne peux pas te chatouiller toi-même ?",
+  "serie": "Pourquoi tu… #8",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Essaie, là, maintenant",
+  "sources": [
+    "Blakemore, S.-J., Wolpert, D. M. & Frith, C. D. (1998). Central cancellation of self-produced tickle sensation. Nature Neuroscience, 1(7), 635-640 : au scanner, les zones du toucher réagissent moins quand le toucher vient de soi ; le cervelet prédit la sensation",
+    "Blakemore, S.-J., Frith, C. D. & Wolpert, D. M. (1999). Spatio-temporal prediction modulates the perception of self-produced stimuli. Journal of Cognitive Neuroscience, 11(5), 551-559 : avec un robot qui reproduit le geste, un retard de 0,2 seconde rend la chatouille plus forte",
+    "Weiskrantz, L., Elliott, J. & Darlington, C. (1971). Preliminary observations on tickling oneself. Nature, 230, 598-599 : on ne peut pas se chatouiller soi-même"
+  ],
+  "legende": "Essaie de te chatouiller : rien. Quelqu'un d'autre fait le même geste : impossible de ne pas rire. Ton cerveau prévoit tes propres gestes… et coupe le son. Des chercheurs ont trouvé la ruse pour le tromper.\n\nTu as essayé de te chatouiller ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#chatouilles",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ch_accroche",
+      "accents": {
+        "chatouiller": "pop",
+        "maintenant.": "impact"
+      },
+      "texte": "Pourquoi tu n'arrives pas à te chatouiller toi-même ? Essaie, là, maintenant."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ch_prediction",
+      "titre": {
+        "mot": "prévoit",
+        "texte": "Ton cerveau te devance"
+      },
+      "accents": {
+        "prévoit": "whoosh",
+        "peau,": "pop",
+        "sentir.": "impact"
+      },
+      "texte": "Ton cerveau prévoit chacun de tes gestes. Avant même que tes doigts touchent ta peau, il sait déjà ce que tu vas sentir."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ch_volume",
+      "accents": {
+        "volume.": "whoosh",
+        "1998,": "pop",
+        "moins.": "impact"
+      },
+      "texte": "Alors il baisse le volume. En 1998, des chercheurs l'ont vu au scanner : quand le toucher vient de toi, les zones du toucher réagissent beaucoup moins."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ch_robot",
+      "accents": {
+        "ruse": "pop",
+        "robot": "pop",
+        "retard.": "whoosh",
+        "davantage.": "flash"
+      },
+      "texte": "Puis ils ont trouvé une ruse : un petit robot qui reproduit ton geste, avec un léger retard. Deux dixièmes de seconde… et ça chatouille davantage."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ch_surprise",
+      "accents": {
+        "surprise.": "flash",
+        "lui-même.": "impact"
+      },
+      "texte": "La chatouille, c'est la surprise. Et ton cerveau ne peut pas se surprendre lui-même."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu as essayé de te chatouiller pendant la vidéo ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

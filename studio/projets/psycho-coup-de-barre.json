@@ -1,0 +1,144 @@
+{
+  "slug": "psycho-coup-de-barre",
+  "titre": "Le coup de barre",
+  "titre_youtube": "Pourquoi tu as un coup de barre après manger ?",
+  "serie": "Pourquoi tu… #27",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ce n'est pas que ton repas",
+  "sources": [
+    "Monk, T. H. (2005). The post-lunch dip in performance. Clinics in Sports Medicine, 24(2), e15-e23 : la baisse de vigilance du début d'après-midi vient en partie de l'horloge interne et existe même sans repas",
+    "Milner, C. E. & Cote, K. A. (2009). Benefits of napping in healthy adults. Journal of Sleep Research, 18(2), 272-281 : une sieste courte (10 à 20 minutes) améliore la vigilance sans laisser groggy"
+  ],
+  "legende": "14 heures, tu as mangé, et tes paupières pèsent une tonne. Le repas joue un peu… mais ton horloge interne prévoit déjà une petite baisse à cette heure-là, même sans manger.\n\nTu as un coup de barre l'après-midi ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#sommeil",
+    "#energie",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "barre": "impact",
+        "l'après-midi": "pop"
+      },
+      "texte": "Pourquoi tu as un coup de barre au début de l'après-midi ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« zzz… »",
+          "mot": "barre"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "repas.": "pop",
+        "partie": "impact"
+      },
+      "texte": "On accuse souvent le repas. Mais ce n'est qu'une partie de l'histoire.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "UtensilsCrossed",
+            "mot": "repas",
+            "texte": "le repas ?"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "horloge",
+        "texte": "Le creux de l'après-midi"
+      },
+      "accents": {
+        "horloge": "flash",
+        "baisse": "whoosh",
+        "mangé.": "impact"
+      },
+      "texte": "Ton horloge interne prévoit une petite baisse de vigilance en début d'après-midi. Des études la retrouvent même chez des gens qui n'ont pas mangé.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Clock",
+            "mot": "horloge",
+            "texte": "14 h"
+          }
+        ],
+        "pastilles": [
+          {
+            "texte": "même sans manger",
+            "mot": "mangé"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "gros": "pop",
+        "courte": "pop",
+        "forte.": "impact"
+      },
+      "texte": "Un gros repas, surtout gras ou très sucré, et une nuit trop courte la rendent encore plus forte.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Pizza",
+            "mot": "gros",
+            "texte": "gros repas"
+          },
+          {
+            "nom": "BatteryLow",
+            "mot": "courte",
+            "texte": "nuit courte"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "sieste": "flash",
+        "20": "pop",
+        "fatigué.": "impact"
+      },
+      "texte": "L'astuce : une sieste de 10 à 20 minutes. Pas plus, sinon tu te réveilles encore plus fatigué.",
+      "visuel": {
+        "chiffre": {
+          "texte": "10 – 20 min",
+          "mot": "20",
+          "sous": "la sieste idéale"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as un coup de barre l'après-midi ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

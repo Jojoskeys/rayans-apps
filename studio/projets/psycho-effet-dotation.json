@@ -1,0 +1,135 @@
+{
+  "slug": "psycho-effet-dotation",
+  "titre": "L'effet de dotation",
+  "titre_youtube": "Pourquoi ce qui est à toi vaut plus cher à tes yeux ?",
+  "serie": "Pourquoi tu… #45",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Une tasse vaut deux fois plus… si elle est à toi",
+  "sources": [
+    "Kahneman, D., Knetsch, J. L. & Thaler, R. H. (1990). Experimental tests of the endowment effect and the Coase theorem. Journal of Political Economy, 98(6), 1325-1348 : les étudiants à qui on donnait une tasse demandaient environ deux fois plus pour la vendre que ce que les autres étaient prêts à payer (environ 7 $ contre 3 $)"
+  ],
+  "legende": "Tu revends un objet, et tout le monde le trouve trop cher. Normal : dès qu'une chose est à toi, ton cerveau lui donne plus de valeur. Une expérience avec des tasses l'a mesuré : deux fois plus.\n\nTu as du mal à revendre tes affaires ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#argent",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "cher…": "impact",
+        "payer": "pop"
+      },
+      "texte": "Pourquoi tes affaires te semblent valoir plus cher… que ce que les autres veulent payer ?",
+      "visuel": {
+        "perso": {
+          "icone": "Package",
+          "mot": "affaires"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1990,": "pop",
+        "tasse": "pop",
+        "l'acheter.": "pop"
+      },
+      "texte": "En 1990, des chercheurs ont donné une tasse à la moitié d'une classe. L'autre moitié pouvait l'acheter.",
+      "visuel": {
+        "annee": "1990",
+        "icones": [
+          {
+            "nom": "Coffee",
+            "mot": "tasse",
+            "texte": "la tasse"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "sept": "flash",
+        "trois.": "impact"
+      },
+      "texte": "Ceux qui avaient la tasse voulaient environ sept dollars pour la vendre. Ceux qui ne l'avaient pas proposaient à peine trois.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "acheteurs",
+            "valeur": 0.35,
+            "mot": "trois"
+          },
+          {
+            "texte": "propriétaires",
+            "valeur": 0.8,
+            "mot": "sept"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "titre": {
+        "mot": "dotation",
+        "texte": "L'effet de dotation"
+      },
+      "accents": {
+        "Même": "pop",
+        "dotation": "flash",
+        "yeux.": "pop"
+      },
+      "texte": "Même tasse, juste quelques minutes après. C'est l'effet de dotation : ce qui est à toi vaut plus à tes yeux.",
+      "visuel": {
+        "chiffre": {
+          "texte": "× 2",
+          "mot": "dotation",
+          "sous": "la valeur de ce qui est à toi"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "mal": "impact",
+        "revends,": "pop",
+        "l'acheter": "flash"
+      },
+      "texte": "Perdre quelque chose fait plus mal que gagner. Alors quand tu revends, demande-toi : combien je paierais pour l'acheter ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« je l'achèterais combien ? »",
+          "mot": "demande-toi"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as du mal à revendre tes affaires ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

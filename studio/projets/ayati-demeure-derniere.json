@@ -1,0 +1,109 @@
+{
+  "slug": "ayati-demeure-derniere",
+  "titre": "La Demeure dernière",
+  "titre_youtube": "Le paradis est réservé à ceux qui ne cherchent pas ça…",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Ils ne cherchaient pas à être au-dessus",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:83-84 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Allah dit à qui est réservée la Demeure dernière : à ceux qui ne cherchent ni à s'élever au-dessus des autres, ni à semer le désordre. Pas les plus riches. Pas les plus connus. Sourate Al-Qasas (28:83-84).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#humilite",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qr_engloutie",
+      "ref": "28:83",
+      "accents": {
+        "au-dessus": "impact",
+        "Pharaon": "pop",
+        "paradis.": "flash"
+      },
+      "texte": "Qâroûn voulait être au-dessus de tout le monde. Pharaon aussi. Et Allah dit clairement à qui est réservé le paradis."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_mission",
+      "ref": "28:83",
+      "titre": {
+        "mot": "riches.",
+        "texte": "La Demeure dernière"
+      },
+      "accents": {
+        "riches.": "pop",
+        "forts.": "pop",
+        "célèbres.": "impact"
+      },
+      "texte": "Ce n'est pas pour les plus riches. Ni pour les plus forts. Ni pour les plus célèbres."
+    },
+    {
+      "type": "verset",
+      "scene": "qadr_aube",
+      "ref": "28:83"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:83",
+      "accents": {
+        "réservons": "battement",
+        "s'élever": "impact",
+        "fin": "flash"
+      },
+      "texte": "« Cette Demeure dernière, Nous la réservons à ceux qui ne cherchent ni à s'élever sur terre, ni à y semer le désordre. Et la belle fin appartient à ceux qui craignent Allah. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "ref": "28:84",
+      "accents": {
+        "bien": "pop",
+        "mieux": "flash"
+      },
+      "texte": "« Celui qui vient avec le bien aura mieux encore. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "accents": {
+        "au-dessus": "impact",
+        "humble.": "battement",
+        "occupe.": "pop"
+      },
+      "texte": "Tu n'as pas besoin d'être au-dessus des autres. Tu as besoin d'être bon, et humble. Le reste, Allah s'en occupe."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

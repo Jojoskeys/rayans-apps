@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-repetition-verite",
+  "titre": "L'illusion de vérité",
+  "titre_youtube": "Pourquoi tu finis par croire une info qu'on te répète souvent ?",
+  "serie": "Pourquoi tu… #57",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Répété = cru",
+  "sources": [
+    "Hasher, L., Goldstein, D. & Toppino, T. (1977). Frequency and the conference of referential validity. Journal of Verbal Learning and Verbal Behavior, 16(1), 107-112 : une affirmation entendue plusieurs fois paraît plus vraie",
+    "Fazio, L. K., Brashier, N. M., Payne, B. K. & Marsh, E. J. (2015). Knowledge does not protect against illusory truth. Journal of Experimental Psychology: General, 144(5), 993-1002 : l'effet marche même quand on connaît la bonne réponse"
+  ],
+  "legende": "Une info vue dix fois sur les réseaux finit par sembler vraie, même si elle est fausse. Ça s'appelle l'effet de vérité illusoire. Et même savoir la bonne réponse ne protège pas complètement.\n\nTu vérifies avant de partager ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#reseauxsociaux",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_rv_accroche",
+      "accents": {
+        "croire": "pop",
+        "plusieurs": "impact"
+      },
+      "texte": "Pourquoi tu finis par croire une info… juste parce que tu l'as vue plusieurs fois ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_etude",
+      "titre": {
+        "mot": "vraies.",
+        "texte": "L'illusion de vérité"
+      },
+      "accents": {
+        "1977,": "pop",
+        "vraies.": "flash",
+        "fausses.": "impact"
+      },
+      "texte": "En 1977, des chercheurs ont fait lire des phrases, vraies ou fausses, à plusieurs reprises. Les phrases déjà vues paraissaient plus vraies. Même les fausses."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_pourquoi",
+      "accents": {
+        "facile": "pop",
+        "vrai.": "flash"
+      },
+      "texte": "Pour ton cerveau, ce qui est facile à lire, parce que déjà vu, ressemble à ce qui est vrai."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_savoir",
+      "accents": {
+        "2015,": "pop",
+        "connais": "impact"
+      },
+      "texte": "Et en 2015, une étude a montré que ça marche même quand tu connais la bonne réponse."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_astuce",
+      "accents": {
+        "partager": "pop",
+        "vient.": "flash",
+        "vue.": "impact"
+      },
+      "texte": "L'astuce : avant de partager une info, demande-toi d'où elle vient. Pas combien de fois tu l'as vue."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu vérifies une info avant de la partager ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

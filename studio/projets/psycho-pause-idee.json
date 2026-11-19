@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-pause-idee",
+  "titre": "La pause qui débloque",
+  "titre_youtube": "Pourquoi la solution arrive quand tu arrêtes d'y penser ?",
+  "serie": "Pourquoi tu… #30",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Arrête d'y penser",
+  "sources": [
+    "Sio, U. N. & Ormerod, T. C. (2009). Does incubation enhance problem solving? A meta-analytic review. Psychological Bulletin, 135(1), 94-120 : faire une pause (incubation) aide à résoudre des problèmes, surtout les problèmes qui demandent de la créativité, et encore plus avec une activité légère pendant la pause"
+  ],
+  "legende": "Tu bloques sur un problème, tu abandonnes… et la solution arrive sous la douche. Ce n'est pas un hasard : ça s'appelle l'incubation, et 117 études l'ont analysée.\n\nTu as tes idées sous la douche ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#creativite",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_pa_accroche",
+      "accents": {
+        "solution": "pop",
+        "penser": "impact"
+      },
+      "texte": "Pourquoi la solution d'un problème arrive souvent… quand tu as arrêté d'y penser ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pa_nom",
+      "titre": {
+        "mot": "l'incubation.",
+        "texte": "L'incubation"
+      },
+      "accents": {
+        "l'incubation.": "flash",
+        "centaine": "pop",
+        "trouver.": "impact"
+      },
+      "texte": "Ça s'appelle l'incubation. En 2009, des chercheurs ont regroupé plus d'une centaine d'études : faire une pause aide vraiment à trouver."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pa_pourquoi",
+      "accents": {
+        "bloqué": "impact",
+        "l'oublier…": "whoosh",
+        "autrement.": "flash"
+      },
+      "texte": "Quand tu t'acharnes, tu restes bloqué sur la même mauvaise piste. La pause te permet de l'oublier… et de voir le problème autrement."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pa_leger",
+      "accents": {
+        "légère": "pop",
+        "douche.": "whoosh"
+      },
+      "texte": "Et ça marche encore mieux avec une activité légère : marcher, ranger, prendre une douche."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pa_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "pause…": "whoosh",
+        "fond.": "flash"
+      },
+      "texte": "L'astuce : quand tu bloques, ne t'acharne pas. Fais une pause… et laisse ton cerveau travailler en fond."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as tes meilleures idées sous la douche ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

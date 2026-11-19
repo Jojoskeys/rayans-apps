@@ -1,0 +1,109 @@
+{
+  "slug": "ayati-suivre-passion",
+  "titre": "Suivre ses envies",
+  "titre_youtube": "« Qui est plus égaré que celui qui suit sa passion ? »",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Le plus égaré de tous",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:48-50 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Quand la vérité leur est venue, ils ont cherché des excuses. Le Coran répond : s'ils ne répondent pas, c'est qu'ils ne suivent que leurs envies. « Et qui est plus égaré que celui qui suit sa passion sans guide venu d'Allah ? » Sourate Al-Qasas (28:50).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#nafs",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qr_tresor",
+      "ref": "28:50",
+      "accents": {
+        "question": "pop",
+        "égaré…": "impact",
+        "envies": "battement"
+      },
+      "texte": "Le Coran pose une question qui fait réfléchir : qui est plus égaré… que celui qui suit ses envies ?"
+    },
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "ref": "28:48",
+      "titre": {
+        "mot": "vérité",
+        "texte": "Suivre ses envies"
+      },
+      "accents": {
+        "vérité": "flash",
+        "Moussa": "pop",
+        "rejeté": "impact"
+      },
+      "texte": "Quand la vérité est arrivée, certains ont dit : « Si seulement il avait reçu la même chose que Moussa ! » Puis ils ont rejeté les deux."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "ref": "28:49",
+      "accents": {
+        "Livre": "pop",
+        "suivrai.": "flash"
+      },
+      "texte": "Allah leur répond : « Apportez donc un Livre meilleur que ces deux-là, et je le suivrai. »"
+    },
+    {
+      "type": "verset",
+      "scene": "ks_lecon",
+      "ref": "28:50"
+    },
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:50",
+      "accents": {
+        "passions.": "impact",
+        "égaré": "battement",
+        "guide": "flash"
+      },
+      "texte": "« S'ils ne te répondent pas, sache qu'ils ne font que suivre leurs passions. Et qui est plus égaré que celui qui suit sa passion, sans guide venu d'Allah ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "preuves": "pop",
+        "changer.": "impact",
+        "raison": "battement"
+      },
+      "texte": "Parfois, ce n'est pas les preuves qui manquent. C'est l'envie de changer. Demande-toi : est-ce que je cherche la vérité, ou est-ce que je cherche à avoir raison ?"
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

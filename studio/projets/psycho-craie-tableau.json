@@ -1,0 +1,142 @@
+{
+  "slug": "psycho-craie-tableau",
+  "titre": "Le bruit de craie",
+  "titre_youtube": "Pourquoi le bruit de la craie sur un tableau est insupportable ?",
+  "serie": "Pourquoi tu… #26",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton oreille amplifie exactement ce son",
+  "sources": [
+    "Halpern, D. L., Blake, R. & Hillenbrand, J. (1986). Psychoacoustics of a chilling sound. Perception & Psychophysics, 39(2), 77-80 : le crissement d'ongles sur un tableau est jugé l'un des sons les plus désagréables",
+    "Reuter, C. & Oehler, M. (2011). Psychoacoustics of chalkboard squeaking. Journal of the Acoustical Society of America, 130(4), 2545 : les fréquences entre environ 2 000 et 4 000 Hz rendent ce son insupportable ; la réaction du corps (sueur) augmente",
+    "Kumar, S., von Kriegstein, K., Friston, K. & Griffiths, T. D. (2012). Features versus feelings: Dissociable representations of the acoustic features and valence of aversive sounds. Journal of Neuroscience, 32(41), 14184-14192 : les sons les plus désagréables (2 500-5 500 Hz) activent fortement l'amygdale"
+  ],
+  "legende": "Un ongle sur un tableau, une fourchette sur une assiette… et tout ton corps se crispe. Ce n'est pas un hasard : ton oreille amplifie justement ces fréquences, et ton cerveau des émotions s'allume.\n\nCe bruit te donne des frissons ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#son",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "tableau": "impact",
+        "frissons": "secousse"
+      },
+      "texte": "Pourquoi le bruit d'un ongle sur un tableau te donne des frissons dans tout le corps ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Presentation",
+            "mot": "tableau",
+            "texte": "« crrriii »"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1986,": "pop",
+        "désagréables.": "pop",
+        "haut.": "impact"
+      },
+      "texte": "En 1986, des chercheurs ont classé les sons les plus désagréables. Le crissement sur un tableau arrivait tout en haut.",
+      "visuel": {
+        "annee": "1986",
+        "barres": [
+          {
+            "texte": "perceuse",
+            "valeur": 0.5,
+            "mot": "classé"
+          },
+          {
+            "texte": "tableau",
+            "valeur": 0.92,
+            "mot": "haut",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "fréquences,",
+        "texte": "Les fréquences qui crissent"
+      },
+      "accents": {
+        "fréquences,": "pop",
+        "4": "flash",
+        "amplifie": "impact"
+      },
+      "texte": "Le problème vient de certaines fréquences, entre 2 000 et 4 000 hertz. Ce sont justement celles que la forme de ton oreille amplifie le plus.",
+      "visuel": {
+        "chiffre": {
+          "texte": "2 000 – 4 000 Hz",
+          "mot": "fréquences",
+          "sous": "amplifiés par ton oreille"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "2012,": "pop",
+        "l'amygdale,": "flash",
+        "l'alerte.": "impact"
+      },
+      "texte": "Et en 2012, une étude a montré que ces sons allument fortement l'amygdale, la zone des émotions et de l'alerte.",
+      "visuel": {
+        "annee": "2012",
+        "icones": [
+          {
+            "nom": "Brain",
+            "mot": "amygdale",
+            "texte": "alerte !"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "danger…": "impact",
+        "craie.": "pop"
+      },
+      "texte": "Ton corps réagit comme à un danger… alors que ce n'est qu'un bout de craie.",
+      "visuel": {
+        "perso": {
+          "bulle": "« stop ! »",
+          "mot": "danger"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ce bruit te donne des frissons rien qu'en y pensant ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

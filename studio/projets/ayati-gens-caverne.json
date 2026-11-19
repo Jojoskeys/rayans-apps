@@ -1,0 +1,150 @@
+{
+  "slug": "ayati-gens-caverne",
+  "titre": "Les gens de la caverne",
+  "titre_youtube": "Ils ont dormi 309 ans… et pensaient avoir dormi un jour. Les gens de la caverne",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Ils pensaient avoir dormi un jour",
+  "sourates": {
+    "18": "Sourate Al-Kahf"
+  },
+  "sources": [
+    "Coran 18:9-22 et 18:25 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 18, Al-Kahf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : les jeunes gens ne sont jamais montrés de près ; on voit la caverne, la lumière du soleil et leur chien à l'entrée."
+  ],
+  "legende": "Des jeunes gens refusent d'adorer autre chose qu'Allah. Ils quittent tout, se réfugient dans une caverne… et se réveillent 309 ans plus tard, persuadés d'avoir dormi un jour. Sourate Al-Kahf (18:9-25).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#alkahf",
+    "#caverne",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "kc_reveil",
+      "ref": "18:19",
+      "accents": {
+        "caverne…": "whoosh",
+        "jour.": "pop",
+        "cents": "impact"
+      },
+      "texte": "Ils se sont endormis dans une caverne… et en se réveillant, ils pensaient avoir dormi un jour. Ils avaient dormi plus de trois cents ans."
+    },
+    {
+      "type": "narration",
+      "scene": "kc_ville",
+      "ref": "18:13-15",
+      "titre": {
+        "mot": "croyaient",
+        "texte": "Les gens de la caverne"
+      },
+      "accents": {
+        "Seigneur.": "battement",
+        "levés": "impact",
+        "terre.": "pop"
+      },
+      "texte": "C'étaient des jeunes gens qui croyaient en leur Seigneur. Autour d'eux, toute la ville adorait d'autres divinités. Eux se sont levés et ont dit : « Notre Seigneur est le Seigneur des cieux et de la terre. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kc_fuite",
+      "ref": "18:16",
+      "accents": {
+        "quittent": "whoosh",
+        "caverne.": "battement"
+      },
+      "texte": "Alors ils quittent tout, et ils vont se réfugier dans une caverne."
+    },
+    {
+      "type": "verset",
+      "scene": "kc_entree",
+      "ref": "18:10"
+    },
+    {
+      "type": "narration",
+      "scene": "kc_entree",
+      "ref": "18:10",
+      "accents": {
+        "miséricorde,": "battement",
+        "droiture": "pop"
+      },
+      "texte": "« Ô notre Seigneur ! Donne-nous de Ta part une miséricorde, et assure-nous la droiture dans tout ce qui nous concerne. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kc_soleil",
+      "ref": "18:11-17",
+      "accents": {
+        "sommeil.": "whoosh",
+        "droite.": "pop",
+        "gauche.": "pop"
+      },
+      "texte": "Et Allah les plonge dans le sommeil. Le soleil, quand il se lève, s'écarte de leur caverne vers la droite. Quand il se couche, il passe à leur gauche."
+    },
+    {
+      "type": "narration",
+      "scene": "kc_chien",
+      "ref": "18:18",
+      "accents": {
+        "éveillés,": "pop",
+        "dormaient.": "battement",
+        "chien": "impact"
+      },
+      "texte": "On les aurait crus éveillés, alors qu'ils dormaient. Allah les tournait sur la droite et sur la gauche… et leur chien était à l'entrée, pattes étendues."
+    },
+    {
+      "type": "narration",
+      "scene": "kc_reveil",
+      "ref": "18:19",
+      "accents": {
+        "réveillent.": "flash",
+        "Combien": "pop",
+        "jour.": "battement"
+      },
+      "texte": "Puis ils se réveillent. L'un d'eux demande : « Combien de temps sommes-nous restés ? » Les autres répondent : « Un jour, ou une partie d'un jour. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kc_siecles",
+      "ref": "18:25",
+      "accents": {
+        "cents": "impact",
+        "neuf": "flash"
+      },
+      "texte": "En vérité, ils étaient restés dans leur caverne trois cents ans… et neuf de plus."
+    },
+    {
+      "type": "narration",
+      "scene": "kc_lecon",
+      "accents": {
+        "protégés,": "battement",
+        "perdu.": "impact"
+      },
+      "texte": "Ils ont tout quitté pour Allah, et Allah les a protégés, même pendant leur sommeil. Celui qui se réfugie auprès de Lui n'est jamais perdu."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres histoires de la sourate Al-Kahf, et partage celle-ci."
+    }
+  ]
+}

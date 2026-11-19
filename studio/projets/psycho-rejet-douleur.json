@@ -1,0 +1,133 @@
+{
+  "slug": "psycho-rejet-douleur",
+  "titre": "La douleur du rejet",
+  "titre_youtube": "Pourquoi être rejeté fait vraiment mal ?",
+  "serie": "Pourquoi tu… #55",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau confond rejet et douleur",
+  "sources": [
+    "Eisenberger, N. I., Lieberman, M. D. & Williams, K. D. (2003). Does rejection hurt? An fMRI study of social exclusion. Science, 302(5643), 290-292 : être exclu d'un simple jeu de balle en ligne active des zones liées à la douleur",
+    "DeWall, C. N. et al. (2010). Acetaminophen reduces social pain: Behavioral and neural evidence. Psychological Science, 21(7), 931-937 : un antidouleur courant réduisait un peu la sensation de rejet (à ne pas utiliser pour ça)"
+  ],
+  "legende": "Être mis de côté, ignoré, rejeté… ça fait mal, au sens propre. Ton cerveau utilise en partie les mêmes circuits que pour la douleur physique. Une expérience avec un simple jeu de balle l'a montré.\n\nTu as déjà ressenti ça ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#emotions",
+    "#relations",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "rejeté": "impact",
+        "blessure": "pop"
+      },
+      "texte": "Pourquoi être rejeté fait mal… presque comme une vraie blessure ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« …et moi ? »",
+          "mot": "rejeté"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2003,": "pop",
+        "balle": "pop",
+        "arrêtaient": "impact"
+      },
+      "texte": "En 2003, des chercheurs ont fait jouer des gens à un simple jeu de balle en ligne, à trois. Puis les deux autres arrêtaient de leur passer la balle.",
+      "visuel": {
+        "annee": "2003",
+        "perso": {
+          "nb": 3,
+          "jaunes": 2,
+          "mot": "balle"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "douleur.",
+        "texte": "La douleur du rejet"
+      },
+      "accents": {
+        "jeu,": "pop",
+        "inconnus.": "pop",
+        "douleur.": "flash"
+      },
+      "texte": "Juste un jeu, avec des inconnus. Et pourtant, leur cerveau s'allumait dans des zones liées à la douleur.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Brain",
+            "mot": "douleur",
+            "texte": "zones de la douleur"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "antidouleur": "pop",
+        "conseil": "impact",
+        "liés.": "flash"
+      },
+      "texte": "Une étude a même montré qu'un antidouleur courant réduisait un peu cette sensation. Ce n'est pas un conseil : c'est la preuve que les deux sont liés.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "pas un conseil !",
+            "mot": "conseil",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "exclu": "impact",
+        "l'alarme.": "pop",
+        "normal.": "flash"
+      },
+      "texte": "Pour nos ancêtres, être exclu du groupe était dangereux. Ton cerveau a gardé l'alarme. Alors quand ça fait mal… c'est normal.",
+      "visuel": {
+        "perso": {
+          "nb": 5,
+          "jaunes": 5,
+          "mot": "groupe"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as déjà ressenti cette douleur ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

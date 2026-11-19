@@ -1,0 +1,141 @@
+{
+  "slug": "ayati-youssouf-puits",
+  "titre": "Youssouf au fond du puits",
+  "titre_youtube": "Ses propres frères l'ont jeté dans un puits… Youssouf au fond du puits",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Jeté par ses propres frères",
+  "sourates": {
+    "12": "Sourate Youssouf"
+  },
+  "sources": [
+    "Coran 12:8-18 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 12, Yusuf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos Al-Qasas).",
+    "Choix visuels : ni Youssouf ni Yaqoub ne sont montrés ; les frères sont des silhouettes sans visage, au loin ; on voit le puits, la tunique, la nuit."
+  ],
+  "legende": "Jaloux de l'amour de leur père, ses frères l'emmènent « jouer »… et le jettent au fond d'un puits. Le soir, ils reviennent en pleurant, avec sa tunique tachée d'un faux sang. Leur père répond : « Une belle patience. » Sourate Youssouf (12:8-18).\n\nAbonne-toi pour la suite de l'histoire de Youssouf.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#youssouf",
+    "#patience",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "yp_puits",
+      "ref": "12:15-16",
+      "accents": {
+        "frères": "impact",
+        "puits.": "whoosh",
+        "pleurant": "battement"
+      },
+      "texte": "Ses propres frères l'ont jeté au fond d'un puits. Et le soir même, ils sont rentrés en pleurant devant leur père."
+    },
+    {
+      "type": "narration",
+      "scene": "yp_jalousie",
+      "ref": "12:8-9",
+      "titre": {
+        "mot": "frères",
+        "texte": "Youssouf au fond du puits"
+      },
+      "accents": {
+        "plus": "impact",
+        "Éloignons-le,": "whoosh"
+      },
+      "texte": "Les frères de Youssouf se disent : « Notre père l'aime plus que nous. Éloignons-le, et notre père n'aura d'yeux que pour nous. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yp_jalousie",
+      "ref": "12:10",
+      "accents": {
+        "tuez": "impact",
+        "puits,": "pop"
+      },
+      "texte": "L'un d'eux propose : « Ne le tuez pas. Jetez-le plutôt au fond du puits, une caravane le ramassera. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yp_pere",
+      "ref": "12:11-14",
+      "accents": {
+        "jouer.": "pop",
+        "peur": "battement",
+        "loup": "impact"
+      },
+      "texte": "Ils vont voir leur père : « Laisse-le venir avec nous demain, jouer. Nous veillerons sur lui. » Leur père répond : « J'ai peur que le loup le dévore pendant que vous ne faites pas attention. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yp_puits",
+      "ref": "12:15",
+      "accents": {
+        "jettent": "impact",
+        "noir,": "whoosh",
+        "rappelleras": "flash"
+      },
+      "texte": "Ils l'emmènent… et le jettent au fond du puits. Et là, dans le noir, Allah lui révèle : « Un jour, tu leur rappelleras ce qu'ils ont fait. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yp_tunique",
+      "ref": "12:16-18",
+      "accents": {
+        "soir,": "pop",
+        "loup": "impact",
+        "faux": "secousse"
+      },
+      "texte": "Le soir, ils reviennent en pleurant : « Le loup l'a dévoré ! » Et ils apportent sa tunique, tachée d'un faux sang."
+    },
+    {
+      "type": "verset",
+      "scene": "yp_patience",
+      "ref": "12:18"
+    },
+    {
+      "type": "narration",
+      "scene": "yp_patience",
+      "ref": "12:18",
+      "accents": {
+        "dupe.": "pop",
+        "patience.": "battement",
+        "secours.": "flash"
+      },
+      "texte": "Leur père n'est pas dupe. « Vous avez inventé une histoire. Il ne me reste qu'une belle patience. C'est Allah qu'il faut appeler au secours. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yp_lecon",
+      "accents": {
+        "Allah,": "battement",
+        "début": "pop",
+        "palais.": "flash"
+      },
+      "texte": "Une belle patience : se plaindre à Allah, pas aux gens. Et ce puits, c'est le début du chemin qui mènera Youssouf jusqu'au palais."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage-la.": "pop"
+      },
+      "texte": "Abonne-toi pour la suite de l'histoire de Youssouf, et partage-la."
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "slug": "ayati-nuit-eternelle",
+  "titre": "La nuit éternelle",
+  "titre_youtube": "Et si la nuit ne finissait jamais ? Une question du Coran",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Et si le soleil ne se levait plus ?",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:71-73 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Imagine : la nuit ne finit plus, jamais. Ou le jour ne s'arrête plus, sans aucun repos. Le Coran pose la question… et rappelle que la nuit et le jour sont une miséricorde. Sourate Al-Qasas (28:71-73).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#gratitude",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:71",
+      "accents": {
+        "Imagine": "pop",
+        "jamais.": "impact"
+      },
+      "texte": "Imagine : demain, le soleil ne se lève pas. Ni après-demain. Plus jamais."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "ref": "28:71",
+      "titre": {
+        "mot": "nuit",
+        "texte": "La nuit éternelle"
+      },
+      "accents": {
+        "toujours,": "impact",
+        "lumière": "flash"
+      },
+      "texte": "Le Coran pose la question : « Que diriez-vous si Allah faisait durer la nuit pour toujours, jusqu'au Jour de la Résurrection ? Qui d'autre qu'Allah pourrait vous apporter la lumière ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_levant",
+      "ref": "28:72",
+      "accents": {
+        "l'inverse": "whoosh",
+        "reposer.": "battement"
+      },
+      "texte": "Et l'inverse : un jour sans fin, sans jamais pouvoir te reposer."
+    },
+    {
+      "type": "verset",
+      "scene": "kq_levant",
+      "ref": "28:72"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:73",
+      "accents": {
+        "miséricorde": "battement",
+        "reposiez,": "pop",
+        "reconnaissants.": "flash"
+      },
+      "texte": "« C'est par Sa miséricorde qu'Il a fait pour vous la nuit et le jour : pour que vous vous reposiez, que vous recherchiez Sa grâce, et que vous soyez reconnaissants. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "soir,": "pop",
+        "matin,": "flash",
+        "plus.": "impact"
+      },
+      "texte": "Chaque soir, la nuit qui tombe est un cadeau. Chaque matin, la lumière qui revient aussi. On ne le remarque même plus."
+    },
+    {
+      "type": "narration",
+      "scene": "kc_soleil",
+      "accents": {
+        "nuit…": "whoosh",
+        "lillah.": "battement"
+      },
+      "texte": "Ce soir, quand il fera nuit… dis simplement : Al-hamdou lillah."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

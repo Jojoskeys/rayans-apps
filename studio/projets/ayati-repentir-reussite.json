@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-repentir-reussite",
+  "titre": "La porte reste ouverte",
+  "titre_youtube": "Quoi que tu aies fait, cette porte reste ouverte",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Il n'est jamais trop tard",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:65-67 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Allah demandera : « Qu'avez-vous répondu aux messagers ? » Ce jour-là, les excuses disparaîtront. Mais juste après, une porte reste ouverte : « Celui qui se repent, croit et fait le bien… » Sourate Al-Qasas (28:65-67).\n\nPartage-la à quelqu'un qui pense qu'il est trop tard.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#tawba",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:67",
+      "accents": {
+        "durs…": "impact",
+        "porte.": "flash",
+        "toi.": "battement"
+      },
+      "texte": "Après les versets les plus durs… Allah ouvre une porte. Et cette porte est encore ouverte pour toi."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "ref": "28:65",
+      "titre": {
+        "mot": "messagers",
+        "texte": "La porte reste ouverte"
+      },
+      "accents": {
+        "Résurrection,": "pop",
+        "messagers": "impact"
+      },
+      "texte": "Le jour de la Résurrection, Allah demandera : « Qu'avez-vous répondu aux messagers ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "ref": "28:66",
+      "accents": {
+        "excuses": "impact",
+        "rien": "battement"
+      },
+      "texte": "Ce jour-là, toutes les excuses disparaîtront. Plus personne n'osera rien demander."
+    },
+    {
+      "type": "verset",
+      "scene": "qp_lecon",
+      "ref": "28:67"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_lecon",
+      "ref": "28:67",
+      "accents": {
+        "repent,": "flash",
+        "bien…": "pop",
+        "réussissent.": "battement"
+      },
+      "texte": "« Mais celui qui se repent, qui croit et fait le bien… il se peut qu'il soit parmi ceux qui réussissent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "respires,": "pop",
+        "tard.": "impact",
+        "aujourd'hui.": "flash"
+      },
+      "texte": "Tant que tu respires, ce n'est pas trop tard. Reviens vers Allah, aujourd'hui."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

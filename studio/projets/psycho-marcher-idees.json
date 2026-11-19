@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-marcher-idees",
+  "titre": "Marcher pour avoir des idées",
+  "titre_youtube": "Pourquoi tu as plus d'idées en marchant ?",
+  "serie": "Pourquoi tu… #28",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Lève-toi et marche",
+  "sources": [
+    "Oppezzo, M. & Schwartz, D. L. (2014). Give your ideas some legs: The positive effect of walking on creative thinking. Journal of Experimental Psychology: Learning, Memory, and Cognition, 40(4), 1142-1152 : en marchant, les participants trouvaient en moyenne environ 60 % d'idées en plus qu'assis ; l'effet persiste un peu juste après la marche"
+  ],
+  "legende": "Bloqué sur un devoir, une idée, un problème ? Lève-toi et marche. Des chercheurs de Stanford ont mesuré environ 60 % d'idées en plus en marchant.\n\nTu réfléchis mieux en marchant ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#creativite",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_mi_accroche",
+      "accents": {
+        "idées…": "pop",
+        "marchant": "impact"
+      },
+      "texte": "Pourquoi tu as souvent tes meilleures idées… en marchant ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_mi_etude",
+      "titre": {
+        "mot": "60",
+        "texte": "60 % d'idées en plus"
+      },
+      "accents": {
+        "2014,": "pop",
+        "Assis,": "pop",
+        "60": "flash",
+        "plus.": "impact"
+      },
+      "texte": "En 2014, des chercheurs de Stanford ont demandé à des gens de trouver un maximum d'idées. Assis, ou en marchant. En marchant, ils en trouvaient environ 60 % de plus."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_mi_apres",
+      "accents": {
+        "continuait": "whoosh",
+        "assis.": "pop"
+      },
+      "texte": "Et l'effet continuait un peu, juste après la marche, une fois assis."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_mi_dehors",
+      "accents": {
+        "tapis,": "pop",
+        "mur,": "impact",
+        "compte.": "flash"
+      },
+      "texte": "Même sur un tapis, face à un mur, ça marchait. C'est le fait de marcher qui compte."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_mi_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "bloques,": "impact",
+        "maisons.": "whoosh"
+      },
+      "texte": "L'astuce : la prochaine fois que tu bloques, va faire le tour du pâté de maisons."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu réfléchis mieux en marchant ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

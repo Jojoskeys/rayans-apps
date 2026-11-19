@@ -1,0 +1,86 @@
+{
+  "slug": "psycho-carte-bancaire",
+  "titre": "Payer par carte",
+  "titre_youtube": "Pourquoi tu dépenses plus quand tu payes par carte ?",
+  "serie": "Pourquoi tu… #15",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tu ne sens presque rien",
+  "sources": [
+    "Prelec, D. & Simester, D. (2001). Always leave home without it: A further investigation of the credit-card effect on willingness to pay. Marketing Letters, 12(1), 5-12 : aux enchères pour des places de match, ceux qui payaient par carte proposaient jusqu'à deux fois plus que ceux qui payaient en espèces",
+    "Prelec, D. & Loewenstein, G. (1998). The red and the black: Mental accounting of savings and debt. Marketing Science, 17(1), 4-28 : la « douleur de payer »",
+    "Raghubir, P. & Srivastava, J. (2008). Monopoly money: The effect of payment coupling and form on spending behavior. Journal of Experimental Psychology: Applied, 14(3), 213-225 : on dépense moins quand on paye en espèces"
+  ],
+  "legende": "Avec des billets, tu vois l'argent partir. Avec la carte… presque rien. En 2001, des chercheurs ont vu des gens proposer jusqu'à deux fois plus en payant par carte. Ça a un nom : la douleur de payer.\n\nTu payes plutôt par carte ou en espèces ? Dis-le en commentaire 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#argent",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ca_accroche",
+      "accents": {
+        "carte…": "pop",
+        "billets": "impact"
+      },
+      "texte": "Pourquoi tu dépenses plus quand tu payes par carte… qu'avec des billets ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ca_enchere",
+      "titre": {
+        "mot": "deux",
+        "texte": "Deux fois plus"
+      },
+      "accents": {
+        "enchères": "pop",
+        "carte": "pop",
+        "deux": "flash",
+        "espèces.": "impact"
+      },
+      "texte": "En 2001, des chercheurs ont mis aux enchères des places pour un match. Ceux qui devaient payer par carte ont proposé jusqu'à deux fois plus que ceux qui payaient en espèces."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ca_douleur",
+      "accents": {
+        "douleur": "impact",
+        "partir.": "whoosh",
+        "rien.": "pop"
+      },
+      "texte": "La raison : la « douleur de payer ». Quand tu donnes des billets, tu les vois partir. Avec la carte… tu ne sens presque rien."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ca_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "espèces.": "impact",
+        "part.": "flash"
+      },
+      "texte": "L'astuce : pour les petites dépenses de la semaine, essaie de payer en espèces. Tu verras mieux ce qui part."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu payes plutôt par carte ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

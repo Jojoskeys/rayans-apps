@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-sursaut",
+  "titre": "Le sursaut en s'endormant",
+  "titre_youtube": "Pourquoi tu sursautes au moment de t'endormir ?",
+  "serie": "Pourquoi tu… #11",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Comme si tu tombais dans le vide",
+  "sources": [
+    "American Academy of Sleep Medicine (2014). International Classification of Sleep Disorders, 3e édition (ICSD-3) : les secousses d'endormissement (« sleep starts ») touchent 60 à 70 % des gens ; elles sont bénignes et plus fréquentes avec la caféine, le stress, l'effort intense et le manque de sommeil",
+    "Oswald, I. (1959). Sudden bodily jerks on falling asleep. Brain, 82(1), 92-103 : description des secousses au moment de l'endormissement, souvent avec une sensation de chute",
+    "L'idée du cerveau qui « croit tomber » est une explication possible, pas une certitude : elle est présentée comme telle dans la vidéo."
+  ],
+  "legende": "Tu t'endors tranquillement… et d'un coup, ton corps sursaute, comme si tu tombais dans le vide. Ça a un nom, presque tout le monde en a, et certaines choses le rendent plus fréquent.\n\nÇa t'est déjà arrivé ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#sommeil",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_su_accroche",
+      "accents": {
+        "sursautes": "secousse",
+        "vide": "whoosh"
+      },
+      "texte": "Pourquoi tu sursautes parfois juste au moment de t'endormir… comme si tu tombais dans le vide ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_su_nom",
+      "titre": {
+        "mot": "secousse",
+        "texte": "Le sursaut du sommeil"
+      },
+      "accents": {
+        "secousse": "impact",
+        "70": "flash"
+      },
+      "texte": "Ça a un nom : la secousse d'endormissement. Et c'est très courant : 60 à 70 % des gens en ont déjà eu."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_su_chute",
+      "accents": {
+        "relâchent": "whoosh",
+        "tombes…": "secousse",
+        "rattrape.": "impact"
+      },
+      "texte": "Quand tu t'endors, tes muscles se relâchent d'un coup. Une des explications : ton cerveau, encore à moitié éveillé, croit que tu tombes… et il te rattrape."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_su_causes",
+      "accents": {
+        "café": "pop",
+        "stressé,": "pop",
+        "sommeil.": "pop"
+      },
+      "texte": "Elle arrive plus souvent après un café tard le soir, quand tu es stressé, ou quand tu manques de sommeil."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_su_rassure",
+      "accents": {
+        "danger.": "flash",
+        "brusquement.": "secousse"
+      },
+      "texte": "Rassure-toi : c'est sans danger. C'est juste ton cerveau qui laisse la place au sommeil… un peu brusquement."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'est déjà arrivé ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

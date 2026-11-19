@@ -634,6 +634,8 @@ def fabriquer(chemin_projet, rendre=True):
     recits = [s.get("texte", "") if s["type"] == "narration" else "" for s in projet["segments"]]
     for n_seg, seg in enumerate(projet["segments"]):
         out = {"type": seg["type"], "scene": seg["scene"], "ref": seg.get("ref")}
+        if seg.get("visuel"):  # données d'un décor générique (animation/src/generique.tsx)
+            out["visuel"] = seg["visuel"]
         if seg["type"] == "verset":
             v = verset(seg["ref"])
             audio, minutage, recitateur = (CACHE / v["audio"]) if v["audio"] else None, v["minutage"], "as-Sudais"

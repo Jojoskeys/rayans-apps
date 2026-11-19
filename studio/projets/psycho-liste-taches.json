@@ -1,0 +1,138 @@
+{
+  "slug": "psycho-liste-taches",
+  "titre": "La liste qui calme",
+  "titre_youtube": "Pourquoi écrire une liste te calme tout de suite ?",
+  "serie": "Pourquoi tu… #21",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton cerveau lâche prise",
+  "sources": [
+    "Masicampo, E. J. & Baumeister, R. F. (2011). Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals. Journal of Personality and Social Psychology, 101(4), 667-683 : faire un plan précis pour une tâche non terminée supprime les pensées qui reviennent en boucle",
+    "Scullin, M. K., Krueger, M. L., Ballard, H. K., Pruett, N. & Bliwise, D. L. (2018). The effects of bedtime writing on difficulty falling asleep. Journal of Experimental Psychology: General, 147(1), 139-146 : écrire sa liste de choses à faire 5 minutes avant de dormir aide à s'endormir plus vite (environ 9 minutes)"
+  ],
+  "legende": "Ta tête est pleine de choses à faire… tu écris une liste, et d'un coup tu te sens mieux. Ce n'est pas dans ta tête : ton cerveau arrête de surveiller ce qui est noté.\n\nTu fais des listes ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#organisation",
+    "#sommeil",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "liste…": "pop",
+        "rien": "impact"
+      },
+      "texte": "Pourquoi tu te sens mieux dès que tu écris une liste… alors que tu n'as encore rien fait ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "ListChecks",
+            "mot": "liste",
+            "texte": "ta liste"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "3": "pop",
+        "ouvert": "impact",
+        "boucle.": "whoosh"
+      },
+      "texte": "Tu te souviens de l'épisode 3 ? Ton cerveau garde ouvert tout ce qui n'est pas fini. Et ça tourne en boucle.",
+      "visuel": {
+        "perso": {
+          "bulle": "« et ça… et ça… »",
+          "mot": "boucle"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "plan",
+        "texte": "Le plan qui libère"
+      },
+      "accents": {
+        "2011,": "pop",
+        "plan": "flash",
+        "disparaissent.": "whoosh"
+      },
+      "texte": "En 2011, des chercheurs ont montré qu'il suffit de faire un plan précis pour une tâche… et les pensées qui reviennent disparaissent. Même si la tâche n'est pas faite.",
+      "visuel": {
+        "annee": "2011",
+        "pastilles": [
+          {
+            "texte": "pas faite… mais planifiée",
+            "mot": "plan"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "soir,": "pop",
+        "cinq": "pop",
+        "neuf": "flash"
+      },
+      "texte": "Et le soir, ça aide aussi à dormir : écrire sa liste du lendemain cinq minutes avant de se coucher fait s'endormir environ neuf minutes plus vite.",
+      "visuel": {
+        "chiffre": {
+          "texte": "- 9 min",
+          "mot": "neuf",
+          "sous": "pour s'endormir"
+        },
+        "icones": [
+          {
+            "nom": "Moon",
+            "mot": "soir",
+            "texte": "le soir"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "noté.": "pop",
+        "prise.": "flash"
+      },
+      "texte": "Ton cerveau n'a plus besoin de surveiller : c'est noté. Alors il lâche prise.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "lâche",
+          "icone": "ListChecks"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu fais des listes ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

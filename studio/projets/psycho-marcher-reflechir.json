@@ -1,0 +1,154 @@
+{
+  "slug": "psycho-marcher-reflechir",
+  "titre": "Marcher pour réfléchir",
+  "titre_youtube": "Pourquoi marcher t'aide à trouver des idées ?",
+  "serie": "Pourquoi tu… #42",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "+60 % d'idées en marchant",
+  "sources": [
+    "Oppezzo, M. & Schwartz, D. L. (2014). Give your ideas some legs: The positive effect of walking on creative thinking. Journal of Experimental Psychology: Learning, Memory, and Cognition, 40(4), 1142-1152 : en marchant (même sur un tapis face à un mur), les participants produisaient environ 60 % d'idées créatives en plus qu'assis ; l'effet dure un peu après la marche"
+  ],
+  "legende": "Tu bloques sur un exposé ? Lève-toi et marche. Des chercheurs de Stanford ont mesuré environ 60 % d'idées en plus… même en marchant face à un mur.\n\nTu réfléchis mieux en marchant ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#creativite",
+    "#etudes",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "d'idées": "flash",
+        "marches": "pop"
+      },
+      "texte": "Pourquoi tu trouves plus d'idées quand tu marches ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Footprints",
+            "mot": "marches",
+            "texte": "marcher"
+          },
+          {
+            "nom": "Lightbulb",
+            "mot": "idées",
+            "texte": "idées"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2014,": "pop",
+        "originaux": "pop",
+        "marchant.": "pop"
+      },
+      "texte": "En 2014, des chercheurs de Stanford ont demandé à des étudiants de trouver des usages originaux pour des objets du quotidien. Assis… ou en marchant.",
+      "visuel": {
+        "annee": "2014",
+        "icones": [
+          {
+            "nom": "Armchair",
+            "mot": "Assis",
+            "texte": "assis"
+          },
+          {
+            "nom": "Footprints",
+            "mot": "marchant",
+            "texte": "en marchant"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "60",
+        "texte": "Marcher pour penser"
+      },
+      "accents": {
+        "60": "flash"
+      },
+      "texte": "En marchant, ils trouvaient environ 60 % d'idées en plus.",
+      "visuel": {
+        "chiffre": {
+          "texte": "+ 60 %",
+          "mot": "60",
+          "sous": "d'idées"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "mur": "impact",
+        "mouvement.": "flash",
+        "rassis.": "pop"
+      },
+      "texte": "Même sur un tapis de course, face à un mur blanc. Ce n'est donc pas le paysage : c'est le mouvement. Et l'effet continue un peu après s'être rassis.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "pas le paysage",
+            "mot": "paysage",
+            "rouge": true
+          },
+          {
+            "texte": "le mouvement",
+            "mot": "mouvement"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "idées,": "pop",
+        "calcul": "impact",
+        "finir.": "flash"
+      },
+      "texte": "Attention : marcher aide à trouver des idées, pas à faire un calcul précis. Alors marche pour chercher… et assieds-toi pour finir.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Footprints",
+            "mot": "chercher",
+            "texte": "chercher"
+          },
+          {
+            "nom": "Armchair",
+            "mot": "finir",
+            "texte": "finir"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu réfléchis mieux en marchant ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

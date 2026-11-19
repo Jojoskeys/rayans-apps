@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-retour-court",
+  "titre": "Le trajet retour",
+  "titre_youtube": "Pourquoi le trajet retour paraît toujours plus court ?",
+  "serie": "Pourquoi tu… #18",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Même distance, pas la même durée",
+  "sources": [
+    "van de Ven, N., van Rijswijk, L. & Roy, M. M. (2011). The return trip effect: Why the return trip often seems to take less time. Psychonomic Bulletin & Review, 18(5), 827-832 : le retour paraît environ 22 % plus court ; l'effet vient surtout de l'aller qu'on a jugé plus long que prévu"
+  ],
+  "legende": "Même route, même distance… et pourtant le retour passe toujours plus vite. Des chercheurs l'ont mesuré : environ 22 % plus court dans ta tête. La raison est surprenante.\n\nÇa te fait ça aussi ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#temps",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_rt_accroche",
+      "accents": {
+        "retour": "whoosh",
+        "route": "impact"
+      },
+      "texte": "Pourquoi le trajet retour paraît toujours plus court que l'aller… alors que c'est la même route ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rt_mesure",
+      "titre": {
+        "mot": "22",
+        "texte": "L'effet du retour"
+      },
+      "accents": {
+        "2011,": "pop",
+        "22": "flash",
+        "court.": "impact"
+      },
+      "texte": "En 2011, des chercheurs ont fait faire des trajets aller-retour à des volontaires. Résultat : le retour leur semblait environ 22 % plus court."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rt_attente",
+      "accents": {
+        "sous-estimes": "pop",
+        "prévu…": "impact",
+        "interminable.": "whoosh"
+      },
+      "texte": "La raison : à l'aller, tu sous-estimes souvent le temps. Le trajet est plus long que prévu… et ça te paraît interminable."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rt_retour",
+      "accents": {
+        "long": "pop",
+        "surpris.": "flash"
+      },
+      "texte": "Au retour, ton cerveau s'attend à un long trajet. Alors il est agréablement surpris."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rt_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "plus": "impact",
+        "long.": "flash"
+      },
+      "texte": "L'astuce : avant de partir, prévois un peu plus de temps que nécessaire. Le trajet te paraîtra moins long."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi aussi, le retour te paraît plus court ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "slug": "psycho-mains-froides",
+  "titre": "Les mains froides du stress",
+  "titre_youtube": "Pourquoi tu as les mains froides quand tu stresses ?",
+  "serie": "Pourquoi tu… #54",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton corps se prépare à fuir",
+  "sources": [
+    "Herborn, K. A., Graves, J. L., Jerem, P., Evans, N. P., Nager, R., McCafferty, D. J. & McKeegan, D. E. F. (2015). Skin temperature reveals the intensity of acute stress. Physiology & Behavior, 152, 225-230 : sous un stress soudain, la température de la peau des extrémités baisse",
+    "Cannon, W. B. (1915). Bodily changes in pain, hunger, fear and rage : la réaction « combat ou fuite »"
+  ],
+  "legende": "Avant un oral ou un rendez-vous important, tes mains deviennent glacées ? Ce n'est pas un hasard : ton corps envoie le sang vers tes muscles et ton cœur, et les mains passent en dernier.\n\nTu as les mains froides quand tu stresses ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#stress",
+    "#corps",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "glacées…": "impact",
+        "stressant": "pop"
+      },
+      "texte": "Pourquoi tes mains deviennent glacées… juste avant un oral ou un moment stressant ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Hand",
+            "mot": "mains",
+            "texte": "mains froides"
+          },
+          {
+            "nom": "Snowflake",
+            "mot": "glacées",
+            "texte": "brr"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "titre": {
+        "mot": "alarme",
+        "texte": "Combat ou fuite"
+      },
+      "accents": {
+        "alarme": "impact",
+        "battre": "pop",
+        "fuir.": "whoosh"
+      },
+      "texte": "Quand tu stresses, ton cerveau lance une vieille alarme : se préparer à se battre ou à fuir.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "se battre ou fuir",
+            "mot": "fuir",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "accélère,": "pop",
+        "muscles": "flash",
+        "resserrent.": "impact"
+      },
+      "texte": "Ton cœur accélère, et ton corps envoie le sang là où il compte : les gros muscles et les organes. Les petits vaisseaux des mains se resserrent.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "HeartPulse",
+            "mot": "accélère",
+            "texte": "cœur"
+          },
+          {
+            "nom": "Dumbbell",
+            "mot": "muscles",
+            "texte": "muscles"
+          },
+          {
+            "nom": "Hand",
+            "mot": "resserrent",
+            "texte": "mains : moins de sang"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "thermiques": "pop",
+        "doigts": "pop",
+        "baisse.": "flash"
+      },
+      "texte": "Des caméras thermiques l'ont montré : sous un stress soudain, la température du bout des doigts et du nez baisse.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "calme",
+            "valeur": 0.75,
+            "mot": "baisse"
+          },
+          {
+            "texte": "stress",
+            "valeur": 0.4,
+            "mot": "baisse",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "lentement,": "pop",
+        "soufflant": "whoosh",
+        "danger.": "flash"
+      },
+      "texte": "L'astuce : respire lentement, en soufflant plus longtemps que tu n'inspires. Ça dit à ton corps qu'il n'y a pas de danger.",
+      "visuel": {
+        "chiffre": {
+          "texte": "4 s / 6 s",
+          "mot": "soufflant",
+          "sous": "inspirer / souffler"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as les mains froides quand tu stresses ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

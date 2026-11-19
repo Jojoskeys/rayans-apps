@@ -1,0 +1,141 @@
+{
+  "slug": "psycho-biais-optimisme",
+  "titre": "Le biais d'optimisme",
+  "titre_youtube": "Pourquoi tu crois que ça n'arrive qu'aux autres ?",
+  "serie": "Pourquoi tu… #30",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "« Ça ne m'arrivera pas »",
+  "sources": [
+    "Weinstein, N. D. (1980). Unrealistic optimism about future life events. Journal of Personality and Social Psychology, 39(5), 806-820 : les étudiants jugeaient qu'ils avaient plus de chances que les autres de vivre des événements positifs, et moins de chances de vivre des événements négatifs",
+    "Sharot, T. (2011). The optimism bias. Current Biology, 21(23), R941-R945 : environ 80 % des gens montrent ce biais"
+  ],
+  "legende": "Accident, maladie, rupture… « ça n'arrive qu'aux autres ». Presque tout le monde pense être un peu plus chanceux que la moyenne. C'est le biais d'optimisme, et il a du bon… et du moins bon.\n\nTu penses être plus chanceux que la moyenne ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "malheurs,": "impact",
+        "autres": "pop"
+      },
+      "texte": "Pourquoi tu as l'impression que les malheurs, ça n'arrive qu'aux autres ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« pas à moi »",
+          "mot": "autres"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1980,": "pop",
+        "plus": "pop",
+        "moins": "pop"
+      },
+      "texte": "En 1980, des chercheurs ont demandé à des étudiants : avez-vous plus ou moins de chances que les autres de vivre telle chose ?",
+      "visuel": {
+        "annee": "1980",
+        "perso": {
+          "nb": 10,
+          "jaunes": 0
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "impossible",
+        "texte": "Le biais d'optimisme"
+      },
+      "accents": {
+        "au-dessus": "flash",
+        "dessous.": "whoosh",
+        "impossible": "impact"
+      },
+      "texte": "Pour les bonnes choses, ils se voyaient au-dessus de la moyenne. Pour les mauvaises, en dessous. Mathématiquement, c'est impossible pour tout le monde.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "bonnes choses",
+            "valeur": 0.8,
+            "mot": "au-dessus"
+          },
+          {
+            "texte": "mauvaises",
+            "valeur": 0.25,
+            "mot": "dessous",
+            "rouge": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "huit": "flash",
+        "courage": "pop"
+      },
+      "texte": "Environ huit personnes sur dix ont ce biais. Il donne du courage pour se lancer.",
+      "visuel": {
+        "perso": {
+          "nb": 10,
+          "jaunes": 8,
+          "mot": "huit"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "risques": "impact",
+        "ceinture.": "pop"
+      },
+      "texte": "Mais il pousse aussi à prendre des risques inutiles. Alors garde ton optimisme… et mets quand même ta ceinture.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Sparkles",
+            "mot": "optimisme",
+            "texte": "optimisme"
+          },
+          {
+            "nom": "ShieldCheck",
+            "mot": "ceinture",
+            "texte": "prudence"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu penses être plus chanceux que la moyenne ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

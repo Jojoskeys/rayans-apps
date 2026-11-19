@@ -1,0 +1,105 @@
+{
+  "slug": "ayati-reconnaitre-verite",
+  "titre": "Ils l'ont reconnue",
+  "titre_youtube": "Ils ont entendu le Coran… et ont dit : « C'est la vérité »",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Ils ont reconnu la vérité",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:52-53 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Parmi ceux qui avaient reçu le Livre avant, certains entendent le Coran et disent : « Nous y croyons. C'est la vérité qui vient de notre Seigneur. Déjà avant lui, nous étions soumis. » Sourate Al-Qasas (28:52-53).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#verite",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "ref": "28:53",
+      "accents": {
+        "première": "pop",
+        "vérité.": "flash"
+      },
+      "texte": "Ils ont entendu le Coran pour la première fois. Et ils ont tout de suite reconnu la vérité."
+    },
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:52",
+      "titre": {
+        "mot": "Livre",
+        "texte": "Ils l'ont reconnue"
+      },
+      "accents": {
+        "Livre": "pop",
+        "croient": "flash"
+      },
+      "texte": "Le Coran parle de gens qui avaient déjà reçu un Livre avant lui : ceux-là croient aussi au Coran."
+    },
+    {
+      "type": "verset",
+      "scene": "qadr_aube",
+      "ref": "28:53"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:53",
+      "accents": {
+        "croyons.": "pop",
+        "vérité": "flash",
+        "soumis.": "battement"
+      },
+      "texte": "« Et quand on le leur récite, ils disent : nous y croyons. C'est bien la vérité qui vient de notre Seigneur. Déjà avant lui, nous étions soumis. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "sincère": "pop",
+        "d'excuse": "impact"
+      },
+      "texte": "Un cœur sincère reconnaît la vérité quand il l'entend. Il ne cherche pas d'excuse pour la refuser."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "ouvert.": "pop",
+        "crois.": "flash"
+      },
+      "texte": "Garde ton cœur ouvert. Le jour où la vérité frappe à ta porte, sois prêt à dire : j'y crois."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

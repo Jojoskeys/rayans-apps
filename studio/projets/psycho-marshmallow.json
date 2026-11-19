@@ -1,0 +1,151 @@
+{
+  "slug": "psycho-marshmallow",
+  "titre": "Le test du marshmallow",
+  "titre_youtube": "Pourquoi c'est si dur d'attendre une récompense ?",
+  "serie": "Pourquoi tu… #51",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Un maintenant ou deux plus tard ?",
+  "sources": [
+    "Mischel, W., Ebbesen, E. B. & Zeiss, A. R. (1972). Cognitive and attentional mechanisms in delay of gratification. Journal of Personality and Social Psychology, 21(2), 204-218 : les enfants attendent bien plus longtemps quand ils se distraient ou que la friandise est cachée",
+    "Watts, T. W., Duncan, G. J. & Quan, H. (2018). Revisiting the marshmallow test. Psychological Science, 29(7), 1159-1177 : le lien avec la réussite future est bien plus faible qu'on le pensait, une fois pris en compte le milieu familial"
+  ],
+  "legende": "Un bonbon maintenant, ou deux si tu attends 15 minutes ? Le célèbre test du marshmallow… et ce qu'on a mal compris : la vraie leçon, c'est l'astuce que les enfants utilisaient pour tenir.\n\nTu aurais attendu ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#patience",
+    "#motivation",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "dur": "impact",
+        "plus": "pop"
+      },
+      "texte": "Pourquoi c'est si dur d'attendre… même quand tu sais que tu gagneras plus ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Candy",
+            "mot": "attendre",
+            "texte": "1 maintenant"
+          },
+          {
+            "nom": "Candy",
+            "mot": "plus",
+            "texte": "2 plus tard"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "70,": "pop",
+        "suite,": "pop",
+        "quinze": "flash"
+      },
+      "texte": "Dans les années 70, des chercheurs ont proposé à des enfants : un marshmallow tout de suite, ou deux s'ils attendaient seuls environ quinze minutes.",
+      "visuel": {
+        "annee": "1972",
+        "chiffre": {
+          "texte": "15 min",
+          "mot": "quinze",
+          "sous": "pour en avoir deux"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "immédiate.",
+        "texte": "Maintenant ou plus tard"
+      },
+      "accents": {
+        "lointaine": "whoosh",
+        "immédiate.": "impact",
+        "deux": "flash"
+      },
+      "texte": "Pour ton cerveau, une récompense lointaine vaut moins qu'une récompense immédiate. Même si elle est deux fois plus grosse.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "1 maintenant",
+            "valeur": 0.8,
+            "mot": "immédiate"
+          },
+          {
+            "texte": "2 plus tard (ressenti)",
+            "valeur": 0.5,
+            "mot": "deux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "cacher": "pop",
+        "autre": "pop",
+        "volonté.": "impact"
+      },
+      "texte": "Ce qui aidait le plus les enfants à tenir : cacher le bonbon, ou penser à autre chose. Pas la force de volonté.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "cacher la tentation",
+            "mot": "cacher"
+          },
+          {
+            "texte": "penser à autre chose",
+            "mot": "autre"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "récentes": "pop",
+        "prédit": "impact",
+        "éloigne": "flash"
+      },
+      "texte": "Attention : des études récentes montrent que ce test ne prédit pas vraiment ta réussite future. La vraie leçon, c'est l'astuce : éloigne la tentation.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "EyeOff",
+            "mot": "éloigne",
+            "texte": "hors de vue"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu aurais attendu pour en avoir deux ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

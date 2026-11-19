@@ -1,0 +1,107 @@
+{
+  "slug": "ayati-si-allah-le-veut",
+  "titre": "Si Allah le veut",
+  "titre_youtube": "« Je le ferai demain »… le Coran ajoute deux mots",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Deux mots avant chaque projet",
+  "sourates": {
+    "18": "Sourate Al-Kahf"
+  },
+  "sources": [
+    "Coran 18:23-24 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 18, Al-Kahf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière."
+  ],
+  "legende": "« Et ne dis jamais d'une chose : Je la ferai sûrement demain, sans ajouter : Si Allah le veut. » Deux mots qui changent la façon de voir chaque projet. Sourate Al-Kahf (18:23-24).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#inchallah",
+    "#alkahf",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "kc_soleil",
+      "ref": "18:23",
+      "accents": {
+        "demain.": "whoosh",
+        "deux": "pop"
+      },
+      "texte": "Tu dis souvent : je le ferai demain. Le Coran t'apprend à ajouter deux mots."
+    },
+    {
+      "type": "narration",
+      "scene": "kc_siecles",
+      "ref": "18:22",
+      "titre": {
+        "mot": "consigne",
+        "texte": "Si Allah le veut"
+      },
+      "accents": {
+        "caverne,": "battement",
+        "simple,": "pop"
+      },
+      "texte": "Au milieu de l'histoire des gens de la caverne, Allah donne une consigne simple, pour tous les jours."
+    },
+    {
+      "type": "verset",
+      "scene": "kc_soleil",
+      "ref": "18:23-24"
+    },
+    {
+      "type": "narration",
+      "scene": "kc_siecles",
+      "ref": "18:23-24",
+      "accents": {
+        "demain,": "whoosh",
+        "veut.": "flash",
+        "oublies.": "battement"
+      },
+      "texte": "« Et ne dis jamais d'une chose : je la ferai sûrement demain, sans ajouter : si Allah le veut. Et invoque ton Seigneur quand tu oublies. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "formule": "pop",
+        "travailles,": "battement",
+        "toi.": "flash"
+      },
+      "texte": "Ce n'est pas une formule pour éviter d'agir. Tu prévois, tu travailles, et tu sais que le résultat ne dépend pas que de toi."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "oublié": "battement",
+        "porte": "pop",
+        "penses.": "flash"
+      },
+      "texte": "Et si tu as oublié de le dire, le verset te laisse une porte : souviens-toi de ton Seigneur dès que tu y penses."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels du Coran, et partage cette vidéo."
+    }
+  ]
+}

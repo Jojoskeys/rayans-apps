@@ -1,0 +1,92 @@
+{
+  "slug": "psycho-paresse-groupe",
+  "titre": "La paresse sociale",
+  "titre_youtube": "Pourquoi tu fais moins d'efforts dans un travail de groupe ?",
+  "serie": "Pourquoi tu… #38",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Dans un groupe, on en fait moins",
+  "sources": [
+    "Latané, B., Williams, K. & Harkins, S. (1979). Many hands make light the work: The causes and consequences of social loafing. Journal of Personality and Social Psychology, 37(6), 822-832 : en criant ou applaudissant à 6, chacun ne produisait plus qu'environ 36 % de son effort seul",
+    "Karau, S. J. & Williams, K. D. (1993). Social loafing: A meta-analytic review and theoretical integration. Journal of Personality and Social Psychology, 65(4), 681-706 : l'effet diminue quand la contribution de chacun est visible"
+  ],
+  "legende": "Exposé de groupe : un fait tout, les autres attendent. Ce n'est pas que de la mauvaise volonté : seul, tu cries plus fort qu'à six. Ça s'appelle la paresse sociale, et il y a une solution.\n\nTu as déjà tout fait seul dans un groupe ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#etudes",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_pg_accroche",
+      "accents": {
+        "groupe,": "pop",
+        "seul": "impact"
+      },
+      "texte": "Pourquoi, dans un travail de groupe, tout le monde en fait moins… que s'il était seul ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_etude",
+      "accents": {
+        "1979,": "pop",
+        "crier": "impact",
+        "six.": "pop"
+      },
+      "texte": "En 1979, des chercheurs ont demandé à des gens de crier et d'applaudir le plus fort possible. Seuls, puis à six."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_resultat",
+      "titre": {
+        "mot": "36",
+        "texte": "La paresse sociale"
+      },
+      "accents": {
+        "36": "flash",
+        "compte.": "impact"
+      },
+      "texte": "À six, chacun ne faisait plus qu'environ 36 % de son effort seul. Sans même s'en rendre compte."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_pourquoi",
+      "accents": {
+        "voit": "pop",
+        "économise.": "whoosh"
+      },
+      "texte": "Dans un groupe, ton effort se voit moins. Alors ton cerveau économise."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_astuce",
+      "accents": {
+        "solution": "pop",
+        "nom": "flash",
+        "tout.": "impact"
+      },
+      "texte": "La solution : que chacun ait une partie précise, avec son nom dessus. Quand ta part se voit, tu donnes tout."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu as déjà fait tout le travail seul dans un groupe ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

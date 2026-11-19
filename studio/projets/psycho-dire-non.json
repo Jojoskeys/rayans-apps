@@ -1,0 +1,91 @@
+{
+  "slug": "psycho-dire-non",
+  "titre": "Le pied dans la porte",
+  "titre_youtube": "Pourquoi tu as du mal à dire non après avoir dit oui ?",
+  "serie": "Pourquoi tu… #20",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Un petit oui en entraîne un grand",
+  "sources": [
+    "Freedman, J. L. & Fraser, S. C. (1966). Compliance without pressure: The foot-in-the-door technique. Journal of Personality and Social Psychology, 4(2), 195-202 : 76 % des personnes qui avaient d'abord accepté une petite demande acceptent ensuite un grand panneau dans leur jardin, contre 17 % sans petite demande"
+  ],
+  "legende": "Tu acceptes un petit service… puis un plus gros, et tu n'arrives plus à dire non. En 1966, des chercheurs ont multiplié par quatre les « oui » avec une seule astuce.\n\nTu as du mal à dire non ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#influence",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_dn_accroche",
+      "accents": {
+        "oui": "pop",
+        "non": "impact"
+      },
+      "texte": "Pourquoi, après avoir dit oui à un petit service… tu n'arrives plus à dire non au suivant ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dn_panneau",
+      "accents": {
+        "panneau,": "pop",
+        "moche,": "impact",
+        "17": "flash"
+      },
+      "texte": "En 1966, des chercheurs ont demandé à des gens d'installer un grand panneau, très moche, dans leur jardin. Seulement 17 % ont accepté."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dn_petit",
+      "titre": {
+        "mot": "76",
+        "texte": "Le pied dans la porte"
+      },
+      "accents": {
+        "petite": "pop",
+        "autocollant…": "whoosh",
+        "76": "flash"
+      },
+      "texte": "Mais chez ceux qui avaient d'abord accepté une toute petite demande, coller un petit autocollant… 76 % ont dit oui au grand panneau."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dn_coherence",
+      "accents": {
+        "aide.": "pop",
+        "cohérent": "impact"
+      },
+      "texte": "Après un premier oui, tu te vois comme quelqu'un qui aide. Et tu veux rester cohérent avec cette image."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dn_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "premier": "impact"
+      },
+      "texte": "L'astuce : à chaque demande, demande-toi si tu aurais dit oui… sans le premier oui."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as du mal à dire non ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

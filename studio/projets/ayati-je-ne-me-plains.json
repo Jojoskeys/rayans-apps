@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-je-ne-me-plains",
+  "titre": "Je ne me plains qu'à Allah",
+  "titre_youtube": "Il avait perdu deux fils… voici à qui il se plaignait",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "À qui confier sa tristesse",
+  "sourates": {
+    "12": "Sourate Youssouf"
+  },
+  "sources": [
+    "Coran 12:83-86 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 12, Yusuf (Murattal) », Atcovi, CC0, Wikimedia Commons (même récitateur que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière."
+  ],
+  "legende": "Après avoir perdu Youssouf, puis un deuxième fils, Yaqoub ne crie pas contre le destin. Il dit : « Je ne me plains qu'à Allah de mon déchirement et de mon chagrin. » Sourate Youssouf (12:86).\n\nPartage-la à quelqu'un qui garde sa peine pour lui.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#youssouf",
+    "#patience",
+    "#sabr",
+    "#rappel",
+    "#quran"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "yp_tunique",
+      "ref": "12:84",
+      "accents": {
+        "fils.": "impact",
+        "deuxième.": "battement",
+        "seule": "flash"
+      },
+      "texte": "Il a perdu un fils. Des années plus tard, il en perd un deuxième. Et il ne se plaint qu'à une seule personne."
+    },
+    {
+      "type": "narration",
+      "scene": "yp_patience",
+      "ref": "12:84-85",
+      "titre": {
+        "mot": "Yaqoub",
+        "texte": "Je ne me plains qu'à Allah"
+      },
+      "accents": {
+        "blanchissent": "battement",
+        "détruire": "impact"
+      },
+      "texte": "Yaqoub, le père de Youssouf, pleure tant que ses yeux blanchissent de chagrin. Ses fils lui disent : tu vas te détruire à force d'y penser."
+    },
+    {
+      "type": "verset",
+      "scene": "yp_patience",
+      "ref": "12:86"
+    },
+    {
+      "type": "narration",
+      "scene": "yp_tunique",
+      "ref": "12:86",
+      "accents": {
+        "Allah": "flash",
+        "chagrin.": "battement",
+        "savez": "pop"
+      },
+      "texte": "« Je ne me plains qu'à Allah de mon déchirement et de mon chagrin. Et je sais de la part d'Allah ce que vous ne savez pas. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "semblant": "pop",
+        "pleure,": "battement",
+        "changer.": "flash"
+      },
+      "texte": "La patience, ce n'est pas faire semblant d'aller bien. Il pleure, il souffre… mais il confie sa peine à Celui qui peut tout changer."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "raison": "pop",
+        "retrouvé": "flash"
+      },
+      "texte": "Et la suite de l'histoire lui a donné raison : il a retrouvé ses deux fils."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels du Coran, et partage cette vidéo."
+    }
+  ]
+}

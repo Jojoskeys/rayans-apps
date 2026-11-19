@@ -1,0 +1,95 @@
+{
+  "slug": "psycho-ecrire-emotions",
+  "titre": "Écrire ses émotions",
+  "titre_youtube": "Pourquoi écrire ce que tu ressens te fait du bien ?",
+  "serie": "Pourquoi tu… #59",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Quinze minutes, quatre jours",
+  "sources": [
+    "Pennebaker, J. W. & Beall, S. K. (1986). Confronting a traumatic event: Toward an understanding of inhibition and disease. Journal of Abnormal Psychology, 95(3), 274-281 : des étudiants qui ont écrit 15 minutes par jour pendant 4 jours sur leurs pensées et émotions profondes sont allés moins souvent à l'infirmerie dans les mois suivants",
+    "Frattaroli, J. (2006). Experimental disclosure and its moderators: A meta-analysis. Psychological Bulletin, 132(6), 823-865 : effet petit mais réel sur le bien-être"
+  ],
+  "legende": "Quinze minutes par jour, pendant quatre jours, à écrire ce que tu ressens vraiment. Des étudiants qui l'ont fait sont allés moins souvent à l'infirmerie dans les mois suivants. L'écriture expressive.\n\nTu écris tes émotions ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#bienetre",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ee_accroche",
+      "accents": {
+        "écrire": "pop",
+        "bien": "impact"
+      },
+      "texte": "Pourquoi écrire ce que tu ressens… peut te faire du bien ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ee_etude",
+      "titre": {
+        "mot": "quinze",
+        "texte": "Quinze minutes, quatre jours"
+      },
+      "accents": {
+        "1986,": "pop",
+        "quinze": "flash",
+        "quatre": "flash",
+        "profondément.": "impact"
+      },
+      "texte": "En 1986, un chercheur a demandé à des étudiants d'écrire quinze minutes par jour, pendant quatre jours, sur ce qui les touchait le plus profondément."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ee_resultat",
+      "accents": {
+        "mois": "pop",
+        "moins": "flash",
+        "banals.": "impact"
+      },
+      "texte": "Dans les mois suivants, ils sont allés moins souvent à l'infirmerie que ceux qui avaient écrit sur des sujets banals."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ee_pourquoi",
+      "accents": {
+        "mots": "pop",
+        "ranger.": "flash",
+        "place.": "impact"
+      },
+      "texte": "Mettre des mots sur une émotion aide ton cerveau à la ranger. Elle prend moins de place."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ee_honnete",
+      "accents": {
+        "magique,": "pop",
+        "modeste.": "impact",
+        "professionnel.": "flash"
+      },
+      "texte": "L'effet n'est pas magique, il est modeste. Et si tu vas vraiment mal, parle à quelqu'un, ou à un professionnel."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu écris quand ça ne va pas ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

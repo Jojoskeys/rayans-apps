@@ -1,0 +1,139 @@
+{
+  "slug": "ayati-homme-qui-accourt",
+  "titre": "L'homme qui accourt",
+  "titre_youtube": "On ne connaît même pas son nom… mais il a sauvé Moussa",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "On ne connaît même pas son nom",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:18-21 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : Moussa n'est jamais montré ; l'homme qui accourt est une silhouette sans visage."
+  ],
+  "legende": "Toute la ville sait maintenant qui a tué. Les notables se réunissent pour décider de sa mort… et un homme traverse la ville en courant pour prévenir Moussa. On ne connaît même pas son nom. Sourate Al-Qasas (28:18-21).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qa_course",
+      "ref": "28:20",
+      "accents": {
+        "mort.": "impact",
+        "courant": "whoosh",
+        "nom.": "battement"
+      },
+      "texte": "Les notables veulent sa mort. Et un homme traverse toute la ville en courant pour le prévenir… On ne connaît même pas son nom."
+    },
+    {
+      "type": "narration",
+      "scene": "qa_aube",
+      "ref": "28:18",
+      "titre": {
+        "mot": "lendemain",
+        "texte": "L'homme qui accourt"
+      },
+      "accents": {
+        "lendemain": "pop",
+        "peur,": "battement"
+      },
+      "texte": "Le lendemain matin, Moussa est en ville. Il a peur, il regarde autour de lui."
+    },
+    {
+      "type": "narration",
+      "scene": "qa_cri",
+      "ref": "28:18",
+      "accents": {
+        "cris.": "impact",
+        "provocateur": "pop"
+      },
+      "texte": "Et voilà que l'homme qu'il avait aidé la veille l'appelle encore à grands cris. Moussa lui dit : « Tu es vraiment un provocateur ! »"
+    },
+    {
+      "type": "narration",
+      "scene": "qa_secret",
+      "ref": "28:19",
+      "accents": {
+        "tuer,": "impact",
+        "hier": "secousse",
+        "découvert.": "battement"
+      },
+      "texte": "Quand Moussa veut s'en prendre à leur ennemi, on lui lance : « Veux-tu me tuer, comme tu as tué un homme hier ? » Le secret est découvert."
+    },
+    {
+      "type": "narration",
+      "scene": "qa_course",
+      "ref": "28:20",
+      "accents": {
+        "bout": "pop",
+        "courant.": "whoosh"
+      },
+      "texte": "Et c'est alors qu'un homme arrive du bout de la ville, en courant."
+    },
+    {
+      "type": "verset",
+      "scene": "qa_course",
+      "ref": "28:20"
+    },
+    {
+      "type": "narration",
+      "scene": "qa_conseil",
+      "ref": "28:20",
+      "accents": {
+        "tuer.": "impact",
+        "Quitte": "whoosh",
+        "conseil": "battement"
+      },
+      "texte": "« Ô Moussa ! Les notables se concertent pour te tuer. Quitte la ville. C'est un conseil que je te donne. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qa_depart",
+      "ref": "28:21",
+      "accents": {
+        "sort": "whoosh",
+        "Sauve-moi": "battement"
+      },
+      "texte": "Moussa sort de la ville, inquiet, regardant autour de lui. Il dit : « Seigneur ! Sauve-moi de ce peuple injuste ! »"
+    },
+    {
+      "type": "narration",
+      "scene": "qa_lecon",
+      "accents": {
+        "nom.": "pop",
+        "Coran.": "flash",
+        "perdu.": "battement"
+      },
+      "texte": "Cet homme, on ne connaît même pas son nom. Mais il a couru pour sauver quelqu'un, et son geste est raconté dans le Coran. Un bien fait en silence n'est jamais perdu."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Madyan": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Et pour savoir où Moussa est allé, regarde l'histoire du puits de Madyan sur la chaîne. Abonne-toi pour la suite."
+    }
+  ]
+}

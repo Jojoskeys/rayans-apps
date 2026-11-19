@@ -1,0 +1,109 @@
+{
+  "slug": "ayati-paix-sur-vous",
+  "titre": "« Paix sur vous »",
+  "titre_youtube": "Comment répondre aux gens qui se moquent ? La réponse du Coran",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Ils ne répondent pas aux insultes",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:52-55 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Quand ils entendent des paroles futiles ou méchantes, ils s'en détournent et disent : « À nous nos actes, à vous les vôtres. Paix sur vous. Nous ne cherchons pas les ignorants. » Sourate Al-Qasas (28:55).\n\nPartage-la à quelqu'un qui en a besoin.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#comportement",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:55",
+      "accents": {
+        "moqueries.": "pop",
+        "l'insulte.": "impact",
+        "quatre": "flash"
+      },
+      "texte": "Ils ne répondent pas aux moqueries. Ils ne rendent pas l'insulte. Ils disent quatre mots… et ils s'en vont."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_lumiere",
+      "ref": "28:52-53",
+      "titre": {
+        "mot": "croyants",
+        "texte": "« Paix sur vous »"
+      },
+      "accents": {
+        "Livre": "pop",
+        "vérité": "flash"
+      },
+      "texte": "Allah parle de croyants qui ont reçu le Livre avant le Coran. Quand on leur récite le Coran, ils disent : « Nous y croyons, c'est la vérité de notre Seigneur. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:54",
+      "accents": {
+        "deux": "flash",
+        "patience.": "battement",
+        "bien.": "impact"
+      },
+      "texte": "« Ceux-là recevront deux fois leur récompense, pour leur patience. Ils repoussent le mal par le bien. »"
+    },
+    {
+      "type": "verset",
+      "scene": "qp_priere",
+      "ref": "28:55"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_pardon",
+      "ref": "28:55",
+      "accents": {
+        "détournent": "whoosh",
+        "Paix": "flash",
+        "ignorants.": "battement"
+      },
+      "texte": "« Et quand ils entendent des futilités, ils s'en détournent et disent : à nous nos actes, et à vous les vôtres. Paix sur vous. Nous ne recherchons pas les ignorants. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "internet": "pop",
+        "tout.": "impact",
+        "paix": "flash"
+      },
+      "texte": "Sur internet comme dans la vie, tu n'es pas obligé de répondre à tout. Parfois, la plus belle réponse, c'est : paix sur toi."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

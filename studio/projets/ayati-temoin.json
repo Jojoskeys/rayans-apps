@@ -1,0 +1,105 @@
+{
+  "slug": "ayati-temoin",
+  "titre": "Un témoin par peuple",
+  "titre_youtube": "Le jour où chaque peuple aura un témoin",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Chaque peuple aura son témoin",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:74-75 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Le Jour de la Résurrection, Allah fera sortir de chaque communauté un témoin, puis dira : « Apportez votre preuve ! » Ils sauront alors que la vérité appartient à Allah, et ce qu'ils avaient inventé les abandonnera. Sourate Al-Qasas (28:74-75).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#akhira",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "ref": "28:75",
+      "accents": {
+        "témoin.": "impact",
+        "preuve.": "flash"
+      },
+      "texte": "Ce jour-là, chaque peuple aura un témoin. Et chacun devra apporter sa preuve."
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:74",
+      "titre": {
+        "mot": "Résurrection,",
+        "texte": "Un témoin par peuple"
+      },
+      "accents": {
+        "Résurrection,": "pop",
+        "associés": "impact"
+      },
+      "texte": "Le Jour de la Résurrection, Allah appellera ceux qui adoraient autre chose que Lui : « Où sont ceux que vous prétendiez être Mes associés ? »"
+    },
+    {
+      "type": "verset",
+      "scene": "ks_lecon",
+      "ref": "28:75"
+    },
+    {
+      "type": "narration",
+      "scene": "ks_lecon",
+      "ref": "28:75",
+      "accents": {
+        "témoin,": "pop",
+        "preuve": "impact",
+        "vérité": "flash"
+      },
+      "texte": "« Nous ferons sortir de chaque communauté un témoin, puis Nous dirons : apportez votre preuve ! Ils sauront alors que la vérité est à Allah, et ce qu'ils inventaient les abandonnera. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "inventé": "pop",
+        "vérité.": "flash"
+      },
+      "texte": "Tout ce qu'on a inventé pour se rassurer disparaîtra. Il ne restera que la vérité."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "aujourd'hui": "pop",
+        "jour-là.": "battement"
+      },
+      "texte": "Prépare dès aujourd'hui ce que tu présenteras ce jour-là."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

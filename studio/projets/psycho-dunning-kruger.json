@@ -1,0 +1,142 @@
+{
+  "slug": "psycho-dunning-kruger",
+  "titre": "L'effet Dunning-Kruger",
+  "titre_youtube": "Pourquoi ceux qui savent le moins se croient les meilleurs ?",
+  "serie": "Pourquoi tu… #46",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Moins tu sais, moins tu le vois",
+  "sources": [
+    "Kruger, J. & Dunning, D. (1999). Unskilled and unaware of it. Journal of Personality and Social Psychology, 77(6), 1121-1134 : les participants les moins bons (autour du 12e rang sur 100) s'estimaient vers le 62e rang ; les meilleurs avaient tendance à se sous-estimer"
+  ],
+  "legende": "Celui qui débute est souvent le plus sûr de lui, et l'expert celui qui doute. Ce n'est pas qu'une impression : en 1999, deux chercheurs l'ont mesuré. Ça s'appelle l'effet Dunning-Kruger.\n\nTu as déjà été trop sûr de toi ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#biaiscognitifs",
+    "#confiance",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "moins…": "pop",
+        "sûrs": "impact"
+      },
+      "texte": "Pourquoi ceux qui savent le moins… sont souvent les plus sûrs d'eux ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« facile, je gère »",
+          "mot": "sûrs"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1999,": "pop",
+        "logique": "pop",
+        "classement.": "flash"
+      },
+      "texte": "En 1999, deux chercheurs ont fait passer des tests de logique et de grammaire, puis ont demandé à chacun d'estimer son classement.",
+      "visuel": {
+        "annee": "1999",
+        "icones": [
+          {
+            "nom": "ClipboardCheck",
+            "mot": "tests",
+            "texte": "le test"
+          },
+          {
+            "nom": "ChartColumn",
+            "mot": "classement",
+            "texte": "« je suis où ? »"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "au-dessus",
+        "texte": "L'effet Dunning-Kruger"
+      },
+      "accents": {
+        "bas,": "impact",
+        "au-dessus": "flash"
+      },
+      "texte": "Les moins bons, classés tout en bas, pensaient être au-dessus de la moyenne.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "leur vrai rang",
+            "valeur": 0.15,
+            "mot": "bas",
+            "rouge": true
+          },
+          {
+            "texte": "ce qu'ils pensaient",
+            "valeur": 0.62,
+            "mot": "au-dessus"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "compétences": "impact",
+        "meilleurs,": "pop",
+        "sous-estimer.": "flash"
+      },
+      "texte": "Le problème : pour voir qu'on se trompe, il faut justement les compétences qui nous manquent. Et les meilleurs, eux, avaient tendance à se sous-estimer.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "pour voir son erreur, il faut savoir",
+            "mot": "compétences"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "doutes": "pop",
+        "signe.": "flash"
+      },
+      "texte": "Alors si tu doutes de toi en apprenant quelque chose… c'est peut-être bon signe.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "signe",
+          "bulle": "« je doute… donc j'apprends »"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu as déjà été trop sûr de toi ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

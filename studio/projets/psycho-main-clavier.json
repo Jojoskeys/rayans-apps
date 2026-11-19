@@ -1,0 +1,149 @@
+{
+  "slug": "psycho-main-clavier",
+  "titre": "Écrire à la main",
+  "titre_youtube": "Pourquoi tu retiens mieux en écrivant à la main ?",
+  "serie": "Pourquoi tu… #28",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Ton stylo te force à trier",
+  "sources": [
+    "Mueller, P. A. & Oppenheimer, D. M. (2014). The pen is mightier than the keyboard: Advantages of longhand over laptop note taking. Psychological Science, 25(6), 1159-1168 : les étudiants qui prennent des notes à la main reformulent davantage et répondent mieux aux questions de compréhension",
+    "Morehead, K., Dunlosky, J. & Rawson, K. A. (2019). How much mightier is the pen than the keyboard for note-taking? A replication and extension. Educational Psychology Review, 31(3), 753-780 : l'avantage n'est pas toujours retrouvé ; ce qui compte surtout, c'est de reformuler au lieu de recopier"
+  ],
+  "legende": "Au clavier, tu tapes tout mot pour mot. À la main, tu es trop lent… alors tu résumes avec tes mots. Et c'est justement ça qui t'aide à comprendre.\n\nTu prends tes notes à la main ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#etudes",
+    "#memoire",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "retiens": "pop",
+        "main": "impact"
+      },
+      "texte": "Pourquoi tu retiens souvent mieux quand tu prends tes notes à la main ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "PenLine",
+            "mot": "main",
+            "texte": "à la main"
+          },
+          {
+            "nom": "Keyboard",
+            "mot": "notes",
+            "texte": "au clavier"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2014,": "pop",
+        "main": "pop",
+        "ordinateur.": "pop"
+      },
+      "texte": "En 2014, des chercheurs ont comparé des étudiants qui notaient un cours à la main ou sur ordinateur.",
+      "visuel": {
+        "annee": "2014",
+        "perso": {
+          "nb": 10,
+          "jaunes": 5,
+          "mot": "main"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "résumaient",
+        "texte": "Reformuler, c'est retenir"
+      },
+      "accents": {
+        "recopiaient": "pop",
+        "lents…": "whoosh",
+        "mots.": "flash"
+      },
+      "texte": "Au clavier, ils recopiaient presque mot pour mot. À la main, ils étaient trop lents… alors ils résumaient avec leurs propres mots.",
+      "visuel": {
+        "pastilles": [
+          {
+            "texte": "clavier : copier",
+            "mot": "recopiaient",
+            "rouge": true
+          },
+          {
+            "texte": "main : reformuler",
+            "mot": "résumaient"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "compréhension,": "pop",
+        "mieux.": "flash",
+        "Attention": "impact"
+      },
+      "texte": "Et sur les questions de compréhension, ceux qui écrivaient à la main s'en sortaient mieux. Attention : d'autres études trouvent un effet plus petit.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "clavier",
+            "valeur": 0.5,
+            "mot": "mieux"
+          },
+          {
+            "texte": "main",
+            "valeur": 0.75,
+            "mot": "mieux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "stylo.": "pop",
+        "reformuler": "flash"
+      },
+      "texte": "Le vrai secret, ce n'est pas le stylo. C'est de reformuler avec tes mots au lieu de recopier.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "reformuler",
+          "icone": "PenLine"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu prends tes notes à la main ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -10,6 +10,19 @@ import { ScenesSpectateur } from "./spectateur";
 import { ScenesPourquoi } from "./pourquoi";
 import { ScenesQasas } from "./qasas";
 import { ScenesMadyan } from "./madyan";
+import { ScenesHistoires } from "./histoires";
+import { ScenesKahf } from "./kahf";
+import { ScenesKahf2 } from "./kahf2";
+import { ScenesRecits } from "./recits";
+import { ScenesRecits2 } from "./recits2";
+import { ScenesPourquoi2 } from "./pourquoi2";
+import { ScenesPourquoi3 } from "./pourquoi3";
+import { ScenesPourquoi4 } from "./pourquoi4";
+import { ScenesPourquoi5 } from "./pourquoi5";
+import { ScenesPourquoi6 } from "./pourquoi6";
+import { ScenesPourquoi7 } from "./pourquoi7";
+import { ScenesPourquoi8 } from "./pourquoi8";
+import { ScenesGenerique } from "./generique";
 import { Cta } from "./cta";
 import { Camera, Eclairs, Grain, Progression, Surgissements, Vignette } from "./effets";
 import { Accroche, CarteVerset, Marque, References, SousTitres, Titres } from "./textes";
@@ -40,7 +53,7 @@ const FONDU = 12;
 const Plan_: React.FC<{ plan: Plan; t: Timeline; premier: boolean }> = ({ plan, t, premier }) => {
   const f = useCurrentFrame();
   const o = premier ? 1 : interpolate(f, [0, FONDU], [0, 1], clamp);
-  const Scene = plan.scene === "cta" ? null : (t.style === "ayati" ? { ...ScenesAyati, ...ScenesFil, ...ScenesQadr, ...ScenesQasas, ...ScenesMadyan } : { ...ScenesPsycho, ...ScenesSpectateur, ...ScenesPourquoi })[plan.scene];
+  const Scene = plan.scene === "cta" ? null : (t.style === "ayati" ? { ...ScenesAyati, ...ScenesFil, ...ScenesQadr, ...ScenesQasas, ...ScenesMadyan, ...ScenesHistoires, ...ScenesKahf, ...ScenesKahf2, ...ScenesRecits, ...ScenesRecits2 } : { ...ScenesPsycho, ...ScenesSpectateur, ...ScenesPourquoi, ...ScenesPourquoi2, ...ScenesPourquoi3, ...ScenesPourquoi4, ...ScenesPourquoi5, ...ScenesPourquoi6, ...ScenesGenerique })[plan.scene];
   return (
     <AbsoluteFill style={{ opacity: o }}>
       {plan.scene === "cta" ? (

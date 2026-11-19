@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-vers-madyan",
+  "titre": "Vers l'inconnu",
+  "titre_youtube": "Il partait seul vers l'inconnu… et il a dit ces mots",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Seul, sans savoir où aller",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:21-22 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Moussa quitte l'Égypte seul, sans provisions, sans savoir ce qui l'attend. En prenant la route de Madyan, il dit simplement : « Peut-être que mon Seigneur me guidera sur le droit chemin. » Sourate Al-Qasas (28:22).\n\nPartage-la à quelqu'un qui commence quelque chose de nouveau.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#confiance",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "kc_fuite",
+      "ref": "28:22",
+      "accents": {
+        "seul.": "pop",
+        "provisions,": "pop",
+        "phrase.": "battement"
+      },
+      "texte": "Il partait seul. Sans argent, sans provisions, sans savoir ce qui l'attendait. Et il a dit une seule phrase."
+    },
+    {
+      "type": "narration",
+      "scene": "qa_depart",
+      "ref": "28:21",
+      "titre": {
+        "mot": "fuir",
+        "texte": "Vers l'inconnu"
+      },
+      "accents": {
+        "fuir": "whoosh",
+        "inquiet,": "pop",
+        "injuste.": "battement"
+      },
+      "texte": "Moussa doit fuir l'Égypte. Il sort de la ville, inquiet, et prie : « Seigneur, sauve-moi de ce peuple injuste. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_routes",
+      "ref": "28:22",
+      "accents": {
+        "route": "whoosh",
+        "connaît": "pop"
+      },
+      "texte": "Puis il prend la route de Madyan. Une route qu'il ne connaît pas."
+    },
+    {
+      "type": "verset",
+      "scene": "kq_routes",
+      "ref": "28:22"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_route",
+      "ref": "28:22",
+      "accents": {
+        "Seigneur": "battement",
+        "chemin.": "flash"
+      },
+      "texte": "« Peut-être que mon Seigneur me guidera sur le droit chemin. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "Qui": "flash",
+        "nouveau": "pop",
+        "guidera": "battement"
+      },
+      "texte": "Il ne savait pas où il allait. Mais il savait avec Qui il marchait. Nouvelle ville, nouvelle école, nouveau travail : dis, toi aussi, « peut-être que mon Seigneur me guidera »."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

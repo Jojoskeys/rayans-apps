@@ -1,0 +1,148 @@
+{
+  "slug": "psycho-parler-a-soi",
+  "titre": "Se parler à soi-même",
+  "titre_youtube": "Pourquoi tu te parles à toi-même ? (et pourquoi c'est une bonne idée)",
+  "serie": "Pourquoi tu… #19",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Dis ton prénom, pas « je »",
+  "sources": [
+    "Kross, E., Bruehlman-Senecal, E., Park, J. et al. (2014). Self-talk as a regulatory mechanism: How you do it matters. Journal of Personality and Social Psychology, 106(2), 304-324 : se parler à la troisième personne (avec son prénom) avant un discours réduit l'anxiété et améliore la performance",
+    "Hatzigeorgiadis, A., Zourbanos, N., Galanis, E. & Theodorakis, Y. (2011). Self-talk and sports performance: A meta-analysis. Perspectives on Psychological Science, 6(4), 348-356 : le discours intérieur positif améliore les performances sportives"
+  ],
+  "legende": "Tu te parles tout seul ? Bonne nouvelle : ce n'est pas bizarre, c'est utile. Et une étude de 2014 montre qu'un petit détail change tout : utiliser ton prénom.\n\nTu te parles à toi-même ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#developpementpersonnel",
+    "#cerveau",
+    "#confiance",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "toi-même…": "pop",
+        "idée": "flash"
+      },
+      "texte": "Pourquoi tu te parles à toi-même… et pourquoi c'est une bonne idée ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« allez, vas-y »",
+          "mot": "parles"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "bizarre.": "pop",
+        "32": "flash",
+        "performances.": "impact"
+      },
+      "texte": "Se parler tout seul, ce n'est pas bizarre. Une analyse de 32 études en sport montre que se parler positivement améliore les performances.",
+      "visuel": {
+        "chiffre": {
+          "texte": "32 études",
+          "mot": "32"
+        },
+        "icones": [
+          {
+            "nom": "Trophy",
+            "mot": "performances",
+            "texte": "mieux"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "prénom.",
+        "texte": "Dis ton prénom"
+      },
+      "accents": {
+        "2014.": "pop",
+        "stressant,": "impact",
+        "prénom.": "flash"
+      },
+      "texte": "Mais le plus fort vient d'une étude de 2014. Avant un discours stressant, des gens devaient se parler soit avec « je »… soit avec leur prénom.",
+      "visuel": {
+        "annee": "2014",
+        "pastilles": [
+          {
+            "texte": "« je suis nul »",
+            "mot": "je",
+            "rouge": true
+          },
+          {
+            "texte": "« Léa, tu peux le faire »",
+            "mot": "prénom"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "moins": "pop",
+        "mieux": "impact",
+        "ami.": "flash"
+      },
+      "texte": "Ceux qui utilisaient leur prénom étaient moins anxieux, et ont mieux parlé. Comme si tu te donnais des conseils… à un ami.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "« je »",
+            "valeur": 0.8,
+            "mot": "anxieux,",
+            "rouge": true
+          },
+          {
+            "texte": "prénom",
+            "valeur": 0.4,
+            "mot": "moins"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "prénom.": "pop",
+        "calme.": "flash"
+      },
+      "texte": "La prochaine fois que tu stresses, parle-toi avec ton prénom. Ça met un peu de distance… et ça calme.",
+      "visuel": {
+        "perso": {
+          "bulle": "« [ton prénom], respire »",
+          "mot": "prénom",
+          "jaunes": 1
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu te parles à toi-même ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

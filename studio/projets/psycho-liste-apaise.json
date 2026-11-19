@@ -1,0 +1,91 @@
+{
+  "slug": "psycho-liste-apaise",
+  "titre": "La liste qui apaise",
+  "titre_youtube": "Pourquoi écrire une liste de choses à faire te calme ?",
+  "serie": "Pourquoi tu… #48",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Écrire le plan suffit",
+  "sources": [
+    "Masicampo, E. J. & Baumeister, R. F. (2011). Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals. Journal of Personality and Social Psychology, 101(4), 667-683 : faire un plan précis pour une tâche non finie réduit les pensées qui reviennent sans cesse"
+  ],
+  "legende": "Tu as plein de choses à faire et ta tête tourne en boucle. Écris-les, avec un plan pour chacune : ton cerveau lâche prise. Même sans rien avoir fait encore.\n\nTu fais des to-do lists ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#organisation",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_li_accroche",
+      "accents": {
+        "liste": "pop",
+        "rien": "impact"
+      },
+      "texte": "Pourquoi écrire une liste de choses à faire… te calme, alors que tu n'as encore rien fait ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_li_boucle",
+      "accents": {
+        "ouverte.": "pop",
+        "rappel.": "impact"
+      },
+      "texte": "Une tâche pas finie, ton cerveau la garde ouverte. Elle revient sans arrêt dans ta tête, comme un rappel."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_li_etude",
+      "titre": {
+        "mot": "plan",
+        "texte": "Écrire le plan suffit"
+      },
+      "accents": {
+        "2011,": "pop",
+        "plan": "flash",
+        "diminuent.": "impact"
+      },
+      "texte": "En 2011, des chercheurs ont montré qu'il suffit d'écrire un plan précis pour cette tâche : quand, où, comment. Et les pensées qui tournent en boucle diminuent."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_li_confiance",
+      "accents": {
+        "noté,": "pop",
+        "autre": "flash"
+      },
+      "texte": "Ton cerveau se dit : « c'est noté, quelqu'un s'en occupe ». Et il peut enfin penser à autre chose."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_li_astuce",
+      "accents": {
+        "soir,": "pop",
+        "précis": "flash",
+        "mieux.": "impact"
+      },
+      "texte": "L'astuce : le soir, écris ce qu'il reste à faire, avec un moment précis pour chaque chose. Tu dormiras mieux."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu fais des listes de choses à faire ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

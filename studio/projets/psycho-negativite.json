@@ -1,0 +1,93 @@
+{
+  "slug": "psycho-negativite",
+  "titre": "Le biais de négativité",
+  "titre_youtube": "Pourquoi une critique te marque plus que dix compliments ?",
+  "serie": "Pourquoi tu… #56",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Le négatif pèse plus lourd",
+  "sources": [
+    "Baumeister, R. F., Bratslavsky, E., Finkenauer, C. & Vohs, K. D. (2001). Bad is stronger than good. Review of General Psychology, 5(4), 323-370 : dans presque tous les domaines étudiés, les événements négatifs ont plus d'effet que les positifs de même taille"
+  ],
+  "legende": "Dix compliments, une critique… et c'est la critique qui tourne dans ta tête le soir. Ton cerveau donne plus de poids au négatif. Des chercheurs ont passé en revue des centaines d'études : c'est vrai presque partout.\n\nÇa t'arrive ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#emotions",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_ne_accroche",
+      "accents": {
+        "critique": "impact",
+        "compliments": "pop"
+      },
+      "texte": "Pourquoi une seule critique te marque plus… que dix compliments ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ne_etude",
+      "titre": {
+        "mot": "mauvais",
+        "texte": "Le négatif pèse plus lourd"
+      },
+      "accents": {
+        "2001,": "pop",
+        "mauvais": "impact",
+        "bon.": "flash"
+      },
+      "texte": "En 2001, des chercheurs ont passé en revue des centaines d'études. Leur conclusion tient en une phrase : le mauvais est plus fort que le bon."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ne_exemples",
+      "accents": {
+        "dispute": "pop",
+        "note,": "pop",
+        "gain.": "impact"
+      },
+      "texte": "Une dispute pèse plus qu'une bonne journée. Une mauvaise note, plus qu'une bonne. Une perte, plus qu'un gain."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ne_pourquoi",
+      "accents": {
+        "danger": "impact",
+        "moins.": "pop",
+        "prudence.": "flash"
+      },
+      "texte": "Pour nos ancêtres, rater un danger pouvait coûter la vie. Rater une bonne chose… beaucoup moins. Ton cerveau a gardé cette prudence."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ne_astuce",
+      "accents": {
+        "critique": "pop",
+        "trois": "flash",
+        "dites.": "impact"
+      },
+      "texte": "L'astuce : quand une critique tourne dans ta tête, relis volontairement trois choses positives qu'on t'a dites."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Une critique te reste plus longtemps qu'un compliment ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "slug": "ayati-bien-meilleur",
+  "titre": "Meilleur encore",
+  "titre_youtube": "Fais le bien… Allah te rendra encore mieux",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Ce que ton bien te rapportera",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:84 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "« Quiconque viendra avec le bien aura mieux encore. Et quiconque viendra avec le mal ne sera rétribué que selon ce qu'il a fait. » La générosité d'Allah dépasse ce qu'on donne. Sourate Al-Qasas (28:84).\n\nAbonne-toi pour d'autres rappels du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#bienfaisance",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:84",
+      "accents": {
+        "bien": "pop",
+        "mieux.": "flash"
+      },
+      "texte": "Le bien que tu fais ne te sera pas seulement rendu. Il te sera rendu en mieux."
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_aube",
+      "ref": "28:83",
+      "titre": {
+        "mot": "Demeure",
+        "texte": "Meilleur encore"
+      },
+      "accents": {
+        "Demeure": "flash",
+        "l'orgueil": "impact"
+      },
+      "texte": "Le Coran vient de parler de la Demeure dernière, promise à ceux qui ne cherchent ni l'orgueil ni le désordre sur terre."
+    },
+    {
+      "type": "verset",
+      "scene": "qadr_aube",
+      "ref": "28:84"
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:84",
+      "accents": {
+        "bien": "pop",
+        "mieux": "flash",
+        "fait.": "battement"
+      },
+      "texte": "« Quiconque viendra avec le bien aura mieux encore. Et quiconque viendra avec le mal : ceux qui font le mal ne seront rétribués que selon ce qu'ils ont fait. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "multiplié.": "flash",
+        "grossi.": "pop",
+        "justice": "battement"
+      },
+      "texte": "Le bien est multiplié. Le mal, lui, n'est jamais grossi. C'est la générosité et la justice d'Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "sourire,": "pop",
+        "petit": "battement",
+        "Allah.": "flash"
+      },
+      "texte": "Un sourire, un service, une aumône discrète : aucun bien n'est trop petit pour Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

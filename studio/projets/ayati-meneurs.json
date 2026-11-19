@@ -1,0 +1,116 @@
+{
+  "slug": "ayati-meneurs",
+  "titre": "Ceux qui mènent au Feu",
+  "titre_youtube": "Ils guidaient les gens… vers le Feu. Pharaon et ses armées",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "Fais attention à qui tu suis",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:39-42 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "Pharaon et ses armées se sont crus grands sur terre. Allah les a jetés dans la mer, et a fait d'eux « des meneurs qui appellent au Feu ». Fais attention à qui tu suis. Sourate Al-Qasas (28:39-42).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#pharaon",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "tp_mer",
+      "ref": "28:40-41",
+      "accents": {
+        "immense,": "impact",
+        "perte.": "secousse"
+      },
+      "texte": "Ils avaient une armée immense, des milliers de gens derrière eux. Et ils les ont tous menés… à leur perte."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_orgueil",
+      "ref": "28:39",
+      "titre": {
+        "mot": "soldats",
+        "texte": "Ceux qui mènent au Feu"
+      },
+      "accents": {
+        "grands": "impact",
+        "jamais": "pop"
+      },
+      "texte": "Pharaon et ses soldats se sont crus grands sur terre, sans aucun droit. Ils pensaient qu'ils ne reviendraient jamais vers Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_mer",
+      "ref": "28:40",
+      "accents": {
+        "saisis,": "impact",
+        "mer.": "whoosh",
+        "injustes.": "battement"
+      },
+      "texte": "Alors Allah les a saisis, lui et ses armées, et les a jetés dans la mer. Regarde quelle a été la fin des injustes."
+    },
+    {
+      "type": "verset",
+      "scene": "tp_ruines",
+      "ref": "28:41"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "ref": "28:41",
+      "accents": {
+        "meneurs": "impact",
+        "Feu.": "flash",
+        "secourra.": "battement"
+      },
+      "texte": "« Nous avons fait d'eux des meneurs qui appellent au Feu. Et le Jour de la Résurrection, personne ne les secourra. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qr_lendemain",
+      "accents": {
+        "foules.": "pop",
+        "raison.": "impact"
+      },
+      "texte": "Ils étaient suivis par des foules. Mais être suivi ne veut pas dire avoir raison."
+    },
+    {
+      "type": "narration",
+      "scene": "hira_nuit",
+      "accents": {
+        "suivre": "whoosh",
+        "m'emmène": "battement"
+      },
+      "texte": "Avant de suivre quelqu'un, demande-toi : vers où est-ce qu'il m'emmène ?"
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}

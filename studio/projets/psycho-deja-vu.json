@@ -1,0 +1,95 @@
+{
+  "slug": "psycho-deja-vu",
+  "titre": "Le déjà-vu",
+  "titre_youtube": "Pourquoi tu as parfois l'impression d'avoir déjà vécu ce moment ?",
+  "serie": "Pourquoi tu… #12",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Tu as déjà vécu ce moment ?",
+  "sources": [
+    "Brown, A. S. (2003). A review of the déjà vu experience. Psychological Bulletin, 129(3), 394-413 : environ deux personnes sur trois ont déjà eu un déjà-vu ; plus fréquent chez les jeunes, et avec la fatigue ou le stress",
+    "Cleary, A. M., Brown, A. S., Sawyer, B. D., Nomi, J. S., Ajoku, A. C. & Ryals, A. J. (2012). Familiarity from the configuration of objects in 3-dimensional space and its relation to déjà vu: A virtual reality investigation. Consciousness and Cognition, 21(2), 969-975 : une scène nouvelle qui a la même disposition qu'une scène vue puis oubliée donne plus souvent une impression de déjà-vu",
+    "L'explication par la disposition des lieux est une des pistes sérieuses, pas la seule : elle est présentée comme telle."
+  ],
+  "legende": "Tu entres quelque part pour la première fois… et tu as l'impression d'avoir déjà vécu ce moment exact. Deux personnes sur trois l'ont déjà ressenti. Une piste sérieuse : ton cerveau reconnaît quelque chose, sans retrouver quoi.\n\nÇa t'arrive souvent ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#dejavu",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_dv_accroche",
+      "accents": {
+        "déjà": "whoosh",
+        "impossible": "impact"
+      },
+      "texte": "Pourquoi tu as parfois l'impression d'avoir déjà vécu ce moment exact… alors que c'est impossible ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dv_stats",
+      "titre": {
+        "mot": "déjà-vu.",
+        "texte": "Le déjà-vu"
+      },
+      "accents": {
+        "déjà-vu.": "flash",
+        "trois": "pop",
+        "jeunes.": "pop"
+      },
+      "texte": "Ça a un nom : le déjà-vu. Environ deux personnes sur trois en ont déjà eu. Et surtout les jeunes."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dv_plan",
+      "accents": {
+        "disposition": "pop",
+        "2012,": "pop",
+        "plan": "impact",
+        "souvent.": "flash"
+      },
+      "texte": "Une piste sérieuse : ton cerveau reconnaît la disposition des choses. En 2012, des chercheurs ont montré des pièces en réalité virtuelle. Quand une nouvelle pièce avait le même plan qu'une pièce oubliée… le déjà-vu arrivait plus souvent."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dv_familier",
+      "accents": {
+        "familier…": "pop",
+        "souvenir.": "whoosh",
+        "étrange.": "impact"
+      },
+      "texte": "Ton cerveau sent que c'est familier… mais il ne retrouve pas le souvenir. D'où ce sentiment si étrange."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_dv_fatigue",
+      "accents": {
+        "fatigué": "pop",
+        "stressé.": "pop"
+      },
+      "texte": "Et ça arrive plus souvent quand tu es fatigué ou stressé."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'arrive souvent, les déjà-vu ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

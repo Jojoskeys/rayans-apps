@@ -1,0 +1,145 @@
+{
+  "slug": "psycho-ennui",
+  "titre": "L'ennui utile",
+  "titre_youtube": "Pourquoi t'ennuyer rend plus créatif ?",
+  "serie": "Pourquoi tu… #29",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "L'ennui n'est pas du temps perdu",
+  "sources": [
+    "Mann, S. & Cadman, R. (2014). Does being bored make us more creative? Creativity Research Journal, 26(2), 165-173 : après avoir recopié ou lu des numéros d'annuaire (tâche ennuyeuse), les participants trouvaient plus d'usages créatifs à des gobelets",
+    "Wilson, T. D. et al. (2014). Just think: The challenges of the disengaged mind. Science, 345(6192), 75-77 : beaucoup de gens préfèrent se donner une petite décharge électrique plutôt que rester 15 minutes seuls avec leurs pensées"
+  ],
+  "legende": "Tu sors ton téléphone dès que tu t'ennuies ? Pourtant l'ennui pousse ton cerveau à inventer. Une expérience avec… un annuaire téléphonique l'a montré.\n\nTu supportes l'ennui sans ton téléphone ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#creativite",
+    "#telephone",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "téléphone": "pop",
+        "empêcher": "impact"
+      },
+      "texte": "Pourquoi tu attrapes ton téléphone dès que tu t'ennuies… et pourquoi tu devrais parfois t'en empêcher ?",
+      "visuel": {
+        "perso": {
+          "icone": "Smartphone",
+          "mot": "téléphone"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "2014,": "pop",
+        "décharge": "secousse",
+        "quinze": "pop",
+        "pensées.": "impact"
+      },
+      "texte": "En 2014, une étude a montré que beaucoup de gens préfèrent se donner une petite décharge électrique… plutôt que rester quinze minutes seuls avec leurs pensées.",
+      "visuel": {
+        "annee": "2014",
+        "icones": [
+          {
+            "nom": "Zap",
+            "mot": "décharge",
+            "texte": "une décharge"
+          },
+          {
+            "nom": "Brain",
+            "mot": "pensées",
+            "texte": "ou penser"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "l'ennui",
+        "texte": "L'ennui utile"
+      },
+      "accents": {
+        "l'ennui": "pop",
+        "annuaire": "flash",
+        "ennuyeux": "impact"
+      },
+      "texte": "Pourtant, l'ennui sert à quelque chose. Des chercheurs ont fait recopier des numéros de téléphone d'un annuaire pendant un quart d'heure. Le plus ennuyeux possible.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "BookOpen",
+            "mot": "annuaire",
+            "texte": "l'annuaire"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "gobelets.": "pop",
+        "ennuyés": "pop",
+        "plus": "flash"
+      },
+      "texte": "Juste après, ils devaient trouver des idées d'utilisation pour des gobelets. Ceux qui s'étaient ennuyés en ont trouvé plus que les autres.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "sans ennui",
+            "valeur": 0.45,
+            "mot": "plus"
+          },
+          {
+            "texte": "après l'ennui",
+            "valeur": 0.8,
+            "mot": "plus"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "imaginer.": "flash",
+        "poche.": "pop"
+      },
+      "texte": "Quand tu t'ennuies, ton cerveau cherche à s'occuper… et il se met à imaginer. Alors parfois, laisse ton téléphone dans ta poche.",
+      "visuel": {
+        "perso": {
+          "jaunes": 1,
+          "mot": "imaginer",
+          "bulle": "« et si… »"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu arrives à t'ennuyer sans ton téléphone ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "slug": "psycho-simple-exposition",
+  "titre": "L'effet de simple exposition",
+  "titre_youtube": "Pourquoi une chanson te plaît plus à force de l'entendre ?",
+  "serie": "Pourquoi tu… #32",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "Plus tu vois, plus tu aimes",
+  "sources": [
+    "Zajonc, R. B. (1968). Attitudinal effects of mere exposure. Journal of Personality and Social Psychology, 9(2, Pt. 2), 1-27 : plus des mots, des visages ou des symboles inconnus sont montrés souvent, plus ils sont jugés agréables",
+    "Bornstein, R. F. (1989). Exposure and affect: Overview and meta-analysis of research, 1968-1987. Psychological Bulletin, 106(2), 265-289 : l'effet est solide (plus de 200 expériences), et il s'affaiblit au-delà d'un certain nombre d'expositions"
+  ],
+  "legende": "Une chanson que tu trouvais nulle… et au bout de la cinquième écoute, tu la chantes. Ton cerveau aime ce qu'il connaît : c'est l'effet de simple exposition.\n\nÇa t'est déjà arrivé avec une chanson ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#musique",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "nulle": "impact",
+        "plaire…": "pop"
+      },
+      "texte": "Pourquoi une chanson que tu trouvais nulle finit par te plaire… à force de l'entendre ?",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Music",
+            "mot": "chanson",
+            "texte": "1re écoute"
+          },
+          {
+            "nom": "Heart",
+            "mot": "plaire",
+            "texte": "5e écoute"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1968,": "pop",
+        "inventés": "pop",
+        "inconnus,": "pop"
+      },
+      "texte": "En 1968, un chercheur a montré à des gens des mots inventés et des visages inconnus, plus ou moins souvent.",
+      "visuel": {
+        "annee": "1968",
+        "pastilles": [
+          {
+            "texte": "« kadirga »",
+            "mot": "inventés"
+          },
+          {
+            "texte": "« saricik »",
+            "mot": "inconnus"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "titre": {
+        "mot": "agréable.",
+        "texte": "La simple exposition"
+      },
+      "accents": {
+        "souvent,": "pop",
+        "agréable.": "flash",
+        "raison.": "impact"
+      },
+      "texte": "Résultat : plus un mot ou un visage avait été vu souvent, plus il semblait agréable. Sans aucune autre raison.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "vu 1 fois",
+            "valeur": 0.3,
+            "mot": "souvent"
+          },
+          {
+            "texte": "vu 10 fois",
+            "valeur": 0.55,
+            "mot": "souvent"
+          },
+          {
+            "texte": "vu 25 fois",
+            "valeur": 0.8,
+            "mot": "agréable"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "accents": {
+        "familier": "pop",
+        "sûr.": "flash",
+        "agréable.": "impact"
+      },
+      "texte": "Pour ton cerveau, ce qui est familier est sûr. Et ce qui est sûr… est agréable.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "ShieldCheck",
+            "mot": "sûr",
+            "texte": "familier = sûr"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "pubs": "pop",
+        "boucle.": "whoosh",
+        "marre.": "impact"
+      },
+      "texte": "C'est pour ça que les pubs passent en boucle. Mais attention : trop d'écoutes, et tu finis par en avoir marre.",
+      "visuel": {
+        "icones": [
+          {
+            "nom": "Tv",
+            "mot": "pubs",
+            "texte": "les pubs"
+          },
+          {
+            "nom": "Repeat",
+            "mot": "boucle",
+            "texte": "en boucle"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'est déjà arrivé avec une chanson ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

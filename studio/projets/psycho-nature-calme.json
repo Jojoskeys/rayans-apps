@@ -1,0 +1,91 @@
+{
+  "slug": "psycho-nature-calme",
+  "titre": "La nature qui calme",
+  "titre_youtube": "Pourquoi une balade dans la nature te calme ?",
+  "serie": "Pourquoi tu… #51",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  },
+  "accroche": "90 minutes qui changent la tête",
+  "sources": [
+    "Bratman, G. N., Hamilton, J. P., Hahn, K. S., Daily, G. C. & Gross, J. J. (2015). Nature experience reduces rumination and subgenual prefrontal cortex activation. PNAS, 112(28), 8567-8572 : après 90 minutes de marche dans la nature, les participants ruminaient moins, et une zone du cerveau liée aux pensées négatives était moins active ; pas après 90 minutes en ville"
+  ],
+  "legende": "Tu tournes en rond dans ta tête ? Va marcher dans un parc. Des chercheurs ont comparé 90 minutes de marche dans la nature et en ville : seule la nature calmait les pensées qui tournent en boucle.\n\nTu vas souvent dans la nature ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#bienetre",
+    "#faitspsychologiques",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_na_accroche",
+      "accents": {
+        "parc…": "pop",
+        "tête": "impact"
+      },
+      "texte": "Pourquoi une balade dans un parc… calme ta tête ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_na_etude",
+      "titre": {
+        "mot": "90",
+        "texte": "90 minutes de nature"
+      },
+      "accents": {
+        "2015,": "pop",
+        "90": "flash",
+        "ville.": "impact"
+      },
+      "texte": "En 2015, des chercheurs de Stanford ont fait marcher des volontaires pendant 90 minutes. Les uns dans la nature, les autres le long d'une grande route en ville."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_na_resultat",
+      "accents": {
+        "ruminaient": "pop",
+        "boucle.": "whoosh",
+        "active.": "impact"
+      },
+      "texte": "Après la nature, ils ruminaient moins : moins de pensées négatives qui tournent en boucle. Et une zone du cerveau liée à ces pensées était moins active."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_na_ville",
+      "accents": {
+        "ville": "pop",
+        "Aucun": "impact"
+      },
+      "texte": "Après la ville ? Aucun changement."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_na_astuce",
+      "accents": {
+        "verdure.": "flash",
+        "compte.": "pop"
+      },
+      "texte": "L'astuce : quand ta tête tourne en rond, cherche un coin de verdure. Même un parc en ville, ça compte."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Toi, tu vas souvent marcher dans la nature ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ]
+}

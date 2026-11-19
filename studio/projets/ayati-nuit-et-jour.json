@@ -1,0 +1,108 @@
+{
+  "slug": "ayati-nuit-et-jour",
+  "titre": "La nuit et le jour",
+  "titre_youtube": "Pourquoi Allah a fait la nuit et le jour",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  },
+  "accroche": "La nuit pour toi, le jour pour toi",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:73 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage."
+  ],
+  "legende": "« C'est par Sa miséricorde qu'Il vous a donné la nuit et le jour, pour vous y reposer et chercher de Sa grâce, et afin que vous soyez reconnaissants. » Sourate Al-Qasas (28:73).\n\nPartage-la à quelqu'un qui ne prend jamais le temps de se reposer.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#gratitude",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "qadr_nuits",
+      "ref": "28:73",
+      "accents": {
+        "nuit,": "pop",
+        "matin.": "pop",
+        "miséricorde": "flash"
+      },
+      "texte": "Tu dors chaque nuit, tu te lèves chaque matin. Et c'est une miséricorde que tu ne remarques plus."
+    },
+    {
+      "type": "narration",
+      "scene": "qadr_ciel",
+      "ref": "28:71-72",
+      "titre": {
+        "mot": "toujours,",
+        "texte": "La nuit et le jour"
+      },
+      "accents": {
+        "toujours,": "impact",
+        "lumière": "flash",
+        "repos": "battement"
+      },
+      "texte": "Juste avant, Allah demande : si la nuit durait pour toujours, qui t'apporterait la lumière ? Et si le jour ne finissait jamais, qui t'apporterait le repos ?"
+    },
+    {
+      "type": "verset",
+      "scene": "kq_levant",
+      "ref": "28:73"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_levant",
+      "ref": "28:73",
+      "accents": {
+        "miséricorde": "flash",
+        "reposiez,": "pop",
+        "reconnaissants.": "battement"
+      },
+      "texte": "« C'est par Sa miséricorde qu'Il vous a donné la nuit et le jour, pour que vous vous y reposiez, que vous cherchiez de Sa grâce, et afin que vous soyez reconnaissants. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "repos": "pop",
+        "travail": "pop",
+        "moment.": "flash"
+      },
+      "texte": "Le repos est un cadeau d'Allah. Le travail aussi. Les deux ont leur moment."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "merci": "flash",
+        "nouvelle.": "battement"
+      },
+      "texte": "Ce soir, avant de dormir, dis merci pour cette journée. Demain matin, dis merci pour la nouvelle."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "partage": "pop"
+      },
+      "texte": "Abonne-toi pour d'autres rappels de la sourate Al-Qasas, et partage cette vidéo."
+    }
+  ]
+}
