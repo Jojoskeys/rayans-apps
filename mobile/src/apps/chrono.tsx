@@ -3,6 +3,7 @@
 import "../shared/sync.ts";
 import { store } from "../shared/sync.ts";
 import { mountChrome } from "../shared/chrome.ts";
+import { monterPanneau, suivre } from "./chrono-iphone.tsx";
 import { createData, normalizeData, reduce } from "../../../chrono/src/core/engine.ts";
 import { entriesCsv } from "../../../chrono/src/core/csv.ts";
 import type { AppData } from "../../../chrono/src/core/types.ts";
@@ -27,6 +28,7 @@ function dispatch(action: Parameters<ChronoApi["dispatch"]>[0]) {
     navigator.vibrate?.(300);
   }
   for (const l of stateL) l(data);
+  suivre(data);
   if (action.type !== "tick" || r.events.length) {
     if (saveTimer) clearTimeout(saveTimer);
     saveTimer = setTimeout(() => store.save("chrono", JSON.stringify(data)), 600);
@@ -50,4 +52,4 @@ window.chrono = api;
 setInterval(() => dispatch({ type: "tick" }), 250);
 
 mountChrome(["chrono"]);
-void ready.then(() => import("../../../chrono/src/renderer/main.tsx"));
+void ready.then(() => { suivre(data); monterPanneau(() => data, () => dispatch({ type: "start" })); return import("../../../chrono/src/renderer/main.tsx"); });

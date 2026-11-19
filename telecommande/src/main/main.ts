@@ -10,6 +10,7 @@ import { normaliserDonnees, type Donnees } from "../core/donnees.ts";
 import type { Commande, Etat } from "../renderer/api-types.ts";
 import { Store } from "./store.ts";
 import { demarrerServeur, dossierReception } from "./serveur.ts";
+import { Push } from "./push.ts";
 import { depublier, etatTailscale, publier, servePublie, type EtatTailscale } from "./tailscale.ts";
 import { runLaunchTest } from "./launch-test.ts";
 
@@ -66,6 +67,7 @@ function start() {
     },
     alerte,
     changeBoite: () => save(),
+    push: new Push(dataDir, journaliser),
     version: app.getVersion(),
   }, () => ts.proprietaire);
   serveur.on("listening", () => { serveurOk = true; pousser(); });

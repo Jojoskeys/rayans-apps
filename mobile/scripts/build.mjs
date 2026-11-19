@@ -83,6 +83,23 @@ writeFileSync(join(out, "manifest.webmanifest"), JSON.stringify({
   icons: [{ src: "icon.png", sizes: "1024x1024", type: "image/png", purpose: "any" }],
 }, null, 1));
 
+// Service à part pour les notifications de fin de minuteur de Rayan's Chrono, envoyées par le PC (Rayan's
+// Télécommande, avec sa propre clé). Sa portée (chrono/push/) ne contient aucune page : il ne fait que les afficher.
+writeFileSync(join(out, "chrono", "sw-push.js"), `// Rayan's Chrono : notifications de fin de minuteur envoyées par le PC.
+self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
+self.addEventListener("push", (e) => {
+  let m = { title: "Rayan's Chrono", body: "Le minuteur est terminé.", url: "../", tag: "chrono" };
+  try { m = { ...m, ...e.data.json() }; } catch { if (e.data) m.body = e.data.text(); }
+  e.waitUntil(self.registration.showNotification(m.title, { body: m.body, tag: m.tag, data: { url: m.url }, icon: "../icon.png", badge: "../icon.png", requireInteraction: true }));
+});
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || "./", self.location.href).href;
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((cs) => { for (const c of cs) if ("focus" in c) { c.navigate(url).catch(() => {}); return c.focus(); } return self.clients.openWindow(url); }));
+});
+`);
+
 // Service worker : liste de tous les fichiers, mise en cache à l'installation (fichier par fichier : un échec
 // n'empêche pas l'installation, sinon iOS n'active jamais le service et les notifications ne marchent pas), réseau d'abord pour les pages.
 const files = [];
