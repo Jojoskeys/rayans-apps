@@ -41,18 +41,36 @@ def _telecharger(v: dict, dossier: Path) -> tuple[Path, dict]:
     options = {
         "outtmpl": str(dossier / "videos" / f"{v['id']}.%(ext)s"),
         "format": "best[height<=720]/best",
-        "quiet": True, "no_warnings": True, "noplaylist": True,
+        "quiet": True, "no_warnings": True, "noplaylist": True, "noprogress": True,
         "writeinfojson": False, "socket_timeout": 30, "retries": 2,
     }
     if cookies := os.environ.get("FAVORIS_COOKIES"):
         options["cookiefile"] = cookies
     with yt_dlp.YoutubeDL(options) as ydl:
-        info = ydl.extract_info(v["lien"], download=True)
-        chemin = Path(ydl.prepare_filename(info))
+        try:
+            info = ydl.extract_info(v["lien"], download=True)
+            chemin: Path | None = Path(ydl.prepare_filename(info))
+        except yt_dlp.utils.DownloadError as e:
+            if "no video formats" not in str(e).lower():
+                raise
+            info, chemin = None, None
+    if info is None:  # photo ou carrousel sans vidéo : on garde la légende et l'image
+        with yt_dlp.YoutubeDL({**options, "ignore_no_formats_error": True}) as ydl:
+            info = ydl.extract_info(v["lien"], download=False)
     infos = {k: info.get(k) for k in ("title", "description", "uploader", "uploader_id", "duration", "webpage_url",
                                       "view_count", "like_count", "comment_count", "repost_count", "upload_date",
-                                      "channel_follower_count")}
+                                      "channel_follower_count", "thumbnail")}
     return chemin, infos
+
+
+def _photo(url: str, sortie: Path) -> bool:
+    import urllib.request
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=30) as r:
+            sortie.write_bytes(r.read())
+        return True
+    except Exception:
+        return False
 
 
 def _transcrire(video: Path) -> tuple[str, str]:
@@ -107,9 +125,14 @@ def recuperer_une(stock: Stock, v: dict) -> None:
         video, infos = Path(v["fichier"]), {"title": Path(v["fichier"]).stem}
     else:
         video, infos = _telecharger(v, dossier)
-    duree = infos.get("duration") or _duree(video)
-    texte, langue = _transcrire(video)
-    images = _images(video, v["id"], dossier, duree)
+    if video is None:  # photo ou carrousel
+        duree, texte, langue = 0, "", "?"
+        photo = dossier / "images" / f"{v['id']}_1.jpg"
+        images = [photo.name] if infos.get("thumbnail") and _photo(infos["thumbnail"], photo) else []
+    else:
+        duree = infos.get("duration") or _duree(video)
+        texte, langue = _transcrire(video)
+        images = _images(video, v["id"], dossier, duree)
     stats = {k: infos.get(k) for k in ("view_count", "like_count", "comment_count", "repost_count",
                                        "channel_follower_count", "upload_date") if infos.get(k) is not None}
     (dossier / "textes" / f"{v['id']}.txt").write_text(
@@ -121,10 +144,12 @@ def recuperer_une(stock: Stock, v: dict) -> None:
             f"Images : {', '.join(images) or 'aucune'}",
             "Chiffres : " + (" · ".join(f"{_NOMS_STATS[k]} {_nombre(val)}" for k, val in stats.items()) or "inconnus"),
             "", "--- Légende ---", (infos.get("description") or infos.get("title") or "(aucune)").strip(),
-            "", "--- Ce qui est dit ---", texte or "(rien de dit : regarder les images)",
+            "", "--- Ce qui est dit ---",
+            texte or ("(photo ou carrousel, pas de vidéo : lire la légende et l'image)" if video is None
+                      else "(rien de dit : regarder les images)"),
         ]), "utf-8")
     stock.changer(v["id"], etat="a_analyser", auteur=infos.get("uploader") or "", titre=(infos.get("title") or "")[:120],
-                  duree=round(duree or 0), images=images, video=str(video), erreur="", stats=stats)
+                  duree=round(duree or 0), images=images, video=str(video or ""), erreur="", stats=stats)
 
 
 _NOMS_STATS = {"view_count": "vues", "like_count": "j'aime", "comment_count": "commentaires", "repost_count": "partages",
@@ -140,16 +165,35 @@ def _nombre(n) -> str:
     return str(n)
 
 
+PAUSE = float(os.environ.get("FAVORIS_PAUSE", "6"))  # secondes entre deux téléchargements
+ATTENTE_FREIN = 300  # secondes d'attente quand la plateforme répond « trop de demandes »
+
+
 def recuperer(stock: Stock, limite: int | None = None, afficher=print) -> dict:
-    bilan = {"ok": 0, "erreur": 0}
+    import time
+    bilan = {"ok": 0, "erreur": 0, "freine": 0}
     a_faire = stock.par_etat("a_recuperer")[: limite or None]
+    freinages = 0
     for i, v in enumerate(a_faire, 1):
         afficher(f"[{i}/{len(a_faire)}] {v['id']}…")
+        if i > 1 and v["plateforme"] != "fichier":
+            time.sleep(PAUSE)  # Instagram et TikTok freinent ceux qui enchaînent trop vite
         try:
             recuperer_une(stock, v)
             bilan["ok"] += 1
+            freinages = 0
         except Exception as e:  # une vidéo supprimée ou privée ne doit pas arrêter les autres
             message = str(e).splitlines()[0][:300]
+            if "429" in message or "too many requests" in message.lower() or "rate-limit" in message.lower():
+                # Freiné : la vidéo reste à récupérer, on attend, et on s'arrête si ça continue.
+                freinages += 1
+                bilan["freine"] += 1
+                afficher(f"   freiné par la plateforme, pause de {ATTENTE_FREIN // 60} min ({freinages}/3)")
+                if freinages >= 3:
+                    afficher("   arrêt : relancer plus tard, les vidéos restantes attendent.")
+                    break
+                time.sleep(ATTENTE_FREIN)
+                continue
             if "login" in message.lower() or "cookies" in message.lower():
                 message += " — Instagram demande d'être connecté : voir « Instagram demande une connexion » dans le README."
             stock.changer(v["id"], etat="erreur", erreur=message)

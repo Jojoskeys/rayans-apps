@@ -106,6 +106,14 @@ class Fiches(Base):
         self.assertEqual(Stock().videos["tiktok-1"]["etat"], "analysee")
         self.assertEqual(favoris.enregistrer_fiche(self.stock, self.fiche(id="tiktok-1", categorie="drole", resume="chat", pour_rayan="rien")), "ignoree")
 
+    def test_lot_garde_les_bonnes_et_rend_les_refus(self):
+        p = Path(self.tmp.name) / "lot.json"
+        p.write_text(json.dumps([self.complete(), {"id": "inconnu", "categorie": "utile"}]), "utf-8")
+        refus = favoris.enregistrer_lot(self.stock, p)
+        self.assertEqual(len(refus), 1)
+        self.assertTrue(refus[0].startswith("inconnu"))
+        self.assertEqual(Stock().videos["tiktok-1"]["etat"], "analysee")
+
     def test_pour_rayan_obligatoire(self):
         f = self.complete()
         del f["pour_rayan"]
