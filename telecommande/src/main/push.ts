@@ -38,6 +38,13 @@ export class Push {
     return res.statusCode;
   }
 
+  /** Envoie une notification quelconque (ex. pépites de Rayan's Bonnes Affaires). Renvoie le code HTTP. */
+  async envoyerMessage(abonnement: Rappel["abonnement"], m: { titre: string; texte: string; url: string; tag: string }) {
+    const corps = JSON.stringify({ title: m.titre, body: m.texte, url: m.url, tag: m.tag });
+    const res = await webpush.sendNotification(abonnement, corps, { TTL: 6 * 3600, urgency: "high", timeout: 20_000, vapidDetails: { subject: SUJET, publicKey: this.f.publicKey, privateKey: this.f.privateKey } });
+    return res.statusCode;
+  }
+
   private async verifier() {
     if (!this.f.rappels.some((r) => r.fin <= Date.now())) return;
     const { aEnvoyer, restants } = echus(this.f.rappels, Date.now());

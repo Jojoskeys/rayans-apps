@@ -53,6 +53,12 @@ export interface Reglages {
   codePostal?: string;
   /** Rayon de la zone de retrait autour de chaque point de départ (main propre). */
   distanceMaxKm: number;
+  /** Plus loin que la zone, jusqu'à cette distance, seulement pour une pépite (on fait le trajet). */
+  distancePepiteKm: number;
+  /** Écart minimal pour qu'une offre sûre soit une pépite (0,4 = 40 % moins cher) : notification sur l'iPhone. */
+  ecartPepite: number;
+  /** Gain minimal à la revente pour une pépite (en euros) : pas de notification pour quelques euros. */
+  gainPepite: number;
   /** Écart minimal avec le prix habituel pour figurer au classement (0,25 = 25 % moins cher). */
   ecartMin: number;
   /** Part prélevée à la revente (commission, envoi), pour estimer le gain. */
@@ -84,6 +90,10 @@ export interface Offre extends Annonce {
   score: number;
   /** Mis en avant comme l'un des meilleurs choix. */
   choix: boolean;
+  /** Offre exceptionnelle et sûre : elle déclenche une notification sur l'iPhone. */
+  pepite: boolean;
+  /** Hors de la zone de retrait, gardée seulement parce que c'est une pépite. */
+  loin: boolean;
 }
 
 export type Surete = "sûr" | "à vérifier" | "méfiance";

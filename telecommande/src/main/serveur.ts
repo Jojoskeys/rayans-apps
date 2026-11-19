@@ -19,6 +19,7 @@ import * as favoris from "../core/favoris.ts";
 import * as bonnesAffaires from "../core/bonnes-affaires.ts";
 import { abonnementValide, ErreurRappel } from "../core/minuteurs.ts";
 import type { Push } from "./push.ts";
+import type { AlertesAffaires } from "./alertes-affaires.ts";
 import * as sys from "./systeme.ts";
 import { etatTailscale, PORT } from "./tailscale.ts";
 
@@ -32,6 +33,8 @@ export interface Contexte {
   changeBoite(): void;
   /** Rappels de fin de minuteur (Rayan's Chrono sur l'iPhone). */
   push: Push;
+  /** Notifications des pépites de Rayan's Bonnes Affaires. */
+  alertesAffaires: AlertesAffaires;
   version: string;
 }
 
@@ -353,6 +356,27 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
         // ----- Rayan's Bonnes Affaires : classement des annonces, en lecture seule -----
         case "GET /api/bonnes-affaires":
           return envoyer(200, bonnesAffaires.lire(dossierBonnesAffaires()));
+
+        case "GET /api/bonnes-affaires/cle":
+          return envoyer(200, { cle: ctx.push.cle });
+
+        case "POST /api/bonnes-affaires/abonnement": {
+          const b = await lireJson(req);
+          try { await ctx.alertesAffaires.abonner(abonnementValide(b.abonnement)); }
+          catch (e) { throw new ErreurHttp(e instanceof ErreurRappel ? 400 : 502, e instanceof ErreurRappel ? e.message : `le service de notification a refusé l'envoi (${(e as { statusCode?: number }).statusCode ?? "réseau"})`); }
+          return envoyer(200, { ok: true });
+        }
+
+        case "POST /api/bonnes-affaires/desabonnement": {
+          const b = await lireJson(req);
+          ctx.alertesAffaires.desabonner(String(b.endpoint ?? ""));
+          return envoyer(200, { ok: true });
+        }
+
+        case "POST /api/bonnes-affaires/statut": {
+          const b = await lireJson(req);
+          return envoyer(200, { abonne: ctx.alertesAffaires.abonne(String(b.endpoint ?? "")) });
+        }
 
         // ----- Rayan's Favoris : liens et vidéos à analyser par Claude -----
         case "GET /api/favoris":

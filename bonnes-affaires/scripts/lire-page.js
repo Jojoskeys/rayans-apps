@@ -18,3 +18,14 @@ const v = [...document.querySelectorAll('a[data-testid$="--overlay-link"]')].sli
   return m ? [m[1].slice(0, 70), +m[6], a.href.split("/items/")[1].split("?")[0].split("-")[0], m[3] || "", m[4] || "", img] : null;
 }).filter(Boolean);
 "BA1|NOM|RECHERCHE|" + JSON.stringify(v);
+
+// Vestiaire Collective : annonces de la page (titre = marque, type et description, prix actuel, lien, taille, photo).
+// Les titres ne donnent pas le modèle exact : à utiliser pour des recherches de marque (ex. « ralph lauren »).
+const vc = [...document.querySelectorAll('a[href*=".shtml"]')].slice(0, 60).map((a) => {
+  const t = a.innerText.replace(/\s+/g, " ").trim();
+  const prix = [...t.matchAll(/([\d\s]+(?:,\d+)?) €/g)].map((m) => +m[1].replace(/\s/g, "").replace(",", "."));
+  const m = t.match(/^(.*?) (?:(\S+) International )?[\d\s,]+ €/);
+  const slug = a.pathname.split("/").pop().replace(/-\d+\.shtml$/, "").replace(/-/g, " ");
+  return prix.length ? [(m?.[1] || "") + " · " + slug, prix[prix.length - 1], a.pathname, m?.[2] || "", a.querySelector("img")?.src || ""] : null;
+}).filter(Boolean);
+"BA1|NOM|RECHERCHE|" + JSON.stringify(vc);

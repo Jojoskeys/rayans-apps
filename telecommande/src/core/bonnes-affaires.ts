@@ -24,6 +24,10 @@ export interface OffreTuile {
   surete: Surete;
   raisons: string[];
   choix: boolean;
+  /** Offre exceptionnelle et sûre : notification sur l'iPhone. */
+  pepite: boolean;
+  /** Hors de la zone de retrait habituelle, mais l'affaire vaut le trajet. */
+  loin: boolean;
 }
 
 export interface Classement {
@@ -81,7 +85,47 @@ export function lire(dossier: string): Classement {
       surete: SURETES.includes(o.surete) ? o.surete : "à vérifier",
       raisons: Array.isArray(o.raisons) ? o.raisons.slice(0, 8).map((r: unknown) => texte(r, 200)).filter(Boolean) : [],
       choix: o.choix === true,
+      pepite: o.pepite === true,
+      loin: o.loin === true,
     });
   }
   return { majLe: nombre(brut.majLe), demo: brut.demo === true, offres };
+}
+
+// ----- Notifications des pépites -----
+
+/** Liens déjà signalés gardés en mémoire (les plus récents), pour ne jamais prévenir deux fois. */
+export const MEMOIRE = 1000;
+/** Au-delà, une seule notification qui les résume, pour ne pas inonder le téléphone. */
+export const MAX_PAR_PASSAGE = 3;
+
+/** Pépites pas encore signalées, et la mémoire mise à jour. */
+export function nouvellesPepites(c: Classement, deja: string[]): { nouvelles: OffreTuile[]; deja: string[] } {
+  if (c.demo) return { nouvelles: [], deja }; // jamais de notification pour des données d'exemple
+  const vus = new Set(deja);
+  const nouvelles = c.offres.filter((o) => o.pepite && !vus.has(o.lien));
+  return { nouvelles, deja: [...deja, ...nouvelles.map((o) => o.lien)].slice(-MEMOIRE) };
+}
+
+const euros = (n: number) => `${Math.round(n)} €`;
+
+/** Ce qui s'affiche sur l'iPhone : une notification par pépite, ou un résumé s'il y en a beaucoup d'un coup. */
+export function messages(nouvelles: OffreTuile[]): { titre: string; texte: string; tag: string }[] {
+  if (nouvelles.length > MAX_PAR_PASSAGE) {
+    const m = nouvelles[0];
+    return [{
+      titre: `💎 ${nouvelles.length} nouvelles pépites`,
+      texte: `Dont ${m.titre} à ${euros(m.total)} (−${Math.round(m.ecartPct * 100)} %). Ouvre Bonnes affaires.`.slice(0, 200),
+      tag: "bonnes-affaires",
+    }];
+  }
+  return nouvelles.map((o) => ({
+    titre: `💎 ${o.titre}`.slice(0, 80),
+    texte: [
+      `${euros(o.total)} au lieu de ~${euros(o.prixHabituel)} (−${Math.round(o.ecartPct * 100)} %)`,
+      o.distanceKm != null ? `${o.distanceKm} km${o.procheDe ? ` de ${o.procheDe}` : ""}${o.loin ? " (plus loin, mais ça vaut le trajet)" : ""}` : o.livrable ? "livrable" : "",
+      o.site,
+    ].filter(Boolean).join(" · ").slice(0, 200),
+    tag: `ba-${o.lien.slice(-40)}`,
+  }));
 }

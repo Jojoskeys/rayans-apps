@@ -1,5 +1,5 @@
-# Relevé sur demande, fait par Claude : Claude ouvre les pages de recherche Leboncoin et Vinted dans son
-# navigateur intégré, sans compte et à rythme humain, et lit chaque page en renvoyant une ligne
+# Relevé sur demande, fait par Claude : Claude ouvre les pages de recherche Leboncoin, Vinted et Vestiaire
+# Collective dans son navigateur intégré, sans compte et à rythme humain, et lit chaque page en renvoyant une ligne
 # « BA1|<nom>|<recherche>|<annonces> » (voir README, « Relevé sur demande »). Ce script reprend ces lignes
 # dans l'historique de la session (fichier .jsonl) et les écrit en fichiers d'import, en remplaçant le
 # relevé précédent.
@@ -22,7 +22,7 @@ for ligne in open(journal, encoding="utf8"):
             pages[m.group(1)] = (m.group(2), json.loads(json.loads('"' + m.group(3) + '"')))
 if not pages:
     sys.exit("Aucune page relevée trouvée dans cet historique : rien n'est remplacé.")
-for ancien in glob.glob(os.path.join(sortie, "lbc-*.json")) + glob.glob(os.path.join(sortie, "vinted-*.json")):
+for ancien in [f for motif in ("lbc-*.json", "vinted-*.json", "vc-*.json") for f in glob.glob(os.path.join(sortie, motif))]:
     os.remove(ancien)
 total = 0
 for nom, (recherche, lignes) in pages.items():
@@ -34,6 +34,11 @@ for nom, (recherche, lignes) in pages.items():
                 "lien": f"https://www.leboncoin.fr/ad/{chemin}", "codePostal": cp, "lat": lat, "lon": lon,
                 "livrable": bool(liv), "remiseEnMain": True, "recherche": recherche,
                 "photo": f"https://img.leboncoin.fr/api/v1/lbcpb1/images/{img}?rule=ad-image" if img else ""})
+        elif nom.startswith("vc-"):
+            titre, prix, chemin, taille, img = r
+            sortie_l.append({"site": "Vestiaire Collective", "titre": titre, "prix": prix, "port": 10,
+                "lien": f"https://fr.vestiairecollective.com{chemin}", "livrable": True, "remiseEnMain": False,
+                "recherche": recherche, "etat": f"taille {taille or '?'} · port et frais estimés 10 €", "photo": img})
         else:
             titre, prix, ident, etat, taille, img = r
             if re.search(r"\bans\b|\bcm\b|unique", taille): continue  # tailles enfant ou sans taille

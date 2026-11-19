@@ -10,6 +10,9 @@
     }
   ],
   "distanceMaxKm": 40,
+  "distancePepiteKm": 100,
+  "ecartPepite": 0.4,
+  "gainPepite": 30,
   "ecartMin": 0.25,
   "fraisRevente": 0.12,
   "nombre": 20,
