@@ -9,8 +9,9 @@ import { genererCode } from "../core/securite.ts";
 import { normaliserDonnees, type Donnees } from "../core/donnees.ts";
 import type { Commande, Etat } from "../renderer/api-types.ts";
 import { Store } from "./store.ts";
-import { demarrerServeur, dossierReception } from "./serveur.ts";
+import { demarrerServeur, dossierBonnesAffaires, dossierReception } from "./serveur.ts";
 import { Push } from "./push.ts";
+import { AlertesAffaires } from "./alertes-affaires.ts";
 import { depublier, etatTailscale, publier, servePublie, type EtatTailscale } from "./tailscale.ts";
 import { runLaunchTest } from "./launch-test.ts";
 
@@ -53,6 +54,7 @@ function start() {
   ipcMain.handle("etat", () => etat());
   ipcMain.handle("commande", (_e, c: Commande) => commande(c));
 
+  const push = new Push(dataDir, journaliser);
   const serveur = demarrerServeur({
     donnees: () => donnees,
     journaliser,
@@ -67,7 +69,8 @@ function start() {
     },
     alerte,
     changeBoite: () => save(),
-    push: new Push(dataDir, journaliser),
+    push,
+    alertesAffaires: new AlertesAffaires(dataDir, dossierBonnesAffaires, push, journaliser),
     version: app.getVersion(),
   }, () => ts.proprietaire);
   serveur.on("listening", () => { serveurOk = true; pousser(); });

@@ -17,7 +17,7 @@ const racine = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const demo = args.includes("--demo");
 
-const DEFAUTS: Omit<Reglages, "recherches"> = { domiciles: [], distanceMaxKm: 30, ecartMin: 0.25, fraisRevente: 0.12, nombre: 20 };
+const DEFAUTS: Omit<Reglages, "recherches"> = { domiciles: [], distanceMaxKm: 40, distancePepiteKm: 100, ecartPepite: 0.4, gainPepite: 30, ecartMin: 0.25, fraisRevente: 0.12, nombre: 20 };
 
 function chargerReglages(): Reglages {
   const fichier = join(racine, demo ? "reglages.exemple.json" : "reglages.json");

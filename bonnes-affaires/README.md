@@ -43,7 +43,8 @@ gardé mais marqué « méfiance » : c'est souvent une arnaque.
 | **Leboncoin** | Pas d'API publique pour les annonces, site protégé contre les robots | Non | Alertes de recherches sauvegardées + import de fichier |
 | **Facebook Marketplace** | Aucune API Marketplace ; Meta interdit la collecte automatique sans permission | Non (Meta poursuit en justice) | Notifications Marketplace + import de fichier |
 | **Back Market** | API réservée aux vendeurs | Non | Sert de **prix habituel** de l'électronique reconditionnée, à recopier dans `prixHabituel` ; alertes prix du site |
-| **Rakuten** | Flux produits via le programme d'affiliation (Awin), API vendeurs | Par l'affiliation seulement | Plus tard, si on s'inscrit à l'affiliation |
+| **Vestiaire Collective** | Pas d'API publique ; articles de marque, contrôle d'authenticité possible | Non | Relevé sur demande (recherches de marque : les titres ne donnent pas le modèle) |
+| **Rakuten** | Marketplace France fermée le 30 septembre 2026 | — | Abandonné |
 
 Les « API Vinted / Leboncoin / Facebook » vendues en ligne (Apify, RapidAPI...) sont des robots
 d'aspiration : elles enfreignent les conditions des sites. Elles ne sont pas utilisées.
@@ -105,13 +106,17 @@ puis les autres offres. Un appui sur l'annonce l'ouvre sur le site.
 - La tuile montre le dernier classement calculé sur le PC : relancer `npm start` pour le mettre à jour.
 - Après `npm run demo`, la tuile affiche un bandeau « données d'exemple ».
 
-## Recherche automatique chaque matin
+## Recherche automatique (toutes les 30 minutes, de 7 h à 23 h)
 
 ```
-powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1                (chaque jour à 7 h 00)
-powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1 -Heure 06:30   (autre heure)
-powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1 -Retirer       (arrêter)
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1                              (7 h → 23 h, toutes les 30 min)
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1 -Heure 06:30 -Intervalle 15  (autre rythme)
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1 -Intervalle 0                (une fois par jour)
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1 -Retirer                     (arrêter)
 ```
+
+Chaque passage interroge eBay (API officielle, si les clés sont là ; c'est la seule source qu'on peut
+interroger aussi souvent), reclasse le dernier relevé Leboncoin / Vinted / Vestiaire et met à jour la tuile.
 
 Crée la tâche planifiée Windows « Rayan's Bonnes Affaires » : elle lance `lancer.ps1` sans fenêtre, dans ta
 session (pas de mot de passe enregistré, pas de droits administrateur), et rattrape le lancement dès que le
@@ -130,11 +135,31 @@ elle reclasse le dernier.
    - Leboncoin, rayon de 40 km :
      `https://www.leboncoin.fr/recherche?text=<mots>&locations=<Ville>_<CP>__<lat>_<lon>_5000_40000`
    - Vinted (livraison partout) : `https://www.vinted.fr/catalog?search_text=<mots>&order=newest_first`
-2. Sur chaque page, exécuter le lecteur de `scripts/lire-page.js` (Leboncoin ou Vinted) avec un `NOM`
-   (`lbc-…` ou `vinted-…`) et le nom exact de la `RECHERCHE`.
+   - Vestiaire Collective (recherches de marque) : `https://fr.vestiairecollective.com/search/?q=<mots>`
+2. Sur chaque page, exécuter le lecteur de `scripts/lire-page.js` (Leboncoin, Vinted ou Vestiaire) avec un `NOM`
+   (`lbc-…`, `vinted-…` ou `vc-…`) et le nom exact de la `RECHERCHE`.
 3. Reprendre les pages lues dans l'historique de la session et remplacer l'ancien relevé :
    `python scripts/releve.py <historique de la session .jsonl> imports`
 4. `npm start` : classement, page HTML et tuile de l'iPhone à jour.
 
 Sur Vinted, le prix comprend la protection acheteur ; le port, inconnu, est estimé à 5 €. Les tailles enfant
 sont écartées.
+
+## Pépites et notifications sur l'iPhone
+
+Une **pépite** est une offre « sûre », au moins `ecartPepite` (40 %) sous un prix habituel fiable (réglé, ou
+médiane d'au moins 8 annonces), qui rapporte au moins `gainPepite` (30 €) à la revente. Elle
+est toujours mise en avant (💎) et, pour elle seule, la zone s'élargit : une annonce sans livraison jusqu'à
+`distancePepiteKm` (100 km par défaut) est gardée, avec un malus d'un point par 10 km au-delà de la zone.
+
+Dans la tuile « Bonnes affaires », **Me prévenir** abonne l'iPhone : Rayan's Télécommande regarde le
+classement toutes les minutes et envoie une notification pour chaque nouvelle pépite (jamais deux fois la
+même, un résumé s'il y en a plus de 3 d'un coup, rien pour les données d'exemple).
+
+### Pour ne rater aucune pépite sur Leboncoin et Vinted
+
+Le plus rapide et le seul moyen autorisé d'être prévenu en continu sur ces sites : leurs **alertes
+officielles**, dans leurs applis. Leboncoin : faire la recherche (mots, lieu, rayon, prix max) puis
+« Sauvegarder la recherche » et activer les notifications. Vinted : faire la recherche avec les filtres puis
+« Sauvegarder la recherche » (alertes dans l'onglet « Notifications »). Une annonce intéressante reçue ainsi
+peut être donnée à Claude pour un avis, et un relevé sur demande compare tout le reste.

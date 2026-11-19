@@ -106,6 +106,22 @@ self.addEventListener("notificationclick", (e) => {
 });
 `);
 
+// Même service, pour les notifications de pépites de Rayan's Bonnes Affaires (portée bonnes-affaires/push/).
+writeFileSync(join(out, "bonnes-affaires", "sw-push.js"), `// Rayan's Bonnes Affaires : notifications des pépites envoyées par le PC.
+self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
+self.addEventListener("push", (e) => {
+  let m = { title: "Rayan's Bonnes Affaires", body: "Nouvelle pépite !", url: "../", tag: "bonnes-affaires" };
+  try { m = { ...m, ...e.data.json() }; } catch { if (e.data) m.body = e.data.text(); }
+  e.waitUntil(self.registration.showNotification(m.title, { body: m.body, tag: m.tag, data: { url: m.url }, icon: "../icon.png", badge: "../icon.png" }));
+});
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || "../", self.location.href).href;
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((cs) => { for (const c of cs) if ("focus" in c) { c.navigate(url).catch(() => {}); return c.focus(); } return self.clients.openWindow(url); }));
+});
+`);
+
 // Service worker : liste de tous les fichiers, mise en cache à l'installation (fichier par fichier : un échec
 // n'empêche pas l'installation, sinon iOS n'active jamais le service et les notifications ne marchent pas), réseau d'abord pour les pages.
 const files = [];

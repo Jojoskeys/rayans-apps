@@ -9,6 +9,7 @@ const pct = (o: Offre) => `−${Math.round(o.ecartPct * 100)} %`;
 export function livraisonTexte(o: Offre): string {
   const ou = o.distanceKm != null ? `${o.distanceKm} km${o.procheDe ? ` de ${o.procheDe}` : ""}` : (o.ville ?? o.codePostal);
   if (o.dansZone) return `${ou} · à aller chercher`;
+  if (o.loin) return `${ou} · plus loin, à aller chercher`;
   const envoi = o.livrable
     ? o.port == null ? "livrable (port ?)" : o.port === 0 ? "livraison offerte" : `livraison ${euros(o.port)}`
     : "main propre, lieu à vérifier";
@@ -21,7 +22,7 @@ export function texteTerminal(offres: Offre[], nombre: number): string {
   if (!offres.length) return "Aucune bonne affaire pour l'instant avec ces réglages.";
   const bloc = (o: Offre, i: number, detail: boolean) =>
     [
-      `${String(i + 1).padStart(2)}. ${PICTO[o.surete]} ${o.titre}  [${o.site}]`,
+      `${String(i + 1).padStart(2)}. ${PICTO[o.surete]}${o.pepite ? " 💎 PÉPITE" : ""} ${o.titre}  [${o.site}]`,
       `    ${euros(o.total)} au lieu de ~${euros(o.prixHabituel)} (${pct(o)}, revente ≈ ${euros(o.gainRevente)}) · ${livraisonTexte(o)}`,
       ...(detail ? o.raisons.map((r) => `    ${r}`) : []),
       `    ${o.lien}`,
@@ -55,7 +56,7 @@ function carte(o: Offre, i: number): string {
   <div class="corps">
     <div class="sous">n° ${i + 1} · ${esc(o.site)} · ${esc(o.recherche)}</div>
     <h3><a href="${esc(o.lien)}" target="_blank" rel="noopener noreferrer">${esc(o.titre)}</a></h3>
-    <div class="prix"><b>${euros(o.total)}</b> <s>${euros(o.prixHabituel)}</s> <span class="fort">${pct(o)}</span> ${pastille(o)}</div>
+    <div class="prix"><b>${euros(o.total)}</b> <s>${euros(o.prixHabituel)}</s> <span class="fort">${pct(o)}</span> ${pastille(o)}${o.pepite ? ' <span class="pastille pepite">💎 pépite</span>' : ""}</div>
     <div class="sous">${esc(livraisonTexte(o))} · revente ≈ ${euros(o.gainRevente)}</div>
     ${raisons(o)}
   </div>
@@ -96,7 +97,7 @@ a{color:inherit}.sous{font-size:12px;color:var(--doux)}.fort{color:var(--vert);f
 .grande{width:110px;height:110px}.petite{width:72px;height:72px}
 .vide{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--doux);text-align:center}
 .pastille{display:inline-block;font-size:11px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid currentColor}
-.sur{color:var(--vert)}.verif{color:var(--orange)}.mefi{color:var(--rouge)}
+.pepite{color:#8a5cf6}.sur{color:var(--vert)}.verif{color:var(--orange)}.mefi{color:var(--rouge)}
 .raisons{margin:6px 0 0;padding:0;list-style:none;font-size:13px}.raisons li{padding-left:16px;position:relative}
 .raisons li::before{position:absolute;left:0}.bon::before{content:"+";color:var(--vert)}.mauvais::before{content:"−";color:var(--orange)}
 .tableau{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:900px}

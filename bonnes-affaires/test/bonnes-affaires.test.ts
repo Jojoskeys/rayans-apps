@@ -11,7 +11,7 @@ import { chercherEbay } from "../src/ebay.ts";
 import { calculerDistances, Geocodeur, kmEntre } from "../src/distance.ts";
 import { pageHtml } from "../src/affichage.ts";
 
-const base: Omit<Reglages, "recherches"> = { domiciles: [], distanceMaxKm: 30, ecartMin: 0.25, fraisRevente: 0.1, nombre: 10 };
+const base: Omit<Reglages, "recherches"> = { domiciles: [], distanceMaxKm: 30, distancePepiteKm: 100, ecartPepite: 0.4, gainPepite: 30, ecartMin: 0.25, fraisRevente: 0.1, nombre: 10 };
 let n = 0;
 const annonce = (titre: string, prix: number, autre: Partial<Annonce> = {}): Annonce => ({
   site: "test", titre, prix, port: 5, lien: `https://exemple.invalid/${++n}`, livrable: true, remiseEnMain: false, ...autre,
@@ -176,4 +176,29 @@ test("rattachement : une annonce rangée par le site doit contenir les mots de l
     reglages,
   );
   assert.deepEqual(offres.map((o) => o.titre), ["Écran LG 27 4K"]);
+});
+
+test("pépites : notifiées, toujours mises en avant, et seules à justifier un trajet hors zone", () => {
+  const reglages: Reglages = { ...base, recherches: [{ nom: "Switch", mots: "switch", categorie: "electronique", prixHabituel: 250 }] };
+  const mp = { livrable: false, remiseEnMain: true, port: null };
+  const offres = classer(
+    [
+      annonce("Switch proche pépite", 120, { ...mp, distanceKm: 10, procheDe: "Ville A" }), // −52 %, dans la zone
+      annonce("Switch proche correcte", 180, { ...mp, distanceKm: 10, procheDe: "Ville A" }), // −28 %
+      annonce("Switch loin pépite", 130, { ...mp, distanceKm: 80, procheDe: "Ville A" }), // −48 %, hors zone
+      annonce("Switch loin correcte", 180, { ...mp, distanceKm: 80, procheDe: "Ville A" }), // −28 % : pas le trajet
+      annonce("Switch trop loin", 100, { ...mp, distanceKm: 150, procheDe: "Ville A" }), // au-delà de 100 km
+    ],
+    reglages,
+  );
+  const par = (t: string) => offres.find((o) => o.titre === t);
+  assert.equal(par("Switch proche pépite")?.pepite, true);
+  assert.equal(par("Switch proche correcte")?.pepite, false);
+  assert.equal(par("Switch loin pépite")?.loin, true);
+  assert.equal(par("Switch loin pépite")?.choix, true);
+  assert.ok(par("Switch loin pépite")!.raisons.some((r) => r.includes("hors de ta zone")));
+  assert.equal(par("Switch loin correcte"), undefined);
+  assert.equal(par("Switch trop loin"), undefined);
+  // À prix proche, la pépite de la zone passe devant celle qui demande un trajet.
+  assert.ok(offres.indexOf(par("Switch proche pépite")!) < offres.indexOf(par("Switch loin pépite")!));
 });

@@ -49,6 +49,8 @@ export function versPartage(offres: Offre[], demo: boolean, quand = Date.now()) 
       surete: o.surete,
       raisons: o.raisons,
       choix: o.choix,
+      pepite: o.pepite,
+      loin: o.loin,
     })),
   };
 }

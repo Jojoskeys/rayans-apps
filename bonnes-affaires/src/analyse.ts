@@ -8,7 +8,7 @@ const PROTECTIONS: [RegExp, string][] = [
   [/vinted/i, "Protection acheteurs Vinted"],
   [/leboncoin/i, "paiement sécurisé Leboncoin"],
   [/back ?market/i, "garantie Back Market"],
-  [/rakuten/i, "garantie Rakuten"],
+  [/vestiaire/i, "protection acheteurs Vestiaire Collective"],
 ];
 
 export interface Analyse {
@@ -23,6 +23,7 @@ export function analyser(
   categorie: Recherche["categorie"],
   originePrix: string,
   dansZone: boolean,
+  zoneKm = 40,
 ): Analyse {
   const plus: string[] = [];
   const moins: string[] = [];
@@ -49,6 +50,8 @@ export function analyser(
   // Le lieu
   if (dansZone) {
     plus.push(`À ${a.distanceKm} km de ${a.procheDe} : on peut voir et essayer l'objet avant de payer`);
+  } else if (!a.livrable && a.distanceKm != null) {
+    moins.push(`À ${a.distanceKm} km de ${a.procheDe ?? "chez toi"}, hors de ta zone : seulement si l'affaire vaut le trajet`);
   } else if (!a.livrable && a.distanceKm == null) {
     moins.push("Lieu inconnu et pas de livraison : vérifier où il faut aller le chercher");
     monter(1);
@@ -85,7 +88,9 @@ export function analyser(
 
   const surete: Surete = (["sûr", "à vérifier", "méfiance"] as const)[niveau];
   // Au-delà de 60 % de remise, plus n'est pas mieux : c'est surtout plus suspect.
+  // Hors zone sans livraison : le trajet coûte, un point par tranche de 10 km au-delà de la zone.
+  const trajet = !dansZone && !a.livrable && a.distanceKm != null ? Math.max(0, a.distanceKm - zoneKm) / 10 : 0;
   const score =
-    Math.min(ecartPct, 0.6) * 100 + (dansZone ? 15 : 0) - [0, 15, 50][niveau] - moins.length * 2;
+    Math.min(ecartPct, 0.6) * 100 + (dansZone ? 15 : 0) - [0, 15, 50][niveau] - moins.length * 2 - trajet;
   return { surete, raisons: [...plus.map((r) => `+ ${r}`), ...moins.map((r) => `− ${r}`)], score };
 }
