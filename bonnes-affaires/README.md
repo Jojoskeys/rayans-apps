@@ -117,3 +117,24 @@ Crée la tâche planifiée Windows « Rayan's Bonnes Affaires » : elle lance `l
 session (pas de mot de passe enregistré, pas de droits administrateur), et rattrape le lancement dès que le
 PC est rallumé s'il était éteint à l'heure prévue. Le compte rendu va dans `resultats\journal.txt` et la
 tuile de l'iPhone est mise à jour à chaque passage.
+
+## Relevé sur demande (Leboncoin, Vinted)
+
+Vinted, Leboncoin et Facebook n'ont pas d'accès autorisé pour un robot. Quand Rayan le demande, Claude fait
+donc un **relevé ponctuel**, comme un visiteur : il ouvre les pages de recherche dans son navigateur intégré,
+**sans compte** (aucun compte de Rayan n'est en jeu), quelques secondes entre chaque page, et s'arrête si le
+site demande une vérification (jamais contournée). La recherche automatique du matin ne fait pas ce relevé :
+elle reclasse le dernier.
+
+1. Pour chaque recherche de `reglages.json` et chaque point de départ, ouvrir :
+   - Leboncoin, rayon de 40 km :
+     `https://www.leboncoin.fr/recherche?text=<mots>&locations=<Ville>_<CP>__<lat>_<lon>_5000_40000`
+   - Vinted (livraison partout) : `https://www.vinted.fr/catalog?search_text=<mots>&order=newest_first`
+2. Sur chaque page, exécuter le lecteur de `scripts/lire-page.js` (Leboncoin ou Vinted) avec un `NOM`
+   (`lbc-…` ou `vinted-…`) et le nom exact de la `RECHERCHE`.
+3. Reprendre les pages lues dans l'historique de la session et remplacer l'ancien relevé :
+   `python scripts/releve.py <historique de la session .jsonl> imports`
+4. `npm start` : classement, page HTML et tuile de l'iPhone à jour.
+
+Sur Vinted, le prix comprend la protection acheteur ; le port, inconnu, est estimé à 5 €. Les tailles enfant
+sont écartées.
