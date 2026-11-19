@@ -11,6 +11,7 @@ import { calculerDistances, Geocodeur } from "./distance.ts";
 import { chercherEbay, jetonEbay } from "./ebay.ts";
 import { lireDossier, lireFichier } from "./import.ts";
 import { pageHtml, texteTerminal } from "./affichage.ts";
+import { deposer } from "./partage.ts";
 
 const racine = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -71,6 +72,11 @@ async function main() {
   mkdirSync(dirname(sortie), { recursive: true });
   writeFileSync(sortie, pageHtml(offres, new Date()));
   console.log(`\nPage complète : ${sortie}`);
+  try {
+    console.log(`Pour la tuile de l'iPhone : ${deposer(offres, demo)}`);
+  } catch (e) {
+    console.warn(`Tuile iPhone non mise à jour : ${(e as Error).message}`);
+  }
 }
 
 main().catch((e) => {

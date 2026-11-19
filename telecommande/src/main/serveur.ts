@@ -16,6 +16,7 @@ import type { Donnees } from "../core/donnees.ts";
 import * as studio from "../core/studio.ts";
 import * as papiers from "../core/papiers.ts";
 import * as favoris from "../core/favoris.ts";
+import * as bonnesAffaires from "../core/bonnes-affaires.ts";
 import { abonnementValide, ErreurRappel } from "../core/minuteurs.ts";
 import type { Push } from "./push.ts";
 import * as sys from "./systeme.ts";
@@ -55,6 +56,8 @@ export const fichierIdees = () => path.join(app.getPath("videos"), "Rayan's Stud
 export const dossierPapiers = () => path.join(app.getPath("documents"), "Rayan's Papiers");
 /** Liens et vidéos envoyés depuis la tuile Favoris, lus par l'app Python favoris/ (voir core/favoris.ts). */
 export const dossierFavoris = () => path.join(app.getPath("documents"), "Rayan's Favoris");
+/** Classement déposé par l'app bonnes-affaires/ (voir core/bonnes-affaires.ts), lu par la tuile Bonnes affaires. */
+export const dossierBonnesAffaires = () => path.join(app.getPath("documents"), "Rayan's Bonnes Affaires");
 
 class ErreurHttp extends Error { code: number; constructor(code: number, message: string) { super(message); this.code = code; } }
 
@@ -346,6 +349,10 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
           return envoyer(200, { ok: true });
         }
+
+        // ----- Rayan's Bonnes Affaires : classement des annonces, en lecture seule -----
+        case "GET /api/bonnes-affaires":
+          return envoyer(200, bonnesAffaires.lire(dossierBonnesAffaires()));
 
         // ----- Rayan's Favoris : liens et vidéos à analyser par Claude -----
         case "GET /api/favoris":

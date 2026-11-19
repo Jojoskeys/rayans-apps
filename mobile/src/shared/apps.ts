@@ -22,4 +22,5 @@ export const APPS: MobileApp[] = [
   { id: "memo", name: "Mémo", tagline: "Idées et notes rapides", icon: "✎", color: "#C77DDB", files: ["memos"] },
   { id: "papiers", name: "Papiers", tagline: "Documents retrouvables", icon: "▤", color: "#7A8BA6", files: [] },
   { id: "favoris", name: "Favoris", tagline: "Vidéos à analyser", icon: "★", color: "#C95B7F", files: [] },
+  { id: "bonnes-affaires", name: "Bonnes affaires", tagline: "Occasions sous leur prix", icon: "€", color: "#2E9E6A", files: [] },
 ];
