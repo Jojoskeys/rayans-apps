@@ -152,6 +152,31 @@ class Fiches(Base):
         self.assertIn("- farine", texte)
 
 
+class Freins(Base):
+    def test_meme_video_reessayee_puis_arret(self):
+        import recuperer
+        from unittest import mock
+        self.stock.ajouter_lien("https://www.tiktok.com/@_/video/1", "test")
+        self.stock.ajouter_lien("https://www.tiktok.com/@_/video/2", "test")
+        appels = []
+
+        def faux(stock, v):
+            appels.append(v["id"])
+            if len(appels) == 1:
+                raise Exception("ERROR: HTTP Error 403: Forbidden")  # refus isolé : passe au 2e essai
+            if v["id"] == "tiktok-2":
+                raise Exception("ERROR: [TikTok] 2: Unexpected response from webpage request")
+            stock.changer(v["id"], etat="a_analyser")
+
+        with mock.patch.object(recuperer, "recuperer_une", faux), mock.patch("time.sleep"):
+            b = recuperer.recuperer(self.stock, afficher=lambda m: None)
+        self.assertEqual(appels[:2], ["tiktok-1", "tiktok-1"])
+        self.assertEqual(appels[2:], ["tiktok-2"] * 4)  # toujours bloqué : 4 essais puis arrêt
+        self.assertEqual(b["ok"], 1)
+        self.assertEqual(b["freine"], 1)
+        self.assertEqual(self.stock.videos["tiktok-2"]["etat"], "a_recuperer")  # pas marquée en erreur
+
+
 class Depots(Base):
     def test_lien_iphone_et_video(self):
         from recuperer import lire_depots
