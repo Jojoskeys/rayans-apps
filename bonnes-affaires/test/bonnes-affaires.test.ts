@@ -168,3 +168,12 @@ test("partage : le classement est déposé pour la tuile de l'iPhone", async () 
   assert.equal(lu.offres[0].photo, "https://exemple.invalid/p.jpg");
   assert.equal(lu.offres[0].choix, true);
 });
+
+test("rattachement : une annonce rangée par le site doit contenir les mots de la recherche", () => {
+  const reglages: Reglages = { ...base, recherches: [{ nom: "Écran 4K", mots: "ecran 4k", categorie: "electronique", prixHabituel: 200 }] };
+  const offres = classer(
+    [annonce("TV Samsung 55 pouces", 50, { recherche: "Écran 4K" }), annonce("Écran LG 27 4K", 100, { recherche: "Écran 4K" }), annonce("Cherche écran 4K", 10)],
+    reglages,
+  );
+  assert.deepEqual(offres.map((o) => o.titre), ["Écran LG 27 4K"]);
+});
