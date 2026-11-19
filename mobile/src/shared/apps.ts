@@ -21,4 +21,5 @@ export const APPS: MobileApp[] = [
   { id: "courses", name: "Courses", tagline: "Liste par rayon", icon: "✓", color: "#3BA776", files: ["courses"] },
   { id: "memo", name: "Mémo", tagline: "Idées et notes rapides", icon: "✎", color: "#C77DDB", files: ["memos"] },
   { id: "papiers", name: "Papiers", tagline: "Documents retrouvables", icon: "▤", color: "#7A8BA6", files: [] },
+  { id: "favoris", name: "Favoris", tagline: "Vidéos à analyser", icon: "★", color: "#C95B7F", files: [] },
 ];
