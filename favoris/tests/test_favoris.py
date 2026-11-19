@@ -152,6 +152,22 @@ class Fiches(Base):
         self.assertIn("- farine", texte)
 
 
+class DeuxProgrammes(Base):
+    def test_ni_l_un_ni_l_autre_n_ecrase(self):
+        self.stock.ajouter_lien("https://www.tiktok.com/@_/video/1", "test")
+        self.stock.ajouter_lien("https://www.tiktok.com/@_/video/2", "test")
+        self.stock.enregistrer()
+        telechargement, analyse = Stock(), Stock()  # chargés au même moment
+        telechargement.changer("tiktok-2", etat="a_analyser")
+        analyse.changer("tiktok-1", etat="analysee")
+        analyse.enregistrer()
+        telechargement.enregistrer()  # écrit après, avec une liste chargée avant l'analyse
+        relu = Stock().videos
+        self.assertEqual(relu["tiktok-1"]["etat"], "analysee")
+        self.assertEqual(relu["tiktok-2"]["etat"], "a_analyser")
+        self.assertEqual(telechargement.videos["tiktok-1"]["etat"], "analysee")  # mis à jour en mémoire aussi
+
+
 class Freins(Base):
     def test_meme_video_reessayee_puis_arret(self):
         import recuperer
