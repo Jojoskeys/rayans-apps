@@ -22,6 +22,7 @@ application dans `.github/workflows/`.
 | Rayan's Journal | [`journal/`](journal/) | `journal.yml` | Journal d'activité horodaté (applis, fenêtres, fichiers, session) et archive chiffrée des conversations WhatsApp, Telegram, Discord, Instagram, Messenger |
 | Rayan's Studio | [`studio/`](studio/) | — (outil local, Python + Remotion) | Vidéos verticales pour TikTok, YouTube Shorts et Reels (Ayati, La Psycho Facile) : versets vérifiés et récitation synchronisée, voix ElevenLabs, animations, sous-titres mot par mot |
 | Rayan's Favoris | [`favoris/`](favoris/) | — (outil local, Python + Claude Code `/favoris`) | Vidéos enregistrées sur Instagram et TikTok (export officiel, lien, vidéo, tuile « Favoris » de l'iPhone) : transcription, tri par catégorie, double vérification de sécurité, avis et prompt ; rien n'est appliqué sans validation |
+| Rayan's Bonnes Affaires | [`bonnes-affaires/`](bonnes-affaires/) | — (outil local, Node) | Classe les annonces d'occasion vendues bien sous leur prix habituel (vêtements de marque, électronique) : eBay par son API officielle, Vinted, Leboncoin, Facebook et autres par import de fichier ; prix, écart, revente, avis sûr / à vérifier / méfiance, mise en avant des meilleurs choix et zone de retrait autour de chez soi |
 
 Chaque push sur `main` qui touche une application la publie dans le catalogue de Rayan's Launcher (voir « Publication automatique depuis GitHub » dans [`launcher/README.md`](launcher/README.md)). Les paquets restent aussi téléchargeables dans l'onglet **Actions**, section **Artifacts**.
 

@@ -1,0 +1,48 @@
+{
+  "domiciles": [
+    {
+      "nom": "Ville 1",
+      "codePostal": ""
+    },
+    {
+      "nom": "Ville 2",
+      "codePostal": ""
+    }
+  ],
+  "distanceMaxKm": 40,
+  "ecartMin": 0.25,
+  "fraisRevente": 0.12,
+  "nombre": 20,
+  "ebay": {
+    "clientId": "",
+    "clientSecret": ""
+  },
+  "recherches": [
+    {
+      "nom": "Écran 27 pouces 4K",
+      "mots": "ecran 27 4k",
+      "categorie": "electronique",
+      "prixHabituel": 280,
+      "prixMax": 250
+    },
+    {
+      "nom": "Nintendo Switch OLED",
+      "mots": "switch oled",
+      "categorie": "electronique",
+      "prixHabituel": 260
+    },
+    {
+      "nom": "Doudoune The North Face Nuptse",
+      "mots": "north face nuptse",
+      "categorie": "vetements"
+    },
+    {
+      "nom": "Veste Patagonia",
+      "mots": "patagonia veste",
+      "categorie": "vetements",
+      "exclure": [
+        "enfant"
+      ]
+    }
+  ]
+}

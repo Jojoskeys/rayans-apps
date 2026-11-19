@@ -1,0 +1,222 @@
+[
+ {
+  "site": "eBay (démo)",
+  "titre": "Écran Dell 27 pouces 4K U2723QE très bon état",
+  "prix": 145,
+  "port": 9.9,
+  "lien": "https://exemple.invalid/demo/1",
+  "livrable": true,
+  "distanceKm": 410,
+  "procheDe": "Ville A",
+  "vendeurNote": 99.6,
+  "vendeurAvis": 812
+ },
+ {
+  "site": "Leboncoin (démo)",
+  "titre": "Ecran LG 27 4K UHD 27UL850",
+  "prix": 120,
+  "port": null,
+  "lien": "https://exemple.invalid/demo/2",
+  "livrable": false,
+  "distanceKm": 12,
+  "procheDe": "Ville A"
+ },
+ {
+  "site": "Leboncoin (démo)",
+  "titre": "Écran Samsung 27 4K pour pièces",
+  "prix": 30,
+  "port": null,
+  "lien": "https://exemple.invalid/demo/3",
+  "livrable": false,
+  "distanceKm": 5,
+  "procheDe": "Ville A"
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Écran 27 4K Iiyama",
+  "prix": 190,
+  "port": 6.5,
+  "lien": "https://exemple.invalid/demo/4",
+  "livrable": true
+ },
+ {
+  "site": "Facebook (démo)",
+  "titre": "Ecran 27 pouces 4K BenQ EW2780U",
+  "prix": 80,
+  "port": null,
+  "lien": "https://exemple.invalid/demo/5",
+  "livrable": false,
+  "distanceKm": 65,
+  "procheDe": "Ville B"
+ },
+ {
+  "site": "Facebook (démo)",
+  "titre": "Ecran 27 pouces 4K Philips",
+  "prix": 95,
+  "port": null,
+  "lien": "https://exemple.invalid/demo/6",
+  "livrable": false,
+  "distanceKm": 18,
+  "procheDe": "Ville B"
+ },
+ {
+  "site": "Facebook (démo)",
+  "titre": "Ecran 27 4K Asus envoi possible",
+  "prix": 70,
+  "port": 15,
+  "lien": "https://exemple.invalid/demo/7",
+  "livrable": true,
+  "distanceKm": 300,
+  "procheDe": "Ville A"
+ },
+ {
+  "site": "eBay (démo)",
+  "titre": "Nintendo Switch OLED blanche complète",
+  "prix": 175,
+  "port": 0,
+  "lien": "https://exemple.invalid/demo/8",
+  "livrable": true,
+  "distanceKm": 230,
+  "procheDe": "Ville A",
+  "vendeurNote": 100,
+  "vendeurAvis": 2
+ },
+ {
+  "site": "Leboncoin (démo)",
+  "titre": "Switch OLED + 2 jeux",
+  "prix": 160,
+  "port": null,
+  "lien": "https://exemple.invalid/demo/9",
+  "livrable": false,
+  "distanceKm": 9,
+  "procheDe": "Ville B"
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Coque Switch OLED transparente",
+  "prix": 8,
+  "port": 3.5,
+  "lien": "https://exemple.invalid/demo/10",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Nintendo Switch OLED neon",
+  "prix": 40,
+  "port": 4,
+  "lien": "https://exemple.invalid/demo/11",
+  "livrable": true,
+  "distanceKm": 500,
+  "procheDe": "Ville A"
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Doudoune The North Face Nuptse 1996 noire taille M",
+  "prix": 120,
+  "port": 5.2,
+  "lien": "https://exemple.invalid/demo/12",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Doudoune Doudoune North Face Nuptse 700 L",
+  "prix": 135,
+  "port": 5.2,
+  "lien": "https://exemple.invalid/demo/13",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Doudoune North Face Nuptse bleue S",
+  "prix": 110,
+  "port": 5.2,
+  "lien": "https://exemple.invalid/demo/14",
+  "livrable": true,
+  "distanceKm": 25,
+  "procheDe": "Ville B"
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Doudoune Nuptse North Face homme XL",
+  "prix": 140,
+  "port": 5.2,
+  "lien": "https://exemple.invalid/demo/15",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Doudoune The North Face Nuptse retro",
+  "prix": 125,
+  "port": 5.2,
+  "lien": "https://exemple.invalid/demo/16",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Doudoune North Face Nuptse kaki M",
+  "prix": 60,
+  "port": 5.2,
+  "lien": "https://exemple.invalid/demo/17",
+  "livrable": true,
+  "distanceKm": 320,
+  "procheDe": "Ville A"
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Doudoune Doudoune style North Face Nuptse",
+  "prix": 25,
+  "port": 5.2,
+  "lien": "https://exemple.invalid/demo/18",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Patagonia veste polaire Retro-X M",
+  "prix": 95,
+  "port": 4.8,
+  "lien": "https://exemple.invalid/demo/19",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Veste Patagonia Torrentshell L",
+  "prix": 70,
+  "port": 4.8,
+  "lien": "https://exemple.invalid/demo/20",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Veste Patagonia Nano Puff S",
+  "prix": 85,
+  "port": 4.8,
+  "lien": "https://exemple.invalid/demo/21",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Patagonia veste Better Sweater M",
+  "prix": 65,
+  "port": 4.8,
+  "lien": "https://exemple.invalid/demo/22",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Veste Patagonia enfant 10 ans",
+  "prix": 30,
+  "port": 4.8,
+  "lien": "https://exemple.invalid/demo/23",
+  "livrable": true
+ },
+ {
+  "site": "Vinted (démo)",
+  "titre": "Patagonia veste Down Sweater",
+  "prix": 40,
+  "port": 4.8,
+  "lien": "https://exemple.invalid/demo/24",
+  "livrable": true,
+  "distanceKm": 31,
+  "procheDe": "Ville A"
+ }
+]

@@ -1,0 +1,5 @@
+# Réglages personnels (code postal, clés eBay) et résultats : jamais dans le dépôt
+reglages.json
+resultats/
+imports/*
+!imports/LISEZ-MOI.txt
