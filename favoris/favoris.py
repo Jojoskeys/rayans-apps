@@ -315,7 +315,10 @@ def main(argv=None) -> None:
     a = s.add_parser("ajouter")
     a.add_argument("quoi")
     a.add_argument("--note", default="")
-    s.add_parser("recuperer").add_argument("--limite", type=int)
+    r = s.add_parser("recuperer")
+    r.add_argument("--limite", type=int)
+    r.add_argument("--insister", action="store_true",
+                   help="si la plateforme bloque, attendre 1 h et reprendre (12 fois au plus)")
     s.add_parser("etat")
     s.add_parser("fiche").add_argument("chemin", type=Path)
     m = s.add_parser("marquer")
@@ -346,8 +349,13 @@ def main(argv=None) -> None:
     elif args.cmd == "recuperer":
         from recuperer import lire_depots, recuperer
         print(f"{lire_depots(stock)} nouveauté(s) dans a-deposer.")
-        b = recuperer(stock, args.limite)
-        print(f"{b['ok']} prête(s) pour l'analyse, {b['erreur']} impossible(s).")
+        for tour in range(12 if args.insister else 1):
+            b = recuperer(stock, args.limite)
+            print(f"{b['ok']} prête(s) pour l'analyse, {b['erreur']} impossible(s).", flush=True)
+            if not b["freine"] or not args.insister:
+                break
+            print(f"Bloqué par la plateforme : reprise dans 1 h ({tour + 1}/12).", flush=True)
+            time.sleep(3600)
     elif args.cmd == "etat":
         compte: dict[str, int] = {}
         for v in stock.videos.values():

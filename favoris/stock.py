@@ -75,13 +75,36 @@ class Stock:
     def __init__(self, dossier: Path | None = None):
         self.dossier = dossier or racine()
         self.fichier = self.dossier / "favoris.json"
-        self.videos: dict[str, dict] = {}
-        if self.fichier.exists():
-            self.videos = {v["id"]: v for v in json.loads(self.fichier.read_text("utf-8"))}
+        self.videos: dict[str, dict] = self._lire()
+        # État au chargement : à l'enregistrement, seules les vidéos changées depuis sont écrites, par-dessus la
+        # liste relue sur le disque. Deux programmes (téléchargement et analyse) peuvent ainsi travailler ensemble.
+        self._charge = {k: json.dumps(v, sort_keys=True) for k, v in self.videos.items()}
+
+    def _lire(self) -> dict[str, dict]:
+        for essai in range(10):
+            try:
+                if not self.fichier.exists():
+                    return {}
+                return {v["id"]: v for v in json.loads(self.fichier.read_text("utf-8"))}
+            except (PermissionError, json.JSONDecodeError):
+                if essai == 9:
+                    raise
+                time.sleep(0.5)
+        return {}
 
     def enregistrer(self) -> None:
-        tmp = self.fichier.with_suffix(".tmp")
-        tmp.write_text(json.dumps(list(self.videos.values()), ensure_ascii=False, indent=1), "utf-8")
+        sur_disque = self._lire()
+        for k, v in self.videos.items():
+            fige = json.dumps(v, sort_keys=True)
+            if self._charge.get(k) != fige:
+                sur_disque[k] = v
+                self._charge[k] = fige
+        for k, v in sur_disque.items():  # ce que l'autre programme a changé entre-temps
+            if k not in self.videos or self._charge.get(k) == json.dumps(self.videos[k], sort_keys=True):
+                self.videos[k] = v
+                self._charge[k] = json.dumps(v, sort_keys=True)
+        tmp = self.fichier.with_suffix(f".{os.getpid()}.tmp")
+        tmp.write_text(json.dumps(list(sur_disque.values()), ensure_ascii=False, indent=1), "utf-8")
         for essai in range(10):  # Windows refuse le remplacement si la liste est lue au même moment
             try:
                 tmp.replace(self.fichier)
