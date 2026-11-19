@@ -216,6 +216,7 @@ class Seance {
         var cle = EX_CLES[exercice] as String;
         Application.Storage.setValue("derniere_" + cle, series);
         Totaux.ajouter(cle, total());
+        Raccourci.publier();
     }
 
     function vibrer(ms as Number) as Void {
@@ -225,7 +226,8 @@ class Seance {
     }
 }
 
-// Compteurs de toujours et du jour, par exercice (stockés sur la montre).
+// Compteurs de toujours et du jour, par exercice (stockés sur la montre). (:glance) : lus aussi par l'aperçu.
+(:glance)
 module Totaux {
     function jour() as Number {
         var g = Gregorian.info(Time.now(), Time.FORMAT_SHORT);

@@ -8,4 +8,6 @@
     <string id="sensBasse">Basse (moins de faux comptes)</string>
     <string id="sensNormale">Normale</string>
     <string id="sensHaute">Haute (petits mouvements)</string>
+    <string id="ComplicationLong">Muscu du jour</string>
+    <string id="ComplicationCourt">MUSCU</string>
 </strings>

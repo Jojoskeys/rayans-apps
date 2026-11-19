@@ -1,0 +1,49 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "launcher-ui",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "launcher",
+        "run",
+        "dev:ui"
+      ],
+      "port": 1420
+    },
+    {
+      "name": "launcher-ui-1431",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "launcher",
+        "run",
+        "dev:ui",
+        "--",
+        "--port",
+        "1431"
+      ],
+      "port": 1431
+    },
+    {
+      "name": "mobile",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "mobile/scripts/serve.mjs"
+      ],
+      "port": 4173
+    },
+    {
+      "name": "journal-ui",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "journal",
+        "run",
+        "dev:ui"
+      ],
+      "port": 1432
+    }
+  ]
+}

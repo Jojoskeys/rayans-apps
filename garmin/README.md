@@ -5,10 +5,11 @@ Rien n'est piraté : la montre accepte les apps de développeur copiées par câ
 
 | App | Dossier | Type | Ce qu'elle fait |
 | --- | --- | --- | --- |
-| Rayan's Prière (cadran) | [`cadran-priere/`](cadran-priere/) | cadran | Heure, date, **prochaine prière** et temps restant sur un anneau solaire de 24 h, pas, cœur, batterie. **Alerte à l'heure de chaque prière** : notification de la montre « C'est l'heure de Asr — 15:20 », avec vibration. Écran toujours allumé : affichage réduit qui se décale chaque minute. |
+| Rayan's Prière (cadran) | [`cadran-priere/`](cadran-priere/) | cadran | Heure, date, **prochaine prière** et temps restant sur un anneau solaire de 24 h ; en haut météo, Body Battery et répétitions de Muscu ; en bas pas, cœur, batterie, notifications. **Appui long** sur une info pour ouvrir l'écran qui va avec (Muscu compris) ; sur la prière, les six horaires du jour. **Alerte à l'heure de chaque prière** : notification de la montre « C'est l'heure de Asr — 15:20 », avec vibration. Écran toujours allumé : affichage réduit qui se décale chaque minute. |
 | Rayan's 5 km | [`champ-5km/`](champ-5km/) | champ de données | Pendant une course : **avance ou retard** sur le temps visé, temps final estimé, distance restante ; alerte à chaque km (temps du km, écart) ; après 5 km, le vrai temps sur 5 km. |
-| Rayan's Muscu | [`muscu/`](muscu/) | app | **Tractions** ou **pompes**, comme une course : le chrono part dès le choix, START passe de la série (répétitions comptées au poignet) à la pause (chrono), puis à la série suivante ; RETOUR termine. Compteurs du jour et de toujours par exercice. Réglages sur la montre. Enregistrée comme activité « Musculation » (un circuit par série). |
+| Rayan's Muscu | [`muscu/`](muscu/) | app | **Tractions** ou **pompes**, comme une course : le chrono part dès le choix, START passe de la série (répétitions comptées au poignet) à la pause (chrono), puis à la série suivante ; RETOUR termine. Compteurs du jour et de toujours par exercice. **Aperçu dans la liste des widgets** (répétitions du jour) et raccourci sur le cadran. Réglages sur la montre. Enregistrée comme activité « Musculation » (un circuit par série). |
 
+![Cadran avec la ligne du haut, les six horaires après un appui long, aperçu Muscu](captures/cadran-raccourcis.png)
 ![Cadran, écran toujours allumé, champ 5 km](captures/cadran-et-5km.png)
 ![Muscu : accueil, prêt, série](captures/muscu-accueil-serie.png)
 ![Muscu : objectif atteint, repos, fin](captures/muscu-objectif-repos-fin.png)
@@ -18,6 +19,8 @@ Rien n'est piraté : la montre accepte les apps de développeur copiées par câ
 - **Cadran** : anneau de 24 h (midi en haut, minuit en bas) aux couleurs de la lumière du jour — nuit (bleu),
   aube de Fajr au lever (violet), jour (or sombre), crépuscule de Maghrib à Isha (prune). Un trait par prière (la
   prochaine en or), un point blanc pour l'heure actuelle. Heure en Roboto Condensed gras, deux-points en or.
+  Ligne du haut : météo (icône soleil, lune, nuage, pluie, neige, orage), Body Battery (éclair bleu), répétitions
+  du jour de Muscu (bonhomme à la barre, en or dès qu'il y en a). Pas en or quand l'objectif du jour est atteint.
 - **Muscu** : accueil en deux cartes avec pictogramme ; pendant la série, l'anneau se remplit vers l'objectif
   (or, puis vert) ; pendant le repos, il se vide (bleu, puis or) ; points des séries ; histogramme à la fin.
 - **5 km** (champ en plein écran) : anneau de distance coloré selon l'écart, trait du temps visé (où il faudrait
@@ -48,6 +51,27 @@ les courses sont ajoutées au journal sport, puis partent sur l'iPhone avec la s
 faite ce jour-là pour le même exercice (ou la même course) l'emporte. Détails : « Sport » dans
 [`aujourdhui/README.md`](../aujourdhui/README.md). Dans le fichier de la montre, un circuit = une série et le repos
 qui suit, donc une correction faite pendant le repos est bien prise en compte.
+
+## Appui long sur le cadran
+
+| Zone | Ouvre |
+| --- | --- |
+| Météo | la météo de la montre |
+| Éclair (Body Battery) | la Body Battery |
+| Bonhomme (Muscu) | **Rayan's Muscu** directement |
+| Pas · cœur · batterie · enveloppe | l'écran correspondant de la montre |
+| Prochaine prière | les six horaires du jour pendant 8 s (nouvel appui : retour) |
+
+Ailleurs, l'appui long garde son rôle habituel (choix du cadran). Le raccourci Muscu passe par une
+« complication » publiée par Muscu (`muscu/source/Raccourci.mc`, visible seulement par les apps de la même clé) :
+la tuile n'apparaît qu'une fois Muscu installée et ouverte au moins une fois.
+
+## Mettre les apps en premier (sur la montre)
+
+- **Liste des widgets** (HAUT ou BAS depuis le cadran) : maintenir HAUT → Apparence → Aperçus → choisir Rayan's
+  Muscu → la monter tout en haut.
+- **Liste des activités** (START) : Activités et applications → Rayan's Muscu → Réorganiser → en haut.
+- **Course** : mettre Rayan's 5 km sur le premier écran de données (Course → réglages → Écrans de données).
 
 ## Boutons de Rayan's Muscu
 

@@ -11,13 +11,21 @@ const EX_NOMS = ["Tractions", "Pompes"];
 const EX_CLES = ["tractions", "pompes"];
 const EX_INTERVALLE = [1.0, 0.6];
 
+(:glance)
 class MuscuApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
     }
 
+    // Aperçu dans la liste des widgets (sous le cadran) : ce qui a été fait aujourd'hui.
+    (:glance)
+    function getGlanceView() as [WatchUi.GlanceView] or [WatchUi.GlanceView, WatchUi.GlanceViewDelegate] or Null {
+        return [new MuscuApercu()];
+    }
+
     function getInitialView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] {
+        Raccourci.publier();   // valeur du raccourci à jour (nouveau jour : 0)
         var vue = new AccueilVue();
         return [vue, new AccueilDelegue(vue)];
     }
