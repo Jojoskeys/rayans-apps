@@ -104,3 +104,16 @@ puis les autres offres. Un appui sur l'annonce l'ouvre sur le site.
 - Il faut que la Télécommande soit associée (tuile Télécommande) et à jour (Rayan's Launcher).
 - La tuile montre le dernier classement calculé sur le PC : relancer `npm start` pour le mettre à jour.
 - Après `npm run demo`, la tuile affiche un bandeau « données d'exemple ».
+
+## Recherche automatique chaque matin
+
+```
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1                (chaque jour à 7 h 00)
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1 -Heure 06:30   (autre heure)
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier.ps1 -Retirer       (arrêter)
+```
+
+Crée la tâche planifiée Windows « Rayan's Bonnes Affaires » : elle lance `lancer.ps1` sans fenêtre, dans ta
+session (pas de mot de passe enregistré, pas de droits administrateur), et rattrape le lancement dès que le
+PC est rallumé s'il était éteint à l'heure prévue. Le compte rendu va dans `resultats\journal.txt` et la
+tuile de l'iPhone est mise à jour à chaque passage.
