@@ -50,15 +50,26 @@ async function chargerVideo(cfg: Config, id: string, progression: (p: number) =>
   return URL.createObjectURL(new Blob(morceaux as BlobPart[], { type: "video/mp4" }));
 }
 
+interface Script { id: string; titre: string; compte: string; texte: string; sources: string[]; note: string; version: number; envoye: number; retours: Retour[] }
+interface Idee { id: string; texte: string; compte: "ayati" | "psycho" | ""; at: number; statut: "nouvelle" | "script" | "faite" | "abandonnée" }
+type Onglet = "videos" | "scripts" | "idees";
+const NOM_COMPTE: Record<string, string> = { ayati: "Ayati", psycho: "La Psycho Facile", "": "Les deux / à voir" };
+
 function App() {
   const [cfg] = useState<Config | null>(lireConfig);
+  const [onglet, setOnglet] = useState<Onglet>(() => (new URLSearchParams(location.search).get("onglet") as Onglet) || "videos");
   const [videos, setVideos] = useState<Video[] | null>(null);
+  const [scripts, setScripts] = useState<Script[] | null>(null);
+  const [idees, setIdees] = useState<Idee[] | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [message, setMessage] = useState<{ ok: boolean; texte: string } | null>(null);
   const charger = useCallback(async () => {
     if (!cfg) return;
     try { setVideos((await appel<{ videos: Video[] }>(cfg, "/api/studio")).videos); setErreur(null); }
-    catch (e) { setErreur(String((e as Error).message ?? e)); }
+    catch (e) { setErreur(String((e as Error).message ?? e)); return; }
+    // Scripts et idées : Télécommande 1.2 ou plus ; avec une version plus ancienne, les onglets l'indiquent.
+    try { setScripts((await appel<{ scripts: Script[] }>(cfg, "/api/studio/scripts")).scripts); } catch { setScripts(null); }
+    try { setIdees((await appel<{ idees: Idee[] }>(cfg, "/api/studio/idees")).idees); } catch { setIdees(null); }
   }, [cfg]);
   useEffect(() => { void charger(); }, [charger]);
   useEffect(() => { if (!message) return; const t = setTimeout(() => setMessage(null), message.ok ? 4000 : 9000); return () => clearTimeout(t); }, [message]);
@@ -75,12 +86,22 @@ function App() {
 
   const aRegarder = (videos ?? []).filter((v) => !reponseActuelle(v));
   const repondues = (videos ?? []).filter((v) => reponseActuelle(v));
+  const aLire = (scripts ?? []).filter((s) => !reponseActuelle(s));
+  const dire = { ok: (m: string) => { setMessage({ ok: true, texte: m }); void charger(); }, ko: (m: string) => setMessage({ ok: false, texte: m }) };
+  const pastille = (n: number) => (n > 0 ? <span className="pastille">{n}</span> : null);
   return (
     <div className="tc">
       <div className="titre-carte"><h1>Studio</h1><button className="lien accent" onClick={() => void charger()}>Actualiser</button></div>
+      <nav className="onglets trois">
+        <button className={onglet === "videos" ? "actif" : ""} onClick={() => setOnglet("videos")}>Vidéos{pastille(aRegarder.length)}</button>
+        <button className={onglet === "scripts" ? "actif" : ""} onClick={() => setOnglet("scripts")}>Scripts{pastille(aLire.length)}</button>
+        <button className={onglet === "idees" ? "actif" : ""} onClick={() => setOnglet("idees")}>Idées</button>
+      </nav>
       {message && <p className={`toast ${message.ok ? "ok" : "ko"}`} onClick={() => setMessage(null)}>{message.texte}</p>}
-      {erreur && <section className="carte"><p className="ko">{erreur === INJOIGNABLE ? erreur : `Impossible de lire les vidéos : ${erreur}`}</p></section>}
-      {videos && (
+      {erreur && <section className="carte"><p className="ko">{erreur === INJOIGNABLE ? erreur : `Impossible de lire le Studio : ${erreur}`}</p></section>}
+      {onglet === "scripts" && !erreur && <Scripts cfg={cfg} scripts={scripts} dire={dire} />}
+      {onglet === "idees" && !erreur && <Idees cfg={cfg} idees={idees} dire={dire} />}
+      {onglet === "videos" && videos && (
         <>
           <section className="carte">
             <div className="titre-carte"><h2>À regarder</h2>{aRegarder.length > 0 && <span className="puce orange">{aRegarder.length}</span>}</div>
@@ -95,8 +116,122 @@ function App() {
           )}
         </>
       )}
-      <p className="petit centre">Les vidéos restent sur le PC (Vidéos\Rayan's Studio\A valider) ; tes réponses y sont enregistrées et Claude les lit.</p>
+      <p className="petit centre">Tout reste sur le PC (Vidéos\Rayan's Studio) ; tes réponses et tes idées y sont enregistrées et Claude les lit.</p>
     </div>
+  );
+}
+
+const TROP_ANCIENNE = "Mets à jour Rayan's Télécommande sur le PC (Rayan's Launcher, version 1.2 ou plus) pour utiliser cet onglet.";
+interface Dire { ok: (m: string) => void; ko: (m: string) => void }
+
+/** Réponse « C'est bon » / « À corriger » (commune aux scripts ; les vidéos ont la leur, avec le moment de la vidéo). */
+function Reponse({ titre, envoyer }: { titre: string; envoyer: (verdict: "ok" | "corriger", commentaire: string) => Promise<void> }) {
+  const [mode, setMode] = useState<"choix" | "corriger">("choix");
+  const [commentaire, setCommentaire] = useState("");
+  const [envoi, setEnvoi] = useState(false);
+  const go = async (v: "ok" | "corriger") => { setEnvoi(true); try { await envoyer(v, commentaire.trim()); } finally { setEnvoi(false); } };
+  return mode === "choix" ? (
+    <div className="ligne">
+      <button className="bouton vert" disabled={envoi} onClick={() => { if (confirm(`Valider « ${titre} » ? Claude pourra fabriquer la vidéo.`)) void go("ok"); }}>✓ C'est bon</button>
+      <button className="bouton orange" disabled={envoi} onClick={() => setMode("corriger")}>✎ À corriger</button>
+    </div>
+  ) : (
+    <>
+      <textarea rows={5} autoFocus value={commentaire} onChange={(e) => setCommentaire(e.target.value)} placeholder={"Ce qu'il faut changer, par exemple :\nl'accroche est trop longue\nretire la phrase sur…"} />
+      <div className="ligne">
+        <button className="bouton secondaire" onClick={() => setMode("choix")}>Annuler</button>
+        <button className="bouton" disabled={envoi || !commentaire.trim()} onClick={() => void go("corriger")}>{envoi ? "Envoi…" : "Envoyer à Claude"}</button>
+      </div>
+    </>
+  );
+}
+
+function Scripts({ cfg, scripts, dire }: { cfg: Config; scripts: Script[] | null; dire: Dire }) {
+  if (!scripts) return <section className="carte"><p>{TROP_ANCIENNE}</p></section>;
+  const aLire = scripts.filter((s) => !reponseActuelle(s));
+  const repondus = scripts.filter((s) => reponseActuelle(s));
+  const fiche = (s: Script, ouvert: boolean) => <FicheScript key={`${s.id}-${s.version}`} cfg={cfg} s={s} ouvert={ouvert} dire={dire} />;
+  return (
+    <>
+      <section className="carte">
+        <div className="titre-carte"><h2>À lire</h2>{aLire.length > 0 && <span className="puce orange">{aLire.length}</span>}</div>
+        {aLire.length === 0 ? <p>Aucun script à valider. Note une idée dans l'onglet Idées : Claude en fait un script et le dépose ici, avant de fabriquer la vidéo.</p>
+          : aLire.map((s) => fiche(s, aLire.length === 1))}
+      </section>
+      {repondus.length > 0 && <section className="carte"><h2>Déjà répondu</h2>{repondus.map((s) => fiche(s, false))}</section>}
+    </>
+  );
+}
+
+function FicheScript({ cfg, s, ouvert, dire }: { cfg: Config; s: Script; ouvert: boolean; dire: Dire }) {
+  const [deplie, setDeplie] = useState(ouvert);
+  const reponse = reponseActuelle(s);
+  return (
+    <article className="fiche">
+      <button className="entete" onClick={() => setDeplie(!deplie)}>
+        <span className="texte">
+          <b>{s.titre}</b>
+          <small>{NOM_COMPTE[s.compte] ?? s.compte}{s.version > 1 ? ` · version ${s.version}` : ""} · {quand(s.envoye)}</small>
+        </span>
+        {reponse ? <span className={`puce ${reponse.verdict === "ok" ? "vert" : "rouge"}`}>{reponse.verdict === "ok" ? "Validé" : "À corriger"}</span> : <span className="fleche">{deplie ? "˄" : "˅"}</span>}
+      </button>
+      {deplie && (
+        <div className="corps">
+          {s.note && <p className="note"><b>Claude :</b> {s.note}</p>}
+          <div className="script">{s.texte}</div>
+          {s.sources.length > 0 && <details><summary>Sources ({s.sources.length})</summary><ul className="journal">{s.sources.map((x, i) => <li key={i}>{x}</li>)}</ul></details>}
+          {reponse ? (
+            <p className="petit">Ta réponse ({quand(reponse.at)}) : <b className={reponse.verdict === "ok" ? "ok" : "ko"}>{reponse.verdict === "ok" ? "c'est bon" : "à corriger"}</b>{reponse.commentaire && <span className="citation">{reponse.commentaire}</span>}</p>
+          ) : (
+            <Reponse titre={s.titre} envoyer={async (verdict, commentaire) => {
+              try {
+                await appel(cfg, "/api/studio/script/retour", { corps: { id: s.id, version: s.version, verdict, commentaire } });
+                dire.ok(verdict === "ok" ? `Script validé ✓ Claude fabrique la vidéo.` : "Corrections envoyées ✓");
+              } catch (e) { dire.ko(String((e as Error).message ?? e)); }
+            }} />
+          )}
+        </div>
+      )}
+    </article>
+  );
+}
+
+function Idees({ cfg, idees, dire }: { cfg: Config; idees: Idee[] | null; dire: Dire }) {
+  const [texte, setTexte] = useState("");
+  const [compte, setCompte] = useState<Idee["compte"]>("");
+  const [envoi, setEnvoi] = useState(false);
+  if (!idees) return <section className="carte"><p>{TROP_ANCIENNE}</p></section>;
+  const ajouter = async () => {
+    setEnvoi(true);
+    try { await appel(cfg, "/api/studio/idees", { corps: { texte, compte } }); setTexte(""); dire.ok("Idée notée ✓ Claude la verra sur le PC."); }
+    catch (e) { dire.ko(String((e as Error).message ?? e)); } finally { setEnvoi(false); }
+  };
+  const statut: Record<Idee["statut"], string> = { nouvelle: "nouvelle", script: "script en cours", faite: "vidéo faite", "abandonnée": "abandonnée" };
+  return (
+    <>
+      <section className="carte">
+        <h2>Nouvelle idée</h2>
+        <textarea rows={3} value={texte} onChange={(e) => setTexte(e.target.value)} placeholder={"Un sujet, une question, une histoire…\nex. pourquoi on bâille quand quelqu'un bâille"} />
+        <div className="choix-compte">
+          {(["ayati", "psycho", ""] as const).map((c) => (
+            <button key={c} className={compte === c ? "actif" : ""} onClick={() => setCompte(c)}>{NOM_COMPTE[c]}</button>
+          ))}
+        </div>
+        <button className="bouton" disabled={envoi || !texte.trim()} onClick={() => void ajouter()}>{envoi ? "Envoi…" : "Noter l'idée"}</button>
+        <p className="petit">Astuce : touche le micro du clavier pour dicter ton idée.</p>
+      </section>
+      <section className="carte">
+        <h2>Mes idées</h2>
+        {idees.length === 0 ? <p>Pas encore d'idée.</p> : (
+          <ul className="liste">{idees.map((i) => (
+            <li key={i.id}>
+              <span className="texte"><b className="idee">{i.texte}</b><small>{NOM_COMPTE[i.compte]} · {quand(i.at)} · {statut[i.statut]}</small></span>
+              <button className="lien danger" onClick={() => { if (confirm("Supprimer cette idée ?")) void appel(cfg, "/api/studio/idees/supprimer", { corps: { id: i.id } }).then(() => dire.ok("Idée supprimée."), (e) => dire.ko(String((e as Error).message ?? e))); }}>×</button>
+            </li>
+          ))}</ul>
+        )}
+      </section>
+    </>
   );
 }
 

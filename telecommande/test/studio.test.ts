@@ -56,3 +56,29 @@ test("studio : refuse une ancienne version, une correction vide, une vidéo inco
   assert.equal(code(() => ajouterRetour(d, "absent", 1, "ok", "")), 404);
   assert.deepEqual(lister(d)[0].retours, []);
 });
+
+import { ajouterIdee, ajouterRetourScript, listerIdees, listerScripts, supprimerIdee } from "../src/core/studio.ts";
+
+test("scripts : listés avec leur texte et leurs sources, réponses par version", () => {
+  const d = dossier();
+  fs.writeFileSync(path.join(d, "psycho-baille.json"), JSON.stringify({ titre: "Pourquoi tu bâilles ?", compte: "psycho", texte: "Pourquoi…", sources: ["Provine 1986", 3], version: 1, envoye: 10 }));
+  fs.writeFileSync(path.join(d, "vide.json"), JSON.stringify({ titre: "sans texte" }));
+  fs.writeFileSync(path.join(d, "psycho-baille.retours.json"), "[]");
+  const l = listerScripts(d);
+  assert.deepEqual(l.map((s) => s.id), ["psycho-baille"]);
+  assert.deepEqual(l[0].sources, ["Provine 1986"]);
+  ajouterRetourScript(d, "psycho-baille", 1, "corriger", "plus court", 5);
+  assert.equal(listerScripts(d)[0].retours[0].commentaire, "plus court");
+  assert.throws(() => ajouterRetourScript(d, "psycho-baille", 2, "ok", ""), ErreurRetour);
+});
+
+test("idées : ajoutées en tête, compte inconnu vidé, suppression", () => {
+  const f = path.join(dossier(), "sous", "idees.json");
+  const a = ajouterIdee(f, "  pourquoi on bâille  ", "psycho", 1);
+  const b = ajouterIdee(f, "Youssouf et ses frères", "pirate", 2);
+  assert.deepEqual(listerIdees(f).map((i) => [i.texte, i.compte, i.statut]), [["Youssouf et ses frères", "", "nouvelle"], ["pourquoi on bâille", "psycho", "nouvelle"]]);
+  assert.throws(() => ajouterIdee(f, "   ", "ayati"), ErreurRetour);
+  supprimerIdee(f, b.id);
+  assert.deepEqual(listerIdees(f).map((i) => i.id), [a.id]);
+  assert.throws(() => supprimerIdee(f, "absent"), ErreurRetour);
+});
