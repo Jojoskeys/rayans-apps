@@ -17,6 +17,11 @@ const api: ChronoApi = {
   },
   exportCsv: (req) => ipcRenderer.invoke("export-csv", req),
   command: (cmd) => ipcRenderer.invoke("commande", cmd),
+  onBarre: (cb) => {
+    const h = (_: unknown, r: number) => cb(r);
+    ipcRenderer.on("barre", h);
+    return () => ipcRenderer.removeListener("barre", h);
+  },
 };
 
 contextBridge.exposeInMainWorld("chrono", api);

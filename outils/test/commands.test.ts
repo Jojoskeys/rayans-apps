@@ -45,7 +45,7 @@ test("tailles et durées", () => {
 });
 
 test("suggestions", () => {
-  assert.equal(suggest("").length, 15);
+  assert.equal(suggest("").length, 18);
   assert.equal(suggest("ech")[0].id, "echeance");
   assert.equal(suggest("abonnement")[0].id, "echeance");
   assert.equal(suggest("sauvegarde")[0].id, "sauve");

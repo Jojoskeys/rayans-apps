@@ -2,14 +2,16 @@ import { Fragment, useEffect, useState } from "react";
 import { choreStatus, daysBetween, iso, nextDate } from "../core/suivi.ts";
 import { TOOLS, type ToolId } from "../core/commands.ts";
 import type { Goto, State } from "./api-types.ts";
-import { api, IconClose, IconGear, IconImage, IconPdf, IconPhone, IconPower, IconSound, IconText, IconWifi, useOutils } from "./shared.tsx";
+import { api, IconClose, IconGear, IconImage, IconPdf, IconPhone, IconPower, IconSound, IconText, IconWifi, IconDisk, IconPlain, IconRename, useOutils } from "./shared.tsx";
 import { OutilEteins, OutilImage, OutilPdf, OutilSon, OutilTel, OutilTexte, OutilWifi } from "./Tools.tsx";
+import { OutilBrut, OutilDisque, OutilNomme } from "./Fichiers.tsx";
 import { IconBookmark, IconBroom, IconCalendar, IconClipboard, IconClock, OutilColle, OutilEcheance, OutilFait, OutilGarde, OutilRecent } from "./Suivi.tsx";
 
 type Onglet = ToolId | "reglages";
 const ICONS: Partial<Record<ToolId, () => React.ReactElement>> = {
   pdf: () => <IconPdf />, img: () => <IconImage />, tel: () => <IconPhone />, wifi: () => <IconWifi />,
   son: () => <IconSound />, texte: () => <IconText />, eteins: () => <IconPower />,
+  disque: () => <IconDisk />, brut: () => <IconPlain />, nomme: () => <IconRename />,
   echeance: () => <IconCalendar />, garde: () => <IconBookmark />, fait: () => <IconBroom />, recent: () => <IconClock />, colle: () => <IconClipboard />,
 };
 /** Les commandes qui ouvrent une autre application n'ont pas de panneau. */
@@ -56,6 +58,9 @@ export function App() {
         {onglet === "wifi" && <OutilWifi {...props} />}
         {onglet === "son" && <OutilSon {...props} />}
         {onglet === "texte" && <OutilTexte {...props} />}
+        {onglet === "disque" && <OutilDisque {...props} />}
+        {onglet === "brut" && <OutilBrut {...props} />}
+        {onglet === "nomme" && <OutilNomme {...props} />}
         {onglet === "eteins" && <OutilEteins {...props} />}
         {onglet === "echeance" && <OutilEcheance {...props} />}
         {onglet === "garde" && <OutilGarde {...props} />}

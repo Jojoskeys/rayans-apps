@@ -45,6 +45,15 @@ export interface Settings {
   notifications: boolean;
   miniOnTop: boolean;
   closeToTray: boolean;
+  /** Écran de pause plein écran pendant les pauses du Pomodoro (sur le PC). */
+  pauseForcee: boolean;
+  /** Fine barre en haut de l'écran qui se remplit avec le temps de travail du jour. */
+  barreTemps: boolean;
+  /** Objectif de travail du jour, en minutes (barre pleine). */
+  objectifMin: number;
+  /** Pendant le travail, les fenêtres dont le titre contient un de ces mots sont réduites. */
+  bloquer: boolean;
+  motsBloques: string[];
 }
 
 export interface Timer {

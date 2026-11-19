@@ -1,6 +1,7 @@
 // Barre de commande : ce que l'on tape (« img 1mo », « eteins 45 », « son casque »…) devient une action.
 
 export type ToolId = "pdf" | "img" | "tel" | "wifi" | "son" | "texte" | "eteins"
+  | "disque" | "brut" | "nomme"
   | "echeance" | "garde" | "fait" | "recent" | "colle"
   | "bosse" | "aujourdhui" | "sauve";
 
@@ -16,6 +17,9 @@ export const TOOLS: Tool[] = [
   { id: "wifi", command: "wifi", title: "Mot de passe Wi-Fi", hint: "Réseau connecté, clé et QR code pour un invité", aliases: ["wi-fi", "wlan", "reseau"], group: "outil" },
   { id: "son", command: "son", title: "Sortie audio", hint: "son : sortie suivante · son casque : par son nom", aliases: ["audio", "casque", "enceintes", "hautparleurs"], group: "outil" },
   { id: "texte", command: "texte", title: "Copier le texte de l'écran", hint: "Sélectionnez une zone, le texte est copié", aliases: ["ocr", "copier", "lire"], group: "outil" },
+  { id: "disque", command: "disque", title: "Place sur le disque", hint: "Les dossiers qui prennent le plus de place", aliases: ["place", "espace", "stockage", "taille"], group: "outil" },
+  { id: "brut", command: "brut", title: "Coller en texte brut", hint: "Ctrl+Alt+V colle sans police ni couleurs · brut : nettoie le presse-papiers", aliases: ["coller-brut", "sans-forme", "nettoyer"], group: "outil" },
+  { id: "nomme", command: "nomme", title: "Renommer d'après le contenu", hint: "Scans, photos, PDF : « scan0042.pdf » → « Attestation CAF novembre 2026.pdf »", aliases: ["renommer", "nommer", "rename"], group: "outil" },
   { id: "eteins", command: "eteins 45", title: "Éteindre plus tard", hint: "eteins 45 · eteins 1h30 · veille 20 · redemarre 10 · eteins annuler", aliases: ["eteindre", "arret", "veille", "redemarre", "redemarrer", "shutdown"], group: "outil" },
   { id: "echeance", command: "echeance", title: "Échéances et abonnements", hint: "echeance Netflix 15/12 · rappel 3 jours avant, export pour l'agenda", aliases: ["echeances", "abonnement", "abonnements", "deadline", "resilier"], group: "suivi" },
   { id: "garde", command: "garde", title: "À lire plus tard", hint: "garde exemple.fr/article pour le mémoire · effacé après 30 jours", aliases: ["lire", "lien", "liens", "plustard"], group: "suivi" },
@@ -36,6 +40,9 @@ export type Parsed =
   | { tool: "wifi" }
   | { tool: "son"; query: string | null }
   | { tool: "texte" }
+  | { tool: "disque" }
+  | { tool: "brut" }
+  | { tool: "nomme" }
   | { tool: "eteins"; mode: PowerMode; minutes: number | null; cancel: boolean }
   | { tool: "echeance"; text: string }
   | { tool: "garde"; text: string }
@@ -89,6 +96,7 @@ export function parse(input: string): Parsed | null {
     case "tel": return { tool: "tel", text: arg || null };
     case "wifi": return { tool: "wifi" };
     case "texte": return { tool: "texte" };
+    case "disque": case "brut": case "nomme": return { tool: t.id };
     case "son": {
       // « casque » ou « enceintes » tapés seuls : on cherche cette sortie.
       const q = arg || (["casque", "enceintes", "hautparleurs"].includes(w) ? w : "");

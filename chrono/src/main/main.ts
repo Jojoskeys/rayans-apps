@@ -11,6 +11,7 @@ import type { Action, AppData, ChronoEvent } from "../core/types.ts";
 import type { Command, ExportRequest, InitialState, Signal } from "../renderer/api-types.ts";
 import { newId, Store } from "./store.ts";
 import { runLaunchTest } from "./launch-test.ts";
+import { fermerFocus, initFocus, majFocus, reporterPause } from "./focus.ts";
 
 const APP_NAME = "Rayan's Chrono";
 const testArg = process.argv.find((a) => a.startsWith("--test-lancement="));
@@ -96,6 +97,7 @@ export function saveNow() {
 function broadcast() {
   for (const w of [mainWin, miniWin]) if (w && !w.isDestroyed()) w.webContents.send("etat", data);
   updateTray();
+  majFocus(data, Date.now());
 }
 
 function signal(s: Signal) {
@@ -140,9 +142,11 @@ function start() {
   // Lancé par Rayan's Bosse : le chrono démarre sur le projet, la fenêtre reste discrète dans la zone de notification.
   createMain(projet === null);
   if (projet !== null) onProject(projet);
+  initFocus({ rendererHtml, preload: path.join(__dirname, "preload.cjs"), icone: path.join(assets, "icon.png"), test: !!testReport });
   setInterval(() => { dispatch({ type: "tick" }); updateTrayTooltip(); }, 250);
+  setInterval(() => majFocus(data, Date.now()), 1000);
 
-  app.on("before-quit", () => { quitting = true; saveNow(); });
+  app.on("before-quit", () => { quitting = true; fermerFocus(); saveNow(); });
   app.on("window-all-closed", () => { /* l'application vit dans la zone de notification */ });
 
   if (testReport) runLaunchTest(testReport, { getMain: () => mainWin, getMini: () => miniWin, getTray: () => tray, store, command, dispatch, getData, saveNow, exportTo });
@@ -221,6 +225,8 @@ async function command(cmd: Command) {
     case "masquer-mini": miniWin?.close(); break;
     case "quitter": quitting = true; app.quit(); break;
     case "ouvrir-dossier": await shell.openPath(dataDir); break;
+    case "pause-reporter": reporterPause(data, Date.now()); break;
+    case "pause-passer": dispatch({ type: "skip" }); break;
   }
 }
 

@@ -19,7 +19,7 @@ export interface ExportRequest {
   name: string;
 }
 
-export type Command = "mini" | "principal" | "masquer-mini" | "quitter" | "ouvrir-dossier";
+export type Command = "mini" | "principal" | "masquer-mini" | "quitter" | "ouvrir-dossier" | "pause-reporter" | "pause-passer";
 
 export interface ChronoApi {
   getState(): Promise<InitialState>;
@@ -29,6 +29,8 @@ export interface ChronoApi {
   /** Chemin du fichier écrit, ou null si l'utilisateur a annulé. */
   exportCsv(req: ExportRequest): Promise<string | null>;
   command(cmd: Command): Promise<void>;
+  /** Barre du temps de travail : part de l'objectif du jour (0 à 1). */
+  onBarre(cb: (ratio: number) => void): () => void;
 }
 
 declare global {

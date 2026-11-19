@@ -16,7 +16,7 @@ export function Reglages({ data, init }: { data: AppData; init: InitialState }) 
       </span>
     </label>
   );
-  const check = (key: "autoStartBreaks" | "autoStartWork" | "sound" | "notifications" | "miniOnTop" | "closeToTray", label: string, hint?: string) => (
+  const check = (key: "autoStartBreaks" | "autoStartWork" | "sound" | "notifications" | "miniOnTop" | "closeToTray" | "pauseForcee" | "barreTemps", label: string, hint?: string) => (
     <label className="case">
       <input type="checkbox" checked={s[key]} onChange={(e) => set({ [key]: e.target.checked })} />
       <span>{label}{hint && <small>{hint}</small>}</span>
@@ -56,6 +56,8 @@ export function Reglages({ data, init }: { data: AppData; init: InitialState }) 
         <button className="bouton secondaire" onClick={() => void api.command("quitter")}>Quitter Rayan's Chrono</button>
       </section>
 
+      <Concentration data={data} set={set} check={check} />
+
       <section className="carte">
         <h2>Données</h2>
         <p className="aide">Tout est enregistré sur cet ordinateur, dans un seul fichier <code>chrono.json</code> (avec une copie de la version précédente <code>chrono.json.bak</code>).</p>
@@ -79,5 +81,39 @@ function NumberInput({ value, max, onCommit }: { value: number; max: number; onC
   return (
     <input type="number" min={1} max={max} value={text} onChange={(e) => setText(e.target.value)} onBlur={commit}
       onKeyDown={(e) => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }} />
+  );
+}
+
+/** Aides à la concentration (sur le PC seulement). */
+function Concentration({ data, set, check }: { data: AppData; set: (p: Partial<Settings>) => void; check: (k: "pauseForcee" | "barreTemps", l: string, h?: string) => React.ReactNode }) {
+  const s = data.settings, t = data.timer;
+  const [mots, setMots] = useState(s.motsBloques.join(", "));
+  useEffect(() => setMots(s.motsBloques.join(", ")), [s.motsBloques.join(",")]);
+  // Pendant une séance de travail, le blocage ne peut pas être retiré : c'est tout son intérêt.
+  const verrou = s.bloquer && t.status === "marche" && (t.mode === "chrono" || t.phase === "travail");
+  return (
+    <section className="carte">
+      <h2>Concentration (sur le PC)</h2>
+      {check("pauseForcee", "Écran de pause plein écran pendant les pauses", "Il cache tout pendant la pause. « Encore 5 min » une fois par pause ; pour passer, il faut maintenir le bouton 3 secondes.")}
+      {check("barreTemps", "Barre du temps de travail en haut de l'écran", "Une ligne de 4 pixels qui se remplit avec ton temps de travail du jour, et devient verte quand l'objectif est atteint.")}
+      <label className="champ">
+        <span>Objectif du jour</span>
+        <span className="avec-unite">
+          <NumberInput value={Math.max(1, Math.round(s.objectifMin / 60))} max={16} onCommit={(v) => set({ objectifMin: Math.round(v * 60) })} />
+          <small>h</small>
+        </span>
+      </label>
+      <label className="case">
+        <input type="checkbox" checked={s.bloquer} disabled={verrou} onChange={(e) => set({ bloquer: e.target.checked })} />
+        <span>Bloquer les distractions pendant le travail
+          <small>{verrou ? "Séance en cours : le blocage reste actif jusqu'à la pause." : "Pendant le travail, une fenêtre dont le titre contient un de ces mots est réduite aussitôt. Elle est libre pendant les pauses."}</small>
+        </span>
+      </label>
+      <label className="champ">
+        <span>Mots bloqués</span>
+        <input value={mots} disabled={verrou} onChange={(e) => setMots(e.target.value)}
+          onBlur={() => set({ motsBloques: mots.split(",").map((m) => m.trim()).filter(Boolean) })} />
+      </label>
+    </section>
   );
 }
