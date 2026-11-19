@@ -4,7 +4,7 @@
   python favoris.py ajouter <lien ou fichier vidéo> [--note "…"]
   python favoris.py recuperer [--limite N]            télécharger + transcrire ce qui attend
   python favoris.py etat                               où en est chaque vidéo (pour Claude)
-  python favoris.py fiche <fiche.json>                 enregistrer l'analyse d'une vidéo (Claude)
+  python favoris.py fiche <fiche.json>                 enregistrer l'analyse d'une vidéo, ou une liste de fiches (Claude)
   python favoris.py marquer <id> <etat> [--note "…"]   ex. appliquee, une fois l'astuce mise en place
   python favoris.py page                               la page de tri sur http://127.0.0.1:8765
 
@@ -150,8 +150,19 @@ def inspirer_studio(stock: Stock, f: dict) -> bool:
     return True
 
 
-def enregistrer_fiche(stock: Stock, chemin: Path) -> str:
-    f = json.loads(chemin.read_text("utf-8"))
+def enregistrer_lot(stock: Stock, chemin: Path) -> list[str]:
+    """Un fichier qui contient une liste de fiches : enregistre les bonnes, rend les refus (une ligne par fiche)."""
+    refus = []
+    for f in json.loads(chemin.read_text("utf-8")):
+        try:
+            enregistrer_fiche(stock, f)
+        except SystemExit as e:
+            refus.append(f"{f.get('id')} : {e}")
+    return refus
+
+
+def enregistrer_fiche(stock: Stock, chemin: "Path | dict") -> str:
+    f = chemin if isinstance(chemin, dict) else json.loads(chemin.read_text("utf-8"))
     if pb := verifier_fiche(f, stock):
         raise SystemExit("Fiche refusée :\n  - " + "\n  - ".join(pb))
     f["analyse_le"] = int(time.time())
@@ -345,7 +356,11 @@ def main(argv=None) -> None:
                     extra += f" — note à l'envoi : {v['note']}" if v.get("note") else ""
                     print(f"  {v['id']}  textes/{v['id']}.txt{extra}")
     elif args.cmd == "fiche":
-        print("Fiche enregistrée, état :", enregistrer_fiche(stock, args.chemin))
+        if isinstance(json.loads(args.chemin.read_text("utf-8")), list):
+            refus = enregistrer_lot(stock, args.chemin)
+            print("Lot enregistré." if not refus else "Refusées :\n" + "\n".join(refus))
+        else:
+            print("Fiche enregistrée, état :", enregistrer_fiche(stock, args.chemin))
     elif args.cmd == "marquer":
         if args.id not in stock.videos:
             raise SystemExit(f"id inconnu : {args.id}")
