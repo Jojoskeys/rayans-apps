@@ -59,7 +59,10 @@ def _telecharger(v: dict, dossier: Path) -> tuple[Path, dict]:
             info = ydl.extract_info(v["lien"], download=False)
     infos = {k: info.get(k) for k in ("title", "description", "uploader", "uploader_id", "duration", "webpage_url",
                                       "view_count", "like_count", "comment_count", "repost_count", "upload_date",
-                                      "channel_follower_count", "thumbnail")}
+                                      "channel_follower_count")}
+    # Images : celle de la publication, ou celles de chaque élément d'un carrousel (4 au plus).
+    vignettes = [info.get("thumbnail")] + [e.get("thumbnail") for e in (info.get("entries") or []) if e]
+    infos["vignettes"] = [u for u in vignettes if u][:4]
     return chemin, infos
 
 
@@ -127,8 +130,11 @@ def recuperer_une(stock: Stock, v: dict) -> None:
         video, infos = _telecharger(v, dossier)
     if video is None:  # photo ou carrousel
         duree, texte, langue = 0, "", "?"
-        photo = dossier / "images" / f"{v['id']}_1.jpg"
-        images = [photo.name] if infos.get("thumbnail") and _photo(infos["thumbnail"], photo) else []
+        images = []
+        for n, url in enumerate(infos.get("vignettes") or [], 1):
+            photo = dossier / "images" / f"{v['id']}_{n}.jpg"
+            if _photo(url, photo):
+                images.append(photo.name)
     else:
         duree = infos.get("duration") or _duree(video)
         texte, langue = _transcrire(video)
