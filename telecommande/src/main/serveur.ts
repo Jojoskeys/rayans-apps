@@ -14,6 +14,8 @@ import { nomDepuisUrl, nomLibre, nomSur, resoudre, type Racine } from "../core/c
 import { profilValide } from "../core/wifi.ts";
 import type { Donnees } from "../core/donnees.ts";
 import * as studio from "../core/studio.ts";
+import { abonnementValide, ErreurRappel } from "../core/minuteurs.ts";
+import type { Push } from "./push.ts";
 import * as sys from "./systeme.ts";
 import { etatTailscale, PORT } from "./tailscale.ts";
 
@@ -25,6 +27,8 @@ export interface Contexte {
   utilise(appareil: string): void;
   alerte(titre: string, texte: string): void;
   changeBoite(): void;
+  /** Rappels de fin de minuteur (Rayan's Chrono sur l'iPhone). */
+  push: Push;
   version: string;
 }
 
@@ -334,6 +338,29 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           const b = await lireJson(req);
           try { studio.supprimerIdee(fichierIdees(), String(b.id ?? "")); }
           catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
+          return envoyer(200, { ok: true });
+        }
+
+        // ----- Rayan's Chrono : notification de fin de minuteur, écran éteint -----
+        case "GET /api/chrono/cle":
+          return envoyer(200, { cle: ctx.push.cle });
+
+        case "POST /api/chrono/programmer": {
+          const b = await lireJson(req);
+          try { ctx.push.programmer(b); } catch (e) { if (e instanceof ErreurRappel) throw new ErreurHttp(400, e.message); throw e; }
+          return envoyer(200, { ok: true });
+        }
+
+        case "POST /api/chrono/annuler": {
+          const b = await lireJson(req);
+          ctx.push.annuler(b.endpoint);
+          return envoyer(200, { ok: true });
+        }
+
+        case "POST /api/chrono/essai": {
+          const b = await lireJson(req);
+          try { await ctx.push.envoyer({ abonnement: abonnementValide(b.abonnement), titre: "Rayan's Chrono", texte: "Essai réussi : tu seras prévenu à la fin du minuteur." }); }
+          catch (e) { throw new ErreurHttp(e instanceof ErreurRappel ? 400 : 502, e instanceof ErreurRappel ? e.message : `le service de notification a refusé l'envoi (${(e as { statusCode?: number }).statusCode ?? "réseau"})`); }
           return envoyer(200, { ok: true });
         }
 
