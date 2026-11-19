@@ -10,10 +10,10 @@ application dans `.github/workflows/`.
 | Rayan's Ouvertures | [`echecs-ouvertures/`](echecs-ouvertures/) | `echecs-ouvertures.yml` | Entraînement aux ouvertures à partir de vos parties Chess.com, avec Stockfish et répétition espacée |
 | Rayan's Révision | [`revision/`](revision/) | `revision.yml` | Cartes de révision et quiz avec programme FSRS, statistiques, import/export CSV et JSON |
 | Rayan's Hifz | [`coran-memorisation/`](coran-memorisation/) | `coran-memorisation.yml` | Suivi de mémorisation du Coran : progression par verset, révisions espacées, audio |
-| Rayan's Chrono | [`chrono/`](chrono/) | `chrono.yml` | Minuteur Pomodoro et suivi du temps par projet, résumés, export CSV |
+| Rayan's Chrono | [`chrono/`](chrono/) | `chrono.yml` | Minuteur Pomodoro et suivi du temps par projet, résumés, export CSV ; écran de pause plein écran, barre du temps de travail du jour, distractions bloquées pendant le travail |
 | Rayan's Rangement | [`rangement/`](rangement/) | `rangement.yml` | Rangement des Téléchargements et du Bureau par règles, avec aperçu, quarantaine des doublons et annulation |
 | Rayan's Prière | [`priere/`](priere/) | `priere.yml` | Horaires de prière calculés hors ligne, calendrier du mois, notifications avant chaque prière |
-| Rayan's Outils | [`outils/`](outils/) | `outils.yml` | Barre de commande (Ctrl+Alt+Espace) : PDF, image allégée, échange avec le téléphone, Wi-Fi, sortie audio, texte de l'écran, minuterie d'arrêt ; échéances et abonnements, à lire plus tard, entretien, fichiers récents, textes à coller |
+| Rayan's Outils | [`outils/`](outils/) | `outils.yml` | Barre de commande (Ctrl+Alt+Espace) : PDF, image allégée, échange avec le téléphone, Wi-Fi, sortie audio, texte de l'écran, minuterie d'arrêt, place sur le disque, coller en texte brut, renommer d'après le contenu ; échéances et abonnements, à lire plus tard, entretien, fichiers récents, textes à coller |
 | Rayan's Bosse | [`bosse/`](bosse/) | `bosse.yml` | Un espace de travail par projet (programmes, dossiers, fichiers, sites) ouvert en un clic, avec Rayan's Chrono et PowerToys Workspaces |
 | Rayan's Aujourd'hui | [`aujourdhui/`](aujourdhui/) | `aujourdhui.yml` | Ce qu'il reste à réviser aujourd'hui dans Révision, Hifz et Ouvertures, rappel le soir |
 | Rayan's Sauve | [`sauve/`](sauve/) | `sauve.yml` | Sauvegarde robocopy des données des apps et des Documents vers un disque externe ou OneDrive, rappel au bout de 7 jours |

@@ -236,3 +236,14 @@ body.vue-mini { background: var(--fond); overflow: hidden; }
   main, .contenu, .page { overflow: visible; }
   input, select, textarea { font-size: 16px; }
 }
+
+/* ----- Écran de pause et barre du temps de travail (aides à la concentration) ----- */
+.ecran-pause { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: var(--fond); text-align: center; padding: 24px; }
+.ep-phase { margin: 0; font-size: 22px; color: var(--vert); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.ep-temps { margin: 0; font-size: 120px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+.ep-conseil { margin: 0; font-size: 22px; color: var(--texte-2); max-width: 32ch; }
+.ep-boutons { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 24px; }
+.ep-passer { background-image: linear-gradient(90deg, color-mix(in srgb, var(--rouge) 45%, transparent) var(--maintien, 0%), transparent var(--maintien, 0%)); user-select: none; }
+body.vue-barre, body.vue-barre #racine { background: transparent !important; overflow: hidden; margin: 0; }
+.barre-temps { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: rgba(0, 0, 0, .25); }
+.barre-temps > div { height: 100%; transition: width .6s ease; }

@@ -2,7 +2,10 @@
 // avec des fichiers fabriqués dans un dossier temporaire : barre de commande, fusion PDF, image allégée, partage avec
 // le téléphone (téléchargement et envoi en HTTP), QR code. Hors CI, on vérifie aussi le son, le Wi-Fi et l'OCR de
 // Windows (sans rien modifier). Les minuteries d'arrêt ne sont jamais lancées.
-import { app, BrowserWindow, nativeImage, type Tray } from "electron";
+import { app, BrowserWindow, clipboard, nativeImage, type Tray } from "electron";
+import { mesurer } from "./disque.ts";
+import { texteBrut } from "./coller.ts";
+import { annulerDernier, proposer as proposerNoms, renommer } from "./nommer.ts";
 import fs from "node:fs";
 import path from "node:path";
 import { PDFDocument, StandardFonts } from "pdf-lib";
@@ -72,7 +75,7 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
 
   (async () => {
     const w = (await waitFor("fenêtre principale", () => h.getMain()))!;
-    await waitFor("interface chargée", async () => (await js<number>(w, `document.querySelectorAll('.navigation-principale button').length`)) === 13);
+    await waitFor("interface chargée", async () => (await js<number>(w, `document.querySelectorAll('.navigation-principale button').length`)) === 16);
     report.uiLoaded = true;
     step("interface affichée : 7 outils, 5 listes de suivi + réglages");
 
@@ -234,7 +237,34 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
       const t = await ocr(png);
       if (!/mardi/i.test(t.texte)) throw new Error(`OCR : « ${t.texte} »`);
       step(`OCR Windows (${t.langue}) : « ${t.texte} »`);
+
+      // Renommer d'après le contenu : une attestation scannée en PDF reçoit un nom clair, puis l'annulation le rend.
+      const aw = new BrowserWindow({ show: false, width: 1000, height: 260, webPreferences: { offscreen: true } });
+      await aw.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent('<body style="margin:20px;background:#fff;font:34px Segoe UI">CAISSE D\'ALLOCATIONS FAMILIALES<br>Attestation de paiement<br>Rennes, le 03/11/2026</body>')}`);
+      await sleep(400);
+      const scanPdf = await PDFDocument.create();
+      const img = await scanPdf.embedPng((await aw.webContents.capturePage()).toPNG());
+      aw.destroy();
+      scanPdf.addPage([img.width, img.height]).drawImage(img, { x: 0, y: 0 });
+      const scan = path.join(dir, "scan0042.pdf");
+      fs.writeFileSync(scan, await scanPdf.save());
+      const [prop] = await proposerNoms([scan]);
+      if (prop.propose !== "Attestation CAF novembre 2026.pdf") throw new Error(`nom proposé : ${prop.propose} (${prop.erreur ?? prop.extrait})`);
+      const [fait] = renommer([{ chemin: scan, nom: prop.propose }]);
+      if (!fs.existsSync(fait.apres) || fs.existsSync(scan)) throw new Error("renommage non fait");
+      if (annulerDernier() !== 1 || !fs.existsSync(scan)) throw new Error("annulation du renommage ratée");
+      step(`renommer d'après le contenu : scan0042.pdf → « ${prop.propose} », puis annulé`);
     }
+
+    // Place sur le disque : le dossier d'essais est mesuré, ses fichiers comptés.
+    const mesure = await mesurer(dir, () => {});
+    if (mesure.taille <= 0 || mesure.fichiers < 1) throw new Error("mesure du disque vide");
+    step(`place sur le disque : ${dir} = ${mesure.taille} octets, ${mesure.fichiers} fichiers`);
+
+    // Coller en texte brut : le presse-papiers est réécrit avec son seul texte.
+    clipboard.writeText("Bonjour");
+    if (!(await texteBrut()) || (await clipboard.readText()) !== "Bonjour") throw new Error("texte brut : le texte n'a pas été gardé");
+    step("coller en texte brut : le presse-papiers ne garde que le texte");
 
     const tray = h.getTray();
     if (!tray || tray.isDestroyed()) throw new Error("icône de la zone de notification absente");

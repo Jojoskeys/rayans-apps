@@ -175,3 +175,17 @@ input.mini { width: 56px; padding: 1px 4px; margin: 0 4px; font-size: 12px; }
   .navigation-principale button { justify-content: center; }
   .deux-colonnes, .wifi { grid-template-columns: 1fr; }
 }
+
+/* ----- Place sur le disque, Renommer d'après le contenu ----- */
+.fil { font-size: 14px; overflow-wrap: anywhere; }
+.liste-disque, .liste-nomme { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.liste-disque li { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(60px, 1fr) 80px 48px auto; gap: 10px; align-items: center; }
+.liste-disque .lien-titre { text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.liste-disque .lien-titre:disabled { cursor: default; opacity: .8; }
+.jauge { height: 8px; border-radius: 99px; background: rgba(127, 127, 127, .18); overflow: hidden; }
+.jauge > span { display: block; height: 100%; background: var(--accent, #6B8AFD); border-radius: 99px; }
+.liste-disque .taille, .liste-disque .pourcent { font-variant-numeric: tabular-nums; text-align: right; font-size: 13px; }
+.liste-nomme li { display: flex; gap: 10px; align-items: flex-start; }
+.liste-nomme .principal { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.liste-nomme input[type="checkbox"] { margin-top: 26px; }
+.liste-nomme small { overflow-wrap: anywhere; }

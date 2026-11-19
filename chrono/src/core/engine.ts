@@ -20,6 +20,11 @@ export const DEFAULT_SETTINGS: Settings = {
   notifications: true,
   miniOnTop: true,
   closeToTray: true,
+  pauseForcee: false,
+  barreTemps: false,
+  objectifMin: 240,
+  bloquer: false,
+  motsBloques: ["YouTube", "Instagram", "TikTok", "Netflix", "Twitch", "Snapchat", "Reddit"],
 };
 
 export const PHASE_LABEL: Record<Phase, string> = { travail: "Travail", pause: "Pause", longue: "Longue pause" };
@@ -73,6 +78,13 @@ export function normalizeSettings(raw: unknown): Settings {
     notifications: bool(r.notifications, d.notifications),
     miniOnTop: bool(r.miniOnTop, d.miniOnTop),
     closeToTray: bool(r.closeToTray, d.closeToTray),
+    pauseForcee: bool(r.pauseForcee, d.pauseForcee),
+    barreTemps: bool(r.barreTemps, d.barreTemps),
+    objectifMin: Math.round(clamp(num(r.objectifMin, d.objectifMin), 15, 960)),
+    bloquer: bool(r.bloquer, d.bloquer),
+    motsBloques: Array.isArray(r.motsBloques)
+      ? [...new Set(r.motsBloques.filter((m): m is string => typeof m === "string").map((m) => m.trim().slice(0, 40)).filter((m) => m.length >= 2))].slice(0, 40)
+      : [...d.motsBloques],
   };
 }
 

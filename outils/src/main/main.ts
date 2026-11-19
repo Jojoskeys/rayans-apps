@@ -1,5 +1,8 @@
 // Processus principal de Rayan's Outils : fenêtre principale (un panneau par outil), barre de commande ouverte par
 // un raccourci global, fenêtre de sélection pour copier le texte de l'écran, icône dans la zone de notification.
+import { annulerParcours, mesurer } from "./disque.ts";
+import { arreterCollage, collerBrut, prechaufferCollage, texteBrut } from "./coller.ts";
+import { annulerDernier, proposer as proposerNoms, renommer } from "./nommer.ts";
 import { app, BrowserWindow, clipboard, desktopCapturer, dialog, globalShortcut, ipcMain, Menu, nativeImage, Notification, screen, shell, Tray } from "electron";
 import fs from "node:fs";
 import os from "node:os";
@@ -31,7 +34,7 @@ const suiviFile = path.join(dataDir, "suivi.json");
 const assets = path.join(__dirname, "..", "assets");
 const rendererHtml = path.join(__dirname, "renderer", "index.html");
 
-const DEFAULTS: Settings = { shortcut: "Control+Alt+Space", startWithWindows: false, closeToTray: true, pdfQuality: "normale", imgTarget: 1024 };
+const DEFAULTS: Settings = { shortcut: "Control+Alt+Space", startWithWindows: false, closeToTray: true, pdfQuality: "normale", imgTarget: 1024, brutShortcut: "Control+Alt+V" };
 
 let settings: Settings = { ...DEFAULTS };
 let power: Power | null = null;
@@ -82,6 +85,7 @@ function load() {
       closeToTray: typeof s.closeToTray === "boolean" ? s.closeToTray : DEFAULTS.closeToTray,
       pdfQuality: ["legere", "normale", "originale"].includes(s.pdfQuality) ? s.pdfQuality : DEFAULTS.pdfQuality,
       imgTarget: Number.isFinite(s.imgTarget) && s.imgTarget >= 20 ? s.imgTarget : DEFAULTS.imgTarget,
+      brutShortcut: typeof s.brutShortcut === "string" ? s.brutShortcut : DEFAULTS.brutShortcut,
     };
     const p = raw.power;
     power = p && ["eteindre", "redemarrer", "veille"].includes(p.mode) && Number.isFinite(p.at) && p.at > Date.now() ? p : null;
@@ -140,7 +144,7 @@ function copyText(t: string) {
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
 export function state(): State {
-  return { settings, power, lastText, share: share.info && shareQr ? { ...share.info, qr: shareQr } : null, version: app.getVersion(), dataDir, shortcutOk, suivi, now: testHooks.clock() };
+  return { settings, power, lastText, share: share.info && shareQr ? { ...share.info, qr: shareQr } : null, version: app.getVersion(), dataDir, shortcutOk, brutOk, suivi, now: testHooks.clock() };
 }
 
 function broadcast() {
@@ -194,6 +198,17 @@ function start() {
   ipcMain.handle("suivi", (_e, a: SuiviAction) => suiviAction(a));
   ipcMain.handle("recents", () => recentFiles(testHooks.recentRoots ?? undefined));
   ipcMain.handle("ics", (e) => exportIcs(BrowserWindow.fromWebContents(e.sender)));
+  ipcMain.handle("disque", (e, root: string | null) => mesurer(root || app.getPath("home"), (p) => { if (!e.sender.isDestroyed()) e.sender.send("disque-progres", p); }));
+  ipcMain.on("disque-annuler", () => annulerParcours());
+  ipcMain.handle("choisir-dossier", async (e) => {
+    const w = BrowserWindow.fromWebContents(e.sender);
+    const r = w ? await dialog.showOpenDialog(w, { properties: ["openDirectory"] }) : await dialog.showOpenDialog({ properties: ["openDirectory"] });
+    return r.canceled ? null : r.filePaths[0] ?? null;
+  });
+  ipcMain.handle("brut", () => texteBrut());
+  ipcMain.handle("nommer-proposer", (_e, files: string[]) => proposerNoms(files));
+  ipcMain.handle("nommer", (_e, choix: { chemin: string; nom: string }[]) => renommer(choix));
+  ipcMain.handle("nommer-annuler", () => annulerDernier());
   ipcMain.handle("ouvrir-lien", (_e, url: string) => { const u = normalizeUrl(url); if (u) void shell.openExternal(u); });
   ipcMain.on("quitter", () => { quitting = true; app.quit(); });
   ipcMain.on("capture-fin", (_e, rect) => void finishCapture(rect));
@@ -201,12 +216,13 @@ function start() {
   createTray();
   createMain(!atLogin);
   registerShortcut();
+  registerBrut();
   applyLoginItem();
   checkSuivi();
   setInterval(checkSuivi, 15 * 60_000);
 
   app.on("before-quit", () => { quitting = true; void share.stop(); });
-  app.on("will-quit", () => globalShortcut.unregisterAll());
+  app.on("will-quit", () => { globalShortcut.unregisterAll(); arreterCollage(); });
   app.on("window-all-closed", () => { /* l'application vit dans la zone de notification */ });
 
   if (testReport) runLaunchTest(testReport, { getMain: () => win, getPalette: () => palette, getTray: () => tray, state, runCommand, share, dataDir, openPalette, suiviAction, checkSuivi, testHooks, suiviFile });
@@ -216,6 +232,7 @@ export function updateSettings(patch: Partial<Settings>): State {
   const before = settings;
   settings = { ...settings, ...patch };
   if (before.shortcut !== settings.shortcut) registerShortcut(before.shortcut);
+  if (before.brutShortcut !== settings.brutShortcut) registerBrut(before.brutShortcut);
   if (before.startWithWindows !== settings.startWithWindows) applyLoginItem();
   try { save(); } catch (e) { console.error(e); }
   broadcast();
@@ -226,6 +243,15 @@ function registerShortcut(previous?: string) {
   if (previous) globalShortcut.unregister(previous);
   try { shortcutOk = globalShortcut.register(settings.shortcut, () => openPalette()); }
   catch { shortcutOk = false; }
+}
+
+let brutOk = false;
+function registerBrut(previous?: string) {
+  if (previous) { try { globalShortcut.unregister(previous); } catch { /* raccourci invalide */ } }
+  brutOk = false;
+  if (!settings.brutShortcut) return;
+  try { brutOk = globalShortcut.register(settings.brutShortcut, () => { void collerBrut(); }); } catch { brutOk = false; }
+  if (brutOk && !testReport) prechaufferCollage();
 }
 
 function applyLoginItem() {
@@ -291,6 +317,11 @@ export async function runCommand(text: string): Promise<RunResult> {
     case "tel": return go({ tool: "tel", text: c.text });
     case "wifi": return go({ tool: "wifi" });
     case "texte": palette?.hide(); await startCapture(); return { ok: true, close: true };
+    case "disque": return go({ tool: "disque" });
+    case "nomme": return go({ tool: "nomme" });
+    case "brut": return (await texteBrut())
+      ? { ok: true, close: true, message: "Presse-papiers en texte brut : colle avec Ctrl+V." }
+      : { ok: false, message: "Rien à nettoyer : le presse-papiers ne contient pas de texte." };
     case "son": {
       const outs = await listOutputs();
       const target = pickOutput(outs, c.query);

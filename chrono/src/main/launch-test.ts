@@ -2,7 +2,7 @@
 // on clique dans son interface, on vérifie le temps enregistré, la mini-fenêtre, l'icône de notification,
 // le fichier de données et l'export CSV, puis on écrit un rapport et on quitte. Les données sont dans un
 // dossier temporaire : les vraies données de l'utilisateur ne sont jamais touchées.
-import { app, type BrowserWindow, type Tray } from "electron";
+import { app, BrowserWindow, type Tray } from "electron";
 import fs from "node:fs";
 import path from "node:path";
 import type { Action, AppData } from "../core/types.ts";
@@ -147,6 +147,26 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     const lines = fs.readFileSync(csv, "utf8").trim().split(/\r\n/);
     if (lines.length !== 2 || !lines[0].includes("Projet")) throw new Error("export CSV inattendu");
     step("export CSV correct");
+
+    // Aides à la concentration : écran de pause plein écran et barre du temps de travail.
+    h.dispatch({ type: "settings", patch: { pauseForcee: true, barreTemps: true, objectifMin: 60 } });
+    h.dispatch({ type: "setMode", mode: "pomodoro" });
+    h.dispatch({ type: "skip" });
+    if (h.getData().timer.status !== "marche") h.dispatch({ type: "start" });
+    const fenetre = (titre: string) => BrowserWindow.getAllWindows().find((w) => !w.isDestroyed() && w.getTitle() === titre && w.isVisible()) ?? null;
+    const pause = (await waitFor("écran de pause", () => fenetre("Rayan's Chrono (pause)")))!;
+    await waitFor("écran de pause chargé", async () => /\d\d:\d\d/.test(String(await js(pause, `document.querySelector('.ep-temps')?.textContent ?? ''`))));
+    const barre = (await waitFor("barre du temps de travail", () => fenetre("Rayan's Chrono (barre)")))!;
+    const ligne = String(await js(barre, `getComputedStyle(document.querySelector('.barre-temps')).height`));
+    report.pauseForcee = { toujoursAuDessus: pause.isAlwaysOnTop(), ligneBarre: ligne };
+    step(`écran de pause affiché (${await js(pause, `document.querySelector('.ep-temps').textContent`)}) et barre dessinée sur ${ligne} en haut`);
+    const captures0 = process.env.CHRONO_CAPTURES;
+    if (captures0) { await sleep(600); fs.mkdirSync(captures0, { recursive: true }); fs.writeFileSync(path.join(captures0, "6-pause.png"), (await pause.webContents.capturePage()).toPNG()); }
+    await h.command("pause-reporter");
+    await waitFor("écran de pause caché après « encore 5 min »", () => !fenetre("Rayan's Chrono (pause)"), 5000);
+    step("« Encore 5 min » cache l'écran de pause");
+    h.dispatch({ type: "settings", patch: { pauseForcee: false, barreTemps: false } });
+    await waitFor("barre retirée", () => !fenetre("Rayan's Chrono (barre)"), 5000);
 
     const captures = process.env.CHRONO_CAPTURES;
     if (captures) {

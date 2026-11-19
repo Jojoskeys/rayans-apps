@@ -29,6 +29,7 @@ export const setOutput = (id: string) => ps<Output[] | Output>("son.ps1", ["-Cho
 export interface Wifi { connecte: boolean; ssid: string | null; securite: string | null; cle: string | null }
 export const readWifi = () => ps<Wifi>("wifi.ps1");
 
+export const lireTexte = (fichier: string) => ps<{ texte: string }>("lire.ps1", ["-Fichier", fichier]);
 export const ocr = (png: string) => ps<{ texte: string; langue: string }>("ocr.ps1", ["-Image", png]);
 
 /** Extinction ou redémarrage confiés à Windows (shutdown.exe) : ils ont lieu même si l'application est fermée. */

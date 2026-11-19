@@ -10,7 +10,12 @@ export interface Settings {
   closeToTray: boolean;
   pdfQuality: PdfQuality;
   imgTarget: number;
+  /** Raccourci global « coller en texte brut » (format Electron), vide pour le désactiver. */
+  brutShortcut: string;
 }
+
+export interface Dossier { nom: string; chemin: string; taille: number; fichiers: number; enfants: Dossier[]; ici: number }
+export interface PropositionNom { chemin: string; actuel: string; propose: string | null; extrait: string; erreur: string | null }
 
 export interface Power { mode: PowerMode; at: number }
 
@@ -24,6 +29,7 @@ export interface State {
   version: string;
   dataDir: string;
   shortcutOk: boolean;
+  brutOk: boolean;
   /** Échéances, liens à lire, entretien, textes à coller. */
   suivi: Suivi;
   now: number;
@@ -64,6 +70,17 @@ export interface OutilsApi {
   recents(): Promise<RecentFile[]>;
   exportIcs(): Promise<string | null>;
   openUrl(url: string): void;
+  // Place sur le disque
+  measureFolder(root: string | null): Promise<Dossier | null>;
+  cancelMeasure(): void;
+  onMeasureProgress(cb: (p: { dossiers: number; octets: number }) => void): () => void;
+  pickFolder(): Promise<string | null>;
+  // Coller en texte brut
+  plainClipboard(): Promise<boolean>;
+  // Renommer d'après le contenu
+  proposeNames(files: string[]): Promise<PropositionNom[]>;
+  renameFiles(choices: { chemin: string; nom: string }[]): Promise<{ avant: string; apres: string }[]>;
+  undoRename(): Promise<number>;
   // Fenêtre de sélection (capture d'écran pour l'OCR)
   onCaptureImage(cb: (dataUrl: string) => void): () => void;
   captureDone(rect: { x: number; y: number; width: number; height: number } | null): void;

@@ -56,6 +56,9 @@ export const IconWifi = (p: P) => <Svg {...p}><path d="M2 8.5a15 15 0 0 1 20 0M5
 export const IconSound = (p: P) => <Svg {...p}><path d="M11 5L6 9H3v6h3l5 4z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /></Svg>;
 export const IconText = (p: P) => <Svg {...p}><path d="M4 7V5h16v2M9 19h6M12 5v14" /><path d="M2 2h3M2 2v3M22 2h-3M22 2v3M2 22h3M2 22v-3M22 22h-3M22 22v-3" /></Svg>;
 export const IconPower = (p: P) => <Svg {...p}><path d="M12 3v9" /><path d="M6.4 6.4a8 8 0 1 0 11.2 0" /></Svg>;
+export const IconDisk = (p: P) => <Svg {...p}><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3" /></Svg>;
+export const IconPlain = (p: P) => <Svg {...p}><rect x="6" y="4" width="12" height="17" rx="2" /><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3" /></Svg>;
+export const IconRename = (p: P) => <Svg {...p}><path d="M4 7h10M4 12h7M4 17h5" /><path d="M14 20l1-4 5-5 3 3-5 5z" /></Svg>;
 export const IconGear = (p: P) => <Svg {...p}><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12" /><circle cx="16" cy="6" r="2" /><circle cx="10" cy="12" r="2" /><circle cx="18" cy="18" r="2" /></Svg>;
 export const IconUpload = (p: P) => <Svg {...p}><path d="M12 16V4M7 9l5-5 5 5M5 20h14" /></Svg>;
 export const IconClose = (p: P) => <Svg {...p}><path d="M6 6l12 12M18 6L6 18" /></Svg>;

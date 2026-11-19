@@ -47,6 +47,7 @@ const api: ChronoApi = {
     return `${req.name}.csv`;
   },
   command: async (cmd) => { if (cmd === "quitter") location.href = "../"; },
+  onBarre: () => () => {},
 };
 window.chrono = api;
 setInterval(() => dispatch({ type: "tick" }), 250);
