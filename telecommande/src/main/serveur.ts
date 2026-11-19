@@ -43,6 +43,8 @@ const dossiersUtilisateur = (): Racine[] => {
 export const dossierReception = () => path.join(app.getPath("downloads"), "Depuis le téléphone");
 /** Vidéos du Studio déposées par Claude pour validation (voir core/studio.ts). */
 export const dossierStudio = () => path.join(app.getPath("videos"), "Rayan's Studio", "A valider");
+export const dossierScripts = () => path.join(app.getPath("videos"), "Rayan's Studio", "Scripts");
+export const fichierIdees = () => path.join(app.getPath("videos"), "Rayan's Studio", "idees.json");
 
 class ErreurHttp extends Error { code: number; constructor(code: number, message: string) { super(message); this.code = code; } }
 
@@ -298,6 +300,41 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           ctx.journaliser(r.verdict === "ok" ? "Vidéo validée" : "Vidéo à corriger", titre);
           ctx.alerte("Rayan's Studio", r.verdict === "ok" ? `Validée : ${titre}` : `À corriger : ${titre}\n${r.commentaire.slice(0, 200)}`);
           return envoyer(200, { ok: true, retour: r });
+        }
+
+        case "GET /api/studio/scripts":
+          return envoyer(200, { scripts: studio.listerScripts(dossierScripts()) });
+
+        case "POST /api/studio/script/retour": {
+          const b = await lireJson(req);
+          const id = String(b.id ?? "");
+          let r: studio.Retour;
+          try { r = studio.ajouterRetourScript(dossierScripts(), id, Number(b.version), String(b.verdict ?? ""), String(b.commentaire ?? "")); }
+          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
+          const titre = studio.listerScripts(dossierScripts()).find((v) => v.id === id)?.titre ?? id;
+          ctx.journaliser(r.verdict === "ok" ? "Script validé" : "Script à corriger", titre);
+          ctx.alerte("Rayan's Studio", r.verdict === "ok" ? `Script validé : ${titre}` : `Script à corriger : ${titre}\n${r.commentaire.slice(0, 200)}`);
+          return envoyer(200, { ok: true, retour: r });
+        }
+
+        case "GET /api/studio/idees":
+          return envoyer(200, { idees: studio.listerIdees(fichierIdees()) });
+
+        case "POST /api/studio/idees": {
+          const b = await lireJson(req);
+          let idee: studio.Idee;
+          try { idee = studio.ajouterIdee(fichierIdees(), String(b.texte ?? ""), String(b.compte ?? "")); }
+          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
+          ctx.journaliser("Nouvelle idée de vidéo", idee.texte.slice(0, 80));
+          ctx.alerte("Rayan's Studio", `Nouvelle idée : ${idee.texte.slice(0, 200)}`);
+          return envoyer(200, { ok: true, idee });
+        }
+
+        case "POST /api/studio/idees/supprimer": {
+          const b = await lireJson(req);
+          try { studio.supprimerIdee(fichierIdees(), String(b.id ?? "")); }
+          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
+          return envoyer(200, { ok: true });
         }
 
         case "GET /api/journal": {

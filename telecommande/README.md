@@ -38,7 +38,7 @@ Tailscale (il perd alors tout accès au PC, Bureau à distance compris).
 | Presse-papiers | texte, dans les deux sens |
 | Wi-Fi | changer pour un réseau déjà enregistré, avec **retour automatique** si Internet et Tailscale ne reviennent pas en 60 s |
 | Journal | actions de la télécommande et connexions Bureau à distance (journal de Windows) |
-| Studio (tuile **Studio**) | regarder les vidéos déposées par Claude dans `Vidéos\Rayan's Studio\A valider` et répondre « C'est bon » ou ce qu'il faut corriger (avec le moment de la vidéo) ; réponse enregistrée à côté (`<id>.retours.json`) et notifiée sur le PC. Format : `src/core/studio.ts`, dépôt et lecture : `studio/a_valider.py` |
+| Studio (tuile **Studio**) | 3 onglets. **Vidéos** : regarder les vidéos déposées par Claude dans `Vidéos\Rayan's Studio\A valider`, répondre « C'est bon » ou ce qu'il faut corriger (avec le moment), les télécharger pour les partager. **Scripts** : lire le texte d'une future vidéo (dossier `Scripts`) et le valider avant fabrication. **Idées** : noter un sujet pour compte-a ou Compte B (`idees.json`). Réponses enregistrées à côté (`<id>.retours.json`) et notifiées sur le PC. Format : `src/core/studio.ts`, côté Studio : `studio/a_valider.py` |
 
 Depuis le PC vers l'iPhone : déposer des fichiers ou un texte (ils attendent dans Fichiers → Depuis le PC),
 faire sonner l'iPhone par iCloud Localiser.
