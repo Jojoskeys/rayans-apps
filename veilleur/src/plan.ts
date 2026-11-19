@@ -19,8 +19,10 @@ export interface Prefs {
   sport: boolean;
   /** Heures de prière (celles cochées dans Rayan's Prière). */
   prieres: boolean;
+  /** Vidéos du Studio en ligne (flux YouTube), avec les liens à partager. */
+  videos: boolean;
 }
-export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true, sport: true, prieres: true };
+export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true, sport: true, prieres: true, videos: true };
 
 export interface VeilleurState {
   /** Dernier passage (ms). */
@@ -54,6 +56,8 @@ export interface Inputs {
   prieres?: Prieres | null;
   /** Réglages de Rayan's Prière (lieu, méthode, prières à notifier, pause), déchiffrés. */
   priere?: unknown;
+  /** Vidéos en ligne repérées sur YouTube (calculées par main.ts avec videos.ts). */
+  videos?: { key: string; m: Message }[];
 }
 
 /** Fenêtre d'envoi autour de l'heure d'une prière : le veilleur passe toutes les 20 à 30 minutes. */
@@ -185,6 +189,9 @@ export function plan(i: Inputs): { messages: Message[]; state: VeilleurState } {
 
   // 7. Heures de prière (une fois par prière).
   if (prefs.prieres && i.priere !== undefined) for (const { key, m } of messagesPriere(i.priere, now)) once(key, m);
+
+  // 8. Vidéos en ligne (une fois par vidéo).
+  if (prefs.videos) for (const { key, m } of i.videos ?? []) once(key, m);
 
   // 6. Séance de sport : rappel 30 minutes avant le créneau libre du jour (d'après l'emploi du temps).
   if (prefs.sport && i.sport !== undefined) {
