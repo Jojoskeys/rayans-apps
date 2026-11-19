@@ -82,7 +82,14 @@ class Stock:
     def enregistrer(self) -> None:
         tmp = self.fichier.with_suffix(".tmp")
         tmp.write_text(json.dumps(list(self.videos.values()), ensure_ascii=False, indent=1), "utf-8")
-        tmp.replace(self.fichier)
+        for essai in range(10):  # Windows refuse le remplacement si la liste est lue au même moment
+            try:
+                tmp.replace(self.fichier)
+                return
+            except PermissionError:
+                if essai == 9:
+                    raise
+                time.sleep(0.5)
 
     def ajouter_lien(self, lien: str, origine: str, collection: str = "", date: int | None = None) -> dict | None:
         """Ajoute un lien s'il est nouveau. Rend la vidéo ajoutée, ou None (doublon ou lien inconnu)."""
