@@ -216,6 +216,13 @@ class Page(BaseHTTPRequestHandler):
             for v in sorted(stock.videos.values(), key=lambda x: -(x.get("modifie_le") or x["ajoute_le"])):
                 videos.append({**v, "fiche": stock.fiche(v["id"])})
             self._json(200, {"videos": videos, "categories": CATEGORIES, "travail": self.travail})
+        elif self.path == "/icone.ico" and (ICI / "icone.ico").exists():
+            b = (ICI / "icone.ico").read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "image/x-icon")
+            self.send_header("Content-Length", str(len(b)))
+            self.end_headers()
+            self.wfile.write(b)
         elif self.path.startswith("/images/"):
             nom = Path(self.path[len("/images/"):]).name
             f = stock.dossier / "images" / nom

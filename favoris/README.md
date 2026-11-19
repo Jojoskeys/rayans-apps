@@ -6,6 +6,12 @@ que tu n'as pas cliqué sur **Valider**.
 
 Outil local (Python), comme Rayan's Studio. Les données restent sur le PC, dans `Documents\Rayan's Favoris`.
 
+## L'ouvrir
+
+Menu Démarrer → **Rayans Favoris** (icône étoile rose). L'appli s'ouvre dans sa propre fenêtre, sur l'onglet
+**Pratique** (ce qui est faisable et sans danger), et s'arrête quand on la ferme.
+Pour créer ou recréer le raccourci : `python installer.py` (`--retirer` pour l'enlever).
+
 ## Le circuit
 
 1. **Les vidéos arrivent** par l'export officiel, un lien collé, une vidéo déposée, ou la tuile **Favoris**
