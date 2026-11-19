@@ -24,9 +24,21 @@ from stock import Stock
 _whisper = None
 
 
+def _dll_nvidia() -> None:
+    """Les bibliothèques CUDA installées par pip (nvidia-cublas-cu12, nvidia-cudnn-cu12) pour la carte graphique."""
+    if os.name != "nt":
+        return
+    import site
+    for base in [*site.getsitepackages(), site.getusersitepackages()]:
+        for bin_ in Path(base, "nvidia").glob("*/bin"):
+            os.add_dll_directory(str(bin_))
+            os.environ["PATH"] = str(bin_) + os.pathsep + os.environ.get("PATH", "")
+
+
 def _modele():
     global _whisper
     if _whisper is None:
+        _dll_nvidia()
         from faster_whisper import WhisperModel
         nom = os.environ.get("FAVORIS_MODELE", "small")
         try:
@@ -185,7 +197,13 @@ def recuperer(stock: Stock, limite: int | None = None, afficher=print) -> dict:
         if i > 1 and v["plateforme"] != "fichier":
             time.sleep(PAUSE)  # Instagram et TikTok freinent ceux qui enchaînent trop vite
         try:
-            recuperer_une(stock, v)
+            try:
+                recuperer_une(stock, v)
+            except Exception as e:  # TikTok refuse parfois un lien de vidéo (403) : il passe au second essai
+                if "403" not in str(e):
+                    raise
+                time.sleep(20)
+                recuperer_une(stock, v)
             bilan["ok"] += 1
             freinages = 0
         except Exception as e:  # une vidéo supprimée ou privée ne doit pas arrêter les autres
