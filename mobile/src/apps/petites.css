@@ -1,0 +1,20 @@
+/* Tuiles Demain, Courses, Mémo, Papiers : s'appuient sur telecommande.css (mêmes couleurs, cartes et boutons). */
+.heure { font-size: 44px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; margin: 4px 0 0; }
+.heure small { font-size: 15px; font-weight: 500; color: var(--texte-2); letter-spacing: 0; margin-left: 8px; }
+.sous { color: var(--texte-2); margin: 0; }
+.reglages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.reglages label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--texte-2); }
+.reglages input { text-align: center; }
+.rayon { font-size: 12.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--texte-2); font-weight: 600; margin: 6px 0 0; }
+.coche { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; color: inherit; background: none; border: 0; padding: 0; text-align: left; }
+.coche .case { flex: none; width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--bord); display: grid; place-items: center; font-size: 15px; }
+.coche.fait .case { background: var(--vert); border-color: var(--vert); color: #fff; }
+.coche.fait .nom { text-decoration: line-through; color: var(--texte-2); }
+.filtres { display: flex; flex-wrap: wrap; gap: 6px; }
+.filtres button { font: inherit; font-size: 13.5px; color: var(--texte-2); background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 99px; padding: 5px 11px; }
+.filtres button.actif { color: var(--texte); border-color: var(--accent); }
+.memo { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15.5px; line-height: 1.5; margin: 0; }
+.memo-pied { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.extrait { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; color: var(--texte-2); margin: 4px 0 0; }
+.apercu { width: 100%; border-radius: 12px; background: #000; max-height: 70vh; object-fit: contain; }
+.fichier-cache { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }

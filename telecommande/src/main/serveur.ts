@@ -14,6 +14,7 @@ import { nomDepuisUrl, nomLibre, nomSur, resoudre, type Racine } from "../core/c
 import { profilValide } from "../core/wifi.ts";
 import type { Donnees } from "../core/donnees.ts";
 import * as studio from "../core/studio.ts";
+import * as papiers from "../core/papiers.ts";
 import { abonnementValide, ErreurRappel } from "../core/minuteurs.ts";
 import type { Push } from "./push.ts";
 import * as sys from "./systeme.ts";
@@ -49,6 +50,8 @@ export const dossierReception = () => path.join(app.getPath("downloads"), "Depui
 export const dossierStudio = () => path.join(app.getPath("videos"), "Rayan's Studio", "A valider");
 export const dossierScripts = () => path.join(app.getPath("videos"), "Rayan's Studio", "Scripts");
 export const fichierIdees = () => path.join(app.getPath("videos"), "Rayan's Studio", "idees.json");
+/** Photos de documents envoyées depuis la tuile Papiers (voir core/papiers.ts). */
+export const dossierPapiers = () => path.join(app.getPath("documents"), "Rayan's Papiers");
 
 class ErreurHttp extends Error { code: number; constructor(code: number, message: string) { super(message); this.code = code; } }
 
@@ -338,6 +341,57 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           const b = await lireJson(req);
           try { studio.supprimerIdee(fichierIdees(), String(b.id ?? "")); }
           catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
+          return envoyer(200, { ok: true });
+        }
+
+        // ----- Rayan's Papiers : photos de documents, texte lu par l'OCR de Windows -----
+        case "GET /api/papiers":
+          return envoyer(200, { papiers: papiers.chercher(papiers.lireIndex(dossierPapiers()), url.searchParams.get("q") ?? "") });
+
+        case "GET /api/papiers/image": {
+          const p = papiers.lireIndex(dossierPapiers()).find((x) => x.id === url.searchParams.get("id"));
+          const chemin = p && papiers.cheminPapier(dossierPapiers(), p);
+          if (!p || !chemin || !fs.existsSync(chemin)) throw new ErreurHttp(404, "papier introuvable");
+          res.writeHead(200, { ...entetesCors, "Content-Type": papiers.TYPES[p.ext], "Content-Length": String(fs.statSync(chemin).size), "Cache-Control": "no-store" });
+          await pipeline(fs.createReadStream(chemin), res);
+          return;
+        }
+
+        case "POST /api/papiers": {
+          const ext = papiers.extensionDe(req.headers["content-type"]);
+          if (!ext) throw new ErreurHttp(415, "envoie une photo (JPEG, PNG ou HEIC)");
+          if (Number(req.headers["content-length"]) > papiers.TAILLE_MAX) throw new ErreurHttp(413, "photo trop lourde (25 Mo au plus)");
+          let titre = String(req.headers["x-nom-fichier"] ?? "");
+          try { titre = decodeURIComponent(titre); } catch { /* titre brut */ }
+          const dir = dossierPapiers();
+          fs.mkdirSync(dir, { recursive: true });
+          const id = randomUUID();
+          const chemin = papiers.cheminPapier(dir, { id, ext }), tmp = chemin + ".partiel";
+          let n = 0;
+          try {
+            await pipeline(req, async function* (source) { for await (const m of source) { n += (m as Buffer).length; if (n > papiers.TAILLE_MAX) throw new ErreurHttp(413, "photo trop lourde (25 Mo au plus)"); yield m; } }, fs.createWriteStream(tmp));
+            fs.renameSync(tmp, chemin);
+          } catch (e) { fs.rmSync(tmp, { force: true }); throw e; }
+          let texte = "", ocr = "ok";
+          try { texte = (await sys.lireTexteImage(chemin)).trim(); if (!texte) ocr = "vide"; }
+          catch (e) { ocr = String((e as Error).message ?? e).slice(0, 300); }
+          const p = papiers.ajouterPapier(dir, { id, titre, ext, texte, ajoute: Date.now(), taille: n, ocr });
+          ctx.journaliser("Papier reçu du téléphone", p.titre);
+          return envoyer(200, { ok: true, papier: papiers.chercher([p], "")[0] });
+        }
+
+        case "POST /api/papiers/renommer": {
+          const b = await lireJson(req);
+          try { papiers.renommerPapier(dossierPapiers(), String(b.id ?? ""), String(b.titre ?? "")); }
+          catch (e) { if (e instanceof papiers.ErreurPapier) throw new ErreurHttp(e.code, e.message); throw e; }
+          return envoyer(200, { ok: true });
+        }
+
+        case "POST /api/papiers/supprimer": {
+          const b = await lireJson(req);
+          try { papiers.supprimerPapier(dossierPapiers(), String(b.id ?? "")); }
+          catch (e) { if (e instanceof papiers.ErreurPapier) throw new ErreurHttp(e.code, e.message); throw e; }
+          ctx.journaliser("Papier supprimé depuis le téléphone");
           return envoyer(200, { ok: true });
         }
 

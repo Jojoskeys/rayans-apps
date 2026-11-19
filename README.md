@@ -18,7 +18,7 @@ application dans `.github/workflows/`.
 | Rayan's Aujourd'hui | [`aujourdhui/`](aujourdhui/) | `aujourdhui.yml` | Ce qu'il reste à réviser aujourd'hui dans Révision, Hifz et Ouvertures, rappel le soir |
 | Rayan's Sauve | [`sauve/`](sauve/) | `sauve.yml` | Sauvegarde robocopy des données des apps et des Documents vers un disque externe ou OneDrive, rappel au bout de 7 jours |
 | Rayan's Garmin | [`garmin/`](garmin/) | — (compilé sur le PC, copié par USB) | Forerunner 165 : cadran avec la prochaine prière, champ de course « objectif 5 km », compteur de tractions et de pompes |
-| Rayan's Télécommande | [`telecommande/`](telecommande/) | `telecommande.yml` | Piloter le PC depuis l'iPhone à travers Tailscale (état, verrouillage, redémarrage, applis, fichiers dans les deux sens, presse-papiers, Wi-Fi, scénarios) ; tuile « Télécommande » dans Rayan's Mobile |
+| Rayan's Télécommande | [`telecommande/`](telecommande/) | `telecommande.yml` | Piloter le PC depuis l'iPhone à travers Tailscale (état, verrouillage, redémarrage, applis, fichiers dans les deux sens, presse-papiers, Wi-Fi, scénarios) ; tuiles « Télécommande » et « Papiers » (photos de documents, texte lu par l'OCR de Windows) dans Rayan's Mobile |
 | Rayan's Journal | [`journal/`](journal/) | `journal.yml` | Journal d'activité horodaté (applis, fenêtres, fichiers, session) et archive chiffrée des conversations WhatsApp, Telegram, Discord, Instagram, Messenger |
 | Rayan's Studio | [`studio/`](studio/) | — (outil local, Python + Remotion) | Vidéos verticales pour TikTok, YouTube Shorts et Reels (compte-a, Compte B) : versets vérifiés et récitation synchronisée, voix ElevenLabs, animations, sous-titres mot par mot |
 
