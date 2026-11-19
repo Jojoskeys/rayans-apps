@@ -3,6 +3,8 @@
 // un élément supprimé d'un côté (présent dans la base, absent d'un côté) est supprimé partout.
 // Fonctions pures, partagées par la web app et par le pont de synchronisation du PC.
 
+import { mergeCourses, mergeMemos } from "./petites.ts";
+
 type Obj = Record<string, any>;
 
 /** Fusion d'une collection identifiée par clé. `newer(a, b)` dit si a est plus récent que b. */
@@ -258,6 +260,8 @@ export const MERGERS: Record<string, (base: Obj | undefined, local: Obj, remote:
   ouvertures: mergeOuvertures,
   "ouvertures-donnees": (_b, local, remote) => ((remote.publishedAt ?? 0) >= (local.publishedAt ?? 0) ? remote : local),
   fac: mergeFac,
+  courses: (b, l, r) => mergeCourses(b as never, l as never, r as never),
+  memos: (b, l, r) => mergeMemos(b as never, l as never, r as never),
   // Abonnements aux notifications (un par appareil) et préférences.
   notifications: (base, local, remote) => ({
     subscriptions: mergeById(base?.subscriptions, local.subscriptions ?? [], remote.subscriptions ?? [], (x: Obj) => x.endpoint, () => false),

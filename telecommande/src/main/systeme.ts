@@ -159,3 +159,30 @@ export async function connexionsBureau(max = 10): Promise<ConnexionBureau[]> {
     return (Array.isArray(brut) ? brut : [brut]).map((e: { at: number; u: string; ip: string }) => ({ at: e.at, utilisateur: e.u, adresse: e.ip }));
   } catch { return []; }
 }
+
+// ----- Lecture du texte d'une image (OCR intégré à Windows, même script que Rayan's Outils) ----------------
+const SCRIPT_OCR = `
+Add-Type -AssemblyName System.Runtime.WindowsRuntime
+$asTask = ([System.WindowsRuntimeSystemExtensions].GetMethods() | Where-Object { $_.Name -eq "AsTask" -and $_.GetParameters().Count -eq 1 -and $_.GetParameters()[0].ParameterType.Name -eq 'IAsyncOperation\`1' })[0]
+function Await($op, [Type]$type) { $t = $asTask.MakeGenericMethod($type).Invoke($null, @($op)); $t.Wait(-1) | Out-Null; $t.Result }
+[Windows.Storage.StorageFile, Windows.Storage, ContentType = WindowsRuntime] | Out-Null
+[Windows.Media.Ocr.OcrEngine, Windows.Foundation, ContentType = WindowsRuntime] | Out-Null
+[Windows.Graphics.Imaging.BitmapDecoder, Windows.Graphics, ContentType = WindowsRuntime] | Out-Null
+$engine = [Windows.Media.Ocr.OcrEngine]::TryCreateFromUserProfileLanguages()
+if ($null -eq $engine) { throw "Aucune langue OCR installée sur le PC (Paramètres > Heure et langue > Langue)." }
+$file = Await ([Windows.Storage.StorageFile]::GetFileFromPathAsync($chemin)) ([Windows.Storage.StorageFile])
+$stream = Await ($file.OpenAsync([Windows.Storage.FileAccessMode]::Read)) ([Windows.Storage.Streams.IRandomAccessStream])
+try {
+  $decoder = Await ([Windows.Graphics.Imaging.BitmapDecoder]::CreateAsync($stream)) ([Windows.Graphics.Imaging.BitmapDecoder])
+  $bitmap = Await ($decoder.GetSoftwareBitmapAsync()) ([Windows.Graphics.Imaging.SoftwareBitmap])
+  $result = Await ($engine.RecognizeAsync($bitmap)) ([Windows.Media.Ocr.OcrResult])
+} finally { $stream.Dispose() }
+ConvertTo-Json -Compress -InputObject ([ordered]@{ texte = (@($result.Lines | ForEach-Object { $_.Text }) -join "\`n") })
+`;
+
+/** Texte lu dans une image par l'OCR de Windows (langues du profil Windows). */
+export async function lireTexteImage(chemin: string): Promise<string> {
+  const sortie = await powershell(`$ErrorActionPreference='Stop';$chemin=${psTexte(chemin)};${SCRIPT_OCR}`, 90_000);
+  const ligne = sortie.trim().split(/\r?\n/).pop() ?? "";
+  try { return String(JSON.parse(ligne).texte ?? ""); } catch { throw new Error(sortie.trim().split(/\r?\n/).slice(0, 2).join(" ") || "lecture impossible"); }
+}
