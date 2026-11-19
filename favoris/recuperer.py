@@ -74,6 +74,7 @@ def _telecharger(v: dict, dossier: Path) -> tuple[Path, dict]:
                                       "channel_follower_count")}
     # Images : celle de la publication, ou celles de chaque élément d'un carrousel (4 au plus).
     vignettes = [info.get("thumbnail")] + [e.get("thumbnail") for e in (info.get("entries") or []) if e]
+    vignettes += [t.get("url") for t in reversed(info.get("thumbnails") or []) if t.get("url")][:1]
     infos["vignettes"] = [u for u in vignettes if u][:4]
     return chemin, infos
 
@@ -151,6 +152,11 @@ def recuperer_une(stock: Stock, v: dict) -> None:
         duree = infos.get("duration") or _duree(video)
         texte, langue = _transcrire(video)
         images = _images(video, v["id"], dossier, duree)
+        if not images:  # diaporama photo (son seul) : les images de la publication
+            for n, url in enumerate(dict.fromkeys(infos.get("vignettes") or []), 1):
+                photo = dossier / "images" / f"{v['id']}_{n}.jpg"
+                if n <= 4 and _photo(url, photo):
+                    images.append(photo.name)
     stats = {k: infos.get(k) for k in ("view_count", "like_count", "comment_count", "repost_count",
                                        "channel_follower_count", "upload_date") if infos.get(k) is not None}
     (dossier / "textes" / f"{v['id']}.txt").write_text(
