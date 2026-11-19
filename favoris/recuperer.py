@@ -214,7 +214,8 @@ def recuperer(stock: Stock, limite: int | None = None, afficher=print) -> dict:
             freinages = 0
         except Exception as e:  # une vidéo supprimée ou privée ne doit pas arrêter les autres
             message = str(e).splitlines()[0][:300]
-            if "429" in message or "too many requests" in message.lower() or "rate-limit" in message.lower():
+            if ("429" in message or "403" in message or "too many requests" in message.lower()
+                    or "rate-limit" in message.lower()):
                 # Freiné : la vidéo reste à récupérer, on attend, et on s'arrête si ça continue.
                 freinages += 1
                 bilan["freine"] += 1
