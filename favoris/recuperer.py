@@ -190,6 +190,7 @@ def _nombre(n) -> str:
 
 
 PAUSE = float(os.environ.get("FAVORIS_PAUSE", "6"))  # secondes entre deux téléchargements
+PAUSE_TIKTOK = float(os.environ.get("FAVORIS_PAUSE_TIKTOK", "20"))
 ATTENTE_FREIN = 300  # secondes d'attente quand la plateforme répond « trop de demandes »
 
 
@@ -197,41 +198,48 @@ def recuperer(stock: Stock, limite: int | None = None, afficher=print) -> dict:
     import time
     bilan = {"ok": 0, "erreur": 0, "freine": 0}
     a_faire = stock.par_etat("a_recuperer")[: limite or None]
-    freinages = 0
     for i, v in enumerate(a_faire, 1):
         afficher(f"[{i}/{len(a_faire)}] {v['id']}…")
         if i > 1 and v["plateforme"] != "fichier":
-            time.sleep(PAUSE)  # Instagram et TikTok freinent ceux qui enchaînent trop vite
-        try:
-            try:
-                recuperer_une(stock, v)
-            except Exception as e:  # TikTok refuse parfois un lien de vidéo (403) : il passe au second essai
-                if "403" not in str(e):
-                    raise
-                time.sleep(20)
-                recuperer_une(stock, v)
-            bilan["ok"] += 1
-            freinages = 0
-        except Exception as e:  # une vidéo supprimée ou privée ne doit pas arrêter les autres
-            message = str(e).splitlines()[0][:300]
-            if ("429" in message or "403" in message or "too many requests" in message.lower()
-                    or "rate-limit" in message.lower()):
-                # Freiné : la vidéo reste à récupérer, on attend, et on s'arrête si ça continue.
-                freinages += 1
-                bilan["freine"] += 1
-                afficher(f"   freiné par la plateforme, pause de {ATTENTE_FREIN // 60} min ({freinages}/3)")
-                if freinages >= 3:
-                    afficher("   arrêt : relancer plus tard, les vidéos restantes attendent.")
-                    break
-                time.sleep(ATTENTE_FREIN)
-                continue
-            if "login" in message.lower() or "cookies" in message.lower():
-                message += " — Instagram demande d'être connecté : voir « Instagram demande une connexion » dans le README."
-            stock.changer(v["id"], etat="erreur", erreur=message)
-            bilan["erreur"] += 1
-            afficher(f"   impossible : {message}")
+            # Instagram et TikTok bloquent ceux qui enchaînent trop vite (TikTok plus vite qu'Instagram).
+            time.sleep(PAUSE_TIKTOK if v["plateforme"] == "tiktok" else PAUSE)
+        resultat = _une_avec_freins(stock, v, afficher)
+        if resultat == "stop":
+            afficher("   arrêt : la plateforme bloque encore, relancer plus tard ; les vidéos restantes attendent.")
+            bilan["freine"] += 1
+            break
+        bilan[resultat] += 1
         stock.enregistrer()
     return bilan
+
+
+def _freine(message: str) -> bool:
+    m = message.lower()
+    return any(s in m for s in ("429", "403", "too many requests", "rate-limit", "unexpected response from webpage"))
+
+
+def _une_avec_freins(stock: Stock, v: dict, afficher) -> str:
+    """Récupère une vidéo. Si la plateforme freine, attend et réessaie LA MÊME vidéo (3 fois au plus).
+    Rend « ok », « erreur » (vidéo supprimée, privée…) ou « stop » (toujours bloqué : on arrête tout)."""
+    import time
+    for essai in range(1, 5):
+        try:
+            recuperer_une(stock, v)
+            return "ok"
+        except Exception as e:
+            message = str(e).splitlines()[0][:300]
+            if not _freine(message):
+                if "login" in message.lower() or "cookies" in message.lower():
+                    message += " — Instagram demande d'être connecté : voir « Instagram demande une connexion » dans le README."
+                stock.changer(v["id"], etat="erreur", erreur=message)
+                afficher(f"   impossible : {message}")
+                return "erreur"
+            if essai == 4:
+                return "stop"
+            attente = 20 if essai == 1 else ATTENTE_FREIN  # un refus isolé passe souvent après 20 s
+            afficher(f"   freiné par la plateforme, nouvel essai dans {attente} s ({essai}/3)")
+            time.sleep(attente)
+    return "stop"
 
 
 def lire_depots(stock: Stock) -> int:
