@@ -1,3 +1,4 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="icone.svg" dithering="none"/>
+    <bitmap id="ComplicationIcone" filename="complication.svg" dithering="none"/>
 </drawables>

@@ -16,6 +16,9 @@ class CadranApp extends Application.AppBase {
     (:typecheck(disableBackgroundCheck))
     function getInitialView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] {
         vue = new CadranVue();
+        if (WatchUi has :WatchFaceDelegate) {
+            return [vue as CadranVue, new CadranDelegue(vue as CadranVue)];
+        }
         return [vue as CadranVue];
     }
 

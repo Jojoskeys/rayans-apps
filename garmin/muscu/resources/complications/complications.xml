@@ -1,0 +1,5 @@
+<complications>
+    <complication id="0" access="protected" longLabel="@Strings.ComplicationLong" shortLabel="@Strings.ComplicationCourt" icon="@Drawables.ComplicationIcone" glancePreview="true">
+        <faceIt defaultText="@Strings.ComplicationLong"/>
+    </complication>
+</complications>
