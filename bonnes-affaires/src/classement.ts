@@ -12,7 +12,8 @@ export const NOMBRE_CHOIX = 5;
 export function rattacher(a: Annonce, recherches: Recherche[]): Recherche | undefined {
   if (a.recherche) {
     const r = recherches.find((x) => x.nom === a.recherche);
-    if (r) return r;
+    // Même rangée par le site dans cette recherche, l'annonce doit en contenir les mots (ex. pas de télé dans « écran 4K »).
+    if (r) return correspond(a.titre, r.mots) ? r : undefined;
   }
   return recherches.find((r) => correspond(a.titre, r.mots));
 }

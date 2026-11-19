@@ -57,6 +57,7 @@ export const MOTS_EXCLUS = [
   "style",
   "facon",
   "recherche",
+  "cherche",
   "echange",
 ];
 
