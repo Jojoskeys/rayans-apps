@@ -1,6 +1,6 @@
 // Lecteurs de page pour le relevé sur demande (voir README, « Relevé sur demande »).
 // Claude exécute l'un des deux dans son navigateur intégré, sur une page de recherche déjà ouverte, après
-// avoir remplacé NOM (fichier d'import, ex. lbc-switch-rennes) et RECHERCHE (nom exact dans reglages.json).
+// avoir remplacé NOM (fichier d'import, ex. lbc-switch-ville1) et RECHERCHE (nom exact dans reglages.json).
 // Ils ne font que lire ce que la page affiche déjà : aucune requête en plus, aucun compte.
 
 // Leboncoin : annonces de la page (titre, prix, lien, code postal, position, livrable, photo).
