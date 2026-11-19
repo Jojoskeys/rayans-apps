@@ -1,0 +1,149 @@
+{
+  "slug": "ayati-feu-du-mont",
+  "titre": "Le feu sur le Mont",
+  "titre_youtube": "Il allait chercher du feu… il a entendu son Seigneur. Moussa et le feu du Mont",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "accroche": "Il cherchait un tison. Il a trouvé sa mission.",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:29-32 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes). Verset 28:30 = 812,50-839,35 s.",
+    "Choix visuels : Moussa n'est jamais montré, ni sa main (28:32 est rendu par une lumière blanche) ; seuls le bâton et le serpent sont dessinés."
+  ],
+  "legende": "Une nuit dans le désert, Moussa voit un feu au loin. Il part chercher un tison pour réchauffer sa famille… et il entend : « Ô Moussa ! C'est Moi, Allah, le Seigneur de l'Univers. » Sourate Al-Qasas (28:29-32).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#rappel",
+    "#quran",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "mf_feu",
+      "ref": "28:29-30",
+      "accents": {
+        "feu": "whoosh",
+        "réchauffer…": "battement",
+        "voix": "impact"
+      },
+      "texte": "Une nuit, dans le désert, il voit un feu au loin. Il y va pour trouver de quoi se réchauffer… Il va y entendre la voix de son Seigneur."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_route",
+      "ref": "28:29",
+      "titre": {
+        "mot": "Mont,",
+        "texte": "Le feu sur le Mont"
+      },
+      "accents": {
+        "famille.": "pop",
+        "feu.": "impact"
+      },
+      "texte": "Moussa a fini ses années de travail à Madyan. Il repart avec sa famille. Et sur la route, près du Mont, il aperçoit un feu."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_route",
+      "ref": "28:29",
+      "accents": {
+        "Restez": "pop",
+        "réchauffer.": "battement"
+      },
+      "texte": "Il dit aux siens : « Restez ici. Peut-être que je vous rapporterai une nouvelle, ou un tison pour vous réchauffer. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_vallee",
+      "ref": "28:30",
+      "accents": {
+        "approche.": "whoosh",
+        "arbre,": "battement",
+        "appelle…": "impact"
+      },
+      "texte": "Il s'approche. Et là, du flanc droit de la vallée, dans le lieu béni, depuis l'arbre, on l'appelle…"
+    },
+    {
+      "type": "verset",
+      "scene": "mf_arbre",
+      "ref": "28:30"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_arbre",
+      "accents": {
+        "Moussa !": "impact",
+        "l'Univers.": "battement"
+      },
+      "texte": "« Ô Moussa ! C'est Moi, Allah, le Seigneur de l'Univers. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_baton",
+      "ref": "28:31",
+      "accents": {
+        "Jette": "impact",
+        "serpent.": "secousse",
+        "recule": "whoosh"
+      },
+      "texte": "« Jette ton bâton ! » Le bâton se met à remuer, comme un serpent. Moussa recule et s'enfuit, sans se retourner."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_baton",
+      "ref": "28:31",
+      "accents": {
+        "approche": "pop",
+        "sécurité.": "battement"
+      },
+      "texte": "« Ô Moussa, approche et n'aie pas peur. Tu es de ceux qui sont en sécurité. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_preuves",
+      "ref": "28:32",
+      "accents": {
+        "blanche,": "flash",
+        "Deux": "pop",
+        "Pharaon.": "impact"
+      },
+      "texte": "« Mets ta main dans l'ouverture de ta tunique : elle ressortira blanche, sans aucun mal. » Deux preuves de son Seigneur, pour aller devant Pharaon."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_mission",
+      "accents": {
+        "feu": "pop",
+        "mission": "impact",
+        "réserve.": "battement"
+      },
+      "texte": "Il était parti chercher un peu de feu pour sa famille. Il est revenu avec la mission de sa vie. Parfois, ce que tu cherches n'est que le chemin vers ce qu'Allah te réserve."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "abonne-toi": "pop",
+        "partage-la.": "pop"
+      },
+      "texte": "Si cette histoire t'a touché, abonne-toi pour ne pas rater la suite de l'histoire de Moussa, et partage-la."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  }
+}

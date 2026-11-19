@@ -1,0 +1,150 @@
+{
+  "slug": "ayati-puits-madyan",
+  "titre": "Le puits de Madyan",
+  "titre_youtube": "Il n'avait plus rien… alors il a fait cette dou'â. Moussa au puits de Madyan",
+  "style": "ayati",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "accroche": "Il n'avait plus rien. Il a fait une seule dou'â.",
+  "sourates": {
+    "28": "Sourate Al-Qasas"
+  },
+  "sources": [
+    "Coran 28:21-29 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets ; « il n'avait plus rien » traduit le mot « faqîr » (« j'ai grand besoin ») de 28:24.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que Moussa, Qâroûn et la tour de Pharaon, déjà acceptée par YouTube). Verset 28:24 = 608,30-628,95 s."
+  ],
+  "legende": "Il fuyait, seul, sans rien. Au puits de Madyan, il aide deux femmes à abreuver leurs bêtes, puis il s'assoit à l'ombre et fait une seule dou'â… La réponse arrive aussitôt. Sourate Al-Qasas (28:21-28).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#moussa",
+    "#doua",
+    "#rappel",
+    "#alqasas"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:24",
+      "accents": {
+        "rien.": "impact",
+        "dou'â…": "battement",
+        "changé.": "whoosh"
+      },
+      "texte": "Il n'avait plus rien. Ni maison, ni personne. Alors il a fait une seule dou'â… et sa vie a changé."
+    },
+    {
+      "type": "narration",
+      "scene": "md_desert",
+      "ref": "28:21-22",
+      "titre": {
+        "mot": "Madyan.",
+        "texte": "Le puits de Madyan"
+      },
+      "accents": {
+        "tuer.": "battement",
+        "Madyan.": "impact",
+        "droite.": "pop"
+      },
+      "texte": "Moussa vient de fuir l'Égypte : on veut le tuer. Il marche seul vers Madyan. Et il dit : « Il se peut que mon Seigneur me guide sur la voie droite. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_puits",
+      "ref": "28:23",
+      "accents": {
+        "puits": "whoosh",
+        "écart,": "pop",
+        "âgé.": "battement"
+      },
+      "texte": "Au puits de Madyan, une foule de bergers fait boire ses bêtes. À l'écart, deux femmes retiennent leur troupeau : « Nous attendrons que les bergers partent. Notre père est très âgé. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_puits",
+      "ref": "28:24",
+      "accents": {
+        "abreuve": "pop",
+        "ombre,": "whoosh"
+      },
+      "texte": "Alors Moussa abreuve leurs bêtes pour elles. Puis il se retire à l'ombre, et il dit…"
+    },
+    {
+      "type": "verset",
+      "scene": "md_ombre",
+      "ref": "28:24"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "accents": {
+        "plainte.": "pop",
+        "rien.": "battement"
+      },
+      "texte": "Ce n'est pas une plainte. C'est l'aveu d'un homme qui n'a plus rien : « Seigneur, j'ai grand besoin du bien que Tu feras descendre vers moi. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_reponse",
+      "ref": "28:25",
+      "accents": {
+        "aussitôt.": "impact",
+        "pudique": "pop",
+        "récompenser.": "pop"
+      },
+      "texte": "Et la réponse arrive aussitôt. L'une des deux femmes revient, d'une démarche pudique : « Mon père t'appelle, pour te récompenser. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_maison",
+      "ref": "28:25-27",
+      "accents": {
+        "crainte.": "battement",
+        "toit,": "pop",
+        "travail,": "pop",
+        "mariage.": "impact"
+      },
+      "texte": "Le vieil homme écoute son histoire et lui dit : « N'aie aucune crainte. » Puis il lui offre un toit, un travail… et l'une de ses filles en mariage."
+    },
+    {
+      "type": "narration",
+      "scene": "md_lecon",
+      "ref": "28:29",
+      "accents": {
+        "rien.": "battement",
+        "famille.": "pop",
+        "dou'â.": "impact"
+      },
+      "texte": "Il était arrivé seul et sans rien. Il est reparti, des années plus tard, avec sa famille. Tout a commencé par cette dou'â."
+    },
+    {
+      "type": "narration",
+      "scene": "md_lecon",
+      "accents": {
+        "toi": "pop",
+        "rien.": "battement"
+      },
+      "texte": "Cette dou'â, toi aussi tu peux la faire. Surtout le jour où tu as l'impression de ne plus rien avoir."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "abonne-toi": "pop",
+        "partage-la.": "pop"
+      },
+      "texte": "Si cette histoire t'a touché, abonne-toi pour ne pas rater la suite de l'histoire de Moussa, et partage-la."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.38,
+    "style": 0.5,
+    "speed": 1.06
+  }
+}

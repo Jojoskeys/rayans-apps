@@ -1,0 +1,97 @@
+{
+  "slug": "psycho-ver-oreille",
+  "titre": "Le ver d'oreille",
+  "titre_youtube": "Pourquoi une chanson reste bloquée dans ta tête ?",
+  "serie": "Pourquoi tu… #5",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "accroche": "Ton cerveau rejoue toujours le même bout",
+  "sources": [
+    "Liikkanen, L. A. (2012). Musical activities predispose to involuntary musical imagery. Psychology of Music, 40(2), 179-201 : enquête sur plus de 12 000 personnes, environ 89 % ont une musique « coincée » au moins une fois par semaine (« presque 9 sur 10 »)",
+    "Beaman, C. P. & Williams, T. I. (2010). Earworms (stuck song syndrome): Towards a natural history of intrusive thoughts. British Journal of Psychology, 101(4), 637-653 : le ver d'oreille est en général un court fragment (souvent le refrain) qui se répète",
+    "Jakubowski, K., Finkel, S., Stewart, L. & Müllensiefen, D. (2017). Dissecting an earworm: Melodic features and song popularity predict involuntary musical imagery. Psychology of Aesthetics, Creativity, and the Arts, 11(2), 122-135 : tempo plutôt rapide, contour mélodique courant (simple), avec des intervalles inhabituels (le « saut inattendu »)",
+    "Beaman, C. P., Powell, K. & Rapley, E. (2015). Want to block earworms from conscious awareness? B(u)y gum! Quarterly Journal of Experimental Psychology, 68(6), 1049-1057 : mâcher un chewing-gum réduit les vers d'oreille, en gênant la répétition « dans la tête » qui passe par les muscles de la parole"
+  ],
+  "legende": "Une chanson qui tourne en boucle dans ta tête, même une que tu n'aimes pas ? Ça a un nom, presque tout le monde en a chaque semaine… et l'astuce la plus bizarre pour l'arrêter.\n\nTu as une chanson dans la tête en ce moment ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#faitspsychologiques",
+    "#musique",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_refrain",
+      "accents": {
+        "boucle": "whoosh",
+        "aimes": "impact"
+      },
+      "texte": "Pourquoi une chanson tourne en boucle dans ta tête… alors que tu ne l'aimes même pas ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_stats",
+      "accents": {
+        "nom": "pop",
+        "9": "flash"
+      },
+      "texte": "Ça a un nom : un ver d'oreille. Et tu n'es pas seul : presque 9 personnes sur 10 en ont au moins un par semaine."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_melodie",
+      "titre": {
+        "mot": "hasard.",
+        "texte": "Le ver d'oreille"
+      },
+      "accents": {
+        "hasard.": "impact",
+        "rapide,": "pop",
+        "simple…": "pop",
+        "saut": "flash"
+      },
+      "texte": "Et ce n'est pas un hasard. En 2017, des chercheurs ont analysé les chansons qui collent le plus : un rythme plutôt rapide, une mélodie simple… avec un petit saut inattendu."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fragment",
+      "accents": {
+        "bout": "pop",
+        "rejoue,": "whoosh",
+        "encore.": "impact"
+      },
+      "texte": "Ton cerveau n'en garde souvent qu'un petit bout, le refrain. Alors il le rejoue, encore et encore."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_chewing",
+      "accents": {
+        "bizarre": "flash",
+        "chewing-gum.": "pop",
+        "2015": "pop",
+        "silence.": "impact"
+      },
+      "texte": "L'astuce la plus bizarre : mâche un chewing-gum. Une étude de 2015 montre que ça réduit le ver d'oreille. Ta bouche est occupée… et elle ne peut plus fredonner en silence."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Tu as une chanson dans la tête en ce moment ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  }
+}

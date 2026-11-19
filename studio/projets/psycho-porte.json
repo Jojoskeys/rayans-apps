@@ -1,0 +1,94 @@
+{
+  "slug": "psycho-porte",
+  "titre": "L'effet de la porte",
+  "titre_youtube": "Pourquoi tu oublies ce que tu venais faire dans une pièce ?",
+  "serie": "Pourquoi tu… #4",
+  "style": "psycho",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "accroche": "C'est pas ta mémoire. C'est la porte.",
+  "sources": [
+    "Radvansky, G. A., Krawietz, S. A. & Tamplin, A. K. (2011). Walking through doorways causes forgetting: Further explorations. Quarterly Journal of Experimental Psychology, 64(8), 1632-1645 : plus d'oublis après le passage d'une porte qu'en restant dans la même pièce sur la même distance, en réalité virtuelle et dans de vraies pièces",
+    "Radvansky, G. A. & Copeland, D. E. (2006). Walking through doorways causes forgetting: Situation models and experienced space. Memory & Cognition, 34(5), 1150-1156 : la porte agit comme une frontière d'événement (le cerveau découpe l'expérience en épisodes)",
+    "McFadyen, J., Nolan, C., Pinocy, E., Buteri, D. & Baumann, O. (2021). Doorways do not always cause forgetting: a multimodal investigation. BMC Psychology, 9, 41 : l'effet n'apparaît que quand la charge mentale est élevée (d'où « surtout quand tu as la tête pleine »)",
+    "MacLeod, C. M., Gopie, N., Hourihan, K. L., Neary, K. R. & Ozubko, J. D. (2010). The production effect: Delineation of a phenomenon. Journal of Experimental Psychology: Learning, Memory, and Cognition, 36(3), 671-685 : on retient mieux ce qu'on dit à voix haute (l'astuce)"
+  ],
+  "legende": "Tu entres dans la cuisine… et tu ne sais plus pourquoi. Ce n'est pas ta mémoire qui lâche : c'est la porte. Des études l'ont montré, et l'astuce pour que ça ne t'arrive plus.\n\nÇa t'arrive au moins une fois par jour ? OUI ou NON 👇",
+  "hashtags": [
+    "#psychologie",
+    "#pourquoitu",
+    "#faitspsychologiques",
+    "#memoire",
+    "#cerveau",
+    "#lapsychofacile"
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_porte",
+      "accents": {
+        "pièce…": "whoosh",
+        "sais": "impact"
+      },
+      "texte": "Pourquoi tu entres dans une pièce… et tu ne sais plus du tout ce que tu venais y faire ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_chapitre",
+      "accents": {
+        "porte.": "impact",
+        "2011,": "pop",
+        "plus": "flash"
+      },
+      "texte": "Ce n'est pas ta mémoire qui lâche. C'est la porte. En 2011, des chercheurs font marcher des gens d'une pièce à l'autre, en vrai et en réalité virtuelle. Après une porte, ils oublient plus que s'ils restent dans la même pièce, sur la même distance."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_chapitre",
+      "titre": {
+        "mot": "scène,",
+        "texte": "L'effet de la porte"
+      },
+      "accents": {
+        "film.": "whoosh",
+        "range": "pop"
+      },
+      "texte": "Ton cerveau découpe ta journée en scènes, comme un film. Une porte, c'est une fin de scène : il range l'ancienne… avec ce que tu venais chercher."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_charge",
+      "accents": {
+        "2021": "pop",
+        "pleine.": "impact"
+      },
+      "texte": "Une étude de 2021 précise : ça arrive surtout quand tu as la tête pleine. Quand tu penses à mille choses en même temps."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_voix",
+      "accents": {
+        "L'astuce": "flash",
+        "clés.": "pop",
+        "prononce.": "impact"
+      },
+      "texte": "L'astuce : dis à voix haute ce que tu vas chercher. « Les clés. » On retient mieux ce qu'on prononce."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "OUI": "pop",
+        "Abonne-toi": "pop"
+      },
+      "texte": "Ça t'arrive au moins une fois par jour ? OUI ou NON en commentaire. Abonne-toi pour ne pas rater le prochain épisode."
+    }
+  ],
+  "voix_reglages": {
+    "stability": 0.32,
+    "style": 0.65,
+    "speed": 1.14
+  }
+}

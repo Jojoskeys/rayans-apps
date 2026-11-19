@@ -9,6 +9,7 @@ import { ScenesQadr } from "./qadr";
 import { ScenesSpectateur } from "./spectateur";
 import { ScenesPourquoi } from "./pourquoi";
 import { ScenesQasas } from "./qasas";
+import { ScenesMadyan } from "./madyan";
 import { Cta } from "./cta";
 import { Camera, Eclairs, Grain, Progression, Surgissements, Vignette } from "./effets";
 import { Accroche, CarteVerset, Marque, References, SousTitres, Titres } from "./textes";
@@ -39,7 +40,7 @@ const FONDU = 12;
 const Plan_: React.FC<{ plan: Plan; t: Timeline; premier: boolean }> = ({ plan, t, premier }) => {
   const f = useCurrentFrame();
   const o = premier ? 1 : interpolate(f, [0, FONDU], [0, 1], clamp);
-  const Scene = plan.scene === "cta" ? null : (t.style === "ayati" ? { ...ScenesAyati, ...ScenesFil, ...ScenesQadr, ...ScenesQasas } : { ...ScenesPsycho, ...ScenesSpectateur, ...ScenesPourquoi })[plan.scene];
+  const Scene = plan.scene === "cta" ? null : (t.style === "ayati" ? { ...ScenesAyati, ...ScenesFil, ...ScenesQadr, ...ScenesQasas, ...ScenesMadyan } : { ...ScenesPsycho, ...ScenesSpectateur, ...ScenesPourquoi })[plan.scene];
   return (
     <AbsoluteFill style={{ opacity: o }}>
       {plan.scene === "cta" ? (

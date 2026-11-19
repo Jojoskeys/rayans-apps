@@ -4,7 +4,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from "remotion";
-import { Music, NotebookPen, RotateCw, X } from "lucide-react";
+import { Key, Music, NotebookPen, Repeat, RotateCw, X } from "lucide-react";
 import type { SceneProps } from "./types";
 import { clamp, H, prog, quand, ressort, rnd, W } from "./outils";
 import { Bonhomme, COULEURS, FOND, JAUNE, P, ROUGE, Scene, Sol } from "./spectateur";
@@ -522,7 +522,305 @@ const Papier: React.FC<SceneProps> = ({ plan }) => {
   );
 };
 
+// =============================================================== #4 L'effet de la porte
+/** Encadrement de porte, vu de face. */
+const Porte: React.FC<{ x: number; sol: number; o?: number }> = ({ x, sol, o = 1 }) => (
+  <g opacity={o}>
+    <rect x={x - 130} y={sol - 520} width={260} height={520} fill="#0B0E26" />
+    <rect x={x - 150} y={sol - 540} width={300} height={30} rx={8} fill="#3B418C" />
+    <rect x={x - 150} y={sol - 540} width={26} height={540} fill="#3B418C" />
+    <rect x={x + 124} y={sol - 540} width={26} height={540} fill="#3B418C" />
+  </g>
+);
+
+const BullePensee: React.FC<{ x: number; y: number; s: number; children: React.ReactNode }> = ({ x, y, s, children }) => (
+  <g transform={`translate(${x} ${y}) scale(${s})`}>
+    <circle cx={-60} cy={150} r={14} fill="#fff" />
+    <circle cx={-30} cy={110} r={22} fill="#fff" />
+    <ellipse cx={0} cy={0} rx={150} ry={110} fill="#fff" />
+    {children}
+  </g>
+);
+
+const PorteScene: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const d = plan.fin - plan.debut;
+  const piece = quand(plan, "pièce", 0, 40);
+  const sais = quand(plan, "sais", 0, d * 0.7);
+  const x = interpolate(f, [0, sais], [200, 860], { ...clamp, easing: Easing.inOut(Easing.quad) });
+  const passe = x > 540;
+  const s = passe ? 1 - prog(f, sais - 10, sais + 4) : ressort(f, piece - 20);
+  const doute = passe ? ressort(f, sais) : 0;
+  return (
+    <Scene>
+      <Sol y={1420} />
+      <Porte x={540} sol={1420} />
+      <Bonhomme x={x} y={1420} s={1.1} c={COULEURS[0]} marche={x < 860} regard={1} />
+      <BullePensee x={x + 140} y={860} s={s * 0.9}>
+        <Fo x={0} y={0} t={150}><Key size={120} color={ENCRE} strokeWidth={2.4} /></Fo>
+      </BullePensee>
+      {doute > 0 ? (
+        <text x={x + 60} y={980} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={190 * doute} fill={JAUNE}>?</text>
+      ) : null}
+    </Scene>
+  );
+};
+
+const Chapitre: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const d = plan.fin - plan.debut;
+  const porte = quand(plan, "porte.", 0, 40);
+  const an = quand(plan, "2011", 0, 90);
+  const film = quand(plan, "film", 0, d * 0.55);
+  const range = quand(plan, "range", 0, d * 0.8);
+  const etape = f < film - 10 ? 0 : 1;
+  const glisse = prog(f, range, range + 30);
+  return (
+    <Scene>
+      {etape === 0 ? (
+        <g>
+          {f > porte - 4 ? <Pastille x={540} y={520} texte="c'est la porte" s={ressort(f, porte)} taille={58} /> : null}
+          <text x={540} y={760} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={86} fill={JAUNE} opacity={ressort(f, an)}>2011</text>
+          {/* une seule grande pièce, ou deux pièces séparées par une porte : même distance */}
+          <g opacity={ressort(f, an + 10)}>
+            <rect x={110} y={900} width={380} height={260} rx={16} fill="none" stroke="#3B418C" strokeWidth={12} />
+            <rect x={590} y={900} width={380} height={260} rx={16} fill="none" stroke="#3B418C" strokeWidth={12} />
+            <rect x={772} y={890} width={16} height={280} fill={JAUNE} />
+            <path d="M150,1110 L450,1110" stroke="#fff" strokeWidth={6} strokeDasharray="14 14" />
+            <path d="M630,1110 L930,1110" stroke="#fff" strokeWidth={6} strokeDasharray="14 14" />
+            <text x={300} y={1240} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={40} fill="#fff">même pièce</text>
+            <text x={780} y={1240} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={40} fill={JAUNE}>une porte</text>
+            <text x={780} y={1330} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={44} fill={ROUGE} opacity={interpolate(f, [an + 60, an + 75], [0, 1], clamp)}>+ d'oublis</text>
+          </g>
+        </g>
+      ) : (
+        <g>
+          {/* la journée découpée en scènes de film : la porte ferme la scène, et la clé part avec */}
+          <g transform={`translate(${-glisse * 760} 0)`}>
+            <rect x={140} y={700} width={560} height={440} rx={20} fill={BLEU_NUIT} stroke="#fff" strokeWidth={8} />
+            <text x={420} y={790} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={44} fill="#fff">SCÈNE 1 · cuisine</text>
+            <Fo x={420} y={960} t={180}><Key size={150} color={JAUNE} strokeWidth={2.4} /></Fo>
+          </g>
+          <g transform={`translate(${(1 - glisse) * 760} 0)`} opacity={glisse}>
+            <rect x={240} y={700} width={600} height={440} rx={20} fill={BLEU_NUIT} stroke="#fff" strokeWidth={8} />
+            <text x={540} y={790} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={44} fill="#fff">SCÈNE 2 · chambre</text>
+            <text x={540} y={1010} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={150} fill={JAUNE}>?</text>
+          </g>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <rect key={i} x={60 + i * 130} y={600} width={70} height={46} rx={8} fill="#0B0E26" />
+          ))}
+          {Array.from({ length: 8 }).map((_, i) => (
+            <rect key={"b" + i} x={60 + i * 130} y={1200} width={70} height={46} rx={8} fill="#0B0E26" />
+          ))}
+        </g>
+      )}
+    </Scene>
+  );
+};
+
+const Charge: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const d = plan.fin - plan.debut;
+  const an = quand(plan, "2021", 0, 30);
+  const pleine = quand(plan, "pleine.", 0, d * 0.4);
+  const mille = quand(plan, "mille", 0, d * 0.7);
+  const icones = ["📱", "📧", "🛒", "⏰", "📚", "💬", "🍝", "🔑"];
+  return (
+    <Scene>
+      <text x={540} y={560} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={86} fill={JAUNE} opacity={ressort(f, an)}>2021</text>
+      <Sol y={1440} />
+      <Bonhomme x={540} y={1440} s={1.25} c={COULEURS[0]} regard={0} />
+      {icones.map((ic, i) => {
+        const a = (i / icones.length) * Math.PI * 2 + f / 40;
+        const t = interpolate(f, [pleine - 20 + i * 5, pleine + i * 5], [0, 1], clamp) + (f > mille ? 0.15 : 0);
+        const r = 250 + Math.sin(f / 9 + i) * 14;
+        const vis = i === 7 ? (1 - prog(f, mille + 20, mille + 40)) : 1;
+        return (
+          <g key={i} opacity={t * vis} transform={`translate(${540 + Math.cos(a) * r} ${930 + Math.sin(a) * r * 0.55})`}>
+            <circle r={62} fill={i === 7 ? JAUNE : "#fff"} />
+            <text y={22} textAnchor="middle" fontSize={62}>{ic}</text>
+          </g>
+        );
+      })}
+      {f > pleine ? <Pastille x={540} y={720} texte="tête pleine = plus d'oublis" s={ressort(f, pleine + 8)} taille={44} /> : null}
+    </Scene>
+  );
+};
+
+const Voix: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const d = plan.fin - plan.debut;
+  const haute = quand(plan, "haute", 0, 40);
+  const cles = quand(plan, "clés", 0, d * 0.5);
+  const prononce = quand(plan, "prononce.", 0, d * 0.85);
+  const x = interpolate(f, [cles, d], [260, 760], clamp);
+  return (
+    <Scene>
+      <Sol y={1420} />
+      <Porte x={600} sol={1420} o={0.9} />
+      <Bonhomme x={x} y={1420} s={1.1} c={COULEURS[0]} marche={f > cles && f < d - 4} regard={1} />
+      {f > haute - 4 ? (
+        <g transform={`translate(${x + 40} 900) scale(${ressort(f, haute)})`}>
+          <rect x={-200} y={-110} width={400} height={170} rx={60} fill={JAUNE} />
+          <path d="M-60,58 L-90,120 L-10,58 Z" fill={JAUNE} />
+          <text x={0} y={0} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={64} fill={ENCRE}>{f > cles - 4 ? "« Les clés ! »" : "…"}</text>
+        </g>
+      ) : null}
+      {f > prononce - 4 ? <Pastille x={540} y={560} texte="✓ dit = retenu" s={ressort(f, prononce)} taille={54} /> : null}
+    </Scene>
+  );
+};
+
+// =============================================================== #5 Le ver d'oreille
+const Notes: React.FC<{ x: number; y: number; r: number; n: number; o?: number; c?: string }> = ({ x, y, r, n, o = 1, c = JAUNE }) => {
+  const f = useCurrentFrame();
+  return (
+    <g opacity={o}>
+      {Array.from({ length: n }).map((_, i) => {
+        const a = (i / n) * Math.PI * 2 + f / 22;
+        return (
+          <text key={i} x={x + Math.cos(a) * r} y={y + Math.sin(a) * r * 0.45} textAnchor="middle" fontSize={70} fontWeight={800} fill={c}>
+            {i % 2 ? "♪" : "♫"}
+          </text>
+        );
+      })}
+    </g>
+  );
+};
+
+const Refrain: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const d = plan.fin - plan.debut;
+  const boucle = quand(plan, "boucle", 0, 40);
+  const aimes = quand(plan, "aimes", 0, d * 0.75);
+  return (
+    <Scene>
+      <Sol y={1440} />
+      <Bonhomme x={540} y={1440} s={1.3} c={COULEURS[1]} regard={0} />
+      <Notes x={540} y={820} r={260} n={6} o={ressort(f, boucle - 10)} />
+      <g transform={`translate(540 820) scale(${ressort(f, boucle)})`} opacity={0.9}>
+        <Fo x={0} y={0} t={150} r={f * 3}><Repeat size={120} color="#fff" strokeWidth={2.4} /></Fo>
+      </g>
+      {f > aimes - 4 ? <Pastille x={540} y={520} texte="même pas ta préférée" s={ressort(f, aimes)} taille={50} fond={ROUGE} couleur="#fff" /> : null}
+    </Scene>
+  );
+};
+
+const Stats: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const nom = quand(plan, "nom", 0, 20);
+  const neuf = quand(plan, "9", 0, 90);
+  return (
+    <Scene>
+      <g transform={`translate(540 600) scale(${ressort(f, nom)})`}>
+        <text x={0} y={0} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={86} fill={JAUNE}>le « ver d'oreille »</text>
+      </g>
+      {Array.from({ length: 10 }).map((_, i) => {
+        const cx = 160 + (i % 5) * 190;
+        const cy = 1050 + Math.floor(i / 5) * 360;
+        const touche = i < 9 && f > neuf + i * 3;
+        return (
+          <g key={i}>
+            <Bonhomme x={cx} y={cy} s={0.7} c={touche ? JAUNE : "#5A5F9A"} phase={i} />
+            {touche ? <text x={cx + 50} y={cy - 210} fontSize={56} fontWeight={800} fill="#fff" opacity={ressort(f, neuf + i * 3)}>♪</text> : null}
+          </g>
+        );
+      })}
+      {f > neuf + 30 ? <Pastille x={540} y={1540} texte="9 sur 10, chaque semaine" s={ressort(f, neuf + 30)} taille={50} /> : null}
+    </Scene>
+  );
+};
+
+const Melodie: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const d = plan.fin - plan.debut;
+  const an = quand(plan, "2017", 0, 20);
+  const rapide = quand(plan, "rapide", 0, d * 0.45);
+  const simple = quand(plan, "simple", 0, d * 0.6);
+  const saut = quand(plan, "saut", 0, d * 0.8);
+  // notes d'une mélodie inventée : contour simple, puis un saut inattendu (en jaune)
+  const hauteurs = [0, 1, 2, 1, 0, 1, 2, 3, 2, 1, 6, 2];
+  const n = hauteurs.length;
+  const visibles = Math.floor(interpolate(f, [rapide - 10, saut + 10], [0, n], clamp));
+  return (
+    <Scene>
+      <text x={540} y={720} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={86} fill={JAUNE} opacity={ressort(f, an)}>2017</text>
+      {Array.from({ length: 5 }).map((_, i) => <rect key={i} x={80} y={820 + i * 70} width={920} height={5} fill="#3B418C" />)}
+      {hauteurs.slice(0, visibles).map((h, i) => {
+        const special = i === 10;
+        return (
+          <g key={i} transform={`translate(${130 + i * 75} ${1100 - h * 45}) scale(${ressort(f, rapide - 10 + i * ((saut - rapide + 20) / n))})`}>
+            <ellipse cx={0} cy={0} rx={30} ry={22} fill={special ? JAUNE : "#fff"} transform="rotate(-20)" />
+            <rect x={24} y={-130} width={7} height={130} fill={special ? JAUNE : "#fff"} />
+          </g>
+        );
+      })}
+      <g>
+        {f > rapide - 4 ? <Pastille x={250} y={1380} texte="rapide" s={ressort(f, rapide)} taille={44} fond="#fff" /> : null}
+        {f > simple - 4 ? <Pastille x={560} y={1380} texte="simple" s={ressort(f, simple)} taille={44} fond="#fff" /> : null}
+        {f > saut - 4 ? <Pastille x={850} y={1380} texte="un saut" s={ressort(f, saut)} taille={44} /> : null}
+      </g>
+    </Scene>
+  );
+};
+
+const Fragment: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const d = plan.fin - plan.debut;
+  const bout = quand(plan, "bout", 0, 40);
+  const rejoue = quand(plan, "rejoue", 0, d * 0.6);
+  const zoom = prog(f, bout, bout + 25);
+  const tours = f > rejoue ? (f - rejoue) / 18 : 0;
+  return (
+    <Scene>
+      {/* la chanson entière, et le petit bout que ton cerveau garde */}
+      <rect x={80} y={760} width={920} height={90} rx={45} fill="#3B418C" opacity={1 - zoom * 0.5} />
+      <rect x={430} y={760} width={170} height={90} rx={45} fill={JAUNE} />
+      <text x={540} y={700} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={44} fill="#fff" opacity={1 - zoom}>la chanson entière</text>
+      <g transform={`translate(515 1180) scale(${zoom})`}>
+        <circle r={230} fill="none" stroke={JAUNE} strokeWidth={30} strokeDasharray="60 30" transform={`rotate(${tours * 90})`} />
+        <text y={30} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={90} fill="#fff">♪ refrain</text>
+        <text y={130} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={60} fill={JAUNE} opacity={f > rejoue ? 1 : 0}>× {Math.max(1, Math.floor(tours) + 1)}</text>
+      </g>
+    </Scene>
+  );
+};
+
+const Chewing: React.FC<SceneProps> = ({ plan }) => {
+  const f = useCurrentFrame();
+  const d = plan.fin - plan.debut;
+  const gum = quand(plan, "chewing-gum", 0, d * 0.3);
+  const an = quand(plan, "2015", 0, d * 0.5);
+  const bouche = quand(plan, "bouche", 0, d * 0.75);
+  const calme = prog(f, bouche, bouche + 40);
+  const mache = f > gum ? Math.abs(Math.sin(f / 4)) : 0;
+  return (
+    <Scene>
+      <text x={540} y={560} textAnchor="middle" fontFamily={P} fontWeight={800} fontSize={86} fill={JAUNE} opacity={ressort(f, an)}>2015</text>
+      <Sol y={1440} />
+      <Bonhomme x={540} y={1440} s={1.3} c={COULEURS[1]} regard={0} />
+      <Notes x={540} y={820} r={260} n={6} o={1 - calme} />
+      {f > gum - 4 ? (
+        <g transform={`translate(${540 + 60} ${1440 - 1.3 * 120}) scale(${ressort(f, gum) * (0.9 + mache * 0.25)})`}>
+          <circle r={38} fill="#FF7AA2" />
+          <circle cx={-10} cy={-10} r={10} fill="#fff" opacity={0.6} />
+        </g>
+      ) : null}
+      {calme > 0.5 ? <Pastille x={540} y={720} texte="moins de ver d'oreille" s={ressort(f, bouche + 25)} taille={46} /> : null}
+    </Scene>
+  );
+};
+
 export const ScenesPourquoi: Record<string, React.FC<SceneProps>> = {
+  pq_porte: PorteScene,
+  pq_chapitre: Chapitre,
+  pq_charge: Charge,
+  pq_voix: Voix,
+  pq_refrain: Refrain,
+  pq_stats: Stats,
+  pq_melodie: Melodie,
+  pq_fragment: Fragment,
+  pq_chewing: Chewing,
   pq_tache: Tache,
   pq_salle: Salle,
   pq_jauge: Jauge,
