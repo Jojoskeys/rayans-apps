@@ -12,6 +12,25 @@ interface Retour { version: number; verdict: "ok" | "corriger"; commentaire: str
 interface Video { id: string; titre: string; texte: string; note: string; version: number; envoye: number; taille: number; retours: Retour[] }
 
 const reponseActuelle = (v: Video) => [...v.retours].reverse().find((r) => r.version === v.version);
+
+/** Nom du fichier partagé : le titre, lisible par les amis (« L'histoire de Qâroûn.mp4 »). */
+const nomFichier = (v: Video) => `${v.titre.replace(/[\\/:*?"<>|]/g, "").replace(/\s+/g, " ").trim().slice(0, 80) || v.id}.mp4`;
+
+/**
+ * iPhone : feuille de partage (Enregistrer la vidéo, Messages, WhatsApp, Snapchat…).
+ * Ailleurs (PC, ou si le partage de fichiers n'existe pas) : téléchargement classique.
+ */
+async function partager(f: File): Promise<"partage" | "telecharge" | "annule"> {
+  const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
+  if (nav.canShare?.({ files: [f] })) {
+    try { await navigator.share({ files: [f] }); return "partage"; }
+    catch (e) { if ((e as Error).name === "AbortError") return "annule"; }
+  }
+  const u = URL.createObjectURL(f);
+  const a = document.createElement("a"); a.href = u; a.download = f.name; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 60_000);
+  return "telecharge";
+}
 const minutes = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
 /** Télécharge la vidéo avec sa progression (l'en-tête du code empêche de la lire directement depuis le PC). */
@@ -84,7 +103,9 @@ function App() {
 function Fiche({ cfg, video: v, ouverte, apres, erreur }: { cfg: Config; video: Video; ouverte: boolean; apres: (m: string) => void; erreur: (m: string) => void }) {
   const [deplie, setDeplie] = useState(ouverte);
   const [src, setSrc] = useState<string | null>(null);
+  const [fichier, setFichier] = useState<File | null>(null);
   const [progression, setProgression] = useState<number | null>(null);
+  const [pourPartage, setPourPartage] = useState(false);
   const [mode, setMode] = useState<"choix" | "corriger">("choix");
   const [commentaire, setCommentaire] = useState("");
   const [envoi, setEnvoi] = useState(false);
@@ -93,11 +114,24 @@ function Fiche({ cfg, video: v, ouverte, apres, erreur }: { cfg: Config; video: 
   const reponse = reponseActuelle(v);
   useEffect(() => () => { if (src) URL.revokeObjectURL(src); }, [src]);
 
-  const regarder = async () => {
+  const charger = async (): Promise<File | null> => {
+    if (fichier) return fichier;
     setProgression(0);
-    try { setSrc(await chargerVideo(cfg, v.id, setProgression)); }
-    catch (e) { erreur(String((e as Error).message ?? e)); }
+    try {
+      const url = await chargerVideo(cfg, v.id, setProgression);
+      const f = new File([await (await fetch(url)).blob()], nomFichier(v), { type: "video/mp4" });
+      setSrc(url); setFichier(f);
+      return f;
+    } catch (e) { erreur(String((e as Error).message ?? e)); return null; }
     finally { setProgression(null); }
+  };
+  const regarder = () => void charger();
+  // iOS exige un toucher pour ouvrir le partage : si la vidéo n'est pas encore chargée, on la charge,
+  // puis le bouton devient « Partager » et un second toucher ouvre la feuille de partage.
+  const telecharger = async () => {
+    if (!fichier) { setPourPartage(true); await charger(); return; }
+    const r = await partager(fichier);
+    if (r === "telecharge") apres("Vidéo téléchargée ✓");
   };
   const repondre = async (verdict: "ok" | "corriger") => {
     setEnvoi(true);
@@ -128,7 +162,11 @@ function Fiche({ cfg, video: v, ouverte, apres, erreur }: { cfg: Config; video: 
         <div className="corps">
           {v.note && <p className="note"><b>Claude :</b> {v.note}</p>}
           {src ? <video ref={lecteur} src={src} controls playsInline preload="auto" />
-            : <button className="bouton secondaire" disabled={progression !== null} onClick={() => void regarder()}>{progression !== null ? `Chargement… ${Math.round(progression * 100)} %` : "▶ Regarder la vidéo"}</button>}
+            : <button className="bouton secondaire" disabled={progression !== null} onClick={regarder}>{progression !== null ? `Chargement… ${Math.round(progression * 100)} %` : "▶ Regarder la vidéo"}</button>}
+          <button className={`bouton ${fichier && pourPartage ? "" : "secondaire"}`} disabled={progression !== null} onClick={() => void telecharger()}>
+            {fichier ? "⤴ Enregistrer ou partager" : "⤓ Télécharger pour partager"}
+          </button>
+          {fichier && <p className="petit">« Enregistrer la vidéo » la met dans tes Photos ; tu peux aussi l'envoyer directement à tes amis (Messages, WhatsApp…).</p>}
           {v.texte && <details><summary>Légende et hashtags</summary><p className="legende">{v.texte}</p></details>}
 
           {reponse && (
