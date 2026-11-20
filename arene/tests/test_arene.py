@@ -106,6 +106,16 @@ class Reproductible(unittest.TestCase):
         self.assertEqual(len(r1["courbe_arene"]), len(r1["courbe_ag"]))
         self.assertEqual(len(r1["courbe_arene"]), len(r1["dates"]))
 
+    def test_annees_au_calendrier(self):
+        # 7 jours sur 7 (comme le bitcoin) : 1 an = 365 lignes, pas 252
+        self.assertAlmostEqual(arene.annees_entre("2020-01-01", "2021-01-01"), 1.0, places=2)
+        from datetime import date, timedelta
+        d0 = date(2016, 1, 1)
+        dates = [(d0 + timedelta(days=i)).isoformat() for i in range(365 * 6)]
+        prix = arene.serie_demo(graine=3, jours=len(dates))[1]
+        r = arene.walk_forward(dates, prix, generations=2, population=10, graine=1, nb_hasard=5, bavard=False)
+        self.assertAlmostEqual(r["ans_test"], len(r["fenetres"]), delta=0.1)
+
     def test_demo_fixe(self):
         np.testing.assert_array_equal(arene.serie_demo()[1], arene.serie_demo()[1])
 
