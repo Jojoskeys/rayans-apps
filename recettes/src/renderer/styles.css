@@ -27,12 +27,12 @@ body {
   user-select: none;
 }
 #racine { height: 100%; }
-input, textarea, button { font: inherit; color: inherit; }
-input, textarea {
+input, textarea, button, select { font: inherit; color: inherit; }
+input, textarea, select {
   background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 8px; padding: 7px 10px; min-width: 0; user-select: text;
 }
 textarea { resize: vertical; }
-input:focus, textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); outline-offset: 0; border-color: transparent; }
+input:focus, textarea:focus, select:focus { outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); outline-offset: 0; border-color: transparent; }
 input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--accent); margin: 0; flex: none; cursor: pointer; padding: 0; }
 h1 { font-size: 22px; margin: 0; font-weight: 650; }
 h2 { font-size: 15px; margin: 0 0 8px; font-weight: 600; }
@@ -135,6 +135,43 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .formulaire { display: flex; flex-direction: column; gap: 14px; max-width: 900px; }
 .formulaire label { display: flex; flex-direction: column; gap: 6px; color: var(--texte-2); }
 .formulaire input, .formulaire textarea { color: var(--texte); }
+
+/* ----- Mon plan -------------------------------------------------------------------------------- */
+.segmente { display: inline-flex; background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 10px; padding: 3px; }
+.segmente button { padding: 6px 12px; border-radius: 7px; color: var(--texte-2); }
+.segmente button.actif { background: color-mix(in srgb, var(--accent) 22%, var(--bord)); color: var(--texte); }
+.barre-outils { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.plan, .plan-vide { display: flex; flex-direction: column; gap: 14px; }
+.plan-vide { max-width: 720px; }
+.jours { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.jour { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 10px; background: var(--panneau); border: 1px solid var(--bord); color: var(--texte-2); }
+.jour small { color: var(--texte-3); font-size: 12px; }
+.jour.aujourdhui { border-color: color-mix(in srgb, var(--accent) 45%, var(--bord)); }
+.jour.actif { background: color-mix(in srgb, var(--accent) 18%, var(--panneau-2)); border-color: var(--accent); color: var(--texte); }
+.plan-jour { align-items: start; }
+.plan-jour .carte { display: flex; flex-direction: column; gap: 10px; }
+.cases { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.cases li { display: flex; flex-direction: column; gap: 4px; }
+.nom-repas { color: var(--texte-2); font-size: 12.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.nom-repas em { color: var(--accent-doux); font-style: normal; text-transform: none; letter-spacing: 0; font-weight: 500; }
+.case { display: flex; gap: 8px; align-items: center; }
+.case select { flex: 1; }
+.total-jour { margin: 0; color: var(--texte); border-top: 1px solid var(--bord); padding-top: 10px; }
+.total-jour small { color: var(--texte-3); }
+.preparations { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.preparations li { display: flex; flex-direction: column; border-left: 3px solid var(--lilas); padding-left: 10px; }
+.preparations li.ce-soir, .preparations li.des-que-possible { border-left-color: var(--accent); }
+.preparations li .lien { padding: 0; color: var(--texte); font-weight: 600; }
+.preparations small { color: var(--texte-3); }
+.semaine { overflow-x: auto; }
+.semaine table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.semaine th, .semaine td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--bord); vertical-align: top; }
+.semaine thead th { color: var(--texte-2); font-weight: 600; }
+.semaine tbody tr { cursor: pointer; }
+.semaine tbody tr:hover, .semaine tbody tr.actif { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.rayons li { display: flex; flex-direction: column; gap: 4px; }
+.conseil { color: var(--accent-doux) !important; opacity: .85; }
+.choix-magasin { font-size: 12px; padding: 3px 6px; margin-left: 27px; align-self: flex-start; max-width: calc(100% - 27px); }
 
 @media (max-width: 980px) {
   .grille { grid-template-columns: 1fr; }

@@ -9,7 +9,7 @@ const QUANTITE = new RegExp(
   "iu",
 );
 const UNITE = new RegExp(
-  `^(?:g|gr|grammes?|kg|mg|ml|cl|dl|l|litres?|c\\.?\\s*à\\s*(?:soupe|café|s|c)\\.?|cuill[èe]res?(?:\\s*à\\s*(?:soupe|café))?|cas|cac|càs|càc|tasses?|verres?|bols?|tranches?|pincées?|poignées?|boîtes?|sachets?|gousses?|scoops?|dosettes?|mesures?|pots?|briques?|morceaux?|carrés?)${L}\\.?\\s*`,
+  `^(?:g|gr|grammes?|kg|mg|ml|cl|dl|l|litres?|c\\.?\\s*à\\s*(?:soupe|café|s|c)\\.?|cuill[èe]res?(?:\\s*à\\s*(?:soupe|café))?|cas|cac|càs|càc|tasses?|verres?|bols?|tranches?|pincées?|poignées?|boîtes?|sachets?|gousses?|scoops?|doses?|dosettes?|mesures?|pots?|briques?|morceaux?|carrés?)${L}\\.?\\s*`,
   "iu",
 );
 const DE = /^(?:de\s+|d['’]\s*|du\s+|des\s+)/i;
@@ -90,14 +90,24 @@ export function listeCourses(recettes: Recette[]): GroupeRayon[] {
 
 /** Détail d'un article : les quantités demandées par chaque recette, quand elles disent plus que le nom. */
 export function detailArticle(a: Article): string {
+  // Une recette prévue plusieurs fois (plan de la semaine) : « 3 œufs (Omelette) ×2 ».
+  const compte = new Map<string, { texte: string; recette: string; n: number }>();
+  for (const l of a.lignes) {
+    const k = `${l.texte}\u0000${l.recette}`;
+    const c = compte.get(k);
+    if (c) c.n++; else compte.set(k, { ...l, n: 1 });
+  }
   const utiles = a.lignes.filter((l) => l.texte.trim().toLowerCase() !== a.nom);
-  if (!utiles.length) return a.lignes.length > 1 ? `${a.lignes.length} recettes` : "";
-  return a.lignes.map((l) => `${l.texte} (${l.recette})`).join(" ; ");
+  if (!utiles.length) {
+    const recettes = new Set(a.lignes.map((l) => l.recette)).size;
+    return recettes > 1 ? `${recettes} recettes` : a.lignes.length > 1 ? `×${a.lignes.length}` : "";
+  }
+  return [...compte.values()].map((l) => `${l.texte} (${l.recette})${l.n > 1 ? ` ×${l.n}` : ""}`).join(" ; ");
 }
 
 /** Texte à copier (pour une note ou un message) : un rayon par paragraphe, un tiret par produit. */
-export function texteCourses(groupes: GroupeRayon[], recettes: Recette[]): string {
-  const tete = `Liste de courses — ${recettes.map((r) => r.titre).join(", ")}`;
+export function texteCourses(groupes: GroupeRayon[], recettes: Recette[], titre?: string): string {
+  const tete = titre ?? `Liste de courses — ${[...new Set(recettes.map((r) => r.titre))].join(", ")}`;
   const blocs = groupes.map((g) => [g.rayon, ...g.articles.map((a) => {
     const d = detailArticle(a);
     return `- ${a.nom}${d ? ` : ${d}` : ""}`;

@@ -99,8 +99,36 @@ export function lireFiche(fiche: unknown, lien?: string): Recette | null {
     lien: lienValide(texte(f.lien) || lien) ?? lienDepuisId(id),
     resume: texte(f.resume) || undefined,
     pourRayan: texte(f.pour_rayan) || undefined,
+    ...nutrition(r, f.nutrition),
     origine: "favoris",
   };
+}
+
+/** Un nombre positif donné par la fiche (450, "450", "450 kcal", "35 g"), sinon undefined. */
+export function nombre(v: unknown): number | undefined {
+  const n = typeof v === "number" ? v : typeof v === "string" ? Number.parseFloat(v.replace(",", ".")) : NaN;
+  return Number.isFinite(n) && n > 0 && n < 10_000 ? Math.round(n) : undefined;
+}
+
+/** kcal et protéines par portion, seulement s'ils sont écrits dans la fiche (recette.kcal, nutrition.proteines…). */
+function nutrition(r: Record<string, unknown>, n: unknown): { kcal?: number; proteines?: number } {
+  const m = n && typeof n === "object" ? (n as Record<string, unknown>) : {};
+  const kcal = nombre(r.kcal) ?? nombre(r.calories) ?? nombre(m.kcal) ?? nombre(m.calories);
+  const proteines = nombre(r.proteines) ?? nombre(m.proteines);
+  return { ...(kcal ? { kcal } : {}), ...(proteines ? { proteines } : {}) };
+}
+
+/** Recette à préparer en avance (repos au frigo, la veille, marinade, overnight…). */
+export function aPreparerAvance(r: Recette): boolean {
+  const t = sansAccents([r.titre, ...r.etapes].join(" \n "));
+  return /overnight|la veille|toute la nuit|une nuit|au frigo|au refrigerateur|au congelateur|marin|meal ?prep|a l'avance|\b\d+\s*h\b|\b\d+\s*heures?\b/.test(t);
+}
+
+const PETIT_DEJ = /\b(petit[- ]dejeuner|overnight|oats|porridge|flocons d'avoine|pancakes?|crepes?|gaufres?|smoothie|omelette|oeufs? brouilles|mug cake|granola|tartines?|muesli|skyr|yaourt|fromage blanc|banana bread|muffins?)\b/;
+
+/** Recette qui convient au petit-déjeuner : d'après son titre, ou si la vidéo la présente comme un petit-déjeuner. */
+export function petitDej(r: Recette): boolean {
+  return PETIT_DEJ.test(sansAccents(r.titre)) || /petit[- ]dejeuner/.test(sansAccents(r.resume ?? ""));
 }
 
 /**
@@ -136,8 +164,8 @@ export function remarques(r: Recette): Remarques {
 }
 
 const PROTEINES = /\b(whey|proteine?s?|proteinee?s?|poulet|dinde|boeuf|steak|viande|hache|thon|saumon|poisson|crevettes?|oeufs?|blancs? d'oeufs?|skyr|cottage|fromage blanc|yaourt grec|yaourts? grecs?|lentilles|pois chiches|tofu|seitan|kefta|merguez|cabillaud|sardines?)\b/;
-const COLLATION = /\b(cookies?|gateaux?|cake|muffins?|brownies?|pancakes?|crepes?|gaufres?|barres?|bowl|smoothie|milkshake|shake|dessert|tiramisu|cheesecake|mousse|glace|overnight|porridge|collation|snack|bouchees?|energy balls?|biscuits?|tartines?|granola|flan|creme)\b/;
-const REPAS = /\b(poulet|dinde|boeuf|steak|viande|hache|saumon|poisson|riz|pates|patate|pommes? de terre|wrap|burger|tacos|pizza|salade|curry|gratin|omelette|quiche|bowl|plat|repas|dejeuner|diner|soupe|lasagnes?|couscous|tajine|kefta)\b/;
+const COLLATION = /\b(cookies?|gateaux?|cake|muffins?|brownies?|pancakes?|crepes?|gaufres?|barres?|smoothie|milkshake|shake|dessert|tiramisu|cheesecake|mousse|glace|overnight|porridge|collation|snack|bouchees?|energy balls?|biscuits?|tartines?|granola|flan|creme)\b/;
+const REPAS = /\b(poulet|dinde|boeuf|steak|viande|hache|saumon|poisson|riz|pates|patate|pommes? de terre|wrap|burger|tacos|pizza|salade|curry|gratin|omelette|quiche|bowl|plat|repas|(?<!petit[- ])dejeuner|diner|soupe|lasagnes?|couscous|tajine|kefta)\b/;
 
 /** Étiquettes déduites du titre, des ingrédients, des étapes et des remarques. */
 export function etiquettes(r: Recette): Etiquettes {

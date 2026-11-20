@@ -74,11 +74,25 @@ export async function runLaunchTest(report: string, h: Hooks) {
       const t: string = await js(`document.querySelector('[data-testid="liste-courses"]')?.textContent ?? ""`);
       return t.includes("œufs") || t.includes("oeufs") ? t : "";
     });
+    // Plan de la semaine, puis la liste de courses du jour, regroupée par magasin.
+    await waitFor("onglet plan", () => click('[data-testid="nav-plan"]'));
+    await waitFor("créer le plan", () => click('[data-testid="generer-plan"]'));
+    r.casesRemplies = await waitFor("cases du jour", async () => {
+      const n: number = await js(`[...document.querySelectorAll('[data-testid="cases-jour"] select')].filter((s) => s.value).length`);
+      return n >= 2 ? n : 0;
+    });
+    await waitFor("courses du jour", () => click('[data-testid="courses-du-jour"]'));
+    await waitFor("par magasin", () => click('[data-testid="par-magasin"]'));
+    r.coursesMagasins = await waitFor("liste par magasin", async () => {
+      const t: string = await js(`document.querySelector('[data-testid="liste-courses"]')?.textContent ?? ""`);
+      return /\b(À|Au|Sur) /.test(t) ? t : "";
+    });
     const d = h.getDonnees();
     r.panier = d.panier;
     r.faites = Object.keys(d.faites);
     const fichier = JSON.parse(fs.readFileSync(path.join(h.dataDir, "recettes.json"), "utf8"));
-    r.ok = d.panier.length === 1 && Object.keys(d.faites).length === 1 && fichier.panier.length === 1;
+    r.ok = d.panier.length === 1 && Object.keys(d.faites).length === 1 && fichier.panier.length === 1
+      && fichier.plan?.jours?.length === 7;
     const captures = process.env.RECETTES_CAPTURES;
     if (captures) {
       fs.mkdirSync(captures, { recursive: true });
@@ -86,6 +100,9 @@ export async function runLaunchTest(report: string, h: Hooks) {
       w.show();
       await sleep(400);
       fs.writeFileSync(path.join(captures, "courses.png"), (await w.webContents.capturePage()).toPNG());
+      await click('[data-testid="nav-plan"]');
+      await sleep(400);
+      fs.writeFileSync(path.join(captures, "plan.png"), (await w.webContents.capturePage()).toPNG());
       await click('[data-testid="nav-recettes"]');
       await sleep(400);
       fs.writeFileSync(path.join(captures, "recettes.png"), (await w.webContents.capturePage()).toPNG());

@@ -14,8 +14,21 @@ export interface Recette {
   resume?: string;
   /** Remarques pour Rayan (champ pour_rayan de la fiche) : halal, sèche… */
   pourRayan?: string;
+  /** Valeurs par portion, seulement si la fiche (ou Rayan) les donne : jamais devinées. */
+  kcal?: number;
+  proteines?: number;
   origine: "favoris" | "perso";
 }
+
+export const REPAS = ["petitDej", "dejeuner", "collation", "diner"] as const;
+export type Repas = (typeof REPAS)[number];
+
+/** Une case du plan : une recette, ou « libre » (id null). fixe = choisie par Rayan, gardée quand on régénère. */
+export interface Case { id: string | null; fixe: boolean }
+export type Jour = Record<Repas, Case>;
+
+/** Plan de la semaine, du lundi (debut, AAAA-MM-JJ) au dimanche. */
+export interface Plan { debut: string; jours: Jour[] }
 
 /** Ce que Rayan ajoute ou coche : gardé dans le dossier de données de l'app, jamais dans le dépôt. */
 export interface Donnees {
@@ -28,9 +41,16 @@ export interface Donnees {
   perso: Recette[];
   /** Recettes cochées pour la liste de courses. */
   panier: string[];
+  /** Plan de repas de la semaine. */
+  plan: Plan | null;
+  /** Magasin choisi par Rayan pour un produit (clé de l'ingrédient → nom du magasin). */
+  magasins: Record<string, string>;
 }
 
 export type Action =
+  | { type: "plan"; plan: Plan }
+  | { type: "casePlan"; jour: number; repas: Repas; id: string | null }
+  | { type: "magasin"; cle: string; magasin: string | null }
   | { type: "favori"; id: string }
   | { type: "faite"; id: string; at: number }
   | { type: "annulerFaite"; id: string; at: number }
