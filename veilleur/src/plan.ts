@@ -10,7 +10,7 @@ import { journee, nettoyerObjectifs } from "../../aujourdhui/src/core/objectifs.
 import { creneau, ligneSport, nettoyerSport, seanceDuJour } from "../../aujourdhui/src/core/sport.ts";
 import { days, prayerName } from "../../priere/src/core/schedule.ts";
 import { NOTIFIED, normalizeData } from "../../priere/src/core/settings.ts";
-import type { EditionActu } from "../../mobile/src/shared/actu.ts";
+import { titresEssentiel, type EditionActu } from "../../mobile/src/shared/actu.ts";
 
 export interface Prefs {
   cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number;
@@ -204,8 +204,11 @@ export function plan(i: Inputs): { messages: Message[]; state: VeilleurState } {
 
   // 9. « Ton monde ce matin » (une fois par jour, édition du jour seulement).
   if (prefs.actu && i.actu && i.actu.jour === day && i.actu.sujets.length && fenetreActu(now, prefs)) {
+    // Les titres de l'essentiel (2-3) ; une ancienne édition sans rubriques : le nombre de sujets et les premiers.
     const n = i.actu.sujets.length;
-    once(`actu|${day}`, { title: "Ton monde ce matin", body: `${plural(n, "sujet")} : ` + i.actu.sujets.slice(0, 3).map((s) => s.titre).join(" · ") + (n > 3 ? "…" : ""), url: "./actu/", tag: "actu" });
+    const titres = titresEssentiel(i.actu).join(" · ");
+    const body = i.actu.sujets.some((s) => s.rubrique === "essentiel") ? titres : `${plural(n, "sujet")} : ${titres}${n > 3 ? "…" : ""}`;
+    once(`actu|${day}`, { title: "Ton monde ce matin", body, url: "./actu/", tag: "actu" });
   }
 
   // 6. Séance de sport : rappel 30 minutes avant le créneau libre du jour (d'après l'emploi du temps).

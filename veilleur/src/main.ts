@@ -7,7 +7,7 @@
 //
 // Variables : RAYANS_CLE, VAPID_PUBLIC, VAPID_PRIVATE, GITHUB_TOKEN, GITHUB_REPOSITORY ; RAYANS_GH_API pour les tests.
 // Facultative (vidéos en ligne) : VIDEOS_COMPTES ; RAYANS_YT pour les tests.
-// Facultative (« Ton monde ce matin ») : ANTHROPIC_API_KEY pour les résumés par Claude ; sans elle, édition simple.
+// Facultative (« Ton monde ce matin ») : ANTHROPIC_API_KEY pour les résumés par Claude ; sans elle, édition gratuite.
 import webpush from "web-push";
 import { decrypt, encrypt, isEncrypted, unb64 } from "../../mobile/src/shared/e2e.ts";
 import { mergeText } from "../../mobile/src/shared/merge.ts";
