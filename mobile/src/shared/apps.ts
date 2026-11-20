@@ -18,6 +18,7 @@ export const APPS: MobileApp[] = [
   { id: "telecommande", name: "Télécommande", tagline: "Piloter le PC, fichiers", icon: "⌘", color: "#3D8BFD", files: [] },
   { id: "studio", name: "Studio", tagline: "Vidéos à valider", icon: "▶", color: "#D9534F", files: [] },
   { id: "demain", name: "Demain", tagline: "Heure de réveil, Fajr", icon: "☼", color: "#F08A4B", files: [] },
+  { id: "actu", name: "Ton monde", tagline: "L'actu du monde ce matin", icon: "◍", color: "#4A9FD8", files: ["actu"] },
   { id: "courses", name: "Courses", tagline: "Liste par rayon", icon: "✓", color: "#3BA776", files: ["courses"] },
   { id: "memo", name: "Mémo", tagline: "Idées et notes rapides", icon: "✎", color: "#C77DDB", files: ["memos"] },
   { id: "papiers", name: "Papiers", tagline: "Documents retrouvables", icon: "▤", color: "#7A8BA6", files: [] },

@@ -1,6 +1,6 @@
 # Veilleur de Rayan's Mobile (installé dans le dépôt privé des données par veilleur/configurer.ps1).
 # Toutes les 20 minutes de 6 h à 23 h environ (heure de Paris), et toutes les 30 minutes plus tôt pour le rappel
-# d'après Fajr en été : met à jour l'emploi du temps ADE, regarde si une vidéo est sortie sur YouTube et envoie les notifications à l'iPhone. Le code vient du dépôt public rayans-apps ; les données restent chiffrées ici.
+# d'après Fajr en été : met à jour l'emploi du temps ADE, regarde si une vidéo est sortie sur YouTube, prépare « Ton monde ce matin » (actualité du jour) et envoie les notifications à l'iPhone. Le code vient du dépôt public rayans-apps ; les données restent chiffrées ici.
 name: Veilleur
 
 on:
@@ -47,3 +47,5 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           VIDEOS_COMPTES: ${{ secrets.VIDEOS_COMPTES }}
+          # Facultatif : résumés de « Ton monde ce matin » par Claude (sans lui, édition simple des titres).
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

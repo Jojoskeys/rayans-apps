@@ -10,6 +10,7 @@ import { journee, nettoyerObjectifs } from "../../aujourdhui/src/core/objectifs.
 import { creneau, ligneSport, nettoyerSport, seanceDuJour } from "../../aujourdhui/src/core/sport.ts";
 import { days, prayerName } from "../../priere/src/core/schedule.ts";
 import { NOTIFIED, normalizeData } from "../../priere/src/core/settings.ts";
+import type { EditionActu } from "../../mobile/src/shared/actu.ts";
 
 export interface Prefs {
   cours: boolean; rappels: boolean; matin: boolean; soir: boolean; heureMatin: number; heureSoir: number;
@@ -21,8 +22,10 @@ export interface Prefs {
   prieres: boolean;
   /** Vidéos du Studio en ligne (flux YouTube), avec les liens à partager. */
   videos: boolean;
+  /** « Ton monde ce matin » : revue de l'actualité du monde, un peu avant le résumé du matin. */
+  actu: boolean;
 }
-export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true, sport: true, prieres: true, videos: true };
+export const DEFAULT_PREFS: Prefs = { cours: true, rappels: true, matin: true, soir: true, heureMatin: 7, heureSoir: 19, adhkar: true, bilan: true, citations: true, sport: true, prieres: true, videos: true, actu: true };
 
 export interface VeilleurState {
   /** Dernier passage (ms). */
@@ -58,7 +61,13 @@ export interface Inputs {
   priere?: unknown;
   /** Vidéos en ligne repérées sur YouTube (calculées par main.ts avec videos.ts). */
   videos?: { key: string; m: Message }[];
+  /** Édition d'actualité du jour (préparée par main.ts avec actu.ts), ou null. */
+  actu?: EditionActu | null;
 }
+
+/** « Ton monde ce matin » : de 20 min avant l'heure du résumé du matin (6 h 40 par défaut) jusqu'à 4 h après. */
+export const ACTU_AVANCE = 20;
+export const fenetreActu = (now: number, prefs: Prefs) => now >= at(now, prefs.heureMatin, -ACTU_AVANCE) && now < at(now, prefs.heureMatin + 4);
 
 /** Fenêtre d'envoi autour de l'heure d'une prière : le veilleur passe toutes les 20 à 30 minutes. */
 export const PRIERE_AVANT = 25 * 60_000;
@@ -192,6 +201,12 @@ export function plan(i: Inputs): { messages: Message[]; state: VeilleurState } {
 
   // 8. Vidéos en ligne (une fois par vidéo).
   if (prefs.videos) for (const { key, m } of i.videos ?? []) once(key, m);
+
+  // 9. « Ton monde ce matin » (une fois par jour, édition du jour seulement).
+  if (prefs.actu && i.actu && i.actu.jour === day && i.actu.sujets.length && fenetreActu(now, prefs)) {
+    const n = i.actu.sujets.length;
+    once(`actu|${day}`, { title: "Ton monde ce matin", body: `${plural(n, "sujet")} : ` + i.actu.sujets.slice(0, 3).map((s) => s.titre).join(" · ") + (n > 3 ? "…" : ""), url: "./actu/", tag: "actu" });
+  }
 
   // 6. Séance de sport : rappel 30 minutes avant le créneau libre du jour (d'après l'emploi du temps).
   if (prefs.sport && i.sport !== undefined) {
