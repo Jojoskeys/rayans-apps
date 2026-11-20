@@ -12,6 +12,7 @@ GitHub Pages : **https://jojoskeys.github.io/rayans-apps/**
 | Chrono | minuteur, projets, historique, export CSV | mini-fenêtre, notifications |
 | Ouvertures | répertoire et entraînement sur les positions déjà analysées | import Chess.com, analyse Stockfish |
 | Télécommande | piloter le PC, fichiers, presse-papiers (via Tailscale) | Rayan's Télécommande |
+| Recettes | **Aujourd'hui** (ce que je mange, ce que je prépare), **Courses** du jour ou de la semaine rangées par magasin, à cocher en magasin (bouton pour les copier dans la tuile Courses), **Recettes** (recherche, fiche, remarques halal et sèche, vidéo, favori, « je l'ai faite ») — lu sur le PC via la Télécommande | le plan de la semaine et l'ajout de recettes (Rayan's Recettes) |
 | Studio | regarder les vidéos à valider et répondre « C'est bon » / « À corriger » (via la Télécommande, même adresse et même code) | les vidéos et les réponses (lues par Claude) |
 
 Chaque app réutilise le code de l'app Windows (interface et règles de calcul) ; seule la couche « processus

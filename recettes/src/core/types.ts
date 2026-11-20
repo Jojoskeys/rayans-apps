@@ -45,12 +45,16 @@ export interface Donnees {
   plan: Plan | null;
   /** Magasin choisi par Rayan pour un produit (clé de l'ingrédient → nom du magasin). */
   magasins: Record<string, string>;
+  /** Articles de courses déjà pris (clé de l'ingrédient → date), cochés sur le PC ou sur l'iPhone. */
+  achetes: Record<string, number>;
 }
 
 export type Action =
   | { type: "plan"; plan: Plan }
   | { type: "casePlan"; jour: number; repas: Repas; id: string | null }
   | { type: "magasin"; cle: string; magasin: string | null }
+  | { type: "achete"; cle: string; oui: boolean; at: number }
+  | { type: "viderAchetes" }
   | { type: "favori"; id: string }
   | { type: "faite"; id: string; at: number }
   | { type: "annulerFaite"; id: string; at: number }

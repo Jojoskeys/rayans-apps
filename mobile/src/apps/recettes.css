@@ -1,0 +1,19 @@
+/* Tuile Recettes : s'appuie sur telecommande.css et petites.css ; accent rose (thème Sakura de l'app de bureau). */
+.rc { --accent: #F472B6; }
+.onglets.trois { grid-template-columns: repeat(3, 1fr); }
+.rc input[type="search"] { width: 100%; }
+.filtres.jours button.aujourdhui { font-weight: 700; color: var(--texte); }
+/* Cases larges, faciles à toucher d'une main en magasin. */
+.rc-coche { min-height: 48px; padding: 6px 0; }
+.rc-coche .case { width: 30px; height: 30px; border-radius: 9px; font-size: 18px; }
+.rc-coche .texte { display: flex; flex-direction: column; min-width: 0; }
+.rc-coche .nom { font-size: 17px; }
+.rc-coche small { color: var(--texte-2); font-size: 12.5px; overflow-wrap: anywhere; }
+.rc-avance { color: var(--accent) !important; }
+.rc-retour { align-self: flex-start; padding: 0; }
+.rc-halal { border-color: color-mix(in srgb, var(--vert) 45%, var(--bord)); }
+.rc-seche { border-color: color-mix(in srgb, var(--accent) 45%, var(--bord)); }
+.rc-halal p, .rc-seche p { margin: 6px 0 0; }
+.rc-alerte { color: var(--orange); font-weight: 600; }
+.rc-points { margin: 6px 0 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+.rc-points li::marker { color: var(--accent); }

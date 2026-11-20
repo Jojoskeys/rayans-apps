@@ -7,6 +7,7 @@ on:
   push:
     paths:
       - 'telecommande/**'
+      - 'recettes/src/**'   # logique de Rayan's Recettes, réutilisée par la tuile Recettes
       - '.github/workflows/telecommande.yml'
   workflow_dispatch:
 

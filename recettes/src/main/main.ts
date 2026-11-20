@@ -51,11 +51,14 @@ function etat(): Etat {
 
 function actualiser() {
   lecture = lireFavoris(favorisDir);
+  // recettes.json peut aussi être changé depuis l'iPhone (Rayan's Télécommande) : on le relit.
+  donnees = store.load();
   return etat();
 }
 
 export function dispatch(a: Action): Etat {
-  donnees = appliquer(donnees, a);
+  // Relu avant chaque changement, pour ne pas écraser ce que l'iPhone vient d'écrire.
+  donnees = appliquer(store.load(), a);
   try { store.save(donnees); } catch (err) { console.error("Enregistrement impossible :", err); }
   return etat();
 }
