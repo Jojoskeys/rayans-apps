@@ -118,3 +118,15 @@ test("robot : plusieurs recherches par passage, arrêt du site dès un blocage",
   assert.deepEqual(demandees, ["a", "b", "c"], "après le blocage sur c, plus aucune page");
   assert.ok(etat.sites.Vinted?.pauseJusqua);
 });
+
+test("marque très copiée : conseil d'authentification, méfiance au-delà de 45 % de rabais", async () => {
+  const { analyser } = await import("../src/analyse.ts");
+  const a: Annonce = { site: "Vinted", titre: "Doudoune Moncler", prix: 100, port: null, lien: "x", livrable: true, remiseEnMain: false };
+  const forte = analyser(a, 0.6, "vetements", "réglage", false, 40, true);
+  assert.equal(forte.surete, "méfiance");
+  assert.ok(forte.raisons.some((x) => /contrefaçon/.test(x)));
+  const credible = analyser(a, 0.42, "vetements", "réglage", false, 40, true);
+  assert.equal(credible.surete, "à vérifier");
+  assert.ok(credible.raisons.some((x) => /Certilogo/.test(x)));
+  assert.notEqual(analyser(a, 0.6, "vetements", "réglage", false, 40).raisons.some((x) => /copiée/.test(x)), true);
+});

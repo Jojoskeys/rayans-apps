@@ -24,6 +24,8 @@ export function analyser(
   originePrix: string,
   dansZone: boolean,
   zoneKm = 40,
+  /** Marque très copiée (Moncler, Stone Island…) : un gros rabais est surtout le signe d'une contrefaçon. */
+  copiee = false,
 ): Analyse {
   const plus: string[] = [];
   const moins: string[] = [];
@@ -43,6 +45,13 @@ export function analyser(
   } else if (ecartPct > 0.55) {
     moins.push("Prix très bas : demander des photos récentes et une preuve que ça marche");
     monter(1);
+  }
+  if (copiee) {
+    moins.push("Marque très copiée : vérifier étiquettes, coutures et code d'authenticité (QR code, Certilogo) avant de payer");
+    if (ecartPct > 0.45) {
+      moins.push("Rabais trop gros pour cette marque : très probablement une contrefaçon");
+      monter(2);
+    } else monter(1);
   }
   const nb = /médiane de (\d+)/.exec(originePrix);
   if (nb && Number(nb[1]) < 8) moins.push(`Prix habituel estimé sur seulement ${nb[1]} annonces`);
