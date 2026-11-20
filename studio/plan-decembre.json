@@ -2,12 +2,10 @@
  "_lisez_moi": "Ordre conseillé pour la fabrication de nuit (nuit.py) après le 6 décembre 2026. À copier dans Vidéos\\Rayan's Studio\\plan.json. Les doublons ci-dessous sont laissés de côté (à supprimer ou réécrire).",
  "ordre": [
   "ayati-femme-pharaon",
-  "psycho-effet-projecteur",
   "ayati-jamais-complice",
   "psycho-prix-99",
   "ayati-livre-lumiere",
   "psycho-temps-ralenti",
-  "ayati-qaroun",
   "psycho-amis-ressemblent",
   "ayati-bateau-troue",
   "psycho-se-tester",
@@ -37,7 +35,6 @@
   "psycho-visages-objets",
   "ayati-pour-m-eprouver",
   "psycho-donner-heureux",
-  "ayati-elephant",
   "psycho-espacer",
   "ayati-nuit-du-destin",
   "psycho-rejet-douleur",
@@ -72,7 +69,6 @@
   "psycho-dunning-kruger",
   "psycho-option-defaut",
   "psycho-troisieme-personne",
-  "psycho-effet-spectateur",
   "psycho-manger-ecran",
   "psycho-avis-etoiles",
   "psycho-ecrire-emotions",
@@ -88,5 +84,11 @@
   "psycho-verite-illusoire": "même idée que psycho-repetition-verite",
   "psycho-liste-apaise": "déjà programmé le 29/11 (« Pourquoi écrire une liste te calme tout de suite ? »)",
   "psycho-dormir-retenir": "très proche de la vidéo du 01/12 (« … juste avant de dormir »)"
+ },
+ "deja_publies": {
+  "ayati-qaroun": "déjà publié le 19/11",
+  "ayati-elephant": "déjà publié le 19/11",
+  "psycho-effet-projecteur": "déjà publié le 19/11",
+  "psycho-effet-spectateur": "déjà publié le 19/11"
  }
 }
