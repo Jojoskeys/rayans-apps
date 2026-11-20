@@ -174,23 +174,43 @@ class Freins(Base):
         from unittest import mock
         self.stock.ajouter_lien("https://www.tiktok.com/@_/video/1", "test")
         self.stock.ajouter_lien("https://www.tiktok.com/@_/video/2", "test")
+        self.stock.ajouter_lien("https://www.tiktok.com/@_/video/3", "test")
+        self.stock.ajouter_lien("https://www.tiktok.com/@_/video/4", "test")
         appels = []
 
         def faux(stock, v):
             appels.append(v["id"])
             if len(appels) == 1:
                 raise Exception("ERROR: HTTP Error 403: Forbidden")  # refus isolé : passe au 2e essai
-            if v["id"] == "tiktok-2":
+            if v["id"] in ("tiktok-2", "tiktok-3"):
                 raise Exception("ERROR: [TikTok] 2: Unexpected response from webpage request")
             stock.changer(v["id"], etat="a_analyser")
 
         with mock.patch.object(recuperer, "recuperer_une", faux), mock.patch("time.sleep"):
             b = recuperer.recuperer(self.stock, afficher=lambda m: None)
         self.assertEqual(appels[:2], ["tiktok-1", "tiktok-1"])
-        self.assertEqual(appels[2:], ["tiktok-2"] * 4)  # toujours bloqué : 4 essais puis arrêt
+        self.assertEqual(appels[2:], ["tiktok-2"] * 4 + ["tiktok-3"] * 4)  # deux bloquées de suite : arrêt
         self.assertEqual(b["ok"], 1)
         self.assertEqual(b["freine"], 1)
-        self.assertEqual(self.stock.videos["tiktok-2"]["etat"], "a_recuperer")  # pas marquée en erreur
+        for cle in ("tiktok-2", "tiktok-3", "tiktok-4"):
+            self.assertEqual(self.stock.videos[cle]["etat"], "a_recuperer")  # aucune marquée en erreur
+
+    def test_une_video_interdite_ne_bloque_pas_la_file(self):
+        import recuperer
+        from unittest import mock
+        for n in (1, 2, 3):
+            self.stock.ajouter_lien(f"https://www.tiktok.com/@_/video/{n}", "test")
+
+        def faux(stock, v):
+            if v["id"] == "tiktok-1":
+                raise Exception("ERROR: [TikTok] 1: Your IP address is blocked from accessing this post (403)")
+            stock.changer(v["id"], etat="a_analyser")
+
+        with mock.patch.object(recuperer, "recuperer_une", faux), mock.patch("time.sleep"):
+            b = recuperer.recuperer(self.stock, afficher=lambda m: None)
+        self.assertEqual((b["ok"], b["erreur"], b["freine"]), (2, 1, 0))
+        self.assertEqual(self.stock.videos["tiktok-1"]["etat"], "erreur")
+        self.assertEqual(self.stock.videos["tiktok-3"]["etat"], "a_analyser")
 
 
 class Depots(Base):
