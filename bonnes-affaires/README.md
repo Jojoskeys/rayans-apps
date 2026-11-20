@@ -172,12 +172,13 @@ Vêtements de marque : une recherche par marque **et** type de vêtement (« pol
 « nike tech fleece » sans les joggings…), sinon le prix habituel calculé mélange des articles trop différents.
 Les tailles enfant (`enfant`, `fille`, `ans`…) et les lots sont écartés. Recherches de Rayan : Nuptse,
 Patagonia, Ralph Lauren, Polo Lacoste, Nike Tech Fleece, Carhartt, Arc'teryx, Levi's 501, Dunk Low,
-New Balance 530, Longchamp Le Pliage, Stone Island, Doudoune Moncler.
+New Balance 530, Longchamp Le Pliage, Stone Island, Doudoune Moncler, Jordan 4, Salomon XT-6.
 
-Marques très copiées (`"copiee": true`, ex. Moncler, Stone Island) : chaque annonce rappelle de vérifier étiquettes
+Marques très copiées (`"copiee": true` : Moncler, Stone Island, Jordan 4, Salomon XT-6) : chaque annonce rappelle de vérifier étiquettes
 et code d'authenticité (QR code, Certilogo), et au-delà de 45 % de rabais elle passe en « méfiance » (jamais
 postée, jamais dinguerie). Pour Moncler, le prix habituel est fixé (`prixHabituel` 400 €) : sur Vinted, les
-copies font tomber la médiane à environ 115 €.
+copies font tomber la médiane à environ 115 € (de même Jordan 4 fixé à 170 €).
+Les tailles enfant sont aussi écartées dans les autres langues des annonces Vinted (`kinder`, `kids`, `nino`…).
 
 1. Discord : sur ton serveur, paramètres du salon → **Intégrations** → **Webhooks** → **Nouveau webhook** →
    **Copier l'URL du webhook**. Ce lien vaut un mot de passe : il va seulement dans `reglages.json`
