@@ -171,6 +171,12 @@ test("magasin choisi par Rayan gardé dans les données, liste regroupée par ma
   assert.equal(a("Site de nutrition sportive (en promo)"), "Sur un site de nutrition sportive (en promo)");
   d = appliquer(d, { type: "magasin", cle: "riz", magasin: null });
   assert.deepEqual(d.magasins, {});
+  // Articles pris pendant les courses (cochés sur le PC ou l'iPhone), gardés dans les données.
+  d = appliquer(d, { type: "achete", cle: "riz", oui: true, at: 7 });
+  assert.deepEqual(normaliser(JSON.parse(JSON.stringify(d))).achetes, { riz: 7 });
+  assert.deepEqual(appliquer(d, { type: "achete", cle: "riz", oui: false, at: 8 }).achetes, {});
+  assert.deepEqual(appliquer(d, { type: "viderAchetes" }).achetes, {});
+  assert.deepEqual(normaliser({ achetes: { a: "x", b: 3 } }).achetes, { b: 3 });
 });
 
 test("plan gardé dans les données : case changée, fichier abîmé réparé", () => {

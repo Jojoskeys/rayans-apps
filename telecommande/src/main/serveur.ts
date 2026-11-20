@@ -16,6 +16,7 @@ import type { Donnees } from "../core/donnees.ts";
 import * as studio from "../core/studio.ts";
 import * as papiers from "../core/papiers.ts";
 import * as favoris from "../core/favoris.ts";
+import * as recettes from "../core/recettes.ts";
 import * as bonnesAffaires from "../core/bonnes-affaires.ts";
 import { abonnementValide, ErreurRappel } from "../core/minuteurs.ts";
 import type { Push } from "./push.ts";
@@ -406,6 +407,22 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           try { note = decodeURIComponent(note); } catch { /* note brute */ }
           if (note) fs.writeFileSync(chemin + ".note.txt", note.slice(0, 500), "utf8");
           ctx.journaliser("Vidéo de favori reçue du téléphone");
+          return envoyer(200, { ok: true });
+        }
+
+        // ----- Rayan's Recettes : recettes de Favoris, plan de la semaine, courses (données de l'app Recettes) -----
+        case "GET /api/recettes":
+          try { return envoyer(200, recettes.vue(dossierFavoris(), recettes.fichierRecettes())); }
+          catch (e) { if (e instanceof recettes.ErreurRecettes) throw new ErreurHttp(e.code, e.message); throw e; }
+
+        case "POST /api/recettes/faite":
+        case "POST /api/recettes/annulerFaite":
+        case "POST /api/recettes/favori":
+        case "POST /api/recettes/achete":
+        case "POST /api/recettes/viderAchetes": {
+          const b = await lireJson(req);
+          try { recettes.modifier(recettes.fichierRecettes(), recettes.demande(url.pathname.slice("/api/recettes/".length), b)); }
+          catch (e) { if (e instanceof recettes.ErreurRecettes) throw new ErreurHttp(e.code, e.message); throw e; }
           return envoyer(200, { ok: true });
         }
 

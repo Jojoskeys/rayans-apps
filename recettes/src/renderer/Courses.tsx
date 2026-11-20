@@ -13,7 +13,6 @@ export function Courses({ etat, toutes, panier, source, setSource, agir }: {
   etat: Etat; toutes: Recette[]; panier: Recette[]; source: Source; setSource: (s: Source) => void; agir: (a: Action) => void;
 }) {
   const [mode, setMode] = useState<"rayon" | "magasin">("rayon");
-  const [pris, setPris] = useState<Set<string>>(new Set());
   const [copie, setCopie] = useState(false);
   const plan = etat.donnees.plan;
   const choix = etat.donnees.magasins;
@@ -37,9 +36,11 @@ export function Courses({ etat, toutes, panier, source, setSource, agir }: {
     setCopie(true);
     setTimeout(() => setCopie(false), 1800);
   };
-  const changer = (s: Source) => { setSource(s); setPris(new Set()); };
-  const ligne = (a: Article) => <LigneArticle key={a.cle} a={a} pris={pris.has(a.cle)} magasin={magasinDe(a.cle, choix)} montrerMagasin={mode === "rayon"}
-    basculer={() => { const p = new Set(pris); if (p.has(a.cle)) p.delete(a.cle); else p.add(a.cle); setPris(p); }}
+  const changer = (s: Source) => setSource(s);
+  const achetes = etat.donnees.achetes;
+  const nbPris = groupes.reduce((n, g) => n + g.articles.filter((x) => achetes[x.cle]).length, 0);
+  const ligne = (a: Article) => <LigneArticle key={a.cle} a={a} pris={!!achetes[a.cle]} magasin={magasinDe(a.cle, choix)} montrerMagasin={mode === "rayon"}
+    basculer={() => agir({ type: "achete", cle: a.cle, oui: !achetes[a.cle], at: Date.now() })}
     choisir={(m) => agir({ type: "magasin", cle: a.cle, magasin: m })} />;
 
   return (
@@ -48,6 +49,7 @@ export function Courses({ etat, toutes, panier, source, setSource, agir }: {
         <h1>Liste de courses</h1>
         <div className="actions">
           {recettes.length > 0 && <button className="bouton" onClick={copier}>{copie ? "Copié ✓" : "Copier la liste"}</button>}
+          {nbPris > 0 && <button className="bouton secondaire" title="Les cases cochées ici ou sur l'iPhone" onClick={() => agir({ type: "viderAchetes" })}>Décocher les articles pris</button>}
           {source.type === "panier" && panier.length > 0 && <button className="bouton secondaire" onClick={() => agir({ type: "viderPanier" })}>Tout décocher</button>}
         </div>
       </div>

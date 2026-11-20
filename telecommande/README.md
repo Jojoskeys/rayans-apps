@@ -39,6 +39,7 @@ Tailscale (il perd alors tout accès au PC, Bureau à distance compris).
 | Wi-Fi | changer pour un réseau déjà enregistré, avec **retour automatique** si Internet et Tailscale ne reviennent pas en 60 s |
 | Journal | actions de la télécommande et connexions Bureau à distance (journal de Windows) |
 | Studio (tuile **Studio**) | 3 onglets. **Vidéos** : regarder les vidéos déposées par Claude dans `Vidéos\Rayan's Studio\A valider`, répondre « C'est bon » ou ce qu'il faut corriger (avec le moment), les télécharger pour les partager. **Scripts** : lire le texte d'une future vidéo (dossier `Scripts`) et le valider avant fabrication. **Idées** : noter un sujet pour Ayati ou La Psycho Facile (`idees.json`). Réponses enregistrées à côté (`<id>.retours.json`) et notifiées sur le PC. Format : `src/core/studio.ts`, côté Studio : `studio/a_valider.py` |
+| Recettes (tuile **Recettes**) | `GET /api/recettes` : recettes de `Documents\Rayan's Favoris` et données de Rayan's Recettes (`recettes.json` : dossier du launcher `data\rayans-recettes`, sinon `%APPDATA%\Rayans Recettes`), avec le plan du jour, ce qu'il faut préparer et les courses du jour / de la semaine par magasin. `POST /api/recettes/{faite, annulerFaite, favori, achete, viderAchetes}` : écriture relue juste avant, copie `.bak`, fichier temporaire puis renommage. Logique réutilisée de `recettes/src/core` (`src/core/recettes.ts`) |
 
 Depuis le PC vers l'iPhone : déposer des fichiers ou un texte (ils attendent dans Fichiers → Depuis le PC),
 faire sonner l'iPhone par iCloud Localiser.

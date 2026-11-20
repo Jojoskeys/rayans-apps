@@ -25,6 +25,10 @@ Les recettes trouvées par Rayan's Favoris, dans une app Windows simple (Electro
 - Ce que l'app garde (favoris, dates, recettes ajoutées, liste de courses, plan, magasins choisis) : `recettes.json` dans le dossier
   `HANGAR_APP_DATA` fourni par Rayan's Launcher, sinon `%APPDATA%\Rayans Recettes\`. Jamais dans le dépôt.
 
+Sur l'iPhone, la tuile **Recettes** de Rayan's Mobile lit et coche les mêmes données à travers Rayan's
+Télécommande (articles pris, favoris, « je l'ai faite »). L'app relit `recettes.json` avant chaque changement et au
+retour sur sa fenêtre, pour ne rien écraser.
+
 ## Développement
 
 ```bash

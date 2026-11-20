@@ -4,7 +4,7 @@ import { changerCase, normaliserPlan } from "./plan.ts";
 import type { Action, Donnees, Recette } from "./types.ts";
 
 export function donneesVides(): Donnees {
-  return { version: 1, favoris: [], faites: {}, perso: [], panier: [], plan: null, magasins: {} };
+  return { version: 1, favoris: [], faites: {}, perso: [], panier: [], plan: null, magasins: {}, achetes: {} };
 }
 
 const chaines = (v: unknown) => (Array.isArray(v) ? [...new Set(v.filter((x): x is string => typeof x === "string" && !!x))] : []);
@@ -39,6 +39,9 @@ export function normaliser(brut: unknown): Donnees {
   d.plan = normaliserPlan(b.plan);
   if (b.magasins && typeof b.magasins === "object") {
     for (const [k, v] of Object.entries(b.magasins as Record<string, unknown>)) if (typeof v === "string" && v.trim()) d.magasins[k] = v.trim();
+  }
+  if (b.achetes && typeof b.achetes === "object") {
+    for (const [k, v] of Object.entries(b.achetes as Record<string, unknown>)) if (k && Number.isFinite(v)) d.achetes[k] = v as number;
   }
   if (Array.isArray(b.perso)) d.perso = b.perso.map(recettePerso).filter((r): r is Recette => !!r);
   return d;
@@ -77,6 +80,13 @@ export function appliquer(d: Donnees, a: Action): Donnees {
       if (a.magasin && a.magasin.trim()) magasins[a.cle] = a.magasin.trim(); else delete magasins[a.cle];
       return { ...d, magasins };
     }
+    case "achete": {
+      const achetes = { ...d.achetes };
+      if (a.oui) achetes[a.cle] = a.at; else delete achetes[a.cle];
+      return { ...d, achetes };
+    }
+    case "viderAchetes":
+      return { ...d, achetes: {} };
     case "viderPanier":
       return { ...d, panier: [] };
   }
