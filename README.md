@@ -28,6 +28,7 @@ Chaque push sur `main` qui touche une application la publie dans le catalogue de
 
 ## Ajouter une nouvelle application
 
+0. Faire valider une maquette Claude Design avant de coder.
 1. Créer un dossier `<nom-de-l-app>/` à la racine.
 2. Ajouter `.github/workflows/<nom-de-l-app>.yml` avec un filtre `on.push.paths: ['<nom-de-l-app>/**']`, pour
    que seule cette application soit reconstruite quand elle change.
