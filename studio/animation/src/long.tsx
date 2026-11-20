@@ -4,6 +4,7 @@
  *   « image » l'affiche en plein cadre avec un zoom très léger et les sous-titres en bas.
  * - Miniature : trois mises en page (variante 0, 1, 2) pour proposer trois miniatures.
  * - Extrait : un morceau d'une vidéo longue remis en vertical, avec les sous-titres mot par mot habituels.
+ *   Story : le même avec, si finStory > 0, une carte « La vidéo complète est sur le profil » sur les dernières images.
  */
 import React from "react";
 import { AbsoluteFill, Audio, Img, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
@@ -94,9 +95,31 @@ export const Miniature: React.FC<MiniatureProps> = ({ texte, style, variante, im
   );
 };
 
-export type ExtraitProps = { source: string; mots: Mot[]; duree: number; style: "ayati" | "psycho"; marque?: string | null; sousTitres?: boolean };
+export type ExtraitProps = {
+  source: string; mots: Mot[]; duree: number; style: "ayati" | "psycho"; marque?: string | null; sousTitres?: boolean;
+  finStory?: number; // images de la carte de fin d'une story (0 : pas de carte)
+};
 
-export const Extrait: React.FC<ExtraitProps> = ({ source, mots, duree, marque, sousTitres = true }) => {
+/** Fin de story : pas de bouton S'abonner (une story n'a pas de lien), juste où trouver la vidéo complète. */
+const FinStory: React.FC<{ style: "ayati" | "psycho"; marque?: string | null }> = ({ style, marque }) => {
+  const f = useCurrentFrame();
+  const o = interpolate(f, [0, 8], [0, 1], clamp);
+  const y = interpolate(f, [0, 10], [60, 0], clamp);
+  const fond = style === "ayati" ? "radial-gradient(circle at 50% 35%, #3a2a10, #07070c 70%)" : "radial-gradient(circle at 50% 35%, #2a0d0d, #08090d 70%)";
+  return (
+    <AbsoluteFill style={{ background: fond, opacity: o, justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+      <div style={{ transform: `translateY(${y}px)`, display: "flex", flexDirection: "column", alignItems: "center", gap: 40, padding: "0 90px" }}>
+        <div style={{ width: 230, height: 230, borderRadius: 999, border: `8px solid ${OR}`, background: "#111", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: style === "ayati" ? "Amiri" : "Montserrat", fontWeight: 700, fontSize: style === "ayati" ? 110 : 90, color: OR }}>
+          {style === "ayati" ? "آية" : "Ψ"}
+        </div>
+        <div style={{ fontFamily: "Montserrat", fontWeight: 800, fontSize: 76, lineHeight: 1.2, color: "#fff" }}>La vidéo complète est sur le profil</div>
+        <div style={{ fontFamily: "Montserrat", fontWeight: 700, fontSize: 50, color: OR }}>{marque ?? (style === "ayati" ? "Ayati" : "La Psycho Facile")}</div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+export const Extrait: React.FC<ExtraitProps> = ({ source, mots, duree, style, marque, sousTitres = true, finStory = 0 }) => {
   usePolices();
   const seg = [{ type: "narration" as const, scene: "extrait", debut: 0, fin: duree, mots }];
   return (
@@ -110,6 +133,11 @@ export const Extrait: React.FC<ExtraitProps> = ({ source, mots, duree, marque, s
       {sousTitres ? <SousTitres segments={seg} y={() => 1420} /> : null}
       <Marque texte={marque} />
       <Progression total={duree} />
+      {finStory > 0 ? (
+        <Sequence from={duree - finStory} durationInFrames={finStory}>
+          <FinStory style={style} marque={marque} />
+        </Sequence>
+      ) : null}
     </AbsoluteFill>
   );
 };

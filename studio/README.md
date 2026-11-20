@@ -56,6 +56,8 @@ Chaque segment est une `narration` (texte lu par la voix) ou un `verset` (`ref` 
 | `python longue.py planche <slug>` | format long : planche de style + intro déposées pour validation |
 | `python longue.py miniatures <slug>` | 3 miniatures (`"miniatures": ["texte 1", "texte 2", "texte 3"]` dans le projet) |
 | `python decouper.py <video.mp4>` | 4-6 extraits verticaux sous-titrés d'une vidéo longue de Rayan (jamais un verset coupé) |
+| `python decouper.py sorties/<slug>.mp4 --story` | 1 à 3 stories de 15 s tirées du début du Short (jamais un verset coupé, jamais la fin), la dernière finit sur « La vidéo complète est sur le profil » → `sorties/<slug>-story-<n>.mp4`, déposées pour validation |
+| `python post_metricool.py <slug> <date du Short> <url> --story <n>` | post Metricool de la story n : Instagram (+ Facebook pour Ayati), 1 h après le Short puis toutes les 5 min, en brouillon (`--direct` pour publier à l'heure). TikTok ne permet pas les stories programmées : le fichier se poste à la main. YouTube n'a plus de stories (Shorts seulement) |
 | `python bilan.py` / `python bilan.py jour` | top 3 / flop 3 + recommandation ; résumé des 24 h (lecture seule) |
 | `python nuit.py [--essai]` | fabrication de nuit des scripts validés + journal `sorties/nuit/<date>.txt` |
 | `planifier_nuit.ps1` | enregistre la tâche Windows de 2 h (seulement si Rayan le décide) |

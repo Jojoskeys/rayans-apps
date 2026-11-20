@@ -16,6 +16,7 @@ import controle  # noqa: E402
 import decouper  # noqa: E402
 import longue  # noqa: E402
 import nuit  # noqa: E402
+import post_metricool  # noqa: E402
 import regles  # noqa: E402
 from fabrique import marquer_forts  # noqa: E402
 
@@ -119,6 +120,62 @@ class Decouper(unittest.TestCase):
         r = decouper.mots_relatifs(ex, [(10.9, 12.0)])
         self.assertEqual([m["texte"] for m in r], ["a", "c"])
         self.assertEqual(r[1]["debut"], 90)
+
+
+    def test_stories(self):
+        st = decouper.proposer_stories(self.mots())
+        self.assertGreaterEqual(len(st), 1)
+        self.assertLessEqual(len(st), decouper.NB_STORIES)
+        self.assertEqual(st[0]["debut"], 0.0)                      # la première story part de l'accroche
+        for e in st:
+            self.assertGreaterEqual(e["fin"] - e["debut"], decouper.STORY_MIN)
+            self.assertLessEqual(e["fin"] - e["debut"], decouper.STORY_MAX)
+            self.assertLessEqual(e["fin"], 120 * decouper.STORY_PART_MAX)   # la fin du Short n'est pas dévoilée
+        for a, b in zip(st, st[1:]):
+            self.assertLessEqual(a["fin"], b["debut"])
+            self.assertLess(b["debut"] - a["fin"], 1.0)               # elles se suivent
+
+    def test_stories_jamais_un_verset_coupe(self):
+        zones = [(10.5, 22.5)]
+        for e in decouper.proposer_stories(self.mots(), zones):
+            self.assertFalse(decouper.coupe_un_verset(e["debut"], e["fin"], zones))
+
+    def test_stories_vide(self):
+        self.assertEqual(decouper.proposer_stories([]), [])
+
+
+class Stories(unittest.TestCase):
+    def setUp(self):
+        self.dossier = Path(TMP) / "projets"
+        self.dossier.mkdir(exist_ok=True)
+        for slug, style in (("ayati-test", "ayati"), ("psycho-test", "psycho")):
+            (self.dossier / f"{slug}.json").write_text(json.dumps({"style": style}), encoding="utf-8")
+        self.ancien = post_metricool.ICI
+        post_metricool.ICI = Path(TMP)
+
+    def tearDown(self):
+        post_metricool.ICI = self.ancien
+
+    def test_heure(self):
+        self.assertEqual(post_metricool.heure_story("2026-11-20T18:30", 1), "2026-11-20T19:30")
+        self.assertEqual(post_metricool.heure_story("2026-11-20T23:30", 3), "2026-11-21T00:40")
+
+    def test_ayati(self):
+        d = post_metricool.info_story("ayati-test", "2026-11-20T18:30", "https://x/s.mp4", 2)
+        self.assertEqual([p["network"] for p in d["providers"]], ["instagram", "facebook"])
+        self.assertEqual(d["instagramData"]["type"], "STORY")
+        self.assertEqual(d["facebookData"]["type"], "STORY")
+        self.assertEqual(d["text"], "")
+        self.assertTrue(d["draft"])
+        self.assertFalse(d["autoPublish"])
+        self.assertEqual(d["publicationDate"]["dateTime"], "2026-11-20T19:35:00")
+
+    def test_psycho_direct(self):
+        d = post_metricool.info_story("psycho-test", "2026-11-20T18:30", "https://x/s.mp4", 1, direct=True)
+        self.assertEqual([p["network"] for p in d["providers"]], ["instagram"])
+        self.assertNotIn("facebookData", d)
+        self.assertTrue(d["autoPublish"])
+        self.assertFalse(d["draft"])
 
 
 class Bilan(unittest.TestCase):
