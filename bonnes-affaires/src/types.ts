@@ -39,6 +39,8 @@ export interface Recherche {
   prixMax?: number;
   /** Mots qui écartent une annonce (en plus de la liste par défaut). */
   exclure?: string[];
+  /** Marque très copiée : conseil d'authentification, et méfiance au-delà de 45 % de rabais. */
+  copiee?: boolean;
 }
 
 export interface Domicile {
@@ -80,6 +82,20 @@ export interface Reglages {
     dingueDegres?: number;
     /** …ou au moins cette réduction, déjà à 100° (votes) ; sur eBay, toute pépite. */
     dingueReduction?: number;
+    /** Occasion (Vinted, eBay) : réduction minimale sur le prix habituel pour poster (0,4 = 40 %)… */
+    ecartOccasion?: number;
+    /** …et gain minimal estimé à la revente, en euros. */
+    gainOccasion?: number;
+  };
+  /** Robot prudent Vinted / Leboncoin du bot (robot.ts) : une recherche par site et par passage, rien la nuit. */
+  robot?: {
+    vinted?: boolean;
+    leboncoin?: boolean;
+    /** Heure où le robot s'arrête la nuit (1 h) et heure où il reprend (7 h). */
+    nuitDebut?: number;
+    nuitFin?: number;
+    /** Recherches lues par site et par passage (1 par défaut, 3 au plus). */
+    parPassage?: number;
   };
   recherches: Recherche[];
 }

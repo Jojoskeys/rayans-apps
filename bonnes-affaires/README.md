@@ -49,7 +49,8 @@ gardé mais marqué « méfiance » : c'est souvent une arnaque.
 | **Amazon** | API produits réservée aux affiliés qui vendent déjà ; le site interdit l'aspiration | Non | Ses promos arrivent par Dealabs |
 | **Rakuten** | Marketplace France fermée le 30 septembre 2026 | — | Abandonné |
 
-Les « API Vinted / Leboncoin / Facebook » vendues en ligne (Apify, RapidAPI...) sont des robots
+Depuis le 20/11/2026, le bot Discord lit aussi Vinted avec un robot prudent, choix de Rayan en connaissant le
+risque (voir « Robot prudent Vinted »). Les « API Vinted / Leboncoin / Facebook » vendues en ligne (Apify, RapidAPI...) sont des robots
 d'aspiration : elles enfreignent les conditions des sites. Elles ne sont pas utilisées.
 
 ### Pourquoi c'est sans risque pour les comptes
@@ -144,8 +145,40 @@ couleur, pastille et nom en tête, liste dans `src/style.ts`), avec la grande ph
 (barré), Réduction, Votes (🔥 à 🔥🔥🔥) et Rayon ; pour eBay aussi Revente, Retrait et Avis.
 
 Jamais deux fois la même annonce (`resultats\bot-deja-vus.json`). Le premier passage ne poste que « bot en
-marche » : ce qui était déjà en ligne est retenu sans envoi. Vinted et Leboncoin n'y sont pas (robots interdits,
-risque de blocage de la connexion de la box) : leurs alertes officielles restent la voie sûre.
+marche » : ce qui était déjà en ligne est retenu sans envoi. De même, la première lecture d'une recherche sur un
+site (Vinted, eBay…) est retenue sans envoi (`resultats\bot-etat.json`).
+
+### Robot prudent Vinted (et Leboncoin, coupé)
+
+Choisi par Rayan le 20/11/2026 en connaissant le risque : Vinted et Leboncoin interdisent les robots et peuvent
+bloquer un temps la connexion de la box (pages « vérifie que tu es humain » sur le Wi-Fi, même sur le téléphone).
+Le robot (`src/robot.ts`) limite ce risque :
+
+- sans compte ni cookie, il lit la page de recherche publique, comme un navigateur ;
+- **peu de recherches par site et par passage** (`robot.parPassage`, 2 ; 3 au plus), à tour de rôle, 4 s
+  d'écart entre deux pages (15 recherches → chacune toutes les 40 min environ, 24 pages par heure) ;
+- **rien la nuit** (`robot.nuitDebut` 1 h → `robot.nuitFin` 7 h) ;
+- **aucune ruse** : dès qu'un site demande une vérification ou refuse, pause automatique de 6 h, puis 12 h, 24 h,
+  48 h, signalée dans le salon (⏸️ puis ▶️ à la reprise). Si ça revient souvent : `"vinted": false`.
+- **Leboncoin est coupé** (`"leboncoin": false`) : il a demandé une vérification au robot dès le premier essai.
+  On ne contourne pas ; ses alertes officielles restent la voie sûre.
+
+Une annonce d'occasion (Vinted, eBay) est postée si elle est au moins `ecartOccasion` (40 %) sous le prix
+habituel, rapporte au moins `gainOccasion` (15 €) à la revente et n'inspire pas méfiance ; l'avis (✅ sûr, ⚠️ à vérifier) est sur la carte. L'électronique envoyée par colis
+reste « à vérifier » (on ne peut pas l'essayer). **Dinguerie** d'occasion : pépite, ou moitié prix qui rapporte
+au moins `gainPepite` (30 €) à la revente.
+
+Vêtements de marque : une recherche par marque **et** type de vêtement (« polo lacoste », « veste carhartt »,
+« nike tech fleece » sans les joggings…), sinon le prix habituel calculé mélange des articles trop différents.
+Les tailles enfant (`enfant`, `fille`, `ans`…) et les lots sont écartés. Recherches de Rayan : Nuptse,
+Patagonia, Ralph Lauren, Polo Lacoste, Nike Tech Fleece, Carhartt, Arc'teryx, Levi's 501, Dunk Low,
+New Balance 530, Longchamp Le Pliage, Stone Island, Doudoune Moncler, Jordan 4, Salomon XT-6.
+
+Marques très copiées (`"copiee": true` : Moncler, Stone Island, Jordan 4, Salomon XT-6) : chaque annonce rappelle de vérifier étiquettes
+et code d'authenticité (QR code, Certilogo), et au-delà de 45 % de rabais elle passe en « méfiance » (jamais
+postée, jamais dinguerie). Pour Moncler, le prix habituel est fixé (`prixHabituel` 400 €) : sur Vinted, les
+copies font tomber la médiane à environ 115 € (de même Jordan 4 fixé à 170 €).
+Les tailles enfant sont aussi écartées dans les autres langues des annonces Vinted (`kinder`, `kids`, `nino`…).
 
 1. Discord : sur ton serveur, paramètres du salon → **Intégrations** → **Webhooks** → **Nouveau webhook** →
    **Copier l'URL du webhook**. Ce lien vaut un mot de passe : il va seulement dans `reglages.json`
