@@ -81,6 +81,14 @@ export interface Reglages {
     /** …ou au moins cette réduction, déjà à 100° (votes) ; sur eBay, toute pépite. */
     dingueReduction?: number;
   };
+  /** Robot prudent Vinted / Leboncoin du bot (robot.ts) : une recherche par site et par passage, rien la nuit. */
+  robot?: {
+    vinted?: boolean;
+    leboncoin?: boolean;
+    /** Heure où le robot s'arrête la nuit (1 h) et heure où il reprend (7 h). */
+    nuitDebut?: number;
+    nuitFin?: number;
+  };
   recherches: Recherche[];
 }
 
