@@ -82,3 +82,32 @@ test("idées : ajoutées en tête, compte inconnu vidé, suppression", () => {
   assert.deepEqual(listerIdees(f).map((i) => i.id), [a.id]);
   assert.throws(() => supprimerIdee(f, "absent"), ErreurRetour);
 });
+
+// ------------------------------------------------------------------ stories à poster
+import { aPoster, cheminStory, marquerPostee } from "../src/core/studio.ts";
+
+test("stories : seules les stories validées (dernière version) et pas encore postées sont à poster", () => {
+  const d = dossier();
+  const deposer = (id: string, version = 1) => {
+    fs.writeFileSync(path.join(d, `${id}.mp4`), "leger");
+    fs.writeFileSync(path.join(d, `${id}.json`), JSON.stringify({ titre: `T ${id}`, version, envoye: 1 }));
+  };
+  deposer("court-story-1"); deposer("court-story-2"); deposer("court-story-3", 2); deposer("court");
+  fs.writeFileSync(path.join(d, "court-story-1.hd.mp4"), "pleine qualite");
+  ajouterRetour(d, "court-story-1", 1, "ok", "", 10);
+  ajouterRetour(d, "court-story-2", 1, "corriger", "trop court", 11);
+  fs.writeFileSync(path.join(d, "court-story-3.retours.json"), JSON.stringify([{ version: 1, verdict: "ok", commentaire: "", at: 5 }]));
+  ajouterRetour(d, "court", 1, "ok", "", 12);   // un Short validé n'est pas une story
+  assert.equal(lister(d).length, 4);              // le .hd.mp4 n'apparaît pas comme une vidéo à part
+  const l = aPoster(d);
+  assert.deepEqual(l.map((s) => s.id), ["court-story-1"]);
+  assert.equal(l[0].taille, "pleine qualite".length);
+  assert.equal(l[0].validee, 10);
+  assert.equal(cheminStory(d, "court-story-1"), path.join(d, "court-story-1.hd.mp4"));
+  assert.equal(cheminStory(d, "court-story-2"), path.join(d, "court-story-2.mp4"));   // sans .hd : la version légère
+  assert.equal(cheminStory(d, "court"), null);
+  assert.equal(cheminStory(d, "../court-story-1"), null);
+  marquerPostee(d, "court-story-1", 20);
+  assert.deepEqual(aPoster(d), []);
+  assert.throws(() => marquerPostee(d, "court-story-1"), (e: unknown) => e instanceof ErreurRetour && e.code === 404);
+});

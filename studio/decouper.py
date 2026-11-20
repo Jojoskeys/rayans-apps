@@ -177,7 +177,7 @@ def rendre(video: Path, slug: str, n: int, ex: dict, zones, style: str, marque: 
     pub.mkdir(parents=True, exist_ok=True)
     clip = pub / f"{nom}.mp4"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{ex['debut']:.3f}", "-to", f"{ex['fin']:.3f}",
-                    "-i", str(video), "-c:v", "libx264", "-crf", "18", "-c:a", "aac", "-b:a", "192k", str(clip)], check=True)
+                    "-i", str(video), "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", str(clip)], check=True)
     duree = int(round((ex["fin"] - ex["debut"]) * FPS)) + fin_story
     props = pub / f"{nom}.json"
     props.write_text(json.dumps({"source": f"extraits/{nom}.mp4", "mots": mots_relatifs(ex, zones), "duree": duree,
