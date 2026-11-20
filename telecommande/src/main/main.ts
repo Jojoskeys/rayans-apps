@@ -57,6 +57,7 @@ function start() {
   const push = new Push(dataDir, journaliser);
   const serveur = demarrerServeur({
     donnees: () => donnees,
+    dossierDonnees: dataDir,
     journaliser,
     dossierBoite: store.boite,
     utilise: (appareil) => {
@@ -136,6 +137,7 @@ async function commande(c: Commande): Promise<{ ok: boolean; message?: string; l
     case "publier": { const r = await publier(); await actualiser(); if (r.ok) journaliser("Accès depuis l'iPhone activé"); return r; }
     case "depublier": await depublier(); await actualiser(); journaliser("Accès depuis l'iPhone coupé"); return { ok: true };
     case "nouveau-code": donnees.code = genererCode(); journaliser("Nouveau code d'association", "les anciens téléphones sont déconnectés"); return { ok: true };
+    case "nouveau-code-montre": donnees.codeMontre = genererCode(); journaliser("Nouveau code de la montre", "à recopier dans garmin/montre/config.local.json, puis réinstaller l'app"); return { ok: true };
     case "reglages": donnees = normaliserDonnees({ ...donnees, reglages: { ...donnees.reglages, ...c.patch } }); save(); applyLoginItem(); return { ok: true };
     case "scenarios": donnees = normaliserDonnees({ ...donnees, scenarios: c.scenarios }); save(); return { ok: true };
     case "choisir-cible": {

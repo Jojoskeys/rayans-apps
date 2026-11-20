@@ -38,6 +38,7 @@ export const PAGES = [
   { id: "favoris", title: "Favoris", entry: "src/apps/favoris.tsx", root: "racine" },
   { id: "recettes", title: "Recettes", entry: "src/apps/recettes.tsx", root: "racine" },
   { id: "bonnes-affaires", title: "Bonnes affaires", entry: "src/apps/bonnes-affaires.tsx", root: "racine" },
+  { id: "montre", title: "Montre", entry: "src/apps/montre.tsx", root: "racine" },
 ];
 
 const tauriStub = join(root, "src/stubs/tauri.ts");
