@@ -1,0 +1,48 @@
+{
+  "name": "RayansArene",
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": {
+      "$className": "Workspace",
+      "Baseplate": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Locked": true,
+          "Size": [600, 2, 600],
+          "CFrame": { "CFrame": { "position": [0, -1, 130], "orientation": [[1, 0, 0], [0, 1, 0], [0, 0, 1]] } },
+          "Color": [0.388, 0.373, 0.384],
+          "TopSurface": { "Enum": 0 },
+          "BottomSurface": { "Enum": 0 }
+        }
+      },
+      "SpawnLocation": {
+        "$className": "SpawnLocation",
+        "$properties": {
+          "Anchored": true,
+          "Size": [12, 1, 12],
+          "CFrame": { "CFrame": { "position": [-100, 0.5, 130], "orientation": [[1, 0, 0], [0, 1, 0], [0, 0, 1]] } },
+          "Color": [0.949, 0.788, 0.298],
+          "Duration": 0,
+          "TopSurface": { "Enum": 0 },
+          "BottomSurface": { "Enum": 0 }
+        }
+      }
+    },
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "Arene": { "$path": "src/ReplicatedStorage/Arene" }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "$path": "src/ServerScriptService"
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "$path": "src/StarterPlayer/StarterPlayerScripts"
+      }
+    }
+  }
+}
