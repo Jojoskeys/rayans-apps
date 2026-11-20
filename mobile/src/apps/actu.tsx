@@ -38,7 +38,7 @@ function App() {
           ))}</ul>
         </section>
       ))}
-      {e && <p className="petit centre">{e.mode === "claude" ? "Sujets choisis et résumés par Claude à partir des titres des médias. Lis l'article complet sur le site du média." : "Édition simple : titres regroupés automatiquement. Lis l'article sur le site du média."}</p>}
+      {e && <p className="petit centre">{e.mode === "claude" ? "Sujets choisis et résumés par Claude à partir des titres des médias. Lis l'article complet sur le site du média." : "Édition gratuite : sujets regroupés automatiquement, avec le début du texte de présentation du média. Lis l'article complet sur son site."}</p>}
     </div>
   );
 }

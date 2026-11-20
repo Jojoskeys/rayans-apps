@@ -313,6 +313,13 @@ def fenetres(dates, ans_entrainement=ANNEES_ENTRAINEMENT):
     return sorties
 
 
+def annees_entre(date_a, date_b):
+    """Durée en années de calendrier entre deux dates « AAAA-MM-JJ » (juste pour la bourse comme pour la crypto,
+    qui s'échange aussi le week-end : on ne compte pas en jours de cotation)."""
+    from datetime import date
+    return (date.fromisoformat(date_b[:10]) - date.fromisoformat(date_a[:10])).days / 365.25
+
+
 def walk_forward(dates, prix, generations=20, population=200, graine=1, nb_hasard=200, bavard=True):
     rng = random.Random(graine)
     rng_hasard = random.Random(graine + 10_000)
@@ -325,7 +332,7 @@ def walk_forward(dates, prix, generations=20, population=200, graine=1, nb_hasar
         f_jeu = min(f_t + 1, len(prix))
         net_test, nb_test = evaluer(champion["genome"], prix, d_t, f_jeu)
         net_ag = acheter_garder(prix, d_t, f_jeu)
-        ans_e = (f_e - d_e) / JOURS_AN
+        ans_e = annees_entre(dates[d_e], dates[f_e - 1])
         resultat["fenetres"].append({
             "annee": a_test,
             "entrainement": f"{dates[d_e][:4]}–{dates[f_e - 1][:4]}",
@@ -359,7 +366,7 @@ def walk_forward(dates, prix, generations=20, population=200, graine=1, nb_hasar
         "total_hasard": float(np.median(totaux_h)),
         "part_hasard_bat_ag": sum(t > total(net_g) for t in totaux_h) / len(totaux_h),
         "ecart_moyen": float(np.mean([f["entr_annuel"] - f["test"] for f in resultat["fenetres"]])),
-        "ans_test": len(net_a) / JOURS_AN,
+        "ans_test": annees_entre(dates[fs[0][3]], resultat["dates"][-1]),
     })
     return resultat
 
