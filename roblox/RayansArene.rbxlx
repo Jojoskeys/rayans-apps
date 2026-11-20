@@ -1,0 +1,1381 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Meta name="ExplicitAutoJoints">true</Meta>
+	<Item class="Workspace" referent="RBX00000000000000000000000000000001">
+		<Properties>
+			<string name="Name">Workspace</string>
+		</Properties>
+		<Item class="Part" referent="RBX00000000000000000000000000000002">
+			<Properties>
+				<string name="Name">Baseplate</string>
+				<bool name="Anchored">true</bool>
+				<Vector3 name="size"><X>600</X><Y>2</Y><Z>600</Z></Vector3>
+				<CoordinateFrame name="CFrame"><X>0</X><Y>-1</Y><Z>130</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+				<Color3uint8 name="Color3uint8">4284702562</Color3uint8>
+				<token name="TopSurface">0</token>
+				<token name="BottomSurface">0</token>
+				<bool name="Locked">true</bool>
+			</Properties>
+		</Item>
+		<Item class="SpawnLocation" referent="RBX00000000000000000000000000000003">
+			<Properties>
+				<string name="Name">SpawnLocation</string>
+				<bool name="Anchored">true</bool>
+				<Vector3 name="size"><X>12</X><Y>1</Y><Z>12</Z></Vector3>
+				<CoordinateFrame name="CFrame"><X>-100</X><Y>0.5</Y><Z>130</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+				<Color3uint8 name="Color3uint8">4294101324</Color3uint8>
+				<token name="TopSurface">0</token>
+				<token name="BottomSurface">0</token>
+				<int name="Duration">0</int>
+			</Properties>
+		</Item>
+	</Item>
+	<Item class="ReplicatedStorage" referent="RBX00000000000000000000000000000004">
+		<Properties>
+			<string name="Name">ReplicatedStorage</string>
+		</Properties>
+		<Item class="Folder" referent="RBX00000000000000000000000000000005">
+			<Properties>
+				<string name="Name">Arene</string>
+			</Properties>
+			<Item class="ModuleScript" referent="RBX00000000000000000000000000000006">
+				<Properties>
+					<string name="Name">Prix</string>
+					<ProtectedString name="Source"><![CDATA[-- Généré par construire.py : ne pas modifier à la main.
+-- Clôtures HEBDOMADAIRES (dernier jour de bourse de chaque semaine).
+return {
+	actif = "SPY",
+	source = "SPY (Yahoo Finance, clôtures ajustées)",
+	demo = false,
+	dates = {
+		"2016-11-25", "2016-12-02", "2016-12-09", "2016-12-16", "2016-12-23", "2016-12-30", "2017-01-06", "2017-01-13",
+		"2017-01-20", "2017-01-27", "2017-02-03", "2017-02-10", "2017-02-17", "2017-02-24", "2017-03-03", "2017-03-10",
+		"2017-03-17", "2017-03-24", "2017-03-31", "2017-04-07", "2017-04-13", "2017-04-21", "2017-04-28", "2017-05-05",
+		"2017-05-12", "2017-05-19", "2017-05-26", "2017-06-02", "2017-06-09", "2017-06-16", "2017-06-23", "2017-06-30",
+		"2017-07-07", "2017-07-14", "2017-07-21", "2017-07-28", "2017-08-04", "2017-08-11", "2017-08-18", "2017-08-25",
+		"2017-09-01", "2017-09-08", "2017-09-15", "2017-09-22", "2017-09-29", "2017-10-06", "2017-10-13", "2017-10-20",
+		"2017-10-27", "2017-11-03", "2017-11-10", "2017-11-17", "2017-11-24", "2017-12-01", "2017-12-08", "2017-12-15",
+		"2017-12-22", "2017-12-29", "2018-01-05", "2018-01-12", "2018-01-19", "2018-01-26", "2018-02-02", "2018-02-09",
+		"2018-02-16", "2018-02-23", "2018-03-02", "2018-03-09", "2018-03-16", "2018-03-23", "2018-03-29", "2018-04-06",
+		"2018-04-13", "2018-04-20", "2018-04-27", "2018-05-04", "2018-05-11", "2018-05-18", "2018-05-25", "2018-06-01",
+		"2018-06-08", "2018-06-15", "2018-06-22", "2018-06-29", "2018-07-06", "2018-07-13", "2018-07-20", "2018-07-27",
+		"2018-08-03", "2018-08-10", "2018-08-17", "2018-08-24", "2018-08-31", "2018-09-07", "2018-09-14", "2018-09-21",
+		"2018-09-28", "2018-10-05", "2018-10-12", "2018-10-19", "2018-10-26", "2018-11-02", "2018-11-09", "2018-11-16",
+		"2018-11-23", "2018-11-30", "2018-12-07", "2018-12-14", "2018-12-21", "2018-12-28", "2019-01-04", "2019-01-11",
+		"2019-01-18", "2019-01-25", "2019-02-01", "2019-02-08", "2019-02-15", "2019-02-22", "2019-03-01", "2019-03-08",
+		"2019-03-15", "2019-03-22", "2019-03-29", "2019-04-05", "2019-04-12", "2019-04-18", "2019-04-26", "2019-05-03",
+		"2019-05-10", "2019-05-17", "2019-05-24", "2019-05-31", "2019-06-07", "2019-06-14", "2019-06-21", "2019-06-28",
+		"2019-07-05", "2019-07-12", "2019-07-19", "2019-07-26", "2019-08-02", "2019-08-09", "2019-08-16", "2019-08-23",
+		"2019-08-30", "2019-09-06", "2019-09-13", "2019-09-20", "2019-09-27", "2019-10-04", "2019-10-11", "2019-10-18",
+		"2019-10-25", "2019-11-01", "2019-11-08", "2019-11-15", "2019-11-22", "2019-11-29", "2019-12-06", "2019-12-13",
+		"2019-12-20", "2019-12-27", "2020-01-03", "2020-01-10", "2020-01-17", "2020-01-24", "2020-01-31", "2020-02-07",
+		"2020-02-14", "2020-02-21", "2020-02-28", "2020-03-06", "2020-03-13", "2020-03-20", "2020-03-27", "2020-04-03",
+		"2020-04-09", "2020-04-17", "2020-04-24", "2020-05-01", "2020-05-08", "2020-05-15", "2020-05-22", "2020-05-29",
+		"2020-06-05", "2020-06-12", "2020-06-19", "2020-06-26", "2020-07-02", "2020-07-10", "2020-07-17", "2020-07-24",
+		"2020-07-31", "2020-08-07", "2020-08-14", "2020-08-21", "2020-08-28", "2020-09-04", "2020-09-11", "2020-09-18",
+		"2020-09-25", "2020-10-02", "2020-10-09", "2020-10-16", "2020-10-23", "2020-10-30", "2020-11-06", "2020-11-13",
+		"2020-11-20", "2020-11-27", "2020-12-04", "2020-12-11", "2020-12-18", "2020-12-24", "2020-12-31", "2021-01-08",
+		"2021-01-15", "2021-01-22", "2021-01-29", "2021-02-05", "2021-02-12", "2021-02-19", "2021-02-26", "2021-03-05",
+		"2021-03-12", "2021-03-19", "2021-03-26", "2021-04-01", "2021-04-09", "2021-04-16", "2021-04-23", "2021-04-30",
+		"2021-05-07", "2021-05-14", "2021-05-21", "2021-05-28", "2021-06-04", "2021-06-11", "2021-06-18", "2021-06-25",
+		"2021-07-02", "2021-07-09", "2021-07-16", "2021-07-23", "2021-07-30", "2021-08-06", "2021-08-13", "2021-08-20",
+		"2021-08-27", "2021-09-03", "2021-09-10", "2021-09-17", "2021-09-24", "2021-10-01", "2021-10-08", "2021-10-15",
+		"2021-10-22", "2021-10-29", "2021-11-05", "2021-11-12", "2021-11-19", "2021-11-26", "2021-12-03", "2021-12-10",
+		"2021-12-17", "2021-12-23", "2021-12-31", "2022-01-07", "2022-01-14", "2022-01-21", "2022-01-28", "2022-02-04",
+		"2022-02-11", "2022-02-18", "2022-02-25", "2022-03-04", "2022-03-11", "2022-03-18", "2022-03-25", "2022-04-01",
+		"2022-04-08", "2022-04-14", "2022-04-22", "2022-04-29", "2022-05-06", "2022-05-13", "2022-05-20", "2022-05-27",
+		"2022-06-03", "2022-06-10", "2022-06-17", "2022-06-24", "2022-07-01", "2022-07-08", "2022-07-15", "2022-07-22",
+		"2022-07-29", "2022-08-05", "2022-08-12", "2022-08-19", "2022-08-26", "2022-09-02", "2022-09-09", "2022-09-16",
+		"2022-09-23", "2022-09-30", "2022-10-07", "2022-10-14", "2022-10-21", "2022-10-28", "2022-11-04", "2022-11-11",
+		"2022-11-18", "2022-11-25", "2022-12-02", "2022-12-09", "2022-12-16", "2022-12-23", "2022-12-30", "2023-01-06",
+		"2023-01-13", "2023-01-20", "2023-01-27", "2023-02-03", "2023-02-10", "2023-02-17", "2023-02-24", "2023-03-03",
+		"2023-03-10", "2023-03-17", "2023-03-24", "2023-03-31", "2023-04-06", "2023-04-14", "2023-04-21", "2023-04-28",
+		"2023-05-05", "2023-05-12", "2023-05-19", "2023-05-26", "2023-06-02", "2023-06-09", "2023-06-16", "2023-06-23",
+		"2023-06-30", "2023-07-07", "2023-07-14", "2023-07-21", "2023-07-28", "2023-08-04", "2023-08-11", "2023-08-18",
+		"2023-08-25", "2023-09-01", "2023-09-08", "2023-09-15", "2023-09-22", "2023-09-29", "2023-10-06", "2023-10-13",
+		"2023-10-20", "2023-10-27", "2023-11-03", "2023-11-10", "2023-11-17", "2023-11-24", "2023-12-01", "2023-12-08",
+		"2023-12-15", "2023-12-22", "2023-12-29", "2024-01-05", "2024-01-12", "2024-01-19", "2024-01-26", "2024-02-02",
+		"2024-02-09", "2024-02-16", "2024-02-23", "2024-03-01", "2024-03-08", "2024-03-15", "2024-03-22", "2024-03-28",
+		"2024-04-05", "2024-04-12", "2024-04-19", "2024-04-26", "2024-05-03", "2024-05-10", "2024-05-17", "2024-05-24",
+		"2024-05-31", "2024-06-07", "2024-06-14", "2024-06-21", "2024-06-28", "2024-07-05", "2024-07-12", "2024-07-19",
+		"2024-07-26", "2024-08-02", "2024-08-09", "2024-08-16", "2024-08-23", "2024-08-30", "2024-09-06", "2024-09-13",
+		"2024-09-20", "2024-09-27", "2024-10-04", "2024-10-11", "2024-10-18", "2024-10-25", "2024-11-01", "2024-11-08",
+		"2024-11-15", "2024-11-22", "2024-11-29", "2024-12-06", "2024-12-13", "2024-12-20", "2024-12-27", "2025-01-03",
+		"2025-01-10", "2025-01-17", "2025-01-24", "2025-01-31", "2025-02-07", "2025-02-14", "2025-02-21", "2025-02-28",
+		"2025-03-07", "2025-03-14", "2025-03-21", "2025-03-28", "2025-04-04", "2025-04-11", "2025-04-17", "2025-04-25",
+		"2025-05-02", "2025-05-09", "2025-05-16", "2025-05-23", "2025-05-30", "2025-06-06", "2025-06-13", "2025-06-20",
+		"2025-06-27", "2025-07-03", "2025-07-11", "2025-07-18", "2025-07-25", "2025-08-01", "2025-08-08", "2025-08-15",
+		"2025-08-22", "2025-08-29", "2025-09-05", "2025-09-12", "2025-09-19", "2025-09-26", "2025-10-03", "2025-10-10",
+		"2025-10-17", "2025-10-24", "2025-10-31", "2025-11-07", "2025-11-14", "2025-11-21", "2025-11-28", "2025-12-05",
+		"2025-12-12", "2025-12-19", "2025-12-26", "2026-01-02", "2026-01-09", "2026-01-16", "2026-01-23", "2026-01-30",
+		"2026-02-06", "2026-02-13", "2026-02-20", "2026-02-27", "2026-03-06", "2026-03-13", "2026-03-20", "2026-03-27",
+		"2026-04-02", "2026-04-10", "2026-04-17", "2026-04-24", "2026-05-01", "2026-05-08", "2026-05-15", "2026-05-22",
+		"2026-05-29", "2026-06-05", "2026-06-12", "2026-06-18", "2026-06-26", "2026-07-02", "2026-07-10", "2026-07-17",
+		"2026-07-24", "2026-07-31", "2026-08-07", "2026-08-14", "2026-08-21", "2026-08-28", "2026-09-04", "2026-09-11",
+		"2026-09-18", "2026-09-25", "2026-10-02", "2026-10-09", "2026-10-16", "2026-10-23", "2026-10-30", "2026-11-06",
+		"2026-11-13", "2026-11-19",
+	},
+	clotures = {
+		189.1771, 187.6058, 193.4385, 193.3159, 193.8914, 192.0187, 195.1800, 195.0425, 194.7762, 196.6919,
+		197.0097, 198.8738, 201.9491, 203.3665, 204.8097, 204.1826, 204.5015, 201.7665, 203.3885, 202.9226,
+		200.6017, 202.3963, 205.4074, 206.8050, 206.1838, 205.6058, 208.5392, 210.6616, 210.0059, 210.3624,
+		210.7872, 209.6342, 209.9030, 212.8940, 214.0384, 214.0644, 214.4979, 211.6455, 210.4231, 212.0270,
+		214.8707, 213.7783, 217.1133, 217.3311, 218.8907, 221.6265, 222.1318, 224.0138, 224.5365, 225.1813,
+		224.8676, 224.6673, 226.8454, 230.4176, 231.3325, 233.3906, 234.2664, 233.6972, 239.4420, 243.3828,
+		245.5633, 250.9665, 241.2197, 229.0032, 239.1704, 240.5716, 235.6413, 244.2147, 241.0867, 226.8871,
+		231.3712, 228.3554, 233.1296, 234.4133, 234.3694, 233.8945, 239.8998, 238.5633, 239.2843, 240.5592,
+		244.5949, 244.7570, 242.6462, 239.5904, 243.2468, 246.9296, 247.0091, 248.5460, 250.4713, 250.0827,
+		251.7607, 253.9245, 256.3973, 254.0040, 256.9009, 259.0485, 257.9219, 255.3491, 244.8182, 245.0843,
+		235.3962, 241.2162, 246.4239, 242.8486, 233.5510, 244.5520, 233.8349, 231.0846, 214.7920, 221.0831,
+		225.2237, 231.1044, 237.7793, 237.1724, 240.9918, 241.3576, 247.5150, 249.0945, 250.2367, 244.9182,
+		252.1367, 250.2903, 253.1853, 258.6437, 260.0688, 259.9434, 262.9817, 263.5375, 258.2225, 256.1967,
+		253.4542, 246.7229, 257.8191, 259.2622, 264.7922, 263.8915, 268.8091, 270.7816, 267.6472, 272.0064,
+		263.5493, 262.6486, 260.1538, 256.5512, 263.3962, 268.4398, 271.1778, 269.8876, 267.2818, 266.3317,
+		268.0780, 269.6071, 272.8915, 276.9995, 279.5330, 282.1116, 281.3607, 284.3917, 284.8985, 287.1152,
+		291.6275, 293.5642, 293.1550, 296.1555, 301.8294, 298.9379, 292.5367, 302.0567, 306.9667, 303.2205,
+		269.3778, 270.4689, 244.8823, 209.2623, 231.7800, 226.9966, 254.4440, 262.1632, 258.8067, 258.6421,
+		267.4680, 261.8340, 270.2119, 278.3336, 292.0710, 278.2330, 283.5269, 275.6358, 286.8248, 291.7487,
+		295.5427, 294.7710, 299.9520, 307.3471, 309.4323, 311.8575, 322.0543, 314.6960, 306.8785, 304.9619,
+		303.1910, 307.9041, 319.9033, 320.3091, 318.9164, 301.1712, 322.9562, 330.2793, 327.7244, 335.4166,
+		341.1165, 337.8423, 341.9499, 341.7832, 346.3033, 353.1389, 347.9890, 354.6394, 342.7744, 359.1131,
+		363.6795, 361.2621, 352.3053, 355.3342, 364.9948, 361.9342, 367.9745, 372.2770, 382.3875, 387.7495,
+		387.2662, 387.7867, 392.2658, 387.1176, 385.5935, 390.3329, 392.7118, 394.3008, 386.8364, 397.7351,
+		404.3639, 406.0420, 402.1450, 410.1629, 408.8298, 412.5403, 415.7382, 413.3515, 419.7751, 422.4135,
+		415.2906, 412.8424, 415.1901, 406.1458, 409.5315, 417.0233, 423.8043, 429.5376, 438.2173, 437.0388,
+		438.5540, 429.2758, 424.0849, 440.2842, 431.6286, 441.6997, 445.7919, 437.4667, 436.1808, 411.0830,
+		414.8091, 421.1446, 413.4107, 407.5633, 410.8671, 405.6297, 394.2728, 418.5174, 426.2096, 426.4261,
+		421.3891, 412.1812, 401.1185, 387.8997, 387.2783, 378.2211, 366.8383, 390.9691, 386.5252, 366.9984,
+		345.9467, 368.8485, 360.4895, 367.5152, 364.1678, 373.5857, 389.5659, 390.9652, 403.8535, 399.1634,
+		383.2495, 370.8908, 384.4692, 366.0721, 349.3522, 339.1265, 344.4529, 339.5538, 355.3717, 369.3572,
+		357.3275, 378.3676, 376.0128, 381.9944, 386.3430, 373.4019, 365.5688, 365.2255, 364.7676, 370.1566,
+		380.0954, 377.5964, 386.9438, 393.3058, 389.1949, 388.4509, 378.0733, 385.5226, 368.0869, 373.3981,
+		378.9131, 391.9728, 391.7813, 394.9121, 394.6632, 398.2346, 395.0749, 394.0791, 400.8101, 402.1505,
+		409.7144, 411.6102, 422.3265, 416.3201, 425.9975, 421.4519, 431.7636, 434.5505, 439.1057, 429.3899,
+		428.2751, 419.4819, 422.8166, 433.5991, 428.1501, 427.5869, 415.0980, 412.2626, 414.2492, 416.1395,
+		406.1965, 396.0606, 419.2160, 424.9251, 434.7428, 439.0922, 442.7570, 443.8179, 454.4579, 458.6411,
+		460.2484, 453.0927, 461.5750, 467.1428, 471.9650, 478.6851, 485.3181, 483.6816, 491.7573, 496.5988,
+		495.5047, 495.2084, 506.2621, 508.0688, 503.5617, 496.1992, 480.9592, 493.6834, 496.6266, 505.9028,
+		514.2657, 514.2560, 512.2454, 518.6951, 527.2134, 530.6002, 530.3175, 540.4713, 545.6847, 534.9656,
+		530.5318, 519.2867, 519.3743, 540.1498, 547.7700, 549.2805, 526.5560, 547.6531, 555.4321, 558.5793,
+		560.0553, 566.5065, 571.4036, 565.9786, 558.1591, 584.6967, 572.5374, 582.0772, 588.9583, 594.0997,
+		590.5809, 579.7603, 583.5460, 580.5449, 569.3057, 586.0664, 596.2562, 590.2248, 589.1950, 597.9528,
+		588.3810, 582.7319, 564.8237, 551.9663, 554.7776, 546.5933, 497.0355, 525.2278, 517.8206, 541.6554,
+		557.5123, 555.1318, 584.5046, 569.6608, 579.7731, 589.3641, 587.2589, 586.3115, 606.6648, 616.9550,
+		615.2580, 619.1649, 628.5573, 613.3835, 628.6362, 634.8123, 636.6572, 636.4007, 638.5613, 648.5948,
+		656.6160, 654.7560, 662.0673, 646.0500, 657.2986, 670.0214, 674.7800, 663.8084, 664.7581, 651.9959,
+		676.0958, 678.3713, 674.4833, 675.3154, 684.9600, 677.8753, 688.6909, 686.2995, 683.8883, 686.6071,
+		685.2676, 676.4663, 684.0869, 680.6735, 667.1689, 657.1572, 645.3010, 630.8940, 652.5244, 676.0353,
+		706.5607, 710.3416, 717.0177, 733.9022, 735.4444, 741.8818, 752.6671, 733.8325, 738.0114, 744.8903,
+		727.1843, 742.9352, 753.0800, 741.4488, 737.0996, 745.1796, 771.3446, 774.4170, 763.8232, 767.4443,
+		768.2822, 762.3968, 761.6900, 771.3500, 769.6400, 778.5700, 763.2500, 759.9700, 755.7200, 735.2900,
+		754.3700, 715.8700,
+	},
+}
+]]></ProtectedString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX00000000000000000000000000000007">
+				<Properties>
+					<string name="Name">Config</string>
+					<ProtectedString name="Source"><![CDATA[-- Réglages du jeu (modifiables sans toucher au reste).
+return {
+	NB_ROBOTS = 30, -- robots dans la population (robots des joueurs compris)
+	GENERATIONS = 5, -- générations sur la période d'entraînement avant l'examen
+	ANNEES_ENTRAINEMENT = 3, -- années de prix pour l'entraînement (réduites s'il n'y a pas assez de données)
+	SEMAINES_EXAMEN = 52, -- l'année jamais vue
+	DUREE_MANCHE = 12, -- secondes pour faire défiler les semaines d'une génération
+	DUREE_EXAMEN = 10, -- secondes pour l'examen
+	ATTENTE_DEPART = 15, -- secondes pour choisir sa famille avant la première génération
+	PAUSE = 5, -- secondes entre deux générations
+	GRAINE = nil :: number?, -- nil = partie différente à chaque fois ; un nombre = toujours la même
+}
+]]></ProtectedString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX00000000000000000000000000000008">
+				<Properties>
+					<string name="Name">Regles</string>
+					<ProtectedString name="Source"><![CDATA[-- Rayan's Arène (Roblox) : logique pure, sans rien de Roblox, testable avec le CLI `luau`.
+-- Port simplifié de arene/arene.py (genome_hasard, muter, positions, evaluer) sur des prix
+-- HEBDOMADAIRES : les durées sont en semaines au lieu de jours.
+-- Argent fictif uniquement. Positions : 0 = cash, 1 = investi (jamais de vente à découvert).
+
+local Regles = {}
+
+Regles.FRAIS = 0.001 -- 0,1 % par ordre
+Regles.GLISSEMENT = 0.0005 -- 0,05 % par ordre
+Regles.COUT_ORDRE = Regles.FRAIS + Regles.GLISSEMENT
+Regles.CHAUFFE = 52 -- semaines de passé utilisées pour calculer les indicateurs (jamais le futur)
+
+Regles.TYPES = { "croisement", "rebond", "momentum", "tendance" }
+
+Regles.NOMS = {
+	croisement = "Croisement",
+	rebond = "Rebond",
+	momentum = "Momentum",
+	tendance = "Tendance",
+}
+
+-- mêmes couleurs que la tuile animée de Rayan's Mobile (arene-film.tsx)
+Regles.COULEURS = {
+	croisement = "#5B8DEF",
+	rebond = "#E3A33B",
+	momentum = "#C77DDB",
+	tendance = "#3BA776",
+}
+Regles.OR = "#F2C94C"
+
+Regles.EXPLICATIONS = {
+	croisement = "Investi quand la moyenne courte des prix passe au-dessus de la moyenne longue.",
+	rebond = "Achète après une grosse baisse, revend après une hausse (ou coupe les pertes).",
+	momentum = "Investi quand le prix a bien monté ces dernières semaines.",
+	tendance = "Investi quand le prix est au-dessus de sa moyenne : il suit la tendance.",
+}
+
+export type Genome = { [string]: any }
+export type Hasard = {
+	reel: (Hasard) -> number,
+	entier: (Hasard, number, number) -> number,
+	uniforme: (Hasard, number, number) -> number,
+	choix: <T>(Hasard, { T }) -> T,
+}
+
+-- ------------------------------------------------------------ hasard reproductible
+-- Générateur de Park-Miller (exact en nombres flottants), le même dans Roblox et dans `luau`.
+local Hasard = {}
+Hasard.__index = Hasard
+
+function Regles.hasard(graine: number?): Hasard
+	local g = math.floor(graine or 1) % 2147483647
+	if g <= 0 then
+		g = g + 2147483646
+	end
+	return (setmetatable({ etat = g }, Hasard) :: any) :: Hasard
+end
+
+function Hasard.reel(self: any): number
+	self.etat = (self.etat * 48271) % 2147483647
+	return (self.etat - 1) / 2147483646
+end
+
+function Hasard.entier(self: any, a: number, b: number): number
+	return math.min(b, a + math.floor(self:reel() * (b - a + 1)))
+end
+
+function Hasard.uniforme(self: any, a: number, b: number): number
+	return a + (b - a) * self:reel()
+end
+
+function Hasard.choix(self: any, t: { any }): any
+	return t[self:entier(1, #t)]
+end
+
+local function arrondi(x: number, decimales: number): number
+	local m = 10 ^ decimales
+	return math.floor(x * m + 0.5) / m
+end
+
+local function borne(v: number, a: number, b: number): number
+	return math.max(a, math.min(b, v))
+end
+
+-- ------------------------------------------------------------ génomes
+function Regles.genomeHasard(h: Hasard, type_: string?): Genome
+	local t = type_ or h:choix(Regles.TYPES)
+	local g: Genome = { type = t, filtre = h:choix({ 0, 0, 20, 30, 40 }) }
+	if t == "croisement" then
+		g.court = h:entier(1, 10)
+		g.long = h:entier(g.court + 2, 50)
+	elseif t == "rebond" then
+		g.baisse = arrondi(h:uniforme(0.02, 0.20), 3)
+		g.hausse = arrondi(h:uniforme(0.02, 0.30), 3)
+		g.fenetre = h:entier(1, 12)
+		g.stop = arrondi(h:uniforme(0.03, 0.25), 3)
+	elseif t == "momentum" then
+		g.semaines = h:entier(2, 50)
+		g.seuil = arrondi(h:uniforme(-0.02, 0.10), 3)
+	else
+		g.semaines = h:entier(4, 50)
+	end
+	return g
+end
+
+local ENTIERS = { court = true, long = true, fenetre = true, semaines = true }
+
+function Regles.copier(g: Genome): Genome
+	local e: Genome = {}
+	for k, v in g do
+		e[k] = v
+	end
+	return e
+end
+
+-- Enfant : copie avec un ou deux paramètres légèrement modifiés (comme muter dans arene.py).
+function Regles.muter(g: Genome, h: Hasard): Genome
+	local e = Regles.copier(g)
+	local cles = {}
+	for k in e do
+		if k ~= "type" then
+			table.insert(cles, k)
+		end
+	end
+	table.sort(cles) -- ordre fixe : même graine, même enfant
+	local nb = math.min(#cles, h:choix({ 1, 2 }))
+	for _ = 1, nb do
+		local k = table.remove(cles, h:entier(1, #cles))
+		if k == nil then
+			break
+		end
+		local v = e[k]
+		if k == "filtre" then
+			e[k] = h:choix({ 0, 20, 30, 40 })
+		elseif ENTIERS[k] then
+			e[k] = math.floor(borne(math.floor(v * h:uniforme(0.75, 1.3) + 0.5) + h:choix({ -1, 0, 1 }), 1, 50))
+		else
+			e[k] = arrondi(borne(v * h:uniforme(0.7, 1.4), 0.005, 0.5), 3)
+		end
+	end
+	if e.type == "croisement" and e.long <= e.court + 1 then
+		e.long = math.min(50, e.court + 2)
+		e.court = math.min(e.court, e.long - 2)
+	end
+	return e
+end
+
+-- ------------------------------------------------------------ règles
+-- Moyenne des n derniers prix, semaine t comprise. nil avant d'avoir n prix.
+local function moyennes(prix: { number }, n: number): { number? }
+	local out: { number? } = {}
+	local somme = 0
+	for t = 1, #prix do
+		somme += prix[t]
+		if t > n then
+			somme -= prix[t - n]
+		end
+		out[t] = if t >= n then somme / n else nil
+	end
+	return out
+end
+Regles.moyennes = moyennes
+
+local function au_dessus(a: number?, b: number?): boolean
+	return a ~= nil and b ~= nil and a > b
+end
+
+-- Position (0 ou 1) décidée à la clôture de chaque semaine, avec les prix <= cette semaine.
+function Regles.positions(g: Genome, prix: { number }): { number }
+	local n = #prix
+	local ok: { boolean } = table.create(n, false)
+	if g.type == "croisement" then
+		local c, l = moyennes(prix, g.court), moyennes(prix, g.long)
+		for t = 1, n do
+			ok[t] = au_dessus(c[t], l[t])
+		end
+	elseif g.type == "momentum" then
+		local j = g.semaines
+		for t = j + 1, n do
+			ok[t] = prix[t] / prix[t - j] - 1 > g.seuil
+		end
+	elseif g.type == "tendance" then
+		local m = moyennes(prix, g.semaines)
+		for t = 1, n do
+			ok[t] = au_dessus(prix[t], m[t])
+		end
+	else -- rebond
+		local f, investi, entree = g.fenetre, false, 0
+		for t = 1, n do
+			if investi then
+				if prix[t] >= entree * (1 + g.hausse) or prix[t] <= entree * (1 - g.stop) then
+					investi = false
+				end
+			elseif t > f then
+				local haut = prix[t]
+				for s = t - f, t do
+					haut = math.max(haut, prix[s])
+				end
+				if prix[t] <= haut * (1 - g.baisse) then
+					investi, entree = true, prix[t]
+				end
+			end
+			ok[t] = investi
+		end
+	end
+	local filtre = if g.filtre and g.filtre > 0 then moyennes(prix, g.filtre) else nil
+	local pos = table.create(n, 0)
+	for t = 1, n do
+		local investi = ok[t]
+		if filtre and not au_dessus(prix[t], filtre[t]) then
+			investi = false
+		end
+		pos[t] = if investi then 1 else 0
+	end
+	return pos
+end
+
+-- Rendement de chaque semaine, frais et glissement compris. La position décidée à la clôture de t
+-- s'applique au mouvement t -> t+1 ; chaque changement de position paie un ordre ; départ en cash.
+function Regles.rendements(pos: { number }, prix: { number }): ({ number }, number)
+	local net, ordres = {}, 0
+	for t = 1, #prix - 1 do
+		local avant = if t > 1 then pos[t - 1] else 0
+		local ordre = math.abs(pos[t] - avant)
+		ordres += ordre
+		local r = prix[t + 1] / prix[t] - 1
+		net[t] = (1 - ordre * Regles.COUT_ORDRE) * (1 + pos[t] * r) - 1
+	end
+	return net, ordres
+end
+
+-- Stratégie jouée de la semaine debut à la semaine fin (indices de prix, fin - debut rendements).
+-- Les indicateurs lisent au plus CHAUFFE semaines AVANT debut, et rien après fin.
+function Regles.evaluer(g: Genome, prix: { number }, debut: number, fin: number): ({ number }, number)
+	local a = math.max(1, debut - Regles.CHAUFFE)
+	local morceau = table.move(prix, a, fin, 1, {})
+	local pos = Regles.positions(g, morceau)
+	local decale = debut - a
+	return Regles.rendements(table.move(pos, decale + 1, #pos, 1, {}), table.move(morceau, decale + 1, #morceau, 1, {}))
+end
+
+function Regles.acheterGarder(prix: { number }, debut: number, fin: number): ({ number }, number)
+	local p = table.move(prix, debut, fin, 1, {})
+	return Regles.rendements(table.create(#p, 1), p)
+end
+
+-- Valeur de 1 € fictif après chaque semaine (courbe[0] n'existe pas : départ = 1).
+function Regles.courbe(net: { number }): { number }
+	local v, c = 1, {}
+	for i, r in net do
+		v *= 1 + r
+		c[i] = v
+	end
+	return c
+end
+
+function Regles.total(net: { number }): number
+	local v = 1
+	for _, r in net do
+		v *= 1 + r
+	end
+	return v - 1
+end
+
+-- ------------------------------------------------------------ sélection
+-- Classe du meilleur gain au moins bon ; à égalité, le plus ancien (id le plus petit) d'abord.
+function Regles.classer(robots: { any }): { any }
+	local l = table.clone(robots)
+	table.sort(l, function(a, b)
+		if a.gain ~= b.gain then
+			return a.gain > b.gain
+		end
+		return a.id < b.id
+	end)
+	return l
+end
+
+-- La moitié la moins bonne meurt. Renvoie survivants (classés) et morts.
+function Regles.selection(robots: { any }): ({ any }, { any })
+	local l = Regles.classer(robots)
+	local garde = math.ceil(#l / 2)
+	local vivants, morts = {}, {}
+	for i, r in l do
+		table.insert(if i <= garde then vivants else morts, r)
+	end
+	return vivants, morts
+end
+
+-- nb enfants mutés de survivants tirés au hasard. Les ids continuent à partir de prochainId.
+function Regles.enfants(vivants: { any }, nb: number, h: Hasard, prochainId: number): { any }
+	local l = {}
+	if #vivants == 0 then
+		return l
+	end
+	for i = 1, nb do
+		local mere = h:choix(vivants)
+		table.insert(l, { id = prochainId + i - 1, parent = mere.id, genome = Regles.muter(mere.genome, h) })
+	end
+	return l
+end
+
+-- Découpe nbPrix semaines : chauffe, puis entraînement, puis l'examen (les dernières semaines).
+-- Renvoie nil s'il n'y a pas au moins un an d'entraînement.
+function Regles.periodes(nbPrix: number, ansEntrainement: number, semExamen: number): any
+	local examFin = nbPrix
+	local examDebut = examFin - semExamen
+	local dispo = examDebut - 1 - Regles.CHAUFFE
+	local ans = math.min(ansEntrainement, math.floor(dispo / 52))
+	if ans < 1 then
+		return nil
+	end
+	return {
+		entrainement = { debut = examDebut - 52 * ans, fin = examDebut },
+		examen = { debut = examDebut, fin = examFin },
+		ans = ans,
+	}
+end
+
+-- ------------------------------------------------------------ textes
+function Regles.pct(x: number): string
+	local s = string.format("%+.1f %%", x * 100)
+	return (string.gsub(s, "%.", ","))
+end
+
+local function p(x: number): string
+	return (string.gsub(string.format("%.1f %%", x * 100), "%.", ","))
+end
+
+local function sem(n: number): string
+	return if n > 1 then n .. " semaines" else "1 semaine"
+end
+
+function Regles.decrire(g: Genome): string
+	local t, s = g.type, ""
+	if t == "croisement" then
+		s = "Investi quand la moyenne des " .. sem(g.court) .. " est au-dessus de celle des " .. sem(g.long)
+	elseif t == "rebond" then
+		s = "Achète après une baisse de " .. p(g.baisse) .. " sous le plus haut des " .. sem(g.fenetre)
+			.. ", revend à +" .. p(g.hausse) .. " (ou coupe à -" .. p(g.stop) .. ")"
+	elseif t == "momentum" then
+		if g.seuil >= 0 then
+			s = "Investi si le prix a monté de plus de " .. p(g.seuil) .. " sur les " .. sem(g.semaines)
+		else
+			s = "Investi si le prix n'a pas baissé de plus de " .. p(-g.seuil) .. " sur les " .. sem(g.semaines)
+		end
+	else
+		s = "Investi quand le prix est au-dessus de sa moyenne des " .. sem(g.semaines)
+	end
+	if g.filtre and g.filtre > 0 then
+		s ..= ", et seulement si le prix est au-dessus de sa moyenne " .. g.filtre .. " semaines"
+	end
+	return s
+end
+
+return Regles
+]]></ProtectedString>
+				</Properties>
+			</Item>
+		</Item>
+	</Item>
+	<Item class="ServerScriptService" referent="RBX00000000000000000000000000000009">
+		<Properties>
+			<string name="Name">ServerScriptService</string>
+		</Properties>
+		<Item class="ModuleScript" referent="RBX0000000000000000000000000000000A">
+			<Properties>
+				<string name="Name">Decor</string>
+				<ProtectedString name="Source"><![CDATA[-- Décor créé par script au démarrage : piste à couloirs, grand écran, robots, couronne, explosions.
+local Lighting = game:GetService("Lighting")
+local Debris = game:GetService("Debris")
+
+local Decor = {}
+
+Decor.LARGEUR_COULOIR = 5
+Decor.NB_COULOIRS = 32
+Decor.Z_DEPART = 70 -- ligne « 0 % »
+Decor.Z_MAX = 250
+Decor.Z_MIN = 4
+Decor.HAUTEUR = 3.6 -- hauteur du centre des robots
+
+local dossier: Folder
+
+local function piece(props): Part
+	local p = Instance.new("Part")
+	p.Anchored = true
+	p.TopSurface = Enum.SurfaceType.Smooth
+	p.BottomSurface = Enum.SurfaceType.Smooth
+	for k, v in props do
+		(p :: any)[k] = v
+	end
+	return p
+end
+
+local function texte(parent, props): TextLabel
+	local t = Instance.new("TextLabel")
+	t.BackgroundTransparency = 1
+	t.Font = Enum.Font.GothamBold
+	t.TextColor3 = Color3.new(1, 1, 1)
+	t.TextScaled = true
+	for k, v in props do
+		(t :: any)[k] = v
+	end
+	t.Parent = parent
+	return t
+end
+
+function Decor.xCouloir(couloir: number): number
+	return (couloir - (Decor.NB_COULOIRS + 1) / 2) * Decor.LARGEUR_COULOIR
+end
+
+function Decor.construire()
+	Lighting.ClockTime = 14
+	dossier = Instance.new("Folder")
+	dossier.Name = "Arene"
+	dossier.Parent = workspace
+
+	local largeur = Decor.NB_COULOIRS * Decor.LARGEUR_COULOIR
+	local longueur = Decor.Z_MAX + 20
+	piece({
+		Name = "Piste",
+		Size = Vector3.new(largeur + 4, 1, longueur),
+		CFrame = CFrame.new(0, 0.5, longueur / 2),
+		Color = Color3.fromRGB(45, 48, 60),
+		Parent = dossier,
+	})
+	for i = 0, Decor.NB_COULOIRS do
+		piece({
+			Name = "Ligne",
+			Size = Vector3.new(0.2, 0.05, longueur),
+			CFrame = CFrame.new(Decor.xCouloir(i) + Decor.LARGEUR_COULOIR / 2, 1.03, longueur / 2),
+			Color = Color3.fromRGB(200, 200, 210),
+			CanCollide = false,
+			Parent = dossier,
+		})
+	end
+	local depart = piece({
+		Name = "Depart",
+		Size = Vector3.new(largeur + 4, 0.06, 1),
+		CFrame = CFrame.new(0, 1.04, Decor.Z_DEPART),
+		Color = Color3.fromRGB(80, 220, 120),
+		Material = Enum.Material.Neon,
+		CanCollide = false,
+		Parent = dossier,
+	})
+	-- panneau « 0 % » au bord de la piste
+	local panneau = piece({
+		Name = "Panneau0",
+		Size = Vector3.new(1, 6, 10),
+		CFrame = CFrame.new(-largeur / 2 - 4, 3, Decor.Z_DEPART),
+		Color = Color3.fromRGB(30, 30, 40),
+		Parent = dossier,
+	})
+	for _, face in { Enum.NormalId.Left, Enum.NormalId.Right } do
+		local sg = Instance.new("SurfaceGui")
+		sg.Face = face
+		sg.Parent = panneau
+		texte(sg, { Size = UDim2.fromScale(1, 1), Text = "0 %\nplus loin = plus de gain" })
+	end
+	local _ = depart
+
+	-- grand écran au bout de la piste
+	local ecran = piece({
+		Name = "Ecran",
+		Size = Vector3.new(150, 70, 2),
+		CFrame = CFrame.new(0, 45, Decor.Z_MAX + 30),
+		Color = Color3.fromRGB(10, 10, 16),
+		Parent = dossier,
+	})
+	for _, x in { -70, 70 } do
+		piece({
+			Name = "Pilier",
+			Size = Vector3.new(4, 12, 4),
+			CFrame = CFrame.new(x, 6, Decor.Z_MAX + 30),
+			Color = Color3.fromRGB(60, 60, 70),
+			Parent = dossier,
+		})
+	end
+	return ecran
+end
+
+-- ------------------------------------------------------------ écran (SurfaceGui)
+local W, H = 1400, 520
+
+function Decor.ecran(partie: Part)
+	local sg = Instance.new("SurfaceGui")
+	sg.Face = Enum.NormalId.Front -- la face -Z, tournée vers la piste
+	sg.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+	sg.CanvasSize = Vector2.new(1500, 700)
+	sg.LightInfluence = 0
+	sg.Parent = partie
+
+	local titre = texte(sg, { Size = UDim2.new(1, -40, 0, 70), Position = UDim2.fromOffset(20, 10), Text = "Rayan's Arène" })
+	local sous = texte(sg, {
+		Size = UDim2.new(1, -40, 0, 44),
+		Position = UDim2.fromOffset(20, 84),
+		Text = "",
+		Font = Enum.Font.Gotham,
+		TextColor3 = Color3.fromRGB(190, 190, 205),
+	})
+	local zone = Instance.new("Frame")
+	zone.Size = UDim2.fromOffset(W, H)
+	zone.Position = UDim2.fromOffset(50, 150)
+	zone.BackgroundColor3 = Color3.fromRGB(22, 24, 34)
+	zone.BorderSizePixel = 0
+	zone.ClipsDescendants = true
+	zone.Parent = sg
+
+	local e = { segments = {} :: { Frame }, points = {} :: { Vector2 } }
+
+	local function trait(a: Vector2, b: Vector2, couleur: Color3, epaisseur: number)
+		local d = b - a
+		local f = Instance.new("Frame")
+		f.AnchorPoint = Vector2.new(0.5, 0.5)
+		f.Position = UDim2.fromOffset((a.X + b.X) / 2, (a.Y + b.Y) / 2)
+		f.Size = UDim2.fromOffset(d.Magnitude + epaisseur / 2, epaisseur)
+		f.Rotation = math.deg(math.atan2(d.Y, d.X))
+		f.BackgroundColor3 = couleur
+		f.BorderSizePixel = 0
+		f.Parent = zone
+		table.insert(e.segments, f)
+	end
+
+	-- prépare la courbe des prix de la semaine debut à fin (rien n'est montré avant d'y arriver)
+	function e.commencer(prix: { number }, debut: number, fin: number, t: string, st: string)
+		for _, f in e.segments do
+			f:Destroy()
+		end
+		e.segments, e.points = {}, {}
+		local mini, maxi = math.huge, -math.huge
+		for i = debut, fin do
+			mini, maxi = math.min(mini, prix[i]), math.max(maxi, prix[i])
+		end
+		local marge = (maxi - mini) * 0.08 + 1e-9
+		mini, maxi = mini - marge, maxi + marge
+		for i = debut, fin do
+			local x = (i - debut) / (fin - debut) * W
+			local y = H - (prix[i] - mini) / (maxi - mini) * H
+			table.insert(e.points, Vector2.new(x, y))
+		end
+		-- ligne grise : le prix de départ (au-dessus = acheter et garder gagne)
+		local y0 = e.points[1].Y
+		trait(Vector2.new(0, y0), Vector2.new(W, y0), Color3.fromRGB(90, 90, 105), 2)
+		titre.Text = t
+		sous.Text = st
+	end
+
+	-- trace la semaine w (1 = première semaine après le départ)
+	function e.point(w: number, couleur: Color3?)
+		local a, b = e.points[w], e.points[w + 1]
+		if a and b then
+			trait(a, b, couleur or Color3.fromRGB(242, 201, 76), 5)
+		end
+	end
+
+	function e.texte(st: string)
+		sous.Text = st
+	end
+
+	return e
+end
+
+-- ------------------------------------------------------------ robots
+local function boule(diametre: number, couleur: Color3, parent: Instance): Part
+	local b = piece({
+		Shape = Enum.PartType.Ball,
+		Size = Vector3.new(diametre, diametre, diametre),
+		Color = couleur,
+		Material = Enum.Material.SmoothPlastic,
+		CanCollide = false,
+		CanQuery = false,
+		CastShadow = false,
+		Parent = parent,
+	})
+	return b
+end
+
+-- Un robot : corps rond coloré, deux yeux, antenne, couronne cachée, étiquette nom + gain.
+function Decor.robot(nom: string, couleur: Color3, couloir: number)
+	local m = Instance.new("Model")
+	m.Name = nom
+	local corps = boule(3.4, couleur, m)
+	corps.Name = "Corps"
+	m.PrimaryPart = corps
+	local base = CFrame.new(0, 0, 0)
+	local morceaux = { { corps, base } }
+	for _, cote in { -0.7, 0.7 } do
+		local oeil = boule(1, Color3.new(1, 1, 1), m)
+		local pupille = boule(0.5, Color3.fromRGB(20, 20, 30), m)
+		table.insert(morceaux, { oeil, CFrame.new(cote, 0.45, 1.3) })
+		table.insert(morceaux, { pupille, CFrame.new(cote, 0.45, 1.75) })
+	end
+	local tige = piece({
+		Shape = Enum.PartType.Cylinder,
+		Size = Vector3.new(1.3, 0.2, 0.2),
+		Color = Color3.fromRGB(60, 60, 70),
+		CanCollide = false,
+		CanQuery = false,
+		Parent = m,
+	})
+	table.insert(morceaux, { tige, CFrame.new(0, 2.2, 0) * CFrame.Angles(0, 0, math.rad(90)) })
+	local bout = boule(0.6, couleur:Lerp(Color3.new(1, 1, 1), 0.4), m)
+	bout.Material = Enum.Material.Neon
+	table.insert(morceaux, { bout, CFrame.new(0, 2.95, 0) })
+
+	-- couronne (cachée tant que le robot n'est pas le meilleur)
+	local couronne = {}
+	local anneau = piece({
+		Shape = Enum.PartType.Cylinder,
+		Size = Vector3.new(0.6, 2.2, 2.2),
+		Color = Color3.fromRGB(242, 201, 76),
+		Material = Enum.Material.Neon,
+		CanCollide = false,
+		CanQuery = false,
+		Transparency = 1,
+		Parent = m,
+	})
+	table.insert(morceaux, { anneau, CFrame.new(0, 1.9, 0) * CFrame.Angles(0, 0, math.rad(90)) })
+	table.insert(couronne, anneau)
+	for i = 0, 3 do
+		local a = i * math.pi / 2
+		local pointe = boule(0.45, Color3.fromRGB(242, 201, 76), m)
+		pointe.Transparency = 1
+		table.insert(morceaux, { pointe, CFrame.new(math.cos(a) * 0.9, 2.35, math.sin(a) * 0.9) })
+		table.insert(couronne, pointe)
+	end
+
+	local bb = Instance.new("BillboardGui")
+	bb.Size = UDim2.fromOffset(160, 50)
+	bb.StudsOffset = Vector3.new(0, 4.6, 0)
+	bb.MaxDistance = 150
+	bb.Adornee = corps
+	bb.Parent = corps
+	local lNom = texte(bb, { Size = UDim2.new(1, 0, 0.5, 0), Text = nom, TextStrokeTransparency = 0.4 })
+	local lGain = texte(bb, {
+		Size = UDim2.new(1, 0, 0.5, 0),
+		Position = UDim2.fromScale(0, 0.5),
+		Text = "+0,0 %",
+		TextStrokeTransparency = 0.4,
+	})
+
+	local r = {
+		modele = m,
+		morceaux = morceaux,
+		couloir = couloir,
+		cf = CFrame.new(Decor.xCouloir(couloir), Decor.HAUTEUR, Decor.Z_DEPART),
+		cible = Decor.Z_DEPART,
+	}
+	function r.placer(cf: CFrame)
+		r.cf = cf
+		for _, mc in morceaux do
+			mc[1].CFrame = cf * mc[2]
+		end
+	end
+	function r.gain(txt: string, positif: boolean)
+		lGain.Text = txt
+		lGain.TextColor3 = if positif then Color3.fromRGB(120, 235, 140) else Color3.fromRGB(255, 120, 120)
+	end
+	function r.nom(txt: string)
+		lNom.Text = txt
+	end
+	function r.couronner(oui: boolean)
+		for _, c in couronne do
+			c.Transparency = if oui then 0 else 1
+		end
+	end
+	function r.exploser()
+		local ex = Instance.new("Explosion")
+		ex.Position = r.cf.Position
+		ex.BlastRadius = 4
+		ex.BlastPressure = 0 -- aucun effet physique
+		ex.DestroyJointRadiusPercent = 0 -- aucun dégât aux joueurs
+		ex.ExplosionType = Enum.ExplosionType.NoCraters
+		ex.Parent = workspace
+		Debris:AddItem(ex, 2)
+		m:Destroy()
+	end
+	function r.retirer()
+		m:Destroy()
+	end
+	r.placer(r.cf)
+	m.Parent = dossier
+	return r
+end
+
+return Decor
+]]></ProtectedString>
+			</Properties>
+		</Item>
+		<Item class="Script" referent="RBX0000000000000000000000000000000B">
+			<Properties>
+				<string name="Name">Jeu</string>
+				<ProtectedString name="Source"><![CDATA[-- Rayan's Arène (Roblox) : le serveur décide de tout (règles, frais, sélection, examen).
+-- Argent fictif uniquement. Aucun achat, aucune donnée gardée sur les joueurs.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local Dossier = ReplicatedStorage:WaitForChild("Arene")
+local R = require(Dossier:WaitForChild("Regles"))
+local C = require(Dossier:WaitForChild("Config"))
+local Prix = require(Dossier:WaitForChild("Prix"))
+local Decor = require(script.Parent:WaitForChild("Decor"))
+
+local prix, dates = Prix.clotures, Prix.dates
+local per = R.periodes(#prix, C.ANNEES_ENTRAINEMENT, C.SEMAINES_EXAMEN)
+assert(per, "Pas assez de semaines de prix dans le module Prix (relance construire.py).")
+
+-- ------------------------------------------------------------ communication
+local evenement = Instance.new("RemoteEvent")
+evenement.Name = "Evenement"
+evenement.Parent = Dossier
+local statut = Instance.new("StringValue")
+statut.Name = "Statut"
+statut.Parent = Dossier
+
+local function message(texte: string, joueur: Player?, duree: number?)
+	if joueur then
+		evenement:FireClient(joueur, "message", texte, duree or 8)
+	else
+		evenement:FireAllClients("message", texte, duree or 8)
+	end
+end
+
+-- ------------------------------------------------------------ décor
+local ecranPart = Decor.construire()
+local ecran = Decor.ecran(ecranPart)
+local h = R.hasard(C.GRAINE or os.time())
+
+local joueurs = {} -- [Player] = { robot = robot ou nil, choix = famille en attente ou nil }
+local robots = {} -- population en course (robot doré à part)
+local dore = nil
+local prochainId = 1
+
+local function couleurDe(genome)
+	if genome == nil then
+		return Color3.fromHex(R.OR)
+	end
+	return Color3.fromHex(R.COULEURS[genome.type])
+end
+
+local function couloirsLibres(): { number }
+	local pris = {}
+	for _, r in robots do
+		pris[r.vue.couloir] = true
+	end
+	local libres = {}
+	for c = 2, Decor.NB_COULOIRS do -- le couloir 1 est celui du robot doré
+		if not pris[c] then
+			table.insert(libres, c)
+		end
+	end
+	return libres
+end
+
+local function creer(genome, proprietaire: Player?, parent: number?)
+	local libres = couloirsLibres()
+	local couloir = libres[1] or Decor.NB_COULOIRS
+	local id = prochainId
+	prochainId += 1
+	local nom = if proprietaire then proprietaire.DisplayName else R.NOMS[genome.type] .. " n°" .. id
+	local r = {
+		id = id,
+		parent = parent,
+		genome = genome,
+		gain = 0,
+		proprietaire = proprietaire,
+		vue = Decor.robot(nom, couleurDe(genome), couloir),
+	}
+	table.insert(robots, r)
+	if proprietaire and joueurs[proprietaire] then
+		joueurs[proprietaire].robot = r
+	end
+	return r
+end
+
+local function creerDore()
+	dore = { id = 0, gain = 0, vue = Decor.robot("Acheter et garder", couleurDe(nil), 1) }
+end
+
+-- les robots glissent doucement vers leur place
+RunService.Heartbeat:Connect(function(dt)
+	local liste = table.clone(robots)
+	if dore then
+		table.insert(liste, dore)
+	end
+	for _, r in liste do
+		if r.vue.modele.Parent then
+			local x = Decor.xCouloir(r.vue.couloir)
+			local actuel = r.vue.cf.Position
+			local z = actuel.Z + (r.vue.cible - actuel.Z) * math.min(1, dt * 8)
+			local saut = math.abs(math.sin(os.clock() * 6 + r.vue.couloir)) * 0.4
+			r.vue.placer(CFrame.new(x, Decor.HAUTEUR + saut, z))
+		end
+	end
+end)
+
+-- ------------------------------------------------------------ joueurs
+local function leaderstat(joueur: Player, texte: string)
+	local ls = joueur:FindFirstChild("leaderstats")
+	local v = ls and ls:FindFirstChild("Gain %")
+	if v then
+		(v :: StringValue).Value = texte
+	end
+end
+
+Players.PlayerAdded:Connect(function(joueur)
+	joueurs[joueur] = {}
+	local ls = Instance.new("Folder")
+	ls.Name = "leaderstats"
+	local v = Instance.new("StringValue")
+	v.Name = "Gain %"
+	v.Value = "—"
+	v.Parent = ls
+	ls.Parent = joueur
+	task.delay(2, function()
+		if joueurs[joueur] and not joueurs[joueur].robot then
+			evenement:FireClient(joueur, "choisir")
+		end
+	end)
+end)
+
+Players.PlayerRemoving:Connect(function(joueur)
+	local j = joueurs[joueur]
+	if j and j.robot then
+		j.robot.proprietaire = nil -- le robot reste dans la course, sans propriétaire
+		j.robot.vue.nom(R.NOMS[j.robot.genome.type] .. " n°" .. j.robot.id)
+	end
+	joueurs[joueur] = nil
+end)
+
+local dernierClic = {}
+evenement.OnServerEvent:Connect(function(joueur, action, famille)
+	if action ~= "choisir" or type(famille) ~= "string" or R.NOMS[famille] == nil then
+		return
+	end
+	local maintenant = os.clock()
+	if dernierClic[joueur] and maintenant - dernierClic[joueur] < 1 then
+		return
+	end
+	dernierClic[joueur] = maintenant
+	local j = joueurs[joueur]
+	if not j or j.robot then
+		return
+	end
+	j.choix = famille
+	evenement:FireClient(joueur, "choisi")
+	message("C'est noté : ton robot " .. R.NOMS[famille] .. " entre au départ de la prochaine génération.", joueur, 5)
+end)
+
+-- robots des joueurs qui attendent leur tour ; renvoie le nombre de robots ajoutés
+local function ajouterJoueurs(place: number): number
+	local n = 0
+	for joueur, j in joueurs do
+		if j.choix and not j.robot and n < place then
+			local g = R.genomeHasard(h, j.choix)
+			j.choix = nil
+			creer(g, joueur)
+			n += 1
+			message("Ta règle : " .. R.decrire(g) .. ".", joueur, 10)
+		end
+	end
+	return n
+end
+
+-- ------------------------------------------------------------ une course
+local function course(liste, debut: number, fin: number, duree: number, titre: string)
+	local nbSem = fin - debut
+	local maxi = 0.2
+	for _, r in liste do
+		local net = if r.genome then R.evaluer(r.genome, prix, debut, fin) else R.acheterGarder(prix, debut, fin)
+		r.courbe = R.courbe(net)
+		r.gain = R.total(net)
+		for _, v in r.courbe do
+			maxi = math.max(maxi, v - 1)
+		end
+		r.vue.cible = Decor.Z_DEPART
+		r.vue.gain("+0,0 %", true)
+		r.vue.couronner(false)
+	end
+	local echelle = (Decor.Z_MAX - Decor.Z_DEPART - 10) / maxi
+	ecran.commencer(prix, debut, fin, titre, Prix.actif .. " : " .. dates[debut] .. " → " .. dates[fin])
+	task.wait(1.5)
+	for w = 1, nbSem do
+		for _, r in liste do
+			local v = r.courbe[w] - 1
+			r.vue.cible = math.clamp(Decor.Z_DEPART + v * echelle, Decor.Z_MIN, Decor.Z_MAX)
+			r.vue.gain(R.pct(v), v >= 0)
+		end
+		ecran.point(w)
+		statut.Value = titre .. " — semaine " .. w .. "/" .. nbSem .. " (" .. dates[debut + w] .. ")"
+		task.wait(duree / nbSem)
+	end
+end
+
+local function nomDe(r)
+	if r.proprietaire then
+		return r.proprietaire.DisplayName
+	end
+	return if r.genome then R.NOMS[r.genome.type] .. " n°" .. r.id else "Acheter et garder"
+end
+
+-- ------------------------------------------------------------ une partie
+local function partie()
+	for _, r in robots do
+		r.vue.retirer()
+	end
+	robots = {}
+	for _, j in joueurs do
+		j.robot = nil
+	end
+	if dore then
+		dore.vue.retirer()
+	end
+	creerDore()
+	evenement:FireAllClients("choisir")
+	for s = C.ATTENTE_DEPART, 1, -1 do
+		statut.Value = "Nouvelle partie dans " .. s .. " s : choisis la règle de ton robot !"
+		task.wait(1)
+	end
+
+	local e = per.entrainement
+	local n = ajouterJoueurs(C.NB_ROBOTS)
+	for _ = n + 1, C.NB_ROBOTS do
+		creer(R.genomeHasard(h))
+	end
+
+	local vivants = {}
+	for gen = 1, C.GENERATIONS do
+		local liste = table.clone(robots)
+		table.insert(liste, dore)
+		course(liste, e.debut, e.fin, C.DUREE_MANCHE, "Génération " .. gen .. "/" .. C.GENERATIONS .. " (entraînement)")
+
+		local morts
+		vivants, morts = R.selection(robots)
+		vivants[1].vue.couronner(true)
+		message(
+			"Génération " .. gen .. " : la meilleure est " .. nomDe(vivants[1]) .. " (" .. R.pct(vivants[1].gain)
+				.. "). Acheter et garder : " .. R.pct(dore.gain) .. ". La moitié la moins bonne explose !",
+			nil,
+			C.PAUSE + 2
+		)
+		for rang, r in vivants do
+			if r.proprietaire then
+				leaderstat(r.proprietaire, R.pct(r.gain))
+				local texte = "Ton robot survit : " .. (if rang == 1 then "1er" else rang .. "e") .. " sur " .. #robots
+					.. " (" .. R.pct(r.gain) .. ")."
+				task.delay(3, message, texte, r.proprietaire, 5) -- après le message de toute l'arène
+			end
+		end
+		task.wait(1)
+		for _, r in morts do
+			r.vue.exploser()
+			if r.proprietaire and joueurs[r.proprietaire] then
+				leaderstat(r.proprietaire, R.pct(r.gain) .. " (perdu)")
+				joueurs[r.proprietaire].robot = nil
+				local joueur = r.proprietaire
+				task.delay(3, function()
+					message("Ton robot a explosé (" .. R.pct(r.gain) .. "). Choisis une nouvelle règle !", joueur, 6)
+					evenement:FireClient(joueur, "choisir")
+				end)
+			end
+			task.wait(0.08)
+		end
+		robots = vivants
+		if gen < C.GENERATIONS then
+			statut.Value = "Les survivants font des enfants mutés…"
+			task.wait(C.PAUSE)
+			local place = C.NB_ROBOTS - #robots
+			local ajoutes = ajouterJoueurs(place)
+			for _, enfant in R.enfants(vivants, place - ajoutes, h, prochainId) do
+				creer(enfant.genome, nil, enfant.parent)
+			end
+		end
+	end
+
+	-- L'examen : la championne et les robots des joueurs encore en vie, contre le robot doré
+	local champion = vivants[1]
+	local candidats = { champion, dore }
+	for _, r in robots do
+		if r ~= champion then
+			if r.proprietaire then
+				table.insert(candidats, r)
+			else
+				r.vue.retirer()
+			end
+		end
+	end
+	robots = {}
+	for _, r in candidats do
+		if r ~= dore then
+			table.insert(robots, r)
+		end
+	end
+	message(
+		"L'examen ! La championne " .. nomDe(champion) .. " joue l'année suivante, qu'elle n'a jamais vue, sans rien changer à sa règle : "
+			.. R.decrire(champion.genome) .. ".",
+		nil,
+		C.DUREE_EXAMEN
+	)
+	task.wait(3)
+	local x = per.examen
+	course(candidats, x.debut, x.fin, C.DUREE_EXAMEN, "L'EXAMEN : l'année jamais vue")
+	champion.vue.couronner(champion.gain > dore.gain)
+	dore.vue.couronner(dore.gain >= champion.gain)
+
+	local bilan = "Examen (" .. dates[x.debut] .. " → " .. dates[x.fin] .. ") : " .. nomDe(champion) .. " fait "
+		.. R.pct(champion.gain) .. ", Acheter et garder fait " .. R.pct(dore.gain) .. ". "
+	if dore.gain >= champion.gain then
+		bilan ..= "Acheter et garder gagne. La championne était la meilleure sur le passé, mais le marché ne rejoue jamais "
+			.. "la même partie : c'est la leçon de l'Arène."
+	else
+		bilan ..= "La championne gagne cette fois. Une seule année ne prouve rien : rejoue, souvent c'est l'inverse."
+	end
+	bilan ..= " (Argent fictif, ce n'est pas un conseil.)"
+	message(bilan, nil, 20)
+	for _, r in robots do
+		if r.proprietaire then
+			leaderstat(r.proprietaire, R.pct(r.gain) .. " (examen)")
+		end
+	end
+	for s = 20, 1, -1 do
+		statut.Value = "Fin de la partie. Nouvelle partie dans " .. s .. " s."
+		task.wait(1)
+	end
+end
+
+if Prix.demo then
+	print("Rayan's Arène : prix de démonstration (lance construire.py avec le réseau pour de vrais prix).")
+end
+while true do
+	partie()
+end
+]]></ProtectedString>
+			</Properties>
+		</Item>
+	</Item>
+	<Item class="StarterPlayer" referent="RBX0000000000000000000000000000000C">
+		<Properties>
+			<string name="Name">StarterPlayer</string>
+		</Properties>
+		<Item class="StarterPlayerScripts" referent="RBX0000000000000000000000000000000D">
+			<Properties>
+				<string name="Name">StarterPlayerScripts</string>
+			</Properties>
+			<Item class="LocalScript" referent="RBX0000000000000000000000000000000E">
+				<Properties>
+					<string name="Name">Interface</string>
+					<ProtectedString name="Source"><![CDATA[-- Interface du joueur : bandeau d'état, choix de la famille de règle, messages.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Dossier = ReplicatedStorage:WaitForChild("Arene")
+local R = require(Dossier:WaitForChild("Regles"))
+local evenement = Dossier:WaitForChild("Evenement") :: RemoteEvent
+local statut = Dossier:WaitForChild("Statut") :: StringValue
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "Arene"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = false
+gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local function etiquette(parent, props): TextLabel
+	local t = Instance.new("TextLabel")
+	t.BackgroundTransparency = 1
+	t.Font = Enum.Font.GothamBold
+	t.TextColor3 = Color3.new(1, 1, 1)
+	t.TextScaled = true
+	t.TextWrapped = true
+	for k, v in props do
+		(t :: any)[k] = v
+	end
+	t.Parent = parent
+	return t
+end
+
+local function arrondir(o: GuiObject, rayon: number)
+	local c = Instance.new("UICorner")
+	c.CornerRadius = UDim.new(0, rayon)
+	c.Parent = o
+end
+
+-- bandeau d'état en haut
+local bandeau = etiquette(gui, {
+	Size = UDim2.new(0.7, 0, 0, 40),
+	Position = UDim2.new(0.15, 0, 0, 8),
+	BackgroundTransparency = 0.35,
+	BackgroundColor3 = Color3.fromRGB(20, 22, 32),
+	Text = statut.Value,
+})
+arrondir(bandeau, 10)
+statut:GetPropertyChangedSignal("Value"):Connect(function()
+	bandeau.Text = statut.Value
+end)
+
+-- message (résultats, examen)
+local boite = etiquette(gui, {
+	Size = UDim2.new(0.6, 0, 0, 90),
+	Position = UDim2.new(0.2, 0, 1, -110),
+	BackgroundTransparency = 0.2,
+	BackgroundColor3 = Color3.fromRGB(20, 22, 32),
+	Font = Enum.Font.Gotham,
+	Visible = false,
+})
+arrondir(boite, 12)
+local pad = Instance.new("UIPadding")
+pad.PaddingLeft, pad.PaddingRight = UDim.new(0, 12), UDim.new(0, 12)
+pad.PaddingTop, pad.PaddingBottom = UDim.new(0, 8), UDim.new(0, 8)
+pad.Parent = boite
+local numeroMessage = 0
+
+-- panneau de choix : 4 gros boutons
+local panneau = Instance.new("Frame")
+panneau.Size = UDim2.new(0, 560, 0, 400)
+panneau.AnchorPoint = Vector2.new(0.5, 0.5)
+panneau.Position = UDim2.fromScale(0.5, 0.5)
+panneau.BackgroundColor3 = Color3.fromRGB(20, 22, 32)
+panneau.BackgroundTransparency = 0.1
+panneau.Visible = false
+panneau.Parent = gui
+arrondir(panneau, 16)
+local taille = Instance.new("UISizeConstraint")
+taille.MaxSize = Vector2.new(560, 400)
+taille.Parent = panneau
+local echelle = Instance.new("UIAspectRatioConstraint")
+echelle.AspectRatio = 560 / 400
+echelle.Parent = panneau
+
+etiquette(panneau, {
+	Size = UDim2.new(1, -24, 0.12, 0),
+	Position = UDim2.new(0, 12, 0.02, 0),
+	Text = "Choisis la règle de ton robot",
+})
+etiquette(panneau, {
+	Size = UDim2.new(1, -24, 0.07, 0),
+	Position = UDim2.new(0, 12, 0.14, 0),
+	Font = Enum.Font.Gotham,
+	TextColor3 = Color3.fromRGB(190, 190, 205),
+	Text = "Les réglages sont tirés au hasard. Argent fictif, frais compris (0,15 % par ordre).",
+})
+
+for i, famille in R.TYPES do
+	local b = Instance.new("TextButton")
+	b.Size = UDim2.new(1, -24, 0.17, 0)
+	b.Position = UDim2.new(0, 12, 0.23 + (i - 1) * 0.19, 0)
+	b.BackgroundColor3 = Color3.fromHex(R.COULEURS[famille])
+	b.AutoButtonColor = true
+	b.Text = ""
+	b.Parent = panneau
+	arrondir(b, 12)
+	etiquette(b, { Size = UDim2.new(1, -16, 0.5, 0), Position = UDim2.new(0, 8, 0.05, 0), Text = R.NOMS[famille] })
+	etiquette(b, {
+		Size = UDim2.new(1, -16, 0.4, 0),
+		Position = UDim2.new(0, 8, 0.55, 0),
+		Font = Enum.Font.Gotham,
+		Text = R.EXPLICATIONS[famille],
+	})
+	b.Activated:Connect(function()
+		evenement:FireServer("choisir", famille)
+	end)
+end
+
+evenement.OnClientEvent:Connect(function(action, texte, duree)
+	if action == "choisir" then
+		panneau.Visible = true
+	elseif action == "choisi" then
+		panneau.Visible = false
+	elseif action == "message" then
+		numeroMessage += 1
+		local n = numeroMessage
+		boite.Text = texte
+		boite.Visible = true
+		task.delay(duree or 8, function()
+			if n == numeroMessage then
+				boite.Visible = false
+			end
+		end)
+	end
+end)
+]]></ProtectedString>
+				</Properties>
+			</Item>
+		</Item>
+	</Item>
+</roblox>
