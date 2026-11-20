@@ -2,7 +2,7 @@
 //   npm start            recherche eBay (si clés) + fichiers du dossier imports/
 //   npm run demo         classement d'exemple, sans réseau ni réglages
 //   node src/main.ts --import fichier.csv   ajoute un fichier précis
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Annonce, Reglages } from "./types.ts";
@@ -12,27 +12,18 @@ import { chercherEbay, jetonEbay } from "./ebay.ts";
 import { lireDossier, lireFichier } from "./import.ts";
 import { pageHtml, texteTerminal } from "./affichage.ts";
 import { deposer } from "./partage.ts";
+import { chargerReglages } from "./reglages.ts";
 
 const racine = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const demo = args.includes("--demo");
 
-const DEFAUTS: Omit<Reglages, "recherches"> = { domiciles: [], distanceMaxKm: 40, distancePepiteKm: 100, ecartPepite: 0.4, gainPepite: 30, ecartMin: 0.25, fraisRevente: 0.12, nombre: 20 };
-
-function chargerReglages(): Reglages {
-  const fichier = join(racine, demo ? "reglages.exemple.json" : "reglages.json");
-  if (!existsSync(fichier)) {
-    console.error("Pas de reglages.json : copiez reglages.exemple.json en reglages.json et remplissez-le.");
-    process.exit(1);
-  }
-  const r: Reglages = { ...DEFAUTS, ...JSON.parse(readFileSync(fichier, "utf8")) };
-  r.domiciles = r.domiciles.filter((d) => d.codePostal);
-  if (!r.domiciles.length && r.codePostal) r.domiciles = [{ nom: "chez moi", codePostal: r.codePostal }];
-  return r;
+function charger(): Reglages {
+  return chargerReglages(join(racine, demo ? "reglages.exemple.json" : "reglages.json"));
 }
 
 async function main() {
-  const reglages = chargerReglages();
+  const reglages = charger();
   const annonces: Annonce[] = [];
 
   if (demo) {

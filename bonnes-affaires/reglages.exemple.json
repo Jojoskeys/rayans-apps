@@ -20,6 +20,12 @@
     "clientId": "",
     "clientSecret": ""
   },
+  "discord": {
+    "webhook": "",
+    "grossesPromos": true,
+    "degresMin": 300,
+    "reductionMin": 0.5
+  },
   "recherches": [
     {
       "nom": "Écran 27 pouces 4K",
