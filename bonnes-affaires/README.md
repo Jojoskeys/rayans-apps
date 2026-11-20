@@ -134,6 +134,14 @@ Le bot poste dans un salon de ton serveur Discord chaque nouvelle affaire, avec 
   (offres sûres sous le prix habituel ; 💎 pour une pépite) ;
 - 📣 **grosses promos** Dealabs, tous produits : au moins `degresMin` (300°) de votes de la communauté, ou
   au moins `reductionMin` (50 %) sous le prix habituel. `"grossesPromos": false` pour ne garder que mes recherches.
+- 🚨 **dingueries**, avec un tag **@everyone** : bon plan à `dingueDegres` (1000°) ou plus, ou à
+  `dingueReduction` (70 %) sous son prix habituel une fois validé par 100° de votes ;
+  sur eBay, toute pépite. Un bon plan déjà posté qui devient une dinguerie repart une fois, tagué. Les
+  titres des annonces ne taguent jamais personne.
+
+Chaque carte prend l'allure de la boutique (Amazon, Cdiscount, Fnac, Darty, Boulanger, eBay, Zalando… :
+couleur, pastille et nom en tête, liste dans `src/style.ts`), avec la grande photo et des cases Prix, Avant
+(barré), Réduction, Votes (🔥 à 🔥🔥🔥) et Rayon ; pour eBay aussi Revente, Retrait et Avis.
 
 Jamais deux fois la même annonce (`resultats\bot-deja-vus.json`). Le premier passage ne poste que « bot en
 marche » : ce qui était déjà en ligne est retenu sans envoi. Vinted et Leboncoin n'y sont pas (robots interdits,

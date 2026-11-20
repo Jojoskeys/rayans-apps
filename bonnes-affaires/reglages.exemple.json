@@ -24,7 +24,9 @@
     "webhook": "",
     "grossesPromos": true,
     "degresMin": 300,
-    "reductionMin": 0.5
+    "reductionMin": 0.5,
+    "dingueDegres": 1000,
+    "dingueReduction": 0.7
   },
   "recherches": [
     {

@@ -76,6 +76,10 @@ export interface Reglages {
     degresMin?: number;
     /** …ou au moins cette réduction sur son prix habituel (0,5 = 50 %). */
     reductionMin?: number;
+    /** Dinguerie (tag @everyone) : bon plan à au moins tant de degrés… */
+    dingueDegres?: number;
+    /** …ou au moins cette réduction, déjà à 100° (votes) ; sur eBay, toute pépite. */
+    dingueReduction?: number;
   };
   recherches: Recherche[];
 }

@@ -5,7 +5,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { Reglages } from "../src/types.ts";
 import { lireFluxDealabs, type BonPlan } from "../src/dealabs.ts";
-import { carteBonPlan, DejaVus, motifBonPlan } from "../src/bot.ts";
+import { carteBonPlan, DejaVus, estDingue, motifBonPlan } from "../src/bot.ts";
+import { flammes, grandePhoto, styleDe } from "../src/style.ts";
 import { envoyerDiscord, estWebhookDiscord, type Carte } from "../src/discord.ts";
 
 const FLUX = `<?xml version="1.0"?><rss><channel>
@@ -52,14 +53,43 @@ test("bot : ma recherche, grosse promo, ou rien", () => {
   assert.equal(motifBonPlan(plan("Aspirateur", { degres: 150 }), reglages({ discord: { webhook: "", degresMin: 100 } })), "grosse promo");
 });
 
-test("bot : carte Discord d'un bon plan", () => {
+test("bot : carte Discord d'un bon plan, au style de la boutique", () => {
   const [a] = lireFluxDealabs(FLUX);
   const c = carteBonPlan(a, "Switch OLED");
   assert.equal(c.url, "https://www.dealabs.com/bons-plans/a-1");
-  assert.match(c.description!, /1\s199,99 €/);
-  assert.match(c.description!, /−50 %/);
-  assert.match(c.description!, /Ma recherche : Switch OLED/);
+  assert.equal(c.author?.name, "🟠  AMAZON");
+  assert.equal(c.color, 0xff9900);
+  const valeurs = Object.fromEntries((c.fields ?? []).map((f) => [f.name, f.value]));
+  assert.match(valeurs["💶 Prix"], /1\s199,99 €/);
+  assert.match(valeurs["🏷️ Avant"], /~~2\s399,98 €~~/);
+  assert.equal(valeurs["📉 Réduction"], "**−50 %**");
+  assert.equal(valeurs["🗳️ Votes"], "🔥🔥 512°");
+  assert.match(c.description!, /Ma recherche · \*\*Switch OLED/);
+  assert.equal(c.image?.url, "https://exemple.invalid/a.jpg");
+  const d = carteBonPlan(a, "grosse promo", true);
+  assert.match(d.title, /^🚨 /);
+  assert.match(d.description!, /DINGUERIE/);
   assert.equal(carteBonPlan(plan("x".repeat(400)), "grosse promo").title.length, 256);
+});
+
+test("style : boutiques reconnues, inconnues, flammes et grande photo", () => {
+  assert.equal(styleDe("Privé by Zalando").nom, "Privé by Zalando");
+  assert.equal(styleDe("Amazon.fr").nom, "Amazon");
+  assert.equal(styleDe("Cdiscount").emoji, "🔵");
+  assert.equal(styleDe("Boutique du coin").nom, "Boutique du coin");
+  assert.equal(styleDe(undefined).nom, "Bon plan");
+  assert.equal(flammes(1200), "🔥🔥🔥 1200°");
+  assert.equal(flammes(-5), "🧊 -5°");
+  assert.equal(grandePhoto("https://x.invalid/re/150x150/qt/55/a.jpg"), "https://x.invalid/re/768x768/qt/55/a.jpg");
+});
+
+test("bot : dinguerie = 1000° ou −70 % déjà validé, et toujours envoyée", () => {
+  const r = reglages({ discord: { webhook: "", grossesPromos: false } });
+  assert.equal(estDingue(plan("Aspirateur", { degres: 1000 }), r), true);
+  assert.equal(estDingue(plan("Aspirateur", { degres: 150, reduction: 0.75 }), r), true);
+  assert.equal(estDingue(plan("Aspirateur", { degres: 20, reduction: 0.9 }), r), false, "pas encore validée");
+  assert.equal(estDingue(plan("Aspirateur", { degres: 999 }), r), false);
+  assert.equal(motifBonPlan(plan("Aspirateur", { degres: 1500 }), r), "grosse promo", "même sans les grosses promos");
 });
 
 test("bot : déjà vus retenus et oubliés après 60 jours", () => {
@@ -80,7 +110,7 @@ test("Discord : webhook reconnu, paquets de 10 cartes, attente si Discord freine
   assert.ok(estWebhookDiscord("https://discord.com/api/webhooks/123/abc-DEF_9"));
   assert.ok(!estWebhookDiscord("https://exemple.invalid/api/webhooks/123/abc"));
   assert.ok(!estWebhookDiscord(""));
-  const envois: { embeds: Carte[] }[] = [];
+  const envois: { embeds: Carte[]; allowed_mentions: { parse: string[] } }[] = [];
   let freine = true;
   const faux = (async (_url: string, init: RequestInit) => {
     if (freine) {
@@ -91,6 +121,9 @@ test("Discord : webhook reconnu, paquets de 10 cartes, attente si Discord freine
     return new Response(null, { status: 204 });
   }) as typeof fetch;
   const cartes = Array.from({ length: 12 }, (_, i) => ({ title: `n°${i}` }));
-  await envoyerDiscord("https://discord.com/api/webhooks/1/a", cartes, undefined, faux);
+  await envoyerDiscord("https://discord.com/api/webhooks/1/a", cartes, "@everyone dans un texte", faux);
   assert.deepEqual(envois.map((e) => e.embeds.length), [10, 2]);
+  assert.deepEqual(envois.map((e) => e.allowed_mentions.parse), [[], []], "pas de tag sans le demander");
+  await envoyerDiscord("https://discord.com/api/webhooks/1/a", [cartes[0]], "@everyone 🚨", faux, true);
+  assert.deepEqual(envois.at(-1)!.allowed_mentions.parse, ["everyone"]);
 });
