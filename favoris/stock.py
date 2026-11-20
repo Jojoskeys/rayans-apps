@@ -93,6 +93,30 @@ class Stock:
         return {}
 
     def enregistrer(self) -> None:
+        # Un seul programme à la fois relit puis réécrit la liste : sinon, quand deux enregistrent au même
+        # moment, le dernier efface ce que l'autre venait d'écrire (une fiche repassait « à analyser »).
+        verrou = self.fichier.with_suffix(".verrou")
+        for _ in range(120):
+            try:
+                os.close(os.open(verrou, os.O_CREAT | os.O_EXCL))
+                break
+            except FileExistsError:
+                try:
+                    if time.time() - verrou.stat().st_mtime > 30:  # laissé par un programme arrêté net
+                        verrou.unlink()
+                        continue
+                except FileNotFoundError:
+                    continue
+                time.sleep(0.25)
+        try:
+            self._enregistrer()
+        finally:
+            try:
+                verrou.unlink()
+            except FileNotFoundError:
+                pass
+
+    def _enregistrer(self) -> None:
         sur_disque = self._lire()
         for k, v in self.videos.items():
             fige = json.dumps(v, sort_keys=True)
