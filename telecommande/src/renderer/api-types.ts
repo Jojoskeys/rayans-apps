@@ -16,6 +16,7 @@ export type Commande =
   | { type: "publier" }
   | { type: "depublier" }
   | { type: "nouveau-code" }
+  | { type: "nouveau-code-montre" }
   | { type: "reglages"; patch: Partial<Reglages> }
   | { type: "scenarios"; scenarios: Scenario[] }
   | { type: "choisir-cible"; dossier: boolean }

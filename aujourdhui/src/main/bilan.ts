@@ -9,6 +9,7 @@ import { aRemplir, BILAN_VIDE, cocherAdhkar, cocherPrevu, moments, nettoyerBilan
 import { heuresDePriere } from "../core/prieres.ts";
 import { citationsDuJour } from "../core/citations.ts";
 import type { BilanView } from "../renderer/api-types.ts";
+import { jour as jourMontre, lire as lireMontre } from "../../../telecommande/src/core/montre.ts";
 
 interface Ctx {
   dataDir: string;
@@ -33,6 +34,26 @@ export function priereFile(): string {
     path.join(process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming"), "Rayans Priere", "priere.json"),
   ];
   return c.filter((f) => fs.existsSync(f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0] || c[0];
+}
+
+/** Saisies de Rayan's Montre (garmin/montre), rangées par Rayan's Télécommande dans montre.json (seulement lu). */
+export function montreFile(): string {
+  if (process.env.MONTRE_DATA_FILE) return process.env.MONTRE_DATA_FILE;
+  const c = [
+    path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), "AppData", "Local"), "fr.rayan.launcher", "data", "rayans-telecommande", "montre.json"),
+    path.join(process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming"), "Rayans Telecommande", "montre.json"),
+  ];
+  return c.filter((f) => fs.existsSync(f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0] || c[0];
+}
+
+/** Eau, humeur et séances notées sur la montre ce jour-là ; rien noté (ou pas de fichier) : null. */
+function montre(jour: string): BilanView["montre"] {
+  try {
+    const f = montreFile();
+    if (!fs.existsSync(f)) return null;
+    const j = jourMontre(lireMontre(f), jour);
+    return j.eau || j.seances || j.humeur !== null ? { eau: j.eau, seances: j.seances, humeur: j.humeur } : null;
+  } catch { return null; }
 }
 
 function prieres(now: number): Prieres | null {
@@ -89,6 +110,7 @@ export function bilanView(): BilanView {
     reglages: data.reglages,
     historique,
     citations: citationsDuJour(jour),
+    montre: montre(jour),
   };
 }
 

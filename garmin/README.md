@@ -1,6 +1,6 @@
 # Rayan's Garmin
 
-Trois apps Connect IQ pour la **Forerunner 165** (et 165 Music), écrites en Monkey C avec le kit officiel de Garmin.
+Quatre apps Connect IQ pour la **Forerunner 165** (et 165 Music), écrites en Monkey C avec le kit officiel de Garmin.
 Rien n'est piraté : la montre accepte les apps de développeur copiées par câble USB.
 
 | App | Dossier | Type | Ce qu'elle fait |
@@ -8,6 +8,7 @@ Rien n'est piraté : la montre accepte les apps de développeur copiées par câ
 | Rayan's Prière (cadran) | [`cadran-priere/`](cadran-priere/) | cadran | Heure, date, **prochaine prière** et temps restant sur un anneau solaire de 24 h ; en haut météo, Body Battery et répétitions de Muscu ; en bas pas, cœur, batterie, notifications. **Appui long** sur une info pour ouvrir l'écran qui va avec (Muscu compris) ; sur la prière, les six horaires du jour. **Alerte à l'heure de chaque prière** : notification de la montre « C'est l'heure de Asr — 15:20 », avec vibration. Écran toujours allumé : affichage réduit qui se décale chaque minute. |
 | Rayan's 5 km | [`champ-5km/`](champ-5km/) | champ de données | Pendant une course : **avance ou retard** sur le temps visé, temps final estimé, distance restante ; alerte à chaque km (temps du km, écart) ; après 5 km, le vrai temps sur 5 km. |
 | Rayan's Muscu | [`muscu/`](muscu/) | app | **Tractions** ou **pompes**, comme une course : le chrono part dès le choix, START passe de la série (répétitions comptées au poignet) à la pause (chrono), puis à la série suivante ; RETOUR termine. Compteurs du jour et de toujours par exercice. **Aperçu dans la liste des widgets** (répétitions du jour) et raccourci sur le cadran. Réglages sur la montre. Enregistrée comme activité « Musculation » (un circuit par série). |
+| Rayan's Montre | [`montre/`](montre/) | app | Pas du jour, cœur, distance, calories ; **menu de saisie** : verre d'eau +1, séance faite, humeur 1 à 5, envoyés au PC (Rayan's Télécommande) à travers Garmin Connect sur l'iPhone, lus dans la tuile **Montre** de Rayan's Mobile et le bilan du soir d'Aujourd'hui. **Tester la connexion** dans le menu. Détails : [plus bas](#rayans-montre). |
 
 ![Cadran avec la ligne du haut, les six horaires après un appui long, aperçu Muscu](captures/cadran-raccourcis.png)
 ![Cadran, écran toujours allumé, champ 5 km](captures/cadran-et-5km.png)
@@ -93,6 +94,55 @@ Une app copiée par câble ne se règle pas depuis Garmin Connect : les réglage
 - **Muscu** : bouton Réglages de l'accueil : objectif par série (libre ou 3 à 50), rappel de pause (aucun ou 0:45
   à 5:00, la montre vibre), sensibilité du comptage.
 - **5 km** : temps visé 30:00 (à changer dans `champ-5km/resources/settings/properties.xml`, puis réinstaller).
+## Rayan's Montre
+
+Chemin d'une saisie : **montre → Bluetooth → Garmin Connect (iPhone) → Tailscale → Rayan's Télécommande (PC)**,
+`POST <adresse>/api/montre` en JSON avec `Authorization: Bearer <code montre>`. Rangé dans `montre.json` à côté
+de `telecommande.json`.
+
+**Configuration locale (jamais dans le dépôt)** :
+
+1. Sur le PC, Rayan's Télécommande → « Associer l'iPhone » : noter l'**adresse** du PC et le **code montre**
+   (« Afficher », sous le code de l'iPhone). Le code montre ne permet que d'envoyer les saisies de la montre.
+2. Copier `montre\config.exemple.json` en `montre\config.local.json` et y mettre l'adresse
+   (`https://…ts.net`, sans `/` à la fin) et le code montre. Ce fichier est ignoré par git.
+3. `.\construire.ps1 -Apps montre -Installer` : le script écrit `montre\source-config\Config.mc` (généré, ignoré
+   par git) puis compile. Sans `config.local.json`, l'app s'installe mais dit « config absente ».
+
+**En premier : tester la connexion.** START → Tester la connexion. Rien n'est enregistré sur le PC, la montre
+affiche OK ou l'erreur :
+
+| Message | Ce qu'il faut faire |
+| --- | --- |
+| OK | tout marche : les saisies partent toutes seules |
+| Téléphone absent (-104) | Bluetooth activé, iPhone à côté, **Garmin Connect ouvert** (au moins en arrière-plan) |
+| Le téléphone ne répond pas (-2 à -5) | rouvrir Garmin Connect sur l'iPhone |
+| PC injoignable (-300) | **Tailscale activé sur l'iPhone**, PC allumé, Rayan's Télécommande lancée et « accès depuis l'iPhone » actif |
+| Réponse illisible (-400) | adresse fausse, ou certificat HTTPS refusé par Garmin Connect (bug connu de Garmin avec certains certificats Let's Encrypt sur iPhone) : vérifier l'adresse, relancer le test plus tard ; si ça dure, c'est cette limite |
+| Accès refusé (403) | l'iPhone doit être connecté à Tailscale avec le même compte que le PC |
+| Code montre refusé (401) | recopier le code montre dans `config.local.json`, puis réinstaller |
+| Télécommande trop ancienne (404) | mettre à jour Rayan's Télécommande sur le PC |
+
+**Utilisation** : l'écran principal montre les pas, le cœur, la distance et les calories de la montre (« -- » si
+elle ne les a pas), puis ce qui a été noté aujourd'hui. START (ou toucher l'écran) → Verre d'eau +1, Séance
+faite, Humeur (1 à 5), Envoyer maintenant, Tester la connexion. À l'ouverture, l'app envoie aussi un résumé du
+jour (pas, distance, calories, cœur).
+
+**File d'attente** : chaque saisie est horodatée et attend sur la montre (`Application.Storage`, 50 au plus : au-delà
+la plus ancienne est retirée) ; elle n'est retirée qu'après une réponse 200 du PC. Sinon elle repart au prochain
+envoi (nouvelle saisie, ouverture de l'app, « Envoyer maintenant »). Un envoi répété n'est pas compté deux fois
+(chaque saisie a un identifiant).
+
+**Limites** :
+
+- Pas d'envoi sans l'iPhone : Garmin Connect doit tourner et Tailscale être activé sur l'iPhone.
+- Les envois ne partent que quand l'app est ouverte (pas d'envoi en arrière-plan).
+- Code **pas encore compilé ni essayé sur la vraie montre** (écrit sans le SDK) : premier essai =
+  `.\construire.ps1 -Apps montre -Tests`, puis le test de connexion. L'en-tête `Tailscale-User-Login` devrait
+  être ajouté par `tailscale serve` comme pour Safari (même iPhone) : à confirmer par ce test (403 sinon).
+- Changer d'adresse ou de code = modifier `config.local.json` et réinstaller (une app copiée par câble ne se règle
+  pas depuis Garmin Connect).
+
 ## Installer sur la montre
 
 1. Brancher la montre en USB : elle apparaît dans l'Explorateur (« Forerunner 165 »).
@@ -100,7 +150,7 @@ Une app copiée par câble ne se règle pas depuis Garmin Connect : les réglage
    faut d'abord retirer l'ancien `.prg` de la montre : une copie ne remplace pas un fichier existant.
 3. Débrancher.
 4. Cadran : appui long sur l'écran de l'heure → Cadran → Rayan's Prière. Champ 5 km : Course → réglages →
-   Écrans de données → un champ → Connect IQ → Rayan's 5 km. Muscu : START → Rayan's Muscu. Alerte de prière : autoriser les notifications de Rayan's Prière si la montre le demande.
+   Écrans de données → un champ → Connect IQ → Rayan's 5 km. Muscu : START → Rayan's Muscu. Montre : START → Rayan's Montre (configuration et test : [Rayan's Montre](#rayans-montre)). Alerte de prière : autoriser les notifications de Rayan's Prière si la montre le demande.
 
 Une app copiée à la main n'est pas mise à jour par Garmin : recopier le `.prg` après chaque changement.
 
@@ -110,8 +160,8 @@ Il faut Java, le **Connect IQ SDK Manager** (compte Garmin) avec un SDK et les f
 clé de développeur dans `%APPDATA%\Garmin\ConnectIQ\developer_key.der` (jamais dans le dépôt : elle signe les apps).
 
 ```powershell
-.\construire.ps1            # compile les trois apps pour fr165
-.\construire.ps1 -Tests     # tests dans le simulateur (horaires, comptage, champ 5 km)
+.\construire.ps1            # compile les quatre apps pour fr165
+.\construire.ps1 -Tests     # tests dans le simulateur (horaires, comptage, champ 5 km, file de Montre)
 ```
 
 Simulateur : `monkeydo sortie\muscu.prg fr165` (le simulateur se place au siège de Garmin, au Kansas : les horaires
