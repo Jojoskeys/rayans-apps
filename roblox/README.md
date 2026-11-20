@@ -10,18 +10,13 @@ Aucun achat Robux, aucune donnée gardée sur les joueurs, pas de chat ajouté, 
 
 ## Ouvrir le jeu (Windows)
 
-1. Ouvre un terminal dans le dossier `roblox\` et lance :
-   ```
-   python construire.py
-   ```
-   Il prend les prix de SPY dans le cache de l'Arène (`arene\donnees\SPY.csv`), les télécharge s'il n'y
-   sont pas (`pip install numpy yfinance`), ou se replie sur une série de démonstration sans réseau
-   (`python construire.py --demo`). Autre actif : `python construire.py --actif QQQ`.
-2. Double-clique sur **`RayansArene.rbxlx`** : Roblox Studio l'ouvre.
-3. Clique sur **Play** (ou F5). Choisis la règle de ton robot avec un des 4 gros boutons.
+1. Double-clique sur **`RayansArene.rbxlx`** (déjà prêt dans ce dossier, avec 10 ans de prix réels de SPY) :
+   Roblox Studio l'ouvre.
+2. Clique sur **Play** (ou F5). Choisis la règle de ton robot avec un des 4 gros boutons.
 
-Le fichier `.rbxlx` et le module `Prix.luau` sont générés (ignorés par git) : relance `construire.py` pour
-avoir des prix à jour.
+Pour des prix à jour ou un autre actif, refaire le fichier : dans `roblox\`, `python construire.py`
+(prix pris dans `arene\donnees\SPY.csv` ou téléchargés : `pip install numpy yfinance` ; `--demo` sans réseau ;
+`--actif QQQ` pour un autre actif). Le module `Prix.luau` est généré (ignoré par git).
 
 ## Le jeu
 
