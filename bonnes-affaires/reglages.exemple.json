@@ -28,6 +28,12 @@
     "dingueDegres": 1000,
     "dingueReduction": 0.7
   },
+  "robot": {
+    "vinted": true,
+    "leboncoin": false,
+    "nuitDebut": 1,
+    "nuitFin": 7
+  },
   "recherches": [
     {
       "nom": "Écran 27 pouces 4K",
