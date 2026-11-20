@@ -1,7 +1,7 @@
 // Construit Rayan's Mobile dans dist/ : l'accueil, une page par app, le manifeste et le service worker
 // (fonctionnement hors ligne). Publié sur GitHub Pages par .github/workflows/mobile.yml.
 import { build } from "esbuild";
-import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,6 +32,7 @@ export const PAGES = [
   { id: "studio", title: "Studio", entry: "src/apps/studio.tsx", root: "racine" },
   { id: "demain", title: "Demain", entry: "src/apps/demain.tsx", root: "racine" },
   { id: "actu", title: "Ton monde", entry: "src/apps/actu.tsx", root: "racine" },
+  { id: "arene", title: "Arène", entry: "src/apps/arene.tsx", root: "racine" },
   { id: "courses", title: "Courses", entry: "src/apps/courses.tsx", root: "racine" },
   { id: "memo", title: "Mémo", entry: "src/apps/memo.tsx", root: "racine" },
   { id: "papiers", title: "Papiers", entry: "src/apps/papiers.tsx", root: "racine" },
@@ -124,6 +125,11 @@ self.addEventListener("notificationclick", (e) => {
   e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((cs) => { for (const c of cs) if ("focus" in c) { c.navigate(url).catch(() => {}); return c.focus(); } return self.clients.openWindow(url); }));
 });
 `);
+
+// Rayan's Arène : prix et rapports publiés par arene/publier.py (lancé par mobile.yml avant la construction).
+// Absents en local ou sans réseau : la tuile l'indique.
+const publieArene = join(root, "../arene/publie");
+if (existsSync(publieArene)) cpSync(publieArene, join(out, "arene"), { recursive: true });
 
 // Service worker : liste de tous les fichiers, mise en cache à l'installation (fichier par fichier : un échec
 // n'empêche pas l'installation, sinon iOS n'active jamais le service et les notifications ne marchent pas), réseau d'abord pour les pages.

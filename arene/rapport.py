@@ -87,10 +87,10 @@ def svg_courbes(res):
             f'aria-label="Courbe Arène contre acheter et garder sur les années de test">{"".join(lignes)}</svg>')
 
 
-def ecrire_rapport(actif, res, reglages):
+def ecrire_rapport(actif, res, reglages, chemin=None):
     SORTIES.mkdir(parents=True, exist_ok=True)
     jour = dt.date.today().isoformat()
-    chemin = SORTIES / f"{actif}-{jour}.html"
+    chemin = chemin or SORTIES / f"{actif}-{jour}.html"
     e = html.escape
     lignes_fen = "".join(
         f"<tr><td>{f['annee']}</td><td>{f['entrainement']}</td><td>{pct(f['entr_annuel'])}/an</td>"
