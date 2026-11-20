@@ -7,12 +7,15 @@ export interface Carte {
   url?: string;
   description?: string;
   color?: number;
+  author?: { name: string; url?: string };
+  fields?: { name: string; value: string; inline?: boolean }[];
   thumbnail?: { url: string };
+  image?: { url: string };
   footer?: { text: string };
   timestamp?: string;
 }
 
-export const COULEURS = { pepite: 0x2ecc71, promo: 0xe67e22, recherche: 0x3498db, info: 0x95a5a6 };
+export const COULEURS = { pepite: 0x2ecc71, dingue: 0xff0040, info: 0x95a5a6 };
 
 /** Discord accepte au plus 10 cartes par message. */
 const PAR_MESSAGE = 10;
@@ -28,18 +31,22 @@ export function couper(t: string, max: number): string {
   return t.length > max ? t.slice(0, max - 1) + "…" : t;
 }
 
-/** Envoie les cartes par paquets de 10 ; respecte l'attente demandée par Discord s'il freine (code 429). */
+/** Envoie les cartes par paquets de 10 ; respecte l'attente demandée par Discord s'il freine (code 429).
+ *  Tout le monde n'est tagué que si `taguerTout` est demandé : ni un texte ni un titre d'annonce ne tague sinon. */
 export async function envoyerDiscord(
   webhook: string,
   cartes: Carte[],
   contenu?: string,
   chercher: typeof fetch = fetch,
+  taguerTout = false,
 ): Promise<void> {
   const paquets: Carte[][] = [];
   for (let i = 0; i < cartes.length; i += PAR_MESSAGE) paquets.push(cartes.slice(i, i + PAR_MESSAGE));
   if (!paquets.length) paquets.push([]);
   for (const [i, embeds] of paquets.entries()) {
-    const corps = JSON.stringify({ username: "Bonnes Affaires", content: i === 0 ? contenu : undefined, embeds });
+    const texte = i === 0 ? contenu : undefined;
+    const mentions = { parse: taguerTout && texte ? ["everyone"] : [] };
+    const corps = JSON.stringify({ username: "Bonnes Affaires", content: texte, embeds, allowed_mentions: mentions });
     for (let essai = 0; ; essai++) {
       const rep = await chercher(webhook, { method: "POST", headers: { "Content-Type": "application/json" }, body: corps });
       if (rep.ok) break;
