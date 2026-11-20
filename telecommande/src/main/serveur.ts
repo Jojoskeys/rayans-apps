@@ -325,6 +325,25 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           return envoyer(200, { ok: true, retour: r });
         }
 
+        case "GET /api/studio/stories":
+          return envoyer(200, { stories: studio.aPoster(dossierStudio()) });
+
+        case "GET /api/studio/story": {
+          const p = studio.cheminStory(dossierStudio(), url.searchParams.get("id") ?? "");
+          if (!p) throw new ErreurHttp(404, "story introuvable");
+          res.writeHead(200, { ...entetesCors, "Content-Type": "video/mp4", "Content-Length": String(fs.statSync(p).size), "Cache-Control": "no-store" });
+          await pipeline(fs.createReadStream(p), res);
+          return;
+        }
+
+        case "POST /api/studio/story/postee": {
+          const b = await lireJson(req);
+          try { studio.marquerPostee(dossierStudio(), String(b.id ?? "")); }
+          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
+          ctx.journaliser("Story postée", String(b.id ?? ""));
+          return envoyer(200, { ok: true });
+        }
+
         case "GET /api/studio/scripts":
           return envoyer(200, { scripts: studio.listerScripts(dossierScripts()) });
 
