@@ -4,7 +4,7 @@ import Toybox.Test;
 
 (:test)
 function filePlafonnee(logger as Test.Logger) as Boolean {
-    var f = [];
+    var f = [] as Array;
     for (var i = 0; i < FILE_MAX + 5; i++) {
         f = Attente.avecSaisie(f, { "id" => "s" + i.format("%d"), "type" => "eau", "at" => 1800000000 + i } as Dictionary);
     }
