@@ -11,6 +11,7 @@ aucun compte.
 
 ```
 npm run demo     # classement d'exemple, sans réseau ni réglages
+node src/bot.ts  # un passage du bot Discord (--essai : sans envoi)
 npm start        # vraie recherche (eBay si clés + fichiers du dossier imports/)
 npm test
 ```
@@ -44,6 +45,8 @@ gardé mais marqué « méfiance » : c'est souvent une arnaque.
 | **Facebook Marketplace** | Aucune API Marketplace ; Meta interdit la collecte automatique sans permission | Non (Meta poursuit en justice) | Notifications Marketplace + import de fichier |
 | **Back Market** | API réservée aux vendeurs | Non | Sert de **prix habituel** de l'électronique reconditionnée, à recopier dans `prixHabituel` ; alertes prix du site |
 | **Vestiaire Collective** | Pas d'API publique ; articles de marque, contrôle d'authenticité possible | Non | Relevé sur demande (recherches de marque : les titres ne donnent pas le modèle) |
+| **Dealabs** | Flux RSS officiels (nouveaux, tendance), publiés pour être suivis | Oui, par ses flux | **Branché au bot Discord** : bons plans Amazon, Cdiscount, Fnac, Darty, Boulanger… avec la température (votes) et le prix habituel quand l'auteur le donne |
+| **Amazon** | API produits réservée aux affiliés qui vendent déjà ; le site interdit l'aspiration | Non | Ses promos arrivent par Dealabs |
 | **Rakuten** | Marketplace France fermée le 30 septembre 2026 | — | Abandonné |
 
 Les « API Vinted / Leboncoin / Facebook » vendues en ligne (Apify, RapidAPI...) sont des robots
@@ -122,6 +125,34 @@ Crée la tâche planifiée Windows « Rayan's Bonnes Affaires » : elle lance `l
 session (pas de mot de passe enregistré, pas de droits administrateur), et rattrape le lancement dès que le
 PC est rallumé s'il était éteint à l'heure prévue. Le compte rendu va dans `resultats\journal.txt` et la
 tuile de l'iPhone est mise à jour à chaque passage.
+
+## Bot Discord (toutes les 5 minutes, jour et nuit)
+
+Le bot poste dans un salon de ton serveur Discord chaque nouvelle affaire, avec photo, prix, réduction et lien :
+
+- 🔎 **mes recherches** (celles de `reglages.json`) trouvées sur Dealabs, et sur eBay quand les clés sont là
+  (offres sûres sous le prix habituel ; 💎 pour une pépite) ;
+- 📣 **grosses promos** Dealabs, tous produits : au moins `degresMin` (300°) de votes de la communauté, ou
+  au moins `reductionMin` (50 %) sous le prix habituel. `"grossesPromos": false` pour ne garder que mes recherches.
+
+Jamais deux fois la même annonce (`resultats\bot-deja-vus.json`). Le premier passage ne poste que « bot en
+marche » : ce qui était déjà en ligne est retenu sans envoi. Vinted et Leboncoin n'y sont pas (robots interdits,
+risque de blocage de la connexion de la box) : leurs alertes officielles restent la voie sûre.
+
+1. Discord : sur ton serveur, paramètres du salon → **Intégrations** → **Webhooks** → **Nouveau webhook** →
+   **Copier l'URL du webhook**. Ce lien vaut un mot de passe : il va seulement dans `reglages.json`
+   (`"discord"` → `"webhook"`), jamais dans le code ni un message.
+2. Essai sans rien envoyer : `node src/bot.ts --essai`
+3. Mise en marche :
+
+```
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier-bot.ps1                 (toutes les 5 min)
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier-bot.ps1 -Intervalle 10   (autre rythme)
+powershell -ExecutionPolicy Bypass -File bonnes-affaires\planifier-bot.ps1 -Retirer         (arrêter)
+```
+
+Tâche planifiée « Rayan's Bonnes Affaires - Discord », sans fenêtre, dans ta session. Compte rendu :
+`resultats\journal-bot.txt`. Sur le téléphone, active les notifications du salon dans l'appli Discord.
 
 ## Relevé sur demande (Leboncoin, Vinted)
 
