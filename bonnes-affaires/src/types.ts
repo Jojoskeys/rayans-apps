@@ -66,6 +66,17 @@ export interface Reglages {
   /** Nombre d'offres affichées. */
   nombre: number;
   ebay?: { clientId: string; clientSecret: string };
+  /** Bot Discord (bot.ts) : salon où envoyer les bonnes affaires. */
+  discord?: {
+    /** Lien du webhook du salon (vaut un mot de passe : reste dans reglages.json). */
+    webhook: string;
+    /** Envoyer aussi les grosses promos Dealabs hors de mes recherches. */
+    grossesPromos?: boolean;
+    /** Grosse promo : bon plan au moins aussi « chaud » (votes de la communauté)… */
+    degresMin?: number;
+    /** …ou au moins cette réduction sur son prix habituel (0,5 = 50 %). */
+    reductionMin?: number;
+  };
   recherches: Recherche[];
 }
 
