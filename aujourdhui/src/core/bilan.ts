@@ -1,15 +1,22 @@
 // Bilan quotidien et adhkar :
 //   - le matin, à Fajr (Sobh) : adhkar as-sabâh, puis « comment je me sens aujourd'hui » ;
 //   - entre Asr et Maghrib : adhkar al-masâ' (rappel avant Maghrib, et un dernier juste avant s'ils ne sont pas faits) ;
-//   - le soir (17 h 30 par défaut) : comment s'est passée la journée, comment je me sens, ce que je veux faire demain.
-// Ce qui est noté pour demain devient, le lendemain, une liste à cocher.
+//   - le soir (17 h 30 par défaut) : comment s'est passée la journée, comment je me sens, ce que je veux faire demain,
+//     et trois questions facultatives (ce qui a marché, ce qui a coincé, LA priorité de demain).
+// Ce qui est noté pour demain devient, le lendemain, une liste à cocher ; la priorité s'affiche en haut.
 // Fonctions pures : l'heure, les heures de prière et les données sont passées en paramètre.
 
 import { todayISO } from "./counts.ts";
 import { citationsDuJour, formater } from "./citations.ts";
 
 export interface EntreeMatin { humeur: number; ressenti: string; at: number }
-export interface EntreeSoir { humeur: number; journee: string; ressenti: string; at: number }
+export interface EntreeSoir {
+  humeur: number; journee: string; ressenti: string; at: number;
+  /** Questions facultatives : ce qui a marché, ce qui a coincé, LA priorité de demain. */
+  marche?: string; coince?: string; priorite?: string;
+}
+/** Réponses facultatives du bilan du soir. */
+export interface SoirPlus { marche?: string; coince?: string; priorite?: string }
 export interface APrevoir { id: string; texte: string; fait: boolean }
 
 export interface JourBilan {
@@ -17,6 +24,8 @@ export interface JourBilan {
   soir?: EntreeSoir;
   /** Ce qui est prévu pour ce jour-là (noté la veille au soir). */
   prevu?: APrevoir[];
+  /** LA priorité de ce jour-là (notée la veille au soir). */
+  priorite?: string;
   adhkar?: { sabah?: number; masa?: number };
 }
 
@@ -83,16 +92,32 @@ export function noterMatin(d: BilanData, now: number, humeur: number, ressenti: 
   return majJour(d, todayISO(now), (j) => ({ ...j, matin: { humeur, ressenti: nettoyerTexte(ressenti), at: now } }));
 }
 
-/** Bilan du soir ; `demain` devient la liste prévue pour le lendemain (remplace celle déjà notée ce soir). */
-export function noterSoir(d: BilanData, now: number, humeur: number, journee: string, ressenti: string, demain: string[]): BilanData {
+/** Ne garde que les réponses facultatives non vides. */
+function plus(raw: unknown): SoirPlus {
+  const r = (raw ?? {}) as Record<string, unknown>;
+  const out: SoirPlus = {};
+  for (const k of ["marche", "coince", "priorite"] as const) {
+    const t = nettoyerTexte(r[k], k === "priorite" ? 300 : 2000).trim();
+    if (t) out[k] = t;
+  }
+  return out;
+}
+
+/**
+ * Bilan du soir ; `demain` devient la liste prévue pour le lendemain (remplace celle déjà notée ce soir).
+ * `extra` : ce qui a marché, ce qui a coincé, LA priorité de demain (facultatifs) ; la priorité s'affiche le lendemain.
+ */
+export function noterSoir(d: BilanData, now: number, humeur: number, journee: string, ressenti: string, demain: string[], extra: SoirPlus = {}): BilanData {
   if (!(humeur >= 1 && humeur <= 5)) throw new Error("Choisis comment tu te sens.");
   const jour = todayISO(now);
-  let next = majJour(d, jour, (j) => ({ ...j, soir: { humeur, journee: nettoyerTexte(journee), ressenti: nettoyerTexte(ressenti), at: now } }));
+  const x = plus(extra);
+  let next = majJour(d, jour, (j) => ({ ...j, soir: { humeur, journee: nettoyerTexte(journee), ressenti: nettoyerTexte(ressenti), at: now, ...x } }));
   const lignes = demain.map((t) => t.trim()).filter(Boolean).slice(0, 20);
   const demainJour = lendemain(jour);
   next = majJour(next, demainJour, (j) => {
     const anciens = new Map((j.prevu ?? []).map((p) => [p.texte, p]));
-    return { ...j, prevu: lignes.map((t, i) => anciens.get(t) ?? { id: `${demainJour}-${i}-${t.length}`, texte: t.slice(0, 300), fait: false }) };
+    const { priorite: _ancienne, ...reste } = j;
+    return { ...reste, prevu: lignes.map((t, i) => anciens.get(t) ?? { id: `${demainJour}-${i}-${t.length}`, texte: t.slice(0, 300), fait: false }), ...(x.priorite ? { priorite: x.priorite } : {}) };
   });
   return next;
 }
@@ -139,7 +164,8 @@ export function nettoyerBilan(raw: unknown): BilanData {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(k) || !v || typeof v !== "object") continue;
       const j: JourBilan = {};
       if (v.matin && typeof v.matin.humeur === "number") j.matin = { humeur: v.matin.humeur, ressenti: nettoyerTexte(v.matin.ressenti), at: Number(v.matin.at) || 0 };
-      if (v.soir && typeof v.soir.humeur === "number") j.soir = { humeur: v.soir.humeur, journee: nettoyerTexte(v.soir.journee), ressenti: nettoyerTexte(v.soir.ressenti), at: Number(v.soir.at) || 0 };
+      if (v.soir && typeof v.soir.humeur === "number") j.soir = { humeur: v.soir.humeur, journee: nettoyerTexte(v.soir.journee), ressenti: nettoyerTexte(v.soir.ressenti), at: Number(v.soir.at) || 0, ...plus(v.soir) };
+      if (typeof v.priorite === "string" && v.priorite.trim()) j.priorite = v.priorite.trim().slice(0, 300);
       if (Array.isArray(v.prevu)) j.prevu = v.prevu.filter((p) => p && typeof p.id === "string" && typeof p.texte === "string").map((p) => ({ id: p.id, texte: p.texte, fait: !!p.fait }));
       if (v.adhkar && typeof v.adhkar === "object") j.adhkar = { ...(typeof v.adhkar.sabah === "number" ? { sabah: v.adhkar.sabah } : {}), ...(typeof v.adhkar.masa === "number" ? { masa: v.adhkar.masa } : {}) };
       jours[k] = j;
@@ -216,6 +242,7 @@ export function notificationsBilan(d: BilanData, now: number, p: Prieres | null)
     const lignes: string[] = [];
     if (d.reglages.adhkar && !j.adhkar?.sabah) lignes.push(`Adhkar as-sabâh${m.finSabah ? ` (avant le lever du soleil, ${heure(m.finSabah)})` : ""}.`);
     if (d.reglages.actif && !j.matin) lignes.push("Comment tu te sens aujourd'hui ? Écris-le dans Rayan's Aujourd'hui.");
+    if (d.reglages.actif && j.priorite) lignes.unshift(`Priorité du jour : ${j.priorite}`);
     const prevu = (j.prevu ?? []).filter((x) => !x.fait);
     if (d.reglages.actif && prevu.length) lignes.push(`Prévu hier soir : ${prevu.map((x) => x.texte).join(" · ")}`);
     if (lignes.length) messages.push({ titre: "Bonjour : début de journée", corps: lignes.join("\n") });
@@ -247,7 +274,7 @@ export function notificationsBilan(d: BilanData, now: number, p: Prieres | null)
   // Soir : bilan de la journée et ce qu'il y a à faire demain.
   if (d.reglages.actif && du("soir", m.soir) && !j.soir) {
     marquer("soir");
-    messages.push({ titre: "Bilan du soir", corps: "Comment s'est passée ta journée ? Comment tu te sens ? Note ce que tu veux faire demain." });
+    messages.push({ titre: "Bilan du soir", corps: "Comment s'est passée ta journée ? Ce qui a marché, ce qui a coincé, LA priorité de demain, et ta liste pour demain." });
   }
   const data = envoyes.size !== d.envoyes.length ? { ...d, envoyes: [...envoyes].filter((e) => e.slice(0, 10) >= veille(veille(jour))) } : d;
   return { data, messages };

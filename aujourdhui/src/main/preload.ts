@@ -41,7 +41,7 @@ const api: AujourdhuiApi = {
   },
   bilan: {
     morning: (h, t) => ipcRenderer.invoke("bilan-matin", h, t),
-    evening: (h, j, r, d) => ipcRenderer.invoke("bilan-soir", h, j, r, d),
+    evening: (h, j, r, d, x) => ipcRenderer.invoke("bilan-soir", h, j, r, d, x),
     togglePlanned: (id) => ipcRenderer.invoke("bilan-prevu", id),
     toggleAdhkar: (q) => ipcRenderer.invoke("bilan-adhkar", q),
     settings: (r) => ipcRenderer.invoke("bilan-reglages", r),

@@ -67,6 +67,25 @@ test("bilan du soir à 17 h 30, puis la liste pour demain devient la liste du le
   assert.equal(d2.jours["2026-11-18"].prevu!.length, 3);
 });
 
+test("bilan du soir : ce qui a marché, ce qui a coincé, LA priorité de demain (facultatifs), datés et relus", () => {
+  // Sans les questions facultatives : rien de plus n'est gardé.
+  let d = noterSoir(BILAN_VIDE, at(17, 21), 3, "", "", ["Réviser"]);
+  assert.deepEqual(Object.keys(d.jours["2026-11-17"].soir!).sort(), ["at", "humeur", "journee", "ressenti"]);
+  assert.equal(d.jours["2026-11-18"].priorite, undefined);
+  d = noterSoir(d, at(17, 21, 30), 4, "", "", ["Réviser", "Courses"], { marche: " Séance faite ", coince: "Trop de téléphone", priorite: "Finir le TD 4" });
+  const soir = d.jours["2026-11-17"].soir!;
+  assert.deepEqual([soir.marche, soir.coince, soir.priorite], ["Séance faite", "Trop de téléphone", "Finir le TD 4"]);
+  // Le lendemain : la priorité en tête du rappel du matin, avant la liste de demain.
+  assert.equal(d.jours["2026-11-18"].priorite, "Finir le TD 4");
+  const r = envoyer(d, at(18, 6, 52), prieres(18));
+  assert.match(r.corps, /Priorité du jour : Finir le TD 4[\s\S]*Prévu hier soir : Réviser · Courses/);
+  assert.deepEqual(nettoyerBilan(JSON.parse(JSON.stringify(d))), d);
+  // Bilan modifié sans priorité : l'ancienne priorité de demain disparaît, la liste est gardée.
+  d = noterSoir(d, at(17, 22), 4, "", "", ["Réviser"], { priorite: "  " });
+  assert.equal(d.jours["2026-11-18"].priorite, undefined);
+  assert.equal(d.jours["2026-11-18"].prevu!.length, 1);
+});
+
 test("ressenti du matin, réglages et relecture du fichier", () => {
   let d = noterMatin(BILAN_VIDE, at(17, 7), 3, "Un peu fatigué, mais motivé.");
   assert.equal(d.jours["2026-11-17"].matin!.ressenti, "Un peu fatigué, mais motivé.");

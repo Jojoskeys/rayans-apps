@@ -6,7 +6,7 @@ import type { Avancement, ObjectifJour, Reglages, catalogue } from "../core/obje
 import type { Citation } from "../core/citations.ts";
 import type { SportView } from "../core/sportvue.ts";
 import type { Ajustement, BlocReglage, Perf, SeanceFaite, TypeSeance } from "../core/sport.ts";
-import type { APrevoir, EntreeMatin, EntreeSoir, JourBilan, Moments, Prieres, ReglagesBilan } from "../core/bilan.ts";
+import type { APrevoir, EntreeMatin, EntreeSoir, JourBilan, Moments, Prieres, ReglagesBilan, SoirPlus } from "../core/bilan.ts";
 
 /** Synchronisation avec l'iPhone (Rayan's Mobile) par un dépôt GitHub privé. */
 export interface SyncView {
@@ -143,7 +143,7 @@ export interface AujourdhuiApi {
   };
   bilan: {
     morning(humeur: number, ressenti: string): Promise<BilanView>;
-    evening(humeur: number, journee: string, ressenti: string, demain: string[]): Promise<BilanView>;
+    evening(humeur: number, journee: string, ressenti: string, demain: string[], extra?: SoirPlus): Promise<BilanView>;
     togglePlanned(id: string): Promise<BilanView>;
     toggleAdhkar(quand: "sabah" | "masa"): Promise<BilanView>;
     settings(r: Partial<ReglagesBilan>): Promise<BilanView>;

@@ -17,15 +17,33 @@ test("chaque exercice du programme a sa fiche (muscles, explication, consignes)"
   }
 });
 
-test("semaine : lundi Upper, mardi Leg, mercredi fractionné… avec les charges de départ", () => {
+test("semaine : 3 séances de muscu, 3 courses, 1 repos ; jamais de course dure à côté des jambes", () => {
   const lundi = seanceDuJour(SPORT_DEPART, "2026-11-16", at(16, 8));
   assert.equal(lundi.type, "upper");
   const dc = lundi.blocs.find((b) => b.ex === "developpe-couche")!;
   assert.deepEqual([dc.series, dc.reps, dc.prescription.charge], [4, 5, 40]);
   assert.equal(lundi.blocs.find((b) => b.ex === "tractions-lestees")!.prescription.charge, 0);
   assert.equal(lundi.blocs[0].ex, "echauffement-epaule", "échauffement d'épaule en premier");
-  assert.equal(seanceDuJour(SPORT_DEPART, "2026-11-17", at(17, 8)).type, "leg");
-  assert.equal(seanceDuJour(SPORT_DEPART, "2026-11-18", at(18, 8)).type, "fractionne");
+  const types = [16, 17, 18, 19, 20, 21, 22].map((j) => seanceDuJour(SPORT_DEPART, `2026-11-${j}`, at(j, 8)).type);
+  assert.deepEqual(types, ["upper", "fractionne", "pull", "leg", "repos", "seuil", "longue"]);
+  const iJambes = types.indexOf("leg");
+  for (const k of [iJambes - 1, iJambes + 1]) assert.ok(!["fractionne", "seuil"].includes(types[(k + 7) % 7]));
+  // L'échauffement d'épaule reste avant la calisthénie.
+  assert.equal(seanceDuJour(SPORT_DEPART, "2026-11-18", at(18, 8)).blocs[0].ex, "echauffement-epaule");
+});
+
+test("reprise progressive : dips dès la semaine 2, élastique semaine 3, pompes en poirier et pistol semaine 5", () => {
+  const ids = (jour: string) => seanceDuJour(SPORT_DEPART, jour, 0).blocs.map((b) => b.ex);
+  assert.ok(!ids("2026-11-16").includes("dips"));
+  assert.ok(ids("2026-11-23").includes("dips"));
+  assert.ok(ids("2026-11-16").includes("curl-marteau") && ids("2026-11-16").includes("rowing-pronation"));
+  assert.ok(!ids("2026-11-25").includes("handstand-elastique"));
+  assert.ok(ids("2026-12-02").includes("handstand-elastique"));
+  assert.ok(ids("2026-12-09").includes("hspu-assiste") && !ids("2026-12-09").includes("hspu-mur"));
+  assert.ok(ids("2026-12-16").includes("hspu-mur") && !ids("2026-12-16").includes("hspu-assiste"));
+  assert.ok(ids("2026-12-10").includes("pistol-prep") && !ids("2026-12-10").includes("pistol-squat"));
+  assert.ok(ids("2026-12-17").includes("pistol-squat") && !ids("2026-12-17").includes("pistol-prep"));
+  assert.ok(ids("2026-11-19").includes("squat-profond"));
 });
 
 test("progression : réussi → +2,5 kg ; pas assez → même charge ; deux échecs → −5 %", () => {
@@ -66,8 +84,13 @@ test("course : 5 km estimé d'après la meilleure perf, allures et plan sur 4 se
   assert.equal(allure(a.facile[0]), "6:45");
   assert.equal(allure(a.seuil), "6:00");
   assert.equal(allure(a.intervalle), "5:35");
-  assert.match(planCourse("fractionne", SPORT_DEPART, "2026-11-18", at(18, 8)).titre, /6 × 400 m/);
-  assert.match(planCourse("fractionne", SPORT_DEPART, "2026-11-25", at(25, 8)).titre, /8 × 400 m/);
+  const f = planCourse("fractionne", SPORT_DEPART, "2026-11-17", at(17, 8));
+  assert.match(f.titre, /4 × 4 min/);
+  assert.equal(f.dureeMin, 12 + 4 * 7 + 10);
+  assert.match(f.etapes.join(" "), /3 min de trot/);
+  assert.match(planCourse("fractionne", SPORT_DEPART, "2026-12-01", at(17, 8)).titre, /5 × 4 min/);
+  assert.match(planCourse("fractionne", SPORT_DEPART, "2026-12-08", at(17, 8)).titre, /3 × 4 min/, "semaine 4 allégée");
+  assert.match(planCourse("seuil", SPORT_DEPART, "2026-11-21", at(17, 8)).titre, /3 × 8 min/);
   assert.ok(planCourse("seuil", SPORT_DEPART, "2026-12-12", at(17, 8)).test, "semaine 4 : test 5 km");
   assert.match(planCourse("longue", SPORT_DEPART, "2026-11-22", at(22, 8)).titre, /40 min/);
   // Un test 5 km plus rapide recale les allures.
@@ -86,7 +109,8 @@ test("créneau : premier moment libre assez long selon les cours", () => {
   assert.equal(new Date(creneau("2026-11-21", 50, [])!.debut).toTimeString().slice(0, 5), "09:30");
   // Journée pleine jusqu'à 21 h : rien.
   assert.equal(creneau("2026-11-17", 75, [{ start: at(17, 7), end: at(17, 21) }]), null);
-  assert.match(ligneSport(SPORT_DEPART, "2026-11-17", cours, at(17, 7))!, /Jambes \(Leg\) à 18 h 20/);
+  const jeudi = cours.map((c) => ({ start: c.start + 2 * 86_400_000, end: c.end + 2 * 86_400_000 }));
+  assert.match(ligneSport(SPORT_DEPART, "2026-11-19", jeudi, at(19, 7))!, /Jambes et mobilité à 18 h 20/);
 });
 
 test("tout se règle : départ, maximum, incrément, séries, reps, repos, + / −, semaine", () => {
@@ -111,8 +135,8 @@ test("tout se règle : départ, maximum, incrément, séries, reps, repos, + / �
   const lundi = seanceDuJour(d, "2026-12-14", new Date(2026, 11, 14, 8).getTime()).blocs.find((b) => b.ex === "developpe-couche")!;
   assert.deepEqual([lundi.series, lundi.prescription.reps, lundi.repos], [5, 3, 240]);
   // Plage modifiée, max de reps au poids du corps.
-  d = regler(d, "rowing-barre", { plage: [6, 8] });
-  assert.deepEqual(seanceDuJour(d, "2026-12-14", 0).blocs.find((b) => b.ex === "rowing-barre")!.plage, [6, 8]);
+  d = regler(d, "rowing-pronation", { plage: [6, 8] });
+  assert.deepEqual(seanceDuJour(d, "2026-12-14", 0).blocs.find((b) => b.ex === "rowing-pronation")!.plage, [6, 8]);
   d = regler(d, "tractions-strictes", { depart: 8, max: 12 });
   assert.equal(prescriptions(d)["tractions-strictes"].reps, 8);
   const v = sportView(d, [], at(17, 8));
@@ -134,11 +158,12 @@ test("tout se règle : départ, maximum, incrément, séries, reps, repos, + / �
 });
 
 test("pour les objectifs : séance faite et reps de pompes / tractions par jour", () => {
-  const d = enregistrer(SPORT_DEPART, seance("2026-11-20", "pull", [{ bloc: "tractions-strictes", series: [7, 7, 6, 6, 5].map((r) => ({ charge: 0, reps: r })) }], at(20, 19)));
+  const d = enregistrer(SPORT_DEPART, seance("2026-11-18", "pull", [{ bloc: "tractions-strictes", series: [7, 7, 6, 6, 5].map((r) => ({ charge: 0, reps: r })) }], at(18, 19)));
   const r = resumeSport(d);
-  assert.ok(r.seanceFaite["2026-11-20"]);
-  assert.equal(r.sportReps["2026-11-20"]["tractions-strictes"], 31);
-  assert.ok(!r.repos("2026-11-20"));
+  assert.ok(r.seanceFaite["2026-11-18"]);
+  assert.equal(r.sportReps["2026-11-18"]["tractions-strictes"], 31);
+  assert.ok(!r.repos("2026-11-18"));
+  assert.ok(r.repos("2026-11-20"), "vendredi : repos");
 });
 
 test("profil privé : charges de départ et perfs importées sans écraser ce qui est déjà réglé", () => {
