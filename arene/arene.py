@@ -402,10 +402,20 @@ def main(argv=None):
     l.add_argument("--generations", type=int, default=20)
     l.add_argument("--population", type=int, default=200)
     l.add_argument("--graine", type=int, default=1)
+    m = sp.add_parser("mensuel", help="plan mensuel : X € chaque mois sur un ETF, frais compris")
+    m.add_argument("actif", help="symbole déjà téléchargé (ex. CW8.PA), ou « demo »")
+    m.add_argument("--montant", type=float, default=100.0, help="versement mensuel en euros (100 par défaut)")
+    m.add_argument("--fractions", action="store_true", help="morceaux de part (sinon parts entières, comme un PEA)")
     a = p.parse_args(argv)
     if a.cmd == "telecharger":
         for actif in a.actifs:
             telecharger(actif)
+        return
+    if a.cmd == "mensuel":
+        from mensuel import ecrire_rapport_mensuel, plan_mensuel, resume_console_mensuel
+        dates, prix = charger(a.actif)
+        r = plan_mensuel(dates, list(prix), a.montant, a.fractions)
+        resume_console_mensuel(a.actif, r, ecrire_rapport_mensuel(a.actif, r))
         return
     from rapport import ecrire_rapport
     dates, prix = charger(a.actif)

@@ -19,6 +19,7 @@ export const APPS: MobileApp[] = [
   { id: "studio", name: "Studio", tagline: "Vidéos à valider", icon: "▶", color: "#D9534F", files: [] },
   { id: "demain", name: "Demain", tagline: "Heure de réveil, Fajr", icon: "☼", color: "#F08A4B", files: [] },
   { id: "actu", name: "Ton monde", tagline: "L'actu du monde ce matin", icon: "◍", color: "#4A9FD8", files: ["actu"] },
+  { id: "arene", name: "Arène", tagline: "Bourse en argent fictif", icon: "◈", color: "#E3A33B", files: [] },
   { id: "courses", name: "Courses", tagline: "Liste par rayon", icon: "✓", color: "#3BA776", files: ["courses"] },
   { id: "memo", name: "Mémo", tagline: "Idées et notes rapides", icon: "✎", color: "#C77DDB", files: ["memos"] },
   { id: "papiers", name: "Papiers", tagline: "Documents retrouvables", icon: "▤", color: "#7A8BA6", files: [] },
