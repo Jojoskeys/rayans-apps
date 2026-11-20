@@ -2,6 +2,7 @@
 // « tailscale serve » (HTTPS, réseau Tailscale seulement). Chaque requête doit porter :
 //   - l'en-tête Tailscale-User-Login ajouté par Tailscale, égal au compte propriétaire du PC ;
 //   - le code d'association (Authorization: Bearer …), comparé à temps constant, avec limite d'essais.
+// Le code de la montre (Rayan's Montre) ne sert qu'à une chose : POST /api/montre.
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
@@ -17,6 +18,7 @@ import * as studio from "../core/studio.ts";
 import * as papiers from "../core/papiers.ts";
 import * as favoris from "../core/favoris.ts";
 import * as recettes from "../core/recettes.ts";
+import * as montre from "../core/montre.ts";
 import * as bonnesAffaires from "../core/bonnes-affaires.ts";
 import { abonnementValide, ErreurRappel } from "../core/minuteurs.ts";
 import type { Push } from "./push.ts";
@@ -28,6 +30,8 @@ export interface Contexte {
   donnees(): Donnees;
   journaliser(quoi: string, detail?: string): void;
   dossierBoite: string;
+  /** Dossier de telecommande.json ; montre.json y est rangé aussi. */
+  dossierDonnees: string;
   /** Appelé à chaque requête acceptée (notification « iPhone connecté »). */
   utilise(appareil: string): void;
   alerte(titre: string, texte: string): void;
@@ -104,16 +108,18 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
       if (!proprietaire || typeof login !== "string" || login.toLowerCase() !== proprietaire.toLowerCase()) throw new ErreurHttp(403, "accès réservé à ton compte Tailscale");
       if (limite.bloque()) throw new ErreurHttp(429, "trop d'essais avec un mauvais code : réessaie dans 15 minutes");
       const jeton = (req.headers.authorization ?? "").replace(/^Bearer\s+/i, "");
-      if (!codeValide(jeton, ctx.donnees().code)) {
+      const url = new URL(req.url ?? "/", "http://pc");
+      const route = `${req.method} ${url.pathname}`;
+      const parLaMontre = codeValide(jeton, ctx.donnees().codeMontre);
+      if (parLaMontre && route !== "POST /api/montre") throw new ErreurHttp(403, "le code de la montre sert seulement à envoyer ses saisies");
+      if (!parLaMontre && !codeValide(jeton, ctx.donnees().code)) {
         if (limite.echec()) { ctx.journaliser("Télécommande bloquée 15 min", "trop de codes faux"); ctx.alerte("Rayan's Télécommande", "Trop d'essais avec un mauvais code : la télécommande est bloquée 15 minutes."); }
         throw new ErreurHttp(401, "code d'association incorrect");
       }
       limite.reussite();
-      const appareil = String(req.headers["tailscale-user-name"] ?? login);
+      const appareil = parLaMontre ? "Rayan's Montre" : String(req.headers["tailscale-user-name"] ?? login);
       ctx.utilise(appareil);
 
-      const url = new URL(req.url ?? "/", "http://pc");
-      const route = `${req.method} ${url.pathname}`;
       const d = ctx.donnees();
 
       switch (route) {
@@ -425,6 +431,17 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           catch (e) { if (e instanceof recettes.ErreurRecettes) throw new ErreurHttp(e.code, e.message); throw e; }
           return envoyer(200, { ok: true });
         }
+
+        // ----- Rayan's Montre : saisies faites sur la montre Garmin (code montre ou code principal) -----
+        case "POST /api/montre": {
+          const b = await lireJson(req);
+          try { return envoyer(200, montre.recevoir(montre.fichierMontre(ctx.dossierDonnees), montre.demande(b))); }
+          catch (e) { if (e instanceof montre.ErreurMontre) throw new ErreurHttp(e.code, e.message); throw e; }
+        }
+
+        case "GET /api/montre":
+          try { return envoyer(200, montre.vue(montre.lire(montre.fichierMontre(ctx.dossierDonnees)))); }
+          catch (e) { if (e instanceof montre.ErreurMontre) throw new ErreurHttp(e.code, e.message); throw e; }
 
         // ----- Rayan's Papiers : photos de documents, texte lu par l'OCR de Windows -----
         case "GET /api/papiers":

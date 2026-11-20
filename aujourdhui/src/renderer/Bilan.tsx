@@ -118,7 +118,8 @@ function FormMatin({ notify }: { notify: (t: string) => void }) {
 
 function FormSoir({ b, notify, onDone }: { b: BilanView; notify: (t: string) => void; onDone: () => void }) {
   const s = b.aujourdhui.soir;
-  const [humeur, setHumeur] = useState(s?.humeur ?? 0);
+  const [humeur, setHumeur] = useState(s?.humeur ?? b.montre?.humeur ?? 0);
+  const m = b.montre;
   const [journee, setJournee] = useState(s?.journee ?? "");
   const [ressenti, setRessenti] = useState(s?.ressenti ?? "");
   const [demain, setDemain] = useState<string[]>(b.demain.length ? b.demain.map((p) => p.texte) : [""]);
@@ -130,6 +131,7 @@ function FormSoir({ b, notify, onDone }: { b: BilanView; notify: (t: string) => 
     api.bilan.evening(humeur, journee, ressenti, demain, { marche, coince, priorite }).then(() => { notify("Bilan enregistré. Bonne soirée !"); onDone(); }).catch((e) => notify(errText(e)));
   return (
     <div className="bilan-form">
+      {m && <p className="aide" data-testid="montre-soir">⌚ Sur la montre aujourd'hui : {m.eau} verre{m.eau > 1 ? "s" : ""} d'eau{m.seances ? " · séance faite" : ""}{m.humeur ? ` · humeur ${HUMEURS[m.humeur - 1]}${s ? "" : " (reprise ci-dessous)"}` : ""}</p>}
       <p>Comment s'est passée ta journée ?</p>
       <textarea data-testid="journee-soir" rows={3} placeholder="Ce qui s'est bien passé, ce qui a été difficile…" value={journee} onChange={(e) => setJournee(e.target.value)} />
       <p>Comment tu te sens ?</p>

@@ -10,7 +10,9 @@ export interface VideoYoutube { id: string; titre: string; publiee: number }
 /** On ne prévient que pour une vidéo sortie dans les 12 dernières heures (pas de rattrapage au premier passage). */
 export const FENETRE = 12 * 3_600_000;
 
-const entites = (s: string) => s.replace(/&quot;/g, "\"").replace(/&#39;|&apos;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+/** Entités XML et HTML courantes → caractères (aussi celles en chiffres, « &#233; » ou « &#xE9; »). Partagé avec actu.ts. */
+export const entites = (s: string) => s.replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16))).replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(+d))
+  .replace(/&quot;/g, "\"").replace(/&apos;/g, "'").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
 
 /** Flux Atom d'une chaîne → vidéos (identifiant, titre, date de publication). */
 export function lireFlux(xml: string): VideoYoutube[] {

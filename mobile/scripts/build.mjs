@@ -31,12 +31,14 @@ export const PAGES = [
   { id: "telecommande", title: "Télécommande", entry: "src/apps/telecommande.tsx", root: "racine" },
   { id: "studio", title: "Studio", entry: "src/apps/studio.tsx", root: "racine" },
   { id: "demain", title: "Demain", entry: "src/apps/demain.tsx", root: "racine" },
+  { id: "actu", title: "Ton monde", entry: "src/apps/actu.tsx", root: "racine" },
   { id: "courses", title: "Courses", entry: "src/apps/courses.tsx", root: "racine" },
   { id: "memo", title: "Mémo", entry: "src/apps/memo.tsx", root: "racine" },
   { id: "papiers", title: "Papiers", entry: "src/apps/papiers.tsx", root: "racine" },
   { id: "favoris", title: "Favoris", entry: "src/apps/favoris.tsx", root: "racine" },
   { id: "recettes", title: "Recettes", entry: "src/apps/recettes.tsx", root: "racine" },
   { id: "bonnes-affaires", title: "Bonnes affaires", entry: "src/apps/bonnes-affaires.tsx", root: "racine" },
+  { id: "montre", title: "Montre", entry: "src/apps/montre.tsx", root: "racine" },
 ];
 
 const tauriStub = join(root, "src/stubs/tauri.ts");

@@ -1,11 +1,13 @@
 // Veilleur de Rayan's Mobile : lancé toutes les 20 minutes (7 h–22 h) par GitHub Actions dans le dépôt privé des
 // données. Il télécharge l'emploi du temps ADE (même PC éteint), repère les changements, puis envoie les
-// notifications au téléphone (changements de cours, rappels de Ma journée, résumé du matin, rappel du soir).
+// notifications au téléphone (changements de cours, rappels de Ma journée, résumé du matin, rappel du soir) et
+// prépare « Ton monde ce matin », la revue de l'actualité du jour (actu.ts).
 // Les données restent chiffrées dans le dépôt : il les déchiffre en mémoire avec la clé rangée dans le secret
 // RAYANS_CLE, et réécrit chiffré. Il n'écrit JAMAIS de donnée personnelle dans le journal (dépôt public du code).
 //
 // Variables : RAYANS_CLE, VAPID_PUBLIC, VAPID_PRIVATE, GITHUB_TOKEN, GITHUB_REPOSITORY ; RAYANS_GH_API pour les tests.
 // Facultative (vidéos en ligne) : VIDEOS_COMPTES ; RAYANS_YT pour les tests.
+// Facultative (« Ton monde ce matin ») : ANTHROPIC_API_KEY pour les résumés par Claude ; sans elle, édition simple.
 import webpush from "web-push";
 import { decrypt, encrypt, isEncrypted, unb64 } from "../../mobile/src/shared/e2e.ts";
 import { mergeText } from "../../mobile/src/shared/merge.ts";
@@ -13,7 +15,10 @@ import { parseIcs } from "../../aujourdhui/src/core/ics.ts";
 import { applyFetch, prune, sanitizeFac, type FacData } from "../../aujourdhui/src/core/fac.ts";
 import { sanitizeRoutine } from "../../aujourdhui/src/core/routine.ts";
 import { lireComptes, telechargerFlux, videosEnLigne } from "./videos.ts";
-import { DEFAULT_PREFS, EMPTY_STATE, plan, type Prefs, type VeilleurState } from "./plan.ts";
+import { DEFAULT_PREFS, EMPTY_STATE, fenetreActu, plan, type Prefs, type VeilleurState } from "./plan.ts";
+import { preparerEdition } from "./actu.ts";
+import { ajouterEdition, nettoyerActu } from "../../mobile/src/shared/actu.ts";
+import { todayISO } from "../../aujourdhui/src/core/counts.ts";
 
 const env = (k: string) => { const v = process.env[k]; if (!v) throw new Error(`variable ${k} manquante`); return v; };
 const API = process.env.RAYANS_GH_API || "https://api.github.com";
@@ -81,7 +86,7 @@ async function videos(now: number) {
 
 async function main() {
   const now = Date.now();
-  const [facF, routineF, revF, hifzF, ouvF, notifF, stateF, bilanF, objF, priereF, sportF] = await Promise.all(["fac", "routine", "revision", "hifz", "ouvertures", "notifications", "veilleur", "bilan", "objectifs", "priere", "sport"].map(pull));
+  const [facF, routineF, revF, hifzF, ouvF, notifF, stateF, bilanF, objF, priereF, sportF, actuF] = await Promise.all(["fac", "routine", "revision", "hifz", "ouvertures", "notifications", "veilleur", "bilan", "objectifs", "priere", "sport", "actu"].map(pull));
 
   // 1. Emploi du temps : téléchargé ici, même PC éteint.
   let fac: FacData | undefined = facF ? sanitizeFac(parse(facF)) : undefined;
@@ -102,12 +107,23 @@ async function main() {
   const notif = (parse(notifF) ?? {}) as { subscriptions?: { endpoint: string; keys: { p256dh: string; auth: string } }[]; prefs?: Partial<Prefs> };
   const prefs: Prefs = { ...DEFAULT_PREFS, ...(notif.prefs ?? {}) };
   const state: VeilleurState = { ...EMPTY_STATE, ...(parse(stateF) ?? {}) };
+
+  // 3. « Ton monde ce matin » : préparé une seule fois par jour, gardé quelques jours (fichier « actu », chiffré).
+  let actu = nettoyerActu(parse(actuF));
+  let edition = actu.editions.find((e) => e.jour === todayISO(now)) ?? null;
+  if (prefs.actu && !edition && fenetreActu(now, prefs)) {
+    try {
+      edition = await preparerEdition(now, { cle: process.env.ANTHROPIC_API_KEY || undefined, log });
+      if (edition) { actu = ajouterEdition(actu, edition); await save("actu", actuF, JSON.stringify(actu)); log(`actualité du jour prête (${edition.sujets.length} sujet(s), ${edition.mode})`); }
+    } catch (e) { log(`actualité indisponible : ${String((e as Error).message).slice(0, 80)}`); edition = null; }
+  }
   const { messages, state: next } = plan({
     now, prefs, state, fac, newChanges,
     routine: routineF ? sanitizeRoutine(parse(routineF)) : undefined,
     revision: parse(revF), hifz: parse(hifzF), ouvertures: parse(ouvF),
     bilan: parse(bilanF), objectifs: parse(objF), sport: parse(sportF), prieres: await heuresDuJour(parse(priereF), now), priere: parse(priereF),
     videos: prefs.videos ? await videos(now) : [],
+    actu: edition,
   });
   const subs = notif.subscriptions ?? [];
   log(`${messages.length} notification(s) à envoyer, ${subs.length} appareil(s)`);
