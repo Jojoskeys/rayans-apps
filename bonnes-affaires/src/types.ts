@@ -39,6 +39,8 @@ export interface Recherche {
   prixMax?: number;
   /** Mots qui écartent une annonce (en plus de la liste par défaut). */
   exclure?: string[];
+  /** Marque très copiée : conseil d'authentification, et méfiance au-delà de 45 % de rabais. */
+  copiee?: boolean;
 }
 
 export interface Domicile {

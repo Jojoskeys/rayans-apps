@@ -55,7 +55,7 @@ export function classer(annonces: Annonce[], reglages: Reglages): Offre[] {
       const ecart = prixHabituel - total;
       const ecartPct = ecart / prixHabituel;
       if (ecartPct < reglages.ecartMin) continue;
-      const analyse = analyser(a, ecartPct, r.categorie, originePrix, dansZone, reglages.distanceMaxKm);
+      const analyse = analyser(a, ecartPct, r.categorie, originePrix, dansZone, reglages.distanceMaxKm, r.copiee);
       // Pépite : sûre, très en dessous d'un prix habituel fiable, et qui rapporte vraiment quelque chose.
       const prixFiable = !originePrix.startsWith("médiane") || liste.length >= 8;
       const gainRevente = prixHabituel * (1 - reglages.fraisRevente) - total;
