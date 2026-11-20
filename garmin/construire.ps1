@@ -4,11 +4,13 @@
 #   .\construire.ps1 -Apps muscu
 #   .\construire.ps1 -Tests          # compile en version de test et lance les tests dans le simulateur
 #   .\construire.ps1 -Installer      # compile et copie sur la montre branchée en USB
+# Rayan's Montre : l'adresse du PC et le code montre viennent de montre\config.local.json (jamais dans le dépôt,
+# modèle : montre\config.exemple.json), écrits dans montre\source-config\Config.mc (généré, ignoré par git).
 # SDK : celui choisi dans le Connect IQ SDK Manager. Clé : %APPDATA%\Garmin\ConnectIQ\developer_key.der
 # (créée une fois, jamais dans le dépôt).
 param(
     [string]$Appareil = "fr165",
-    [string[]]$Apps = @("cadran-priere", "champ-5km", "muscu"),
+    [string[]]$Apps = @("cadran-priere", "champ-5km", "muscu", "montre"),
     [switch]$Tests,
     [switch]$Installer
 )
@@ -28,8 +30,36 @@ New-Item -ItemType Directory -Force $sortie | Out-Null
 if ($Tests -and -not (Get-Process simulator -ErrorAction SilentlyContinue)) {
     Start-Process (Join-Path $sdk "bin\simulator.exe"); Start-Sleep 8
 }
+# Config.mc de Rayan's Montre depuis config.local.json (sans fichier : app compilée « non configurée »).
+function Ecrire-ConfigMontre {
+    $local = Join-Path $ici "montre\config.local.json"
+    $adresse = ""; $code = ""
+    if (Test-Path $local) {
+        $c = Get-Content $local -Raw -Encoding UTF8 | ConvertFrom-Json
+        $adresse = ([string]$c.adresse).Trim().TrimEnd('/')
+        $code = ([string]$c.code).Trim()
+        if ($adresse -notmatch '^https://[A-Za-z0-9.-]+(:\d+)?$') { throw "montre\config.local.json : adresse attendue comme https://nom-du-pc.xxxx.ts.net" }
+        if ($code -notmatch '^[A-Za-z0-9-]{20,40}$') { throw "montre\config.local.json : code montre attendu (affiché dans Rayan's Télécommande sur le PC)" }
+    } else {
+        Write-Host "   montre\config.local.json absent : l'app dira « config absente » (modèle : config.exemple.json)" -ForegroundColor Yellow
+    }
+    $dossier = Join-Path $ici "montre\source-config"
+    New-Item -ItemType Directory -Force $dossier | Out-Null
+    $mc = @"
+// Généré par construire.ps1 depuis config.local.json : ne pas modifier, jamais dans le dépôt.
+import Toybox.Lang;
+
+module Config {
+    const ADRESSE = "$adresse";
+    const CODE = "$code";
+}
+"@
+    [IO.File]::WriteAllText((Join-Path $dossier "Config.mc"), $mc, (New-Object Text.UTF8Encoding $false))
+}
+
 $echecs = 0
 foreach ($app in $Apps) {
+    if ($app -eq "montre") { Ecrire-ConfigMontre }
     $prg = Join-Path $sortie "$app.prg"
     Write-Host "== $app ($Appareil)"
     $options = @("-f", (Join-Path $ici "$app\monkey.jungle"), "-o", $prg, "-y", $cle, "-d", $Appareil, "-w")

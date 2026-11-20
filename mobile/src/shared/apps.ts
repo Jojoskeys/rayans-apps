@@ -25,4 +25,5 @@ export const APPS: MobileApp[] = [
   { id: "recettes", name: "Recettes", tagline: "Plan du jour, courses", icon: "✿", color: "#F472B6", files: [] },
   { id: "favoris", name: "Favoris", tagline: "Vidéos à analyser", icon: "★", color: "#C95B7F", files: [] },
   { id: "bonnes-affaires", name: "Bonnes affaires", tagline: "Occasions sous leur prix", icon: "€", color: "#2E9E6A", files: [] },
+  { id: "montre", name: "Montre", tagline: "Eau, séances, humeur, pas", icon: "⌚", color: "#26A69A", files: [] },
 ];
