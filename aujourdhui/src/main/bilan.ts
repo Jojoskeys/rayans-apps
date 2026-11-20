@@ -5,7 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { todayISO } from "../core/counts.ts";
-import { aRemplir, BILAN_VIDE, cocherAdhkar, cocherPrevu, moments, nettoyerBilan, notificationsBilan, noterMatin, noterSoir, reglerBilan, type BilanData, type Prieres, type ReglagesBilan } from "../core/bilan.ts";
+import { aRemplir, BILAN_VIDE, cocherAdhkar, cocherPrevu, moments, nettoyerBilan, notificationsBilan, noterMatin, noterSoir, reglerBilan, type BilanData, type Prieres, type ReglagesBilan, type SoirPlus } from "../core/bilan.ts";
 import { heuresDePriere } from "../core/prieres.ts";
 import { citationsDuJour } from "../core/citations.ts";
 import type { BilanView } from "../renderer/api-types.ts";
@@ -17,7 +17,7 @@ interface Ctx {
   changed: () => void;
   /** Objectifs du jour, ajoutés au rappel du matin. */
   objectifs: () => string[];
-  /** Séance de sport du jour et son créneau (« Sport : Jambes (Leg) à 18 h 20 »). */
+  /** Séance de sport du jour et son créneau (« Sport : Jambes et mobilité à 18 h 20 »). */
   sport: () => string | null;
 }
 
@@ -102,8 +102,8 @@ export function setupBilan(c: Ctx) {
   const h = (name: string, fn: (...a: unknown[]) => BilanData) =>
     ipcMain.handle(name, (_e, ...a: unknown[]) => { commit(fn(...a)); ctx.changed(); return bilanView(); });
   h("bilan-matin", (humeur, ressenti) => noterMatin(data, ctx.clock(), Number(humeur), String(ressenti ?? "")));
-  h("bilan-soir", (humeur, journee, ressenti, demain) =>
-    noterSoir(data, ctx.clock(), Number(humeur), String(journee ?? ""), String(ressenti ?? ""), Array.isArray(demain) ? demain.map(String) : []));
+  h("bilan-soir", (humeur, journee, ressenti, demain, extra) =>
+    noterSoir(data, ctx.clock(), Number(humeur), String(journee ?? ""), String(ressenti ?? ""), Array.isArray(demain) ? demain.map(String) : [], (extra ?? {}) as SoirPlus));
   h("bilan-prevu", (id) => cocherPrevu(data, ctx.clock(), String(id)));
   h("bilan-adhkar", (quand) => cocherAdhkar(data, ctx.clock(), quand === "masa" ? "masa" : "sabah"));
   h("bilan-reglages", (r) => reglerBilan(data, (r ?? {}) as Partial<ReglagesBilan>));

@@ -1,5 +1,5 @@
-// Sport : programme de la semaine (4 séances de muscu + 3 courses orientées 5 km), séance du jour détaillée, saisie
-// série par série, progression des charges, plan de course et créneau du jour selon l'emploi du temps.
+// Sport : programme de la semaine (3 séances de muscu / calisthénie + 3 courses orientées 5 km, 1 repos), séance du
+// jour détaillée, saisie série par série, progression des charges, plan de course et créneau du jour selon l'emploi du temps.
 //
 // Les charges actuelles ne sont jamais stockées : elles sont recalculées en rejouant le journal des séances depuis
 // les charges de départ. Le PC et l'iPhone n'ont qu'à réunir leurs journaux pour avoir les mêmes charges.
@@ -32,53 +32,77 @@ export interface Bloc {
   increment?: number;
   /** Plafond (secondes pour un maintien, reps pour un volume). */
   plafond?: number;
+  /** Semaine du plan à partir de laquelle l'exercice entre dans la séance (reprise progressive). */
+  des?: number;
+  /** Dernière semaine du plan où l'exercice est dans la séance (remplacé ensuite par une version plus dure). */
+  jusqua?: number;
   note?: string;
 }
 
 export type TypeSeance = "upper" | "leg" | "push" | "pull" | "fractionne" | "seuil" | "longue" | "repos";
 
+// Les clés gardent leurs anciens noms (données déjà enregistrées) : « pull » est la séance de calisthénie,
+// « push » une séance en plus, en option, qui n'est pas dans la semaine de départ.
 export const NOMS_SEANCES: Record<TypeSeance, string> = {
-  upper: "Haut du corps force (Upper Power)", leg: "Jambes (Leg)", push: "Poussée (Push)", pull: "Tirage (Pull)",
-  fractionne: "Course : fractionné (vitesse 5 km)", seuil: "Course : allure seuil", longue: "Course : sortie longue facile", repos: "Repos",
+  upper: "Haut du corps : force", leg: "Jambes et mobilité", pull: "Calisthénie : figures et volume", push: "En option : épaules et dos",
+  fractionne: "Course : fractionné 4 × 4 min", seuil: "Course : allure seuil", longue: "Course : endurance facile", repos: "Repos",
 };
 
-/** Lundi → dimanche. */
-export const SEMAINE: TypeSeance[] = ["upper", "leg", "fractionne", "push", "pull", "seuil", "longue"];
+/**
+ * Lundi → dimanche : 3 séances de muscu / calisthénie, 3 courses (fractionné, seuil, endurance facile), 1 repos.
+ * Les deux courses dures ne tombent jamais la veille ou le lendemain des jambes.
+ */
+export const SEMAINE: TypeSeance[] = ["upper", "fractionne", "pull", "leg", "repos", "seuil", "longue"];
 
+const ECHAUFFEMENT: Bloc = { ex: "echauffement-epaule", series: 1, mode: "volume", reps: 1, repos: 60, plafond: 1, note: "Avant tout le reste : l'épaule va bien, on la garde chaude" };
+
+/**
+ * Progression sur plusieurs semaines : les charges et les reps montent séance après séance (voir plus bas) ;
+ * `des` / `jusqua` font entrer ou sortir un exercice selon la semaine du plan (reprise progressive des dips et des
+ * pompes en poirier, préparation du pistol squat).
+ */
 export const SEANCES: Record<"upper" | "leg" | "push" | "pull", Bloc[]> = {
   upper: [
-    { ex: "echauffement-epaule", series: 1, mode: "volume", reps: 1, repos: 60, plafond: 1, note: "Avant tout le reste" },
+    ECHAUFFEMENT,
     { ex: "developpe-couche", series: 4, mode: "fixe", reps: 5, repos: 180, increment: 2.5 },
-    { ex: "tractions-lestees", series: 4, mode: "fixe", reps: 5, repos: 180, increment: 2.5 },
-    { ex: "rowing-barre", series: 4, mode: "plage", plage: [8, 10], repos: 120, increment: 2.5 },
-    { ex: "pompes", series: 2, mode: "volume", reps: 20, repos: 120, increment: 1, plafond: 50, note: "Endurance de poussée" },
-    { ex: "planche", series: 3, mode: "maintien", reps: 60, repos: 60, plafond: 120 },
+    { ex: "tractions-lestees", series: 4, mode: "fixe", reps: 5, repos: 180, increment: 2.5, note: "Lest à 0 tant que 4 × 5 au poids du corps n'est pas facile" },
+    { ex: "rowing-pronation", series: 3, mode: "plage", plage: [8, 10], repos: 120, increment: 2.5 },
+    { ex: "dips", series: 3, mode: "volume", reps: 5, repos: 120, increment: 1, plafond: 15, des: 2, note: "Reprise : coude à 90° en bas, 2 reps en réserve" },
+    { ex: "pompes", series: 2, mode: "volume", reps: 20, repos: 90, increment: 1, plafond: 50, note: "Endurance de poussée" },
+    { ex: "curl-marteau", series: 3, mode: "plage", plage: [10, 12], repos: 60, increment: 2, note: "En option à la fin : 2 × 20 s coude à 90°" },
   ],
   leg: [
     { ex: "squat", series: 4, mode: "plage", plage: [6, 8], repos: 180, increment: 2.5 },
     { ex: "sdt-roumain", series: 3, mode: "plage", plage: [8, 10], repos: 150, increment: 2.5 },
     { ex: "fentes", series: 3, mode: "plage", plage: [10, 12], repos: 90, increment: 2 },
     { ex: "mollets", series: 3, mode: "plage", plage: [12, 15], repos: 60, increment: 4 },
-    { ex: "pistol-squat", series: 3, mode: "volume", reps: 5, repos: 90, increment: 1, plafond: 10 },
-  ],
-  push: [
-    { ex: "echauffement-epaule", series: 1, mode: "volume", reps: 1, repos: 60, plafond: 1, note: "Avant tout le reste" },
-    { ex: "incline-halteres", series: 3, mode: "plage", plage: [8, 12], repos: 120, increment: 2 },
-    { ex: "elevations-laterales", series: 3, mode: "plage", plage: [12, 15], repos: 60, increment: 1 },
-    { ex: "pompes-volume", series: 4, mode: "volume", reps: 15, repos: 90, increment: 1, plafond: 40, note: "Volume de pompes, 2 reps avant l'échec" },
-    { ex: "handstand-mur", series: 5, mode: "maintien", reps: 20, repos: 60, plafond: 60 },
-    { ex: "hspu-assiste", series: 3, mode: "volume", reps: 3, repos: 120, increment: 1, plafond: 8 },
+    { ex: "pistol-prep", series: 3, mode: "volume", reps: 5, repos: 90, increment: 1, plafond: 10, jusqua: 4, note: "Semaines 1 à 4, avant le pistol assisté" },
+    { ex: "pistol-squat", series: 3, mode: "volume", reps: 3, repos: 90, increment: 1, plafond: 10, des: 5 },
+    { ex: "squat-profond", series: 3, mode: "maintien", reps: 30, repos: 45, plafond: 60, note: "Mobilité, en fin de séance" },
+    { ex: "planche", series: 3, mode: "maintien", reps: 45, repos: 60, plafond: 120 },
   ],
   pull: [
+    ECHAUFFEMENT,
+    { ex: "handstand-mur", series: 4, mode: "maintien", reps: 20, repos: 60, plafond: 60, note: "Les figures d'abord, quand tu es frais" },
+    { ex: "handstand-elastique", series: 4, mode: "maintien", reps: 15, repos: 60, plafond: 30, des: 3, note: "Quand 3 × 30 s au mur passe sans gêne" },
+    { ex: "hspu-assiste", series: 3, mode: "volume", reps: 4, repos: 120, increment: 1, plafond: 8, jusqua: 4, note: "Semaines 1 à 4 : pieds sur une box" },
+    { ex: "hspu-mur", series: 3, mode: "volume", reps: 2, repos: 150, increment: 1, plafond: 8, des: 5, note: "À partir de la semaine 5, amplitude qui augmente peu à peu" },
     { ex: "tractions-strictes", series: 5, mode: "volume", reps: 7, repos: 120, increment: 1, plafond: 15, note: "Séries à environ 70 % de ton max, sans aller à l'échec" },
+    { ex: "front-lever-tuck", series: 4, mode: "maintien", reps: 5, repos: 90, plafond: 20 },
+    { ex: "muscle-up-transition", series: 3, mode: "volume", reps: 3, repos: 120, increment: 1, plafond: 6 },
+    { ex: "pompes-volume", series: 3, mode: "volume", reps: 15, repos: 90, increment: 1, plafond: 40, note: "Volume de pompes, 2 reps avant l'échec" },
+  ],
+  push: [
+    ECHAUFFEMENT,
+    { ex: "incline-halteres", series: 3, mode: "plage", plage: [8, 12], repos: 120, increment: 2 },
+    { ex: "rowing-barre", series: 3, mode: "plage", plage: [8, 10], repos: 120, increment: 2.5 },
+    { ex: "elevations-laterales", series: 4, mode: "plage", plage: [12, 15], repos: 60, increment: 1 },
     { ex: "rowing-appuye", series: 3, mode: "plage", plage: [10, 12], repos: 90, increment: 2 },
     { ex: "oiseau", series: 3, mode: "plage", plage: [12, 15], repos: 60, increment: 1 },
-    { ex: "front-lever-tuck", series: 5, mode: "maintien", reps: 5, repos: 90, plafond: 20 },
-    { ex: "muscle-up-transition", series: 3, mode: "volume", reps: 3, repos: 120, increment: 1, plafond: 6 },
   ],
 };
 
-/** Exercice sous un autre nom de bloc (pompes en volume le jeudi = mêmes pompes, progression séparée). */
+/** Exercice sous un autre nom de bloc (pompes en volume en calisthénie = mêmes pompes, progression séparée). */
 export const ALIAS: Record<string, string> = { "pompes-volume": "pompes" };
 
 /**
@@ -89,19 +113,26 @@ export const DEPART: Record<string, { charge: number; reps: number }> = {
   "echauffement-epaule": { charge: 0, reps: 1 },
   "developpe-couche": { charge: 40, reps: 5 },
   "tractions-lestees": { charge: 0, reps: 5 },
-  "rowing-barre": { charge: 40, reps: 8 },
+  "rowing-pronation": { charge: 40, reps: 8 },
+  dips: { charge: 0, reps: 4 },
   pompes: { charge: 0, reps: 10 },
+  "curl-marteau": { charge: 8, reps: 10 },
+  "rowing-barre": { charge: 40, reps: 8 },
   "pompes-volume": { charge: 0, reps: 8 },
   planche: { charge: 0, reps: 30 },
   squat: { charge: 40, reps: 6 },
   "sdt-roumain": { charge: 40, reps: 8 },
   fentes: { charge: 8, reps: 10 },
   mollets: { charge: 20, reps: 12 },
+  "pistol-prep": { charge: 0, reps: 4 },
   "pistol-squat": { charge: 0, reps: 3 },
+  "squat-profond": { charge: 0, reps: 30 },
   "incline-halteres": { charge: 12, reps: 8 },
   "elevations-laterales": { charge: 5, reps: 12 },
   "handstand-mur": { charge: 0, reps: 15 },
-  "hspu-assiste": { charge: 0, reps: 2 },
+  "handstand-elastique": { charge: 0, reps: 10 },
+  "hspu-assiste": { charge: 0, reps: 3 },
+  "hspu-mur": { charge: 0, reps: 2 },
   "tractions-strictes": { charge: 0, reps: 4 },
   "rowing-appuye": { charge: 10, reps: 10 },
   oiseau: { charge: 4, reps: 12 },
@@ -313,10 +344,18 @@ export function planCourse(type: "fractionne" | "seuil" | "longue", d: SportData
   const echauf = `Échauffement : 10 min facile (${fac}) + 4 accélérations de 20 s`;
   const retour = "Retour au calme : 5 à 10 min très facile, puis étirements légers";
   if (type === "fractionne") {
-    const series = [["6 × 400 m", "8 × 400 m", "5 × 600 m", "4 × 400 m"], ["5 × 800 m", "6 × 800 m", "4 × 1000 m", "4 × 400 m"], ["5 × 1000 m", "6 × 1000 m", "3 × 1600 m", "4 × 400 m"]][Math.min(cycle, 2)][dansCycle - 1];
+    // 4 × 4 min « norvégien » : le nombre et la durée des blocs montent de cycle en cycle ; semaine 4 allégée.
+    const series = [["4 × 4 min", "4 × 4 min", "5 × 4 min", "3 × 4 min"], ["5 × 4 min", "5 × 4 min", "4 × 5 min", "3 × 4 min"], ["4 × 5 min", "5 × 5 min", "5 × 5 min", "3 × 4 min"]][Math.min(cycle, 2)][dansCycle - 1];
+    const [n, m] = series.split(" × ").map((x) => parseInt(x, 10));
     return {
-      titre: `Fractionné : ${series}`, dureeMin: 50,
-      etapes: [echauf, `${series} à ${allure(a.intervalle)} /km (plus vite que ton allure 5 km)`, "Récupération entre chaque : 1 min 30 en trottinant très lentement", retour],
+      titre: `Fractionné : ${series}`, dureeMin: 12 + n * (m + 3) + 10,
+      etapes: [
+        `Échauffement : 12 min facile (${fac}) + 3 accélérations progressives de 20 s. Ça monte le pouls doucement et prépare les tendons.`,
+        `${series} à 85-95 % de ta FC max (zone 4 à 5 sur la montre), vers ${allure(a.cinqKm)} à ${allure(a.intervalle)} /km. Dur mais régulier : le dernier bloc aussi vite que le premier.`,
+        "Entre chaque : 3 min de trot très lent (60-70 % de la FC max). Le cœur redescend juste assez pour repartir.",
+        "Pourquoi : 4 min près du maximum, c'est le temps qu'il faut au cœur pour pomper au plus fort. Il apprend à envoyer plus de sang à chaque battement : la VO2 max monte, le 5 km devient plus facile.",
+        "Retour au calme : 10 min très facile, puis étirements légers",
+      ],
     };
   }
   if (type === "seuil") {
@@ -324,10 +363,19 @@ export function planCourse(type: "fractionne" | "seuil" | "longue", d: SportData
       return { titre: "Test 5 km", test: true, dureeMin: 50, distanceKm: 5, etapes: [echauf, `5 km le plus vite possible en restant régulier (objectif : ${allure(a.cinqKm - 5)} /km)`, retour, "Note ta distance et ton temps : les allures se recalent sur ce test"] };
     }
     const bloc = [["3 × 8 min", "3 × 10 min", "2 × 15 min"], ["2 × 15 min", "3 × 12 min", "25 min continues"], ["3 × 12 min", "2 × 18 min", "30 min continues"]][Math.min(cycle, 2)][dansCycle - 1];
-    return { titre: `Seuil : ${bloc}`, dureeMin: 55, etapes: [echauf, `${bloc} à ${allure(a.seuil)} /km (« confortablement difficile » : tu peux dire quelques mots)`, "Récupération entre les blocs : 2 min de marche ou trot", retour] };
+    return {
+      titre: `Seuil : ${bloc}`, dureeMin: 60,
+      etapes: [
+        `Échauffement : 15 min facile (${fac}) + 3 accélérations de 20 s`,
+        `${bloc} à ${allure(a.seuil - 5)} - ${allure(a.seuil + 5)} /km (« confortablement difficile » : tu peux dire quelques mots, pas une phrase)`,
+        "Récupération entre les blocs : 2 min de trot",
+        "Pourquoi : à cette allure, le corps élimine encore l'acide qu'il produit. En t'y entraînant, tu repousses le moment où les jambes brûlent : tu tiens une allure plus rapide plus longtemps.",
+        "Retour au calme : 10 min très facile, puis étirements légers",
+      ],
+    };
   }
   const min = dansCycle === 4 ? 35 + cycle * 5 : Math.min(75, 40 + (dansCycle - 1) * 5 + cycle * 5);
-  return { titre: `Sortie longue : ${min} min`, dureeMin: min, etapes: [`${min} min à ${fac}, en aisance respiratoire (tu peux parler)`, "Si besoin : 4 min de course / 1 min de marche, comme avant", "Pas de chrono à battre : c'est le volume qui fait progresser le 5 km"] };
+  return { titre: `Endurance facile : ${min} min`, dureeMin: min, etapes: [`${min} min à ${fac}, en aisance respiratoire (tu peux parler)`, "Si besoin : 4 min de course / 1 min de marche", "Pourquoi : à allure lente, le cœur grossit et les muscles fabriquent plus de petits vaisseaux. C'est la base qui fait tenir les séances dures."] };
 }
 
 // ----- Séance du jour --------------------------------------------------------------------------------------------
@@ -355,7 +403,8 @@ export function seanceDuJour(d: SportData, jour: string, now: number): SeanceDuJ
   if (type === "repos") return { jour, type, titre: "Repos", blocs: [], faite, dureeMin: 0 };
   // Si la séance du jour est déjà faite, on montre ce qui était prévu (prescriptions d'avant la séance).
   const pres = prescriptions(faite ? { ...d, journal: d.journal.filter((s) => s.at < faite.at) } : d);
-  const blocs = seances(d)[type].map((b) => ({ ...b, prescription: pres[b.ex], nom: nomBloc(b.ex) }));
+  const sem = semaineDuPlan(d, jour);
+  const blocs = seances(d)[type].filter((b) => sem >= (b.des ?? 1) && sem <= (b.jusqua ?? Infinity)).map((b) => ({ ...b, prescription: pres[b.ex], nom: nomBloc(b.ex) }));
   return { jour, type, titre: NOMS_SEANCES[type], blocs, faite, dureeMin: 75 };
 }
 

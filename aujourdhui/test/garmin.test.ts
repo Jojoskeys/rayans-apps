@@ -54,9 +54,9 @@ test("tractions le vendredi (tirage) : nouvelle séance, et la progression en ti
 test("pompes : en volume le jeudi (poussée), « pompes » le lundi (haut du corps), un autre jour dans la poussée", () => {
   const d = importerMontre(SPORT_DEPART, [muscu(19, 18, "pompes", [15]), muscu(16, 18, "pompes", [20, 18]), muscu(18, 18, "pompes", [10])]).data;
   const par = (jour: string) => d.journal.filter((s) => s.jour === jour).map((s) => [s.type, s.exercices.map((e) => e.bloc).join()]);
-  assert.deepEqual(par("2026-11-19"), [["push", "pompes-volume"]]);
+  assert.deepEqual(par("2026-11-19"), [["pull", "pompes-volume"]]);
   assert.deepEqual(par("2026-11-16"), [["upper", "pompes"]]);
-  assert.deepEqual(par("2026-11-18"), [["push", "pompes-volume"]]);
+  assert.deepEqual(par("2026-11-18"), [["pull", "pompes-volume"]]);
 });
 
 test("séance déjà saisie : l'exercice de la montre s'ajoute, sans toucher au reste ; une saisie existante l'emporte", () => {
@@ -73,7 +73,7 @@ test("séance déjà saisie : l'exercice de la montre s'ajoute, sans toucher au 
 
 test("course : dans la course prévue (samedi seuil), sinon sortie longue ; avant le début du plan ignorée", () => {
   const course = (jour: number, km: number, s: number): ActiviteMontre => ({ kind: "course", fichier: `${jour}.fit`, debut: new Date(2026, 10, jour, 10).getTime(), distanceKm: km, dureeS: s });
-  const { data, ajouts } = importerMontre(SPORT_DEPART, [course(21, 5.02, 1784), course(17, 6, 2400), course(15, 10, 3600)]);
-  assert.deepEqual(data.journal.map((s) => [s.jour, s.type, s.course?.distanceKm]), [["2026-11-17", "longue", 6], ["2026-11-21", "seuil", 5.02]]);
+  const { data, ajouts } = importerMontre(SPORT_DEPART, [course(21, 5.02, 1784), course(19, 6, 2400), course(15, 10, 3600)]);
+  assert.deepEqual(data.journal.map((s) => [s.jour, s.type, s.course?.distanceKm]), [["2026-11-19", "longue", 6], ["2026-11-21", "seuil", 5.02]]);
   assert.deepEqual(ajouts, ["Course : 6 km en 40:00", "Course : 5,02 km en 29:44"]);
 });

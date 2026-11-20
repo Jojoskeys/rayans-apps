@@ -1,5 +1,5 @@
 // Bilan du jour : ressenti du matin (après Fajr), adhkar as-sabâh et al-masâ', liste prévue la veille au soir,
-// bilan du soir (journée, ressenti, ce qu'il y a à faire demain).
+// bilan du soir (journée, ressenti, ce qui a marché, ce qui a coincé, LA priorité et la liste de demain).
 import { useEffect, useState } from "react";
 import { HUMEURS } from "../core/bilan.ts";
 import type { BilanView } from "./api-types.ts";
@@ -32,6 +32,12 @@ export function BilanToday({ b, now, notify }: { b: BilanView; now: number; noti
   const citation = apresMidi ? b.citations.midi : b.citations.matin;
   return (
     <>
+      {b.reglages.actif && j.priorite && (
+        <section className="carte" data-testid="priorite">
+          <h2>🎯 Priorité du jour</h2>
+          <p>{j.priorite}</p>
+        </section>
+      )}
       {b.reglages.citations && (
         <figure className="citation" data-testid="citation">
           <blockquote>{citation.texte}</blockquote>
@@ -116,9 +122,12 @@ function FormSoir({ b, notify, onDone }: { b: BilanView; notify: (t: string) => 
   const [journee, setJournee] = useState(s?.journee ?? "");
   const [ressenti, setRessenti] = useState(s?.ressenti ?? "");
   const [demain, setDemain] = useState<string[]>(b.demain.length ? b.demain.map((p) => p.texte) : [""]);
+  const [marche, setMarche] = useState(s?.marche ?? "");
+  const [coince, setCoince] = useState(s?.coince ?? "");
+  const [priorite, setPriorite] = useState(s?.priorite ?? "");
   useEffect(() => { if (demain[demain.length - 1]?.trim()) setDemain([...demain, ""]); }, [demain]);
   const enregistrer = () =>
-    api.bilan.evening(humeur, journee, ressenti, demain).then(() => { notify("Bilan enregistré. Bonne soirée !"); onDone(); }).catch((e) => notify(errText(e)));
+    api.bilan.evening(humeur, journee, ressenti, demain, { marche, coince, priorite }).then(() => { notify("Bilan enregistré. Bonne soirée !"); onDone(); }).catch((e) => notify(errText(e)));
   return (
     <div className="bilan-form">
       <p>Comment s'est passée ta journée ?</p>
@@ -126,14 +135,20 @@ function FormSoir({ b, notify, onDone }: { b: BilanView; notify: (t: string) => 
       <p>Comment tu te sens ?</p>
       <Humeur value={humeur} onChange={setHumeur} />
       <textarea data-testid="ressenti-soir" rows={2} placeholder="En quelques mots" value={ressenti} onChange={(e) => setRessenti(e.target.value)} />
-      <p>Pour demain : objectifs, choses à faire</p>
+      <p>Ce qui a marché aujourd'hui <span className="aide">(facultatif)</span></p>
+      <input data-testid="marche-soir" placeholder="Ex. séance faite à l'heure prévue" value={marche} onChange={(e) => setMarche(e.target.value)} />
+      <p>Ce qui a coincé <span className="aide">(facultatif)</span></p>
+      <input data-testid="coince-soir" placeholder="Ex. téléphone pendant la révision" value={coince} onChange={(e) => setCoince(e.target.value)} />
+      <p>LA priorité de demain <span className="aide">(facultatif, une seule chose)</span></p>
+      <input data-testid="priorite-soir" placeholder="Ex. finir l'exercice 4 du TD" value={priorite} onChange={(e) => setPriorite(e.target.value)} />
+      <p>Liste de demain : objectifs, choses à faire</p>
       <div className="demain">
         {demain.map((t, i) => (
           <input key={i} data-testid="demain" placeholder={i === 0 ? "Ex. réviser le chapitre 3" : "Autre chose…"} value={t} onChange={(e) => setDemain(demain.map((x, k) => (k === i ? e.target.value : x)))} />
         ))}
       </div>
       <button className="bouton" data-testid="enregistrer-soir" disabled={!humeur} onClick={enregistrer}>Enregistrer le bilan</button>
-      <p className="aide">Demain, cette liste apparaîtra à cocher, et dans le rappel du matin.</p>
+      <p className="aide">Demain, la priorité s'affichera en haut et la liste à cocher, avec les deux dans le rappel du matin.</p>
     </div>
   );
 }
@@ -180,7 +195,7 @@ export function BilanReglages({ b, notify }: { b: BilanView; notify: (t: string)
               <li key={h.jour}>
                 <b>{new Date(h.jour + "T12:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })}</b>
                 {h.matin && <span> · matin {HUMEURS[h.matin.humeur - 1]} {h.matin.ressenti}</span>}
-                {h.soir && <span> · soir {HUMEURS[h.soir.humeur - 1]} {h.soir.journee} {h.soir.ressenti && `(${h.soir.ressenti})`}</span>}
+                {h.soir && <span> · soir {HUMEURS[h.soir.humeur - 1]} {h.soir.journee} {h.soir.ressenti && `(${h.soir.ressenti})`}{h.soir.marche && ` · ✔ ${h.soir.marche}`}{h.soir.coince && ` · ✖ ${h.soir.coince}`}{h.soir.priorite && ` · 🎯 ${h.soir.priorite}`}</span>}
               </li>
             ))}
           </ul>

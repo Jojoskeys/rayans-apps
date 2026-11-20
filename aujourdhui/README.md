@@ -28,11 +28,17 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
 
 ## Sport
 
-- **Semaine** : lundi haut du corps force (Upper Power), mardi jambes, mercredi fractionné, jeudi poussée, vendredi
-  tirage, samedi allure seuil (test 5 km toutes les 4 semaines), dimanche sortie longue facile.
+- **Semaine** : lundi haut du corps force (couché, tractions lestées, rowing pronation, dips, pompes, curl marteau),
+  mardi fractionné 4 × 4 min, mercredi calisthénie (handstand, pompes en poirier, tractions, front lever, muscle-up,
+  pompes), jeudi jambes et mobilité (squat, roumain, fentes, mollets, pistol, squat profond tenu, gainage), vendredi
+  repos, samedi allure seuil (3 × 8 min au début ; test 5 km toutes les 4 semaines), dimanche endurance facile. Pas de
+  course dure la veille ou le lendemain des jambes. Une séance « épaules et dos » existe en option (réglage de la semaine).
+- **Reprise progressive** (`des` / `jusqua` dans `SEANCES`) : dips à partir de la semaine 2 (coude à 90°), handstand
+  à l'élastique semaine 3, pompes en poirier contre le mur semaine 5 (avant : pieds sur une box), pistol assisté
+  semaine 5 (avant : squat sur une jambe vers un banc). Échauffement d'épaule gardé avant le haut du corps.
 - **Séance guidée** : pour chaque exercice, muscles travaillés, fonctionnement expliqué simplement, consignes,
   objectif (séries × reps × charge) ; saisie série par série, minuteur de repos et séries restantes ; la saisie en
-  cours est gardée si on quitte. Échauffement d'épaule avant les séances du haut du corps, pas de dips.
+  cours est gardée si on quitte.
 - **Progression** (`src/core/sport.ts`) : charges de départ génériques dans le code, les vraies dans les données
   (réglages de chaque exercice, ou fichier privé `profil-sport.json` importé au premier lancement) ; toutes les séries réussies →
   +2,5 kg (barre), +2 kg (haltères), +1 rep (poids du corps) ou +5 s (gainage, équilibres) ; deux séances ratées de
@@ -69,8 +75,10 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
   soir et les objectifs du jour. Dans la fenêtre : humeur (5 visages), quelques mots, case « adhkar as-sabâh ».
 - **Entre Asr et Maghrib** : rappel des **adhkar al-masâ'** 40 min avant Maghrib (jamais avant Asr + 5 min), et un
   dernier rappel 10 min avant Maghrib s'ils ne sont pas cochés.
-- **Le soir** (17 h 30 par défaut) : **bilan** — comment s'est passée la journée, comment je me sens, et ce que je
-  veux faire demain. Cette liste devient, le lendemain, une carte « Prévu hier soir » à cocher.
+- **Le soir** (17 h 30 par défaut) : **bilan** — comment s'est passée la journée, comment je me sens, trois questions
+  facultatives (ce qui a marché, ce qui a coincé, LA priorité de demain) et la liste de demain. Le lendemain, la
+  priorité s'affiche en haut (« Priorité du jour ») et en tête du rappel du matin ; la liste devient une carte
+  « Prévu hier soir » à cocher.
 - Chaque notification part une fois par jour, et seulement dans les 3 h qui suivent son heure. Les heures de prière
   sont calculées avec le code de Rayan's Prière (`priere/src/core`, même lieu et même méthode, `priere.json` seulement
   lu) ; sans ville choisie dans Prière, le rappel du matin part à 7 h et il n'y a pas de rappel des adhkar du soir.

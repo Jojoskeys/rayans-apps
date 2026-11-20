@@ -1,5 +1,6 @@
 // Bibliothèque d'exercices : muscles travaillés, fonctionnement expliqué simplement, consignes techniques.
-// Programme prudent pour les épaules : échauffement d'épaule avant chaque séance du haut du corps, pas de dips.
+// Épaules : échauffement d'épaule gardé avant chaque séance du haut du corps ; dips et pompes en poirier repris
+// progressivement (voir `des` / `jusqua` dans sport.ts).
 
 export interface Exercice {
   id: string;
@@ -138,5 +139,47 @@ export const EXERCICES: Record<string, Exercice> = {
     muscles: "Grand dorsal, pectoraux, triceps, poignets",
     explication: "Le muscle-up, c'est une traction explosive puis un passage au-dessus de la barre. On travaille la transition : négatives lentes depuis le haut (au-dessus de la barre) et tractions explosives poitrine à la barre.",
     consignes: ["Prise fausse (poignets au-dessus de la barre) si possible", "Négatives : 3 à 5 s de descente en passant la transition", "Tractions explosives : la barre touche le bas de la poitrine"],
+  },
+  "rowing-pronation": {
+    id: "rowing-pronation", nom: "Rowing barre prise pronation", mesure: "charge",
+    muscles: "Haut du dos (rhomboïdes, trapèzes), arrière des épaules, grand dorsal ; lombaires en gainage",
+    explication: "Paumes vers le bas, coudes écartés : tu tires la barre vers le bas de la poitrine. Le haut du dos rapproche les omoplates. Il tient les épaules en arrière et équilibre tout ce que tu pousses.",
+    consignes: ["Buste à 45° environ, dos plat, genoux souples", "Prise un peu plus large que les épaules, paumes vers le bas", "Tire vers le bas de la poitrine, coudes à 45-60° du corps", "Serre les omoplates 1 s en haut, pas d'élan"],
+  },
+  dips: {
+    id: "dips", nom: "Dips (barres parallèles)", mesure: "corps",
+    muscles: "Pectoraux (bas), triceps, avant des épaules",
+    explication: "Tu descends entre deux barres en pliant les coudes, puis tu pousses pour remonter : triceps et bas des pectoraux soulèvent tout ton poids. C'est la base du muscle-up et une grosse aide pour les pompes.",
+    consignes: ["Reprise : descends seulement jusqu'au coude à 90°, épaules au-dessus des mains", "Buste légèrement penché, épaules basses (loin des oreilles)", "Descente en 2 s, remontée sans à-coup", "Gêne à l'avant de l'épaule : amplitude plus courte ce jour-là"],
+  },
+  "curl-marteau": {
+    id: "curl-marteau", nom: "Curl marteau", mesure: "charge", parHaltere: true,
+    muscles: "Brachial, brachio-radial (avant-bras), biceps",
+    explication: "Pouces vers le haut, tu plies les coudes : le brachial et le brachio-radial, les muscles qui plient le coude, travaillent plus qu'au curl classique. Ce sont eux qui t'aident à finir les tractions.",
+    consignes: ["Coudes collés au corps, pas d'élan avec le dos", "Monte jusqu'à l'épaule, descente en 2 s", "Option en fin : tenir 2 × 20 s coude à 90°"],
+  },
+  "squat-profond": {
+    id: "squat-profond", nom: "Squat profond tenu", mesure: "duree",
+    muscles: "Mobilité de chevilles, hanches et adducteurs ; quadriceps et fessiers en étirement",
+    explication: "Tu restes accroupi tout en bas, talons au sol. Les chevilles et les hanches gagnent de l'amplitude : c'est ce qui manque quand les talons décollent au pistol squat.",
+    consignes: ["Pieds largeur d'épaules, pointes ouvertes", "Talons au sol, poitrine haute, coudes qui poussent les genoux vers l'extérieur", "Tiens-toi à un poteau au début si besoin", "Respire lentement, relâche"],
+  },
+  "pistol-prep": {
+    id: "pistol-prep", nom: "Préparation pistol (squat sur une jambe vers un banc)", mesure: "corps", parCote: true,
+    muscles: "Quadriceps, fessiers ; équilibre",
+    explication: "Debout sur une jambe, tu descends t'asseoir sur un banc puis tu te relèves sans élan. C'est le pistol squat avec une butée : la jambe apprend à porter tout le poids, sans le passage le plus dur tout en bas.",
+    consignes: ["Banc ou box à hauteur du genou, plus bas quand c'est facile", "L'autre jambe tendue devant, bras devant pour l'équilibre", "Descente en 3 s, effleure le banc sans s'affaler", "Genou dans l'axe du pied"],
+  },
+  "handstand-elastique": {
+    id: "handstand-elastique", nom: "Handstand avec élastique", mesure: "duree",
+    muscles: "Épaules, trapèzes, triceps, gainage",
+    explication: "Un élastique accroché à une barre haute te retient par les hanches : tu tiens l'équilibre loin du mur, l'élastique rattrape les erreurs. Les épaules apprennent à pousser le sol et le gainage à garder le corps droit.",
+    consignes: ["Élastique épais, bien accroché : vérifie-le avant chaque essai", "Sur un tapis, élastique autour des hanches", "Bras tendus, oreilles entre les bras, pousse le sol", "Tenues de 10 à 20 s, 1 min de repos"],
+  },
+  "hspu-mur": {
+    id: "hspu-mur", nom: "Pompes en poirier contre le mur (progressives)", mesure: "corps",
+    muscles: "Épaules (deltoïdes), triceps, trapèzes",
+    explication: "En équilibre contre le mur, tu plies les bras pour descendre la tête vers le sol puis tu pousses. Les épaules soulèvent tout ton corps. On y arrive par étapes : d'abord la descente seule, puis l'amplitude qui augmente.",
+    consignes: ["Ventre ou dos au mur, mains à largeur d'épaules", "Commence par des descentes lentes (3 s) sur un coussin, remonte en redescendant du mur si besoin", "Coudes à 45°, la tête descend devant les mains", "Ajoute de l'amplitude quand les reps sont propres"],
   },
 };
