@@ -51,6 +51,8 @@ export interface BilanView {
   reglages: ReglagesBilan;
   historique: { jour: string; matin: EntreeMatin | null; soir: EntreeSoir | null }[];
   citations: { matin: Citation; midi: Citation };
+  /** Noté aujourd'hui sur la montre (Rayan's Montre, par la Télécommande) ; absent sur l'iPhone. */
+  montre?: { eau: number; seances: number; humeur: number | null } | null;
 }
 
 /** Objectifs du jour : petits objectifs faciles, adaptés aux habitudes. */

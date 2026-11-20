@@ -87,6 +87,7 @@ export function App() {
 
 function Association({ e }: { e: Etat }) {
   const [voir, setVoir] = useState(false);
+  const [voirMontre, setVoirMontre] = useState(false);
   return (
     <section className="carte">
       <h2>2. Associer l'iPhone</h2>
@@ -97,6 +98,12 @@ function Association({ e }: { e: Etat }) {
       </ol>
       <p className="aide">Le code reste sur ce PC et sur ton iPhone. « Nouveau code » déconnecte immédiatement tous les téléphones déjà associés.</p>
       <button className="lien danger" onClick={() => { if (confirm("Créer un nouveau code ? Les téléphones associés devront retaper le nouveau code.")) void api.commande({ type: "nouveau-code" }); }}>Nouveau code</button>
+      <h3>Montre Garmin (Rayan's Montre)</h3>
+      <ul className="etapes">
+        <li>Code montre : <code className="gros" data-testid="code-montre">{voirMontre ? e.donnees.codeMontre : "•••••-•••••-•••••-•••••"}</code> <button className="lien" onClick={() => setVoirMontre(!voirMontre)}>{voirMontre ? "Masquer" : "Afficher"}</button></li>
+      </ul>
+      <p className="aide">À recopier avec l'adresse dans <code>garmin\montre\config.local.json</code> (jamais dans le dépôt), puis réinstaller l'app. Ce code ne permet QUE d'envoyer les saisies de la montre : rien d'autre sur le PC.</p>
+      <button className="lien danger" onClick={() => { if (confirm("Créer un nouveau code montre ? Il faudra le recopier dans config.local.json et réinstaller l'app sur la montre.")) void api.commande({ type: "nouveau-code-montre" }); }}>Nouveau code montre</button>
     </section>
   );
 }

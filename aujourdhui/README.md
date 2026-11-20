@@ -83,6 +83,8 @@ pour ouvrir chaque application, et une notification le soir s'il reste quelque c
   sont calculées avec le code de Rayan's Prière (`priere/src/core`, même lieu et même méthode, `priere.json` seulement
   lu) ; sans ville choisie dans Prière, le rappel du matin part à 7 h et il n'y a pas de rappel des adhkar du soir.
 - Les textes des adhkar ne sont pas affichés : seulement les rappels et les cases.
+- **Montre Garmin** : sur le PC, le bilan du soir rappelle l'eau, la séance et l'humeur notées dans Rayan's Montre
+  (`montre.json` de Rayan's Télécommande, seulement lu) ; l'humeur de la montre est proposée si rien n'est noté.
 - Données : `bilan.json` (365 jours, sur le PC, non synchronisé avec l'iPhone). Calculs : `src/core/bilan.ts`.
 
 ## Citations du jour
