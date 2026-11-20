@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const dist = resolve(dirname(fileURLToPath(import.meta.url)), "../dist");
 const port = Number(process.env.PORT ?? 4173);
-const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".webmanifest": "application/manifest+json", ".png": "image/png", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".ttf": "font/ttf", ".mp3": "audio/mpeg" };
+const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".webmanifest": "application/manifest+json", ".png": "image/png", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".ttf": "font/ttf", ".mp3": "audio/mpeg", ".wasm": "application/wasm", ".txt": "text/plain; charset=utf-8" };
 
 // Faux GitHub (tests locaux uniquement) : /faux-github/repos/<dépôt>/contents/<fichier>, avec sha et conflits 409.
 const fake = new Map();

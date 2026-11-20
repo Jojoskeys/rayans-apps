@@ -27,7 +27,14 @@ export const PAGES = [
   { id: "ouvertures", title: "Ouvertures", entry: "src/apps/ouvertures.ts", bodyFrom: "../echecs-ouvertures/src/ui/index.html",
     head: '<link rel="stylesheet" href="chessground.css" /><link rel="stylesheet" href="styles.css" />',
     concat: [{ to: "chessground.css", from: ["node_modules/chessground/assets/chessground.base.css", "node_modules/chessground/assets/chessground.brown.css", "node_modules/chessground/assets/chessground.cburnett.css"] }],
-    copy: [{ from: "../echecs-ouvertures/src/ui/styles.css", to: "styles.css" }] },
+    copy: [
+      { from: "../echecs-ouvertures/src/ui/styles.css", to: "styles.css" },
+      { from: "../echecs-ouvertures/data/openings.json", to: "openings.json" },
+      // Stockfish en WebAssembly (GPL-3.0), lancé dans un Worker pour analyser les parties sur l'iPhone.
+      { from: "node_modules/stockfish/bin/stockfish-19-lite-single.js", to: "stockfish-19-lite-single.js" },
+      { from: "node_modules/stockfish/bin/stockfish-19-lite-single.wasm", to: "stockfish-19-lite-single.wasm" },
+      { from: "node_modules/stockfish/Copying.txt", to: "stockfish-LICENCE.txt" },
+    ] },
   { id: "telecommande", title: "Télécommande", entry: "src/apps/telecommande.tsx", root: "racine" },
   { id: "studio", title: "Studio", entry: "src/apps/studio.tsx", root: "racine" },
   { id: "demain", title: "Demain", entry: "src/apps/demain.tsx", root: "racine" },

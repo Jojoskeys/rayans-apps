@@ -7,7 +7,7 @@ application dans `.github/workflows/`.
 | --- | --- | --- | --- |
 | Rayan's Échecs (Analyse Échecs) | [`echecs-analyse/`](echecs-analyse/) | `echecs-analyse.yml` | Analyse des parties Chess.com avec Stockfish intégré (macOS, Windows, Linux) |
 | Rayan's Launcher | [`launcher/`](launcher/) | `launcher.yml` | Launcher Windows (Tauri) pour installer, mettre à jour et lancer les applications |
-| Rayan's Ouvertures | [`echecs-ouvertures/`](echecs-ouvertures/) | `echecs-ouvertures.yml` | Entraînement aux ouvertures à partir de vos parties Chess.com, avec Stockfish et répétition espacée |
+| Rayan's Ouvertures | [`echecs-ouvertures/`](echecs-ouvertures/) | `echecs-ouvertures.yml` | Entraînement aux ouvertures à partir de vos parties Chess.com, avec Stockfish et répétition espacée ; sur l'iPhone (Rayan's Mobile), pseudo, import et analyse se font aussi dans le téléphone (Stockfish en version web) |
 | Rayan's Révision | [`revision/`](revision/) | `revision.yml` | Cartes de révision et quiz avec programme FSRS, statistiques, import/export CSV et JSON |
 | Rayan's Hifz | [`coran-memorisation/`](coran-memorisation/) | `coran-memorisation.yml` | Suivi de mémorisation du Coran : progression par verset, révisions espacées, audio |
 | Rayan's Chrono | [`chrono/`](chrono/) | `chrono.yml` | Minuteur Pomodoro et suivi du temps par projet, résumés, export CSV ; écran de pause plein écran, barre du temps de travail du jour, distractions bloquées pendant le travail |
