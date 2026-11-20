@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { detailArticle, listeCourses, texteCourses } from "../core/courses.ts";
 import { dateCourte } from "../core/donnees.ts";
 import { correspond, etiquettes, NOMS_ETIQUETTES, remarques } from "../core/lecture.ts";
 import type { Action, Etiquettes, Recette } from "../core/types.ts";
 import type { Etat } from "./api-types.ts";
+import { Courses, type Source } from "./Courses.tsx";
+import { MonPlan } from "./Plan.tsx";
 
-type Vue = "recettes" | "courses" | "ajouter";
+type Vue = "recettes" | "plan" | "courses" | "ajouter";
 type Filtre = "tout" | keyof Etiquettes;
 const api = window.recettes;
 
@@ -13,6 +14,7 @@ export function App() {
   const [etat, setEtat] = useState<Etat | null>(null);
   const [vue, setVue] = useState<Vue>("recettes");
   const [choisie, setChoisie] = useState<string | null>(null);
+  const [source, setSource] = useState<Source>({ type: "panier" });
 
   useEffect(() => {
     api.getState().then(setEtat);
@@ -31,6 +33,9 @@ export function App() {
         <button className={vue === "recettes" ? "actif" : ""} data-testid="nav-recettes" onClick={() => setVue("recettes")}>
           Recettes <span className="compte">{toutes.length}</span>
         </button>
+        <button className={vue === "plan" ? "actif" : ""} data-testid="nav-plan" onClick={() => setVue("plan")}>
+          Mon plan
+        </button>
         <button className={vue === "courses" ? "actif" : ""} data-testid="nav-courses" onClick={() => setVue("courses")}>
           Liste de courses {panier.length > 0 && <span className="compte plein">{panier.length}</span>}
         </button>
@@ -48,7 +53,10 @@ export function App() {
       <main className="contenu">
         {etat.warning && <p className="bandeau">{etat.warning}</p>}
         {vue === "recettes" && <Recettes etat={etat} toutes={toutes} choisie={choisie} setChoisie={setChoisie} agir={agir} />}
-        {vue === "courses" && <Courses panier={panier} agir={agir} />}
+        {vue === "plan" && <MonPlan etat={etat} toutes={toutes} agir={agir}
+          voirRecette={(id) => { setChoisie(id); setVue("recettes"); }}
+          voirCourses={(s) => { setSource(s); setVue("courses"); }} />}
+        {vue === "courses" && <Courses etat={etat} toutes={toutes} panier={panier} source={source} setSource={setSource} agir={agir} />}
         {vue === "ajouter" && <Ajouter onAjout={async (r) => { await agir({ type: "ajouterPerso", recette: r }); setChoisie(r.id); setVue("recettes"); }} />}
       </main>
     </div>
@@ -122,6 +130,8 @@ function Detail({ r, etat, tags, agir }: { r: Recette; etat: Etat; tags: Etiquet
         <div className="mini-tags">
           {(Object.keys(NOMS_ETIQUETTES) as (keyof Etiquettes)[]).filter((k) => tags[k]).map((k) => <span key={k}>{NOMS_ETIQUETTES[k]}</span>)}
           {r.portions && <span className="neutre">{r.portions}</span>}
+          {r.kcal !== undefined && <span className="neutre">≈ {r.kcal} kcal / portion</span>}
+          {r.proteines !== undefined && <span className="neutre">≈ {r.proteines} g de protéines / portion</span>}
         </div>
       </header>
       <div className="actions">
@@ -169,64 +179,10 @@ function Detail({ r, etat, tags, agir }: { r: Recette; etat: Etat; tags: Etiquet
   );
 }
 
-// ----- Liste de courses ----------------------------------------------------------------------------
-
-function Courses({ panier, agir }: { panier: Recette[]; agir: (a: Action) => void }) {
-  const [pris, setPris] = useState<Set<string>>(new Set());
-  const [copie, setCopie] = useState(false);
-  const groupes = useMemo(() => listeCourses(panier), [panier]);
-  if (!panier.length) return <p className="vide">Cochez des recettes dans la liste pour préparer les courses.</p>;
-  const copier = async () => {
-    await api.copier(texteCourses(groupes, panier));
-    setCopie(true);
-    setTimeout(() => setCopie(false), 1800);
-  };
-  return (
-    <div className="courses">
-      <div className="entete">
-        <h1>Liste de courses</h1>
-        <div className="actions">
-          <button className="bouton" onClick={copier}>{copie ? "Copié ✓" : "Copier la liste"}</button>
-          <button className="bouton secondaire" onClick={() => agir({ type: "viderPanier" })}>Tout décocher</button>
-        </div>
-      </div>
-      <div className="puces">
-        {panier.map((r) => (
-          <span key={r.id} className="puce actif">{r.titre}<button title="Retirer" onClick={() => agir({ type: "panier", id: r.id, dedans: false })}>×</button></span>
-        ))}
-      </div>
-      <div className="rayons" data-testid="liste-courses">
-        {groupes.map((g) => (
-          <section key={g.rayon} className="carte">
-            <h3>{g.rayon}</h3>
-            <ul>
-              {g.articles.map((a) => {
-                const detail = detailArticle(a);
-                return (
-                  <li key={a.cle} className={pris.has(a.cle) ? "pris" : ""}>
-                    <label>
-                      <input type="checkbox" checked={pris.has(a.cle)} onChange={() => {
-                        const p = new Set(pris);
-                        if (p.has(a.cle)) p.delete(a.cle); else p.add(a.cle);
-                        setPris(p);
-                      }} />
-                      <span><b>{a.nom}</b>{detail && <small>{detail}</small>}</span>
-                    </label>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ----- Ajouter une recette ---------------------------------------------------------------------------
 
 function Ajouter({ onAjout }: { onAjout: (r: Recette) => void }) {
-  const [f, setF] = useState({ titre: "", lien: "", portions: "", ingredients: "", etapes: "", remarques: "" });
+  const [f, setF] = useState({ titre: "", lien: "", portions: "", ingredients: "", etapes: "", remarques: "", kcal: "", proteines: "" });
   const champ = (k: keyof typeof f) => ({ value: f[k], onChange: (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value }) });
   const lignes = (s: string) => s.split("\n").map((l) => l.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, "").trim()).filter(Boolean);
   const ok = f.titre.trim() && lignes(f.ingredients).length;
@@ -238,6 +194,8 @@ function Ajouter({ onAjout }: { onAjout: (r: Recette) => void }) {
         id: `perso-${crypto.randomUUID()}`, titre: f.titre.trim(), portions: f.portions.trim() || undefined,
         ingredients: lignes(f.ingredients), etapes: lignes(f.etapes), lien: f.lien.trim() || undefined,
         pourRayan: f.remarques.trim() || undefined, origine: "perso",
+        ...(Number(f.kcal) > 0 ? { kcal: Math.round(Number(f.kcal)) } : {}),
+        ...(Number(f.proteines) > 0 ? { proteines: Math.round(Number(f.proteines)) } : {}),
       });
     }}>
       <h1>Ajouter une recette</h1>
@@ -249,6 +207,10 @@ function Ajouter({ onAjout }: { onAjout: (r: Recette) => void }) {
       <div className="deux-colonnes">
         <label>Ingrédients (un par ligne)<textarea rows={8} {...champ("ingredients")} placeholder={"150 g de poulet halal\n80 g de riz"} /></label>
         <label>Étapes (une par ligne)<textarea rows={8} {...champ("etapes")} placeholder={"Cuire le riz\nGriller le poulet"} /></label>
+      </div>
+      <div className="deux-colonnes">
+        <label>kcal par portion (facultatif, si tu les connais)<input type="number" min="0" {...champ("kcal")} /></label>
+        <label>Protéines par portion en g (facultatif)<input type="number" min="0" {...champ("proteines")} /></label>
       </div>
       <label>Remarques (halal, sèche…)<textarea rows={3} {...champ("remarques")} /></label>
       <div><button className="bouton" type="submit" disabled={!ok}>Ajouter</button></div>
