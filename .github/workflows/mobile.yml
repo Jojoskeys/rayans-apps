@@ -18,7 +18,10 @@ on:
       - 'chrono/src/**'
       - 'echecs-ouvertures/src/**'
       - 'launcher/assets/hangar-logo.png'
+      - 'arene/**'
       - '.github/workflows/mobile.yml'
+  schedule:
+    - cron: '17 5 * * 1'   # chaque lundi : prix et résultats de l'Arène à jour
   workflow_dispatch:
 
 permissions:
@@ -45,6 +48,15 @@ jobs:
       - run: npm ci
       - name: Tests des règles de fusion
         run: npm test
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Arène (prix publics et rapports ; sans réseau, la tuile l'indique)
+        working-directory: .
+        continue-on-error: true
+        run: |
+          pip install --quiet numpy yfinance
+          python arene/publier.py arene/publie
       - name: Construction
         run: npm run build
       - uses: actions/upload-pages-artifact@v4
