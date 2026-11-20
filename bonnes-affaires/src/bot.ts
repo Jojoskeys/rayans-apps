@@ -15,22 +15,29 @@ import { classer, rattacher } from "./classement.ts";
 import { estExclue } from "./texte.ts";
 import { calculerDistances, Geocodeur } from "./distance.ts";
 import { COULEURS, couper, envoyerDiscord, estWebhookDiscord, type Carte } from "./discord.ts";
+import { flammes, grandePhoto, styleDe } from "./style.ts";
 import { chargerReglages } from "./reglages.ts";
 
-/** Ce qui part sur Discord : la carte et le lien qui sert à ne jamais l'envoyer deux fois. */
+/** Ce qui part sur Discord : la carte, le lien qui sert à ne jamais l'envoyer deux fois, et si c'est une
+ *  « dinguerie » (on tague tout le monde). */
 export interface Alerte {
   lien: string;
   carte: Carte;
+  dingue: boolean;
+  /** Nom de la boutique ou du site (Amazon, eBay…). */
+  boutique: string;
 }
 
 const euros = (n: number) => n.toLocaleString("fr-FR", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + " €";
 const pct = (x: number) => `−${Math.round(x * 100)} %`;
+const champ = (name: string, value: string, inline = true) => ({ name, value, inline });
 
 /** Pourquoi un bon plan Dealabs part : le nom de ma recherche, « grosse promo », ou rien. */
 export function motifBonPlan(b: BonPlan, reglages: Reglages): string | undefined {
   const r = rattacher({ site: b.site, titre: b.titre, prix: b.prix ?? 0, port: null, lien: b.lien, livrable: true, remiseEnMain: false }, reglages.recherches);
   // Un bon plan déjà « froid » (votes négatifs) n'est pas envoyé : la communauté le juge mauvais ou expiré.
   if (r && b.degres >= 0 && !estExclue(b.titre, r.exclure) && !(r.prixMax && b.prix && b.prix > r.prixMax)) return r.nom;
+  if (estDingue(b, reglages)) return "grosse promo";
   const d = reglages.discord;
   if (d?.grossesPromos === false) return undefined;
   if (b.degres >= (d?.degresMin ?? 300)) return "grosse promo";
@@ -38,22 +45,31 @@ export function motifBonPlan(b: BonPlan, reglages: Reglages): string | undefined
   return undefined;
 }
 
-export function carteBonPlan(b: BonPlan, motif: string): Carte {
-  const lignes: string[] = [];
-  if (b.prix !== undefined) {
-    let l = `💶 **${euros(b.prix)}**`;
-    if (b.prixHabituel && b.reduction) l += ` au lieu de ${euros(b.prixHabituel)} (**${pct(b.reduction)}**)`;
-    lignes.push(l);
+/** Une dinguerie : bon plan brûlant (1000° et plus), ou énorme réduction déjà validée par la communauté. */
+export function estDingue(b: BonPlan, reglages: Reglages): boolean {
+  const d = reglages.discord;
+  if (b.degres >= (d?.dingueDegres ?? 1000)) return true;
+  return b.degres >= 100 && Boolean(b.reduction && b.reduction >= (d?.dingueReduction ?? 0.7));
+}
+
+export function carteBonPlan(b: BonPlan, motif: string, dingue = false): Carte {
+  const s = styleDe(b.marchand);
+  const champs = [];
+  if (b.prix !== undefined) champs.push(champ("💶 Prix", `**${b.prix ? euros(b.prix) : "GRATUIT"}**`));
+  if (b.prixHabituel && b.reduction) {
+    champs.push(champ("🏷️ Avant", `~~${euros(b.prixHabituel)}~~`), champ("📉 Réduction", `**${pct(b.reduction)}**`));
   }
-  lignes.push([b.marchand && `🏬 ${b.marchand}`, `🔥 ${b.degres}°`, b.categorie].filter(Boolean).join(" · "));
-  lignes.push(motif === "grosse promo" ? "📣 Grosse promo" : `🔎 Ma recherche : ${motif}`);
+  champs.push(champ("🗳️ Votes", flammes(b.degres)));
+  if (b.categorie) champs.push(champ("🗂️ Rayon", b.categorie));
   return {
-    title: couper(b.titre, 256),
+    author: { name: `${s.emoji}  ${s.nom.toUpperCase()}` },
+    title: couper(`${dingue ? "🚨 " : ""}${b.titre}`, 256),
     url: b.lien,
-    description: lignes.join("\n"),
-    color: motif === "grosse promo" ? COULEURS.promo : COULEURS.recherche,
-    thumbnail: b.photo ? { url: b.photo } : undefined,
-    footer: { text: "Dealabs" },
+    description: dingue ? "🚨 **DINGUERIE** — fonce avant la rupture" : motif === "grosse promo" ? "📣 **Grosse promo**" : `🔎 Ma recherche · **${motif}**`,
+    fields: champs,
+    color: dingue ? COULEURS.dingue : s.couleur,
+    image: b.photo ? { url: grandePhoto(b.photo)! } : undefined,
+    footer: { text: "Dealabs · bons plans votés par la communauté" },
     timestamp: b.date && !Number.isNaN(b.date.getTime()) ? b.date.toISOString() : undefined,
   };
 }
@@ -63,21 +79,28 @@ export function offreAEnvoyer(o: Offre): boolean {
   return o.pepite || (o.surete === "sûr" && !o.loin);
 }
 
+/** Carte d'une annonce d'occasion (eBay aujourd'hui ; Vinted, Leboncoin… s'ils arrivent un jour). */
 export function carteOffre(o: Offre): Carte {
-  const lignes = [
-    `💶 **${euros(o.total)}**${o.port ? ` (dont ${euros(o.port)} de port)` : ""} au lieu de ${euros(o.prixHabituel)} (**${pct(o.ecart)}**)`,
-    `💰 Revente estimée : +${euros(Math.round(o.gainRevente))}`,
-    [o.etat, o.distanceKm != null && `📍 ${Math.round(o.distanceKm)} km${o.procheDe ? ` de ${o.procheDe}` : ""}`, o.livrable ? "📦 livrable" : "🤝 main propre"].filter(Boolean).join(" · "),
-    `${o.surete === "sûr" ? "✅" : o.surete === "à vérifier" ? "⚠️" : "⛔"} ${o.surete}${o.raisons.length ? " — " + o.raisons.slice(0, 3).join(", ") : ""}`,
-    `🔎 Ma recherche : ${o.recherche}`,
-  ];
+  const s = styleDe(o.site);
+  const lieu = [o.distanceKm != null && `📍 ${Math.round(o.distanceKm)} km${o.procheDe ? ` de ${o.procheDe}` : ""}`, o.livrable ? "📦 livrable" : "🤝 main propre"].filter(Boolean).join("\n");
+  const avis = `${o.surete === "sûr" ? "✅" : o.surete === "à vérifier" ? "⚠️" : "⛔"} ${o.surete}`;
   return {
-    title: couper(`${o.pepite ? "💎 " : ""}${o.titre}`, 256),
+    author: { name: `${s.emoji}  ${s.nom.toUpperCase()}${o.etat ? ` · ${o.etat}` : ""}` },
+    title: couper(`${o.pepite ? "🚨 " : ""}${o.titre}`, 256),
     url: o.lien,
-    description: couper(lignes.join("\n"), 4096),
-    color: o.pepite ? COULEURS.pepite : COULEURS.recherche,
-    thumbnail: o.photo ? { url: o.photo } : undefined,
-    footer: { text: `${o.site} · prix habituel : ${o.originePrix}` },
+    description: o.pepite ? "🚨 **DINGUERIE** — pépite sûre, bien sous son prix" : `🔎 Ma recherche · **${o.recherche}**`,
+    fields: [
+      champ("💶 Prix", `**${euros(o.total)}**${o.port ? `\ndont ${euros(o.port)} de port` : ""}`),
+      champ("🏷️ Habituel", `~~${euros(o.prixHabituel)}~~`),
+      champ("📉 Réduction", `**${pct(o.ecart)}**`),
+      champ("💰 Revente", `+${euros(Math.round(o.gainRevente))}`),
+      champ("🚚 Retrait", lieu),
+      champ("🛡️ Avis", avis),
+      ...(o.raisons.length ? [champ("Pourquoi", couper(o.raisons.slice(0, 4).join(" · "), 1024), false)] : []),
+    ],
+    color: o.pepite ? COULEURS.dingue : s.couleur,
+    image: o.photo ? { url: o.photo } : undefined,
+    footer: { text: `${s.nom} · prix habituel : ${o.originePrix}` },
   };
 }
 
@@ -122,7 +145,7 @@ async function alertesEbay(reglages: Reglages, racine: string): Promise<Alerte[]
   }
   return classer(annonces, reglages)
     .filter(offreAEnvoyer)
-    .map((o) => ({ lien: o.lien, carte: carteOffre(o) }));
+    .map((o) => ({ lien: o.lien, carte: carteOffre(o), dingue: o.pepite, boutique: styleDe(o.site).nom }));
 }
 
 async function main() {
@@ -140,7 +163,9 @@ async function main() {
     const plans = await chercherDealabs();
     for (const b of plans) {
       const motif = motifBonPlan(b, reglages);
-      if (motif) alertes.push({ lien: b.lien, carte: carteBonPlan(b, motif) });
+      if (!motif) continue;
+      const dingue = estDingue(b, reglages);
+      alertes.push({ lien: b.lien, carte: carteBonPlan(b, motif, dingue), dingue, boutique: styleDe(b.marchand).nom });
     }
     console.log(`Dealabs : ${plans.length} bons plans lus, ${alertes.length} retenus`);
   } catch (e) {
@@ -155,9 +180,14 @@ async function main() {
   }
 
   const vus = new DejaVus(join(racine, "resultats", "bot-deja-vus.json"));
-  const nouvelles = alertes.filter((a) => !vus.a(a.lien));
+  // Un bon plan déjà envoyé qui devient une dinguerie (ses votes montent) repart une fois, avec le tag.
+  const cle = (a: Alerte) => (a.dingue ? "dinguerie " : "") + a.lien;
+  const nouvelles = alertes.filter((a) => !vus.a(cle(a)));
   if (essai) {
-    for (const a of nouvelles) console.log(`• ${a.carte.title}\n  ${a.carte.description?.replace(/\n/g, "\n  ")}\n  ${a.lien}`);
+    for (const a of nouvelles) {
+      const champs = (a.carte.fields ?? []).map((f) => `${f.name} ${f.value.replace(/\n/g, " ")}`).join(" | ");
+      console.log(`${a.dingue ? "🚨 @everyone " : "• "}[${a.boutique}] ${a.carte.title}\n  ${a.carte.description}\n  ${champs}\n  ${a.lien}`);
+    }
     console.log(`(essai : ${nouvelles.length} seraient envoyées, rien n'est envoyé)`);
     return;
   }
@@ -169,10 +199,18 @@ async function main() {
     }]);
     console.log(`Premier passage : ${nouvelles.length} affaires déjà en ligne retenues sans envoi.`);
   } else if (nouvelles.length) {
-    await envoyerDiscord(webhook!, nouvelles.map((a) => a.carte));
-    console.log(`Discord : ${nouvelles.length} envoyées`);
+    // Chaque dinguerie part seule, avec @everyone ; le reste part en paquets, sans tag.
+    for (const a of nouvelles.filter((x) => x.dingue)) {
+      await envoyerDiscord(webhook!, [a.carte], `@everyone 🚨 **DINGUERIE** chez ${a.boutique} !`, fetch, true);
+    }
+    const calmes = nouvelles.filter((x) => !x.dingue);
+    if (calmes.length) await envoyerDiscord(webhook!, calmes.map((a) => a.carte));
+    console.log(`Discord : ${nouvelles.length} envoyées, dont ${nouvelles.length - calmes.length} dingueries (@everyone)`);
   }
-  for (const a of nouvelles) vus.retenir(a.lien);
+  for (const a of nouvelles) {
+    vus.retenir(cle(a));
+    vus.retenir(a.lien);
+  }
   vus.enregistrer();
 }
 
