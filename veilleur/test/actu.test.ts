@@ -1,7 +1,7 @@
 process.env.TZ = "Europe/Paris";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { analyserReponse, construirePrompt, editionSimple, lireRss, motsCles, recents, recopie, regrouper, SYSTEME, type Article } from "../src/actu.ts";
+import { analyserReponse, construirePrompt, editionSimple, extraitChapo, lireRss, motsCles, recents, recopie, regrouper, SYSTEME, type Article } from "../src/actu.ts";
 import { DEFAULT_PREFS, EMPTY_STATE, plan } from "../src/plan.ts";
 
 const at = (d: number, h: number, m = 0) => new Date(2026, 10, d, h, m).getTime();
@@ -47,7 +47,7 @@ test("regroupement : même sujet chez plusieurs médias, ces sujets d'abord", ()
   assert.deepEqual(g[0].map((a) => a.media), ["Le Monde", "franceinfo"]);
 });
 
-test("repli sans clé : 8 sujets au plus, titre + médias + liens, « une seule source » signalée, pas de résumé", () => {
+test("repli sans clé : 8 sujets au plus, titre + médias + liens, « une seule source » signalée, pas de résumé sans chapô", () => {
   const arts = [
     art("BBC News", "Japan earthquake forces thousands to evacuate", 7),
     art("franceinfo", "Séisme au Japon : des milliers d'évacués", 7),
@@ -63,6 +63,18 @@ test("repli sans clé : 8 sujets au plus, titre + médias + liens, « une seule 
   assert.equal(e.sujets[0].uneSource, false);
   assert.equal(e.sujets[0].resume, "");
   assert.equal(e.sujets[1].uneSource, true);
+});
+
+test("repli gratuit : le début du chapô du média sert de résumé (média préféré d'abord), coupé proprement", () => {
+  const e = editionSimple([
+    art("BBC News", "Japan earthquake forces thousands to evacuate", 7, undefined, "A strong quake hit Hokkaido."),
+    art("Le Monde", "Séisme au Japon : des milliers d'évacués", 6, undefined, ""),
+    art("franceinfo", "Séisme au Japon : des milliers d'évacués à Hokkaido", 7, undefined, "Un séisme de magnitude 7 a frappé le nord du pays. Les secours sont sur place. Bilan à venir."),
+  ], at(20, 8));
+  assert.equal(e.sujets[0].resume, "Un séisme de magnitude 7 a frappé le nord du pays. Les secours sont sur place.");
+  assert.equal(extraitChapo("  Une   phrase sans point final  "), "Une phrase sans point final");
+  const long = extraitChapo(`${"mot ".repeat(100)}fin.`);
+  assert.ok(long.length <= 280 && long.endsWith("…") && !long.includes("mo…"));
 });
 
 test("prompt : articles numérotés avec média, titre et chapô ; consignes de résumé sans recopie", () => {
