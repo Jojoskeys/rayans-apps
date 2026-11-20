@@ -198,18 +198,36 @@ def recuperer(stock: Stock, limite: int | None = None, afficher=print) -> dict:
     import time
     bilan = {"ok": 0, "erreur": 0, "freine": 0}
     a_faire = stock.par_etat("a_recuperer")[: limite or None]
+    mise_de_cote = None  # vidéo refusée seule : peut-être interdite elle seule, pas tout le compte
     for i, v in enumerate(a_faire, 1):
         afficher(f"[{i}/{len(a_faire)}] {v['id']}…")
         if i > 1 and v["plateforme"] != "fichier":
             # Instagram et TikTok bloquent ceux qui enchaînent trop vite (TikTok plus vite qu'Instagram).
             time.sleep(PAUSE_TIKTOK if v["plateforme"] == "tiktok" else PAUSE)
         resultat = _une_avec_freins(stock, v, afficher)
+        if resultat == "stop" and mise_de_cote is None:
+            # Une vidéo peut être interdite seule (TikTok : « blocked from accessing this post ») :
+            # on la met de côté et on essaie la suivante au lieu de bloquer toute la file.
+            mise_de_cote = v
+            stock.changer(v["id"], etat="erreur",
+                          erreur="refusée par la plateforme pour cette vidéo, les suivantes passaient")
+            afficher("   mise de côté (refusée), on essaie la suivante.")
+            stock.enregistrer()
+            continue
         if resultat == "stop":
+            # Deux refus de suite : c'est bien la plateforme qui bloque tout. La vidéo mise de côté attend aussi.
+            stock.changer(mise_de_cote["id"], etat="a_recuperer", erreur=None)
+            stock.enregistrer()
             afficher("   arrêt : la plateforme bloque encore, relancer plus tard ; les vidéos restantes attendent.")
             bilan["freine"] += 1
             break
+        if mise_de_cote is not None:
+            bilan["erreur"] += 1  # la suivante n'a pas été bloquée : la mise de côté était bien un refus isolé
+            mise_de_cote = None
         bilan[resultat] += 1
         stock.enregistrer()
+    if mise_de_cote is not None:
+        bilan["erreur"] += 1
     return bilan
 
 
