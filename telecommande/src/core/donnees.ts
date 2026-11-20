@@ -22,6 +22,8 @@ export interface Reglages {
 
 export interface Donnees {
   code: string;
+  /** Code de Rayan's Montre (garmin/montre) : il ne permet QUE d'envoyer les saisies de la montre (POST /api/montre). */
+  codeMontre: string;
   reglages: Reglages;
   scenarios: Scenario[];
   journal: Evenement[];
@@ -63,6 +65,9 @@ export function normaliserDonnees(brut: unknown): Donnees {
     : SCENARIOS_DEFAUT.map((s) => ({ ...s, etapes: [] }));
   const journal = Array.isArray(d.journal) ? d.journal.filter((e): e is Evenement => estObjet(e) && typeof e.at === "number" && typeof e.quoi === "string").slice(-200) : [];
   const boite = Array.isArray(d.boite) ? d.boite.filter((e): e is ElementBoite => estObjet(e) && typeof e.id === "string" && /^[a-z0-9-]+$/.test(e.id) && (e.type === "fichier" || e.type === "texte")) : [];
-  const code = typeof d.code === "string" && d.code.replace(/[^A-Z0-9]/g, "").length >= 20 ? d.code : genererCode();
-  return { code, reglages, scenarios, journal, boite };
+  const codeOk = (c: unknown): c is string => typeof c === "string" && c.replace(/[^A-Z0-9]/g, "").length >= 20;
+  const code = codeOk(d.code) ? d.code : genererCode();
+  let codeMontre = codeOk(d.codeMontre) && d.codeMontre !== code ? d.codeMontre : genererCode();
+  while (codeMontre === code) codeMontre = genererCode();
+  return { code, codeMontre, reglages, scenarios, journal, boite };
 }

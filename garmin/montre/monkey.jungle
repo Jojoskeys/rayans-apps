@@ -1,0 +1,3 @@
+project.manifest = manifest.xml
+# source-config/ : adresse et code du PC, écrits par construire.ps1 depuis config.local.json (jamais dans le dépôt).
+base.sourcePath = source;source-config
