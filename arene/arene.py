@@ -262,9 +262,12 @@ def acheter_garder(prix, debut, fin):
     return rendements_jour(pos, prix[debut:fin])[0]
 
 
-def evoluer(prix, debut, fin, rng, generations=20, population=200):
-    """Sélection naturelle sur [debut, fin). Renvoie la population finale triée (meilleure d'abord)."""
+def evoluer(prix, debut, fin, rng, generations=20, population=200, film=None):
+    """Sélection naturelle sur [debut, fin). Renvoie la population finale triée (meilleure d'abord).
+    film : liste remplie, une entrée par génération, de [id, id du parent (ou -1), type, rendement, survit]
+    pour l'animation de la tuile Arène (ne change rien aux résultats)."""
     pop = [genome_hasard(rng) for _ in range(population)]
+    ids, parents, prochain = list(range(population)), [-1] * population, population
     memo = {}
 
     def juger(g):
@@ -275,15 +278,26 @@ def evoluer(prix, debut, fin, rng, generations=20, population=200):
         return memo[cle]
 
     for _ in range(generations):
-        notes = [juger(g) + (g,) for g in pop]
+        notes = [juger(g) + (g, ids[k], parents[k]) for k, g in enumerate(pop)]
         notes.sort(key=lambda x: -x[0])
         survivantes = notes[: population // 2]           # la moitié la moins bonne meurt
-        enfants = [muter(rng.choice(survivantes)[3], rng) for _ in range(population - len(survivantes))]
+        if film is not None:
+            vivants = {x[4] for x in survivantes}
+            film.append([[x[4], x[5], TYPES.index(x[3]["type"]), round(x[1], 4), x[4] in vivants] for x in notes])
+            # notes triées : le premier de chaque génération est celui que la sélection préfère (couronné)
+        meres, enfants = [], []
+        for _ in range(population - len(survivantes)):    # même ordre de tirage qu'avant : mère puis mutation
+            m = rng.choice(survivantes)
+            meres.append(m)
+            enfants.append(muter(m[3], rng))
         pop = [s[3] for s in survivantes] + enfants
+        ids = [s[4] for s in survivantes] + list(range(prochain, prochain + len(enfants)))
+        parents = [s[5] for s in survivantes] + [m[4] for m in meres]
+        prochain += len(enfants)
     final = []
-    for g in pop:
+    for g, ident, parent in zip(pop, ids, parents):
         n, r, nb = juger(g)
-        final.append({"genome": g, "note": n, "rendement": r, "ordres": nb})
+        final.append({"genome": g, "note": n, "rendement": r, "ordres": nb, "id": ident, "parent": parent})
     final.sort(key=lambda x: -x["note"])
     return final
 

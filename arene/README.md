@@ -18,7 +18,9 @@ meurent »), mais testée honnêtement :
 ## Sur le téléphone et le PC
 
 Tuile **Arène** de Rayan's Mobile (https://jojoskeys.github.io/rayans-apps/arene/, à ouvrir aussi dans le
-navigateur du PC) : plan mensuel au choix du montant (calculé sur le téléphone) et résultats des robots avec leurs
+navigateur du PC) : **arène animée** (une vraie évolution de 200 petits robots filmée génération par génération :
+ils grossissent quand ils gagnent, la moitié meurt, les survivants font des enfants, puis la championne passe
+l'examen sur l'année jamais vue contre « acheter et garder » ; `film.json`), plan mensuel au choix du montant (calculé sur le téléphone) et résultats des robots avec leurs
 rapports. Chaque lundi, `.github/workflows/mobile.yml` lance `python arene/publier.py arene/publie` (prix publics
 et rapports à jour), puis reconstruit Rayan's Mobile.
 
