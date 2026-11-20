@@ -99,3 +99,22 @@ test("robot : une recherche par site et par passage, à tour de rôle ; pause ap
   await passageRobot(recherches, etat, { ...o, maintenant: new Date(2026, 10, 21, 3, 0) });
   assert.equal(demandees.length, avant);
 });
+
+test("robot : plusieurs recherches par passage, arrêt du site dès un blocage", async () => {
+  const recherches: Recherche[] = ["a", "b", "c"].map((nom) => ({ nom, mots: nom, categorie: "autre" }));
+  const demandees: string[] = [];
+  const chercheurs = {
+    Vinted: async (x: Recherche) => {
+      demandees.push(x.nom);
+      if (x.nom === "c") throw new Blocage("Vinted demande une vérification (403)");
+      return [];
+    },
+  };
+  const etat: EtatRobot = { sites: {}, amorces: [] };
+  const o = { sites: ["Vinted" as const], nuitDebut: 1, nuitFin: 7, parPassage: 2, ecartMs: 0, chercheurs, maintenant: new Date(2026, 10, 20, 12, 0) };
+  const res = await passageRobot(recherches, etat, o);
+  assert.deepEqual(res.lues, ["Vinted|a", "Vinted|b"]);
+  await passageRobot(recherches, etat, o);
+  assert.deepEqual(demandees, ["a", "b", "c"], "après le blocage sur c, plus aucune page");
+  assert.ok(etat.sites.Vinted?.pauseJusqua);
+});

@@ -2,7 +2,8 @@
 // et peuvent bloquer un temps la connexion de la box (pages « vérifie que tu es humain » sur le Wi-Fi).
 // Règles de prudence :
 //   - sans compte, sans cookie : il lit la page de recherche publique, comme un navigateur ;
-//   - une seule recherche par site et par passage, chacune à son tour (rotation) ;
+//   - peu de recherches par site et par passage (parPassage, 1 par défaut), chacune à son tour, quelques
+//     secondes d'écart entre deux pages ;
 //   - rien la nuit (de nuitDebut à nuitFin) ;
 //   - aucune ruse : dès qu'un site demande une vérification ou refuse, pause automatique (6 h, puis 12 h,
 //     24 h, 48 h au plus), signalée sur Discord ; le compteur repart à zéro après un passage réussi.
@@ -179,6 +180,10 @@ export interface OptionsRobot {
   sites: SiteRobot[];
   nuitDebut: number;
   nuitFin: number;
+  /** Recherches lues par site et par passage (1 par défaut, 3 au plus). */
+  parPassage?: number;
+  /** Attente entre deux pages d'un même site (ms). */
+  ecartMs?: number;
   maintenant?: Date;
   chercheurs?: Partial<Record<SiteRobot, (r: Recherche) => Promise<Annonce[]>>>;
 }
@@ -189,29 +194,33 @@ export async function passageRobot(recherches: Recherche[], etat: EtatRobot, o: 
   const res: ResultatRobot = { annonces: [], lues: [], messages: [] };
   if (!recherches.length || estLaNuit(maintenant, o.nuitDebut, o.nuitFin)) return res;
   const chercheurs = { Vinted: chercherVinted, Leboncoin: chercherLeboncoin, ...o.chercheurs };
+  const parPassage = Math.min(Math.max(o.parPassage ?? 1, 1), 3, recherches.length);
   for (const site of o.sites) {
     const e: EtatSite = (etat.sites[site] ??= { curseur: 0, blocages: 0 });
-    if (e.pauseJusqua && e.pauseJusqua > maintenant.getTime()) continue;
-    const r = recherches[e.curseur % recherches.length];
-    e.curseur = (e.curseur + 1) % recherches.length;
-    try {
-      const trouvees = await chercheurs[site](r);
-      res.annonces.push(...trouvees);
-      res.lues.push(`${site}|${r.nom}`);
-      if (e.pauseJusqua) res.messages.push(`▶️ ${site} : le robot reprend.`);
-      e.blocages = 0;
-      delete e.pauseJusqua;
-      console.log(`${site} · ${r.nom} : ${trouvees.length} annonces`);
-    } catch (err) {
-      if (err instanceof Blocage) {
+    for (let n = 0; n < parPassage; n++) {
+      if (e.pauseJusqua && e.pauseJusqua > maintenant.getTime()) break;
+      if (n > 0) await new Promise((ok) => setTimeout(ok, o.ecartMs ?? 4000));
+      const r = recherches[e.curseur % recherches.length];
+      e.curseur = (e.curseur + 1) % recherches.length;
+      try {
+        const trouvees = await chercheurs[site](r);
+        res.annonces.push(...trouvees);
+        res.lues.push(`${site}|${r.nom}`);
+        if (e.pauseJusqua) res.messages.push(`▶️ ${site} : le robot reprend.`);
+        e.blocages = 0;
+        delete e.pauseJusqua;
+        console.log(`${site} · ${r.nom} : ${trouvees.length} annonces`);
+      } catch (err) {
+        if (!(err instanceof Blocage)) {
+          console.warn((err as Error).message);
+          continue;
+        }
         e.blocages++;
         const duree = dureePause(e.blocages);
         e.pauseJusqua = maintenant.getTime() + duree;
         const msg = `⏸️ ${err.message} : robot ${site} en pause ${duree / HEURE} h, sans rien forcer. Si ça revient souvent, on l'arrête.`;
         res.messages.push(msg);
         console.warn(msg);
-      } else {
-        console.warn((err as Error).message);
       }
     }
   }
