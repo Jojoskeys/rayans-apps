@@ -9,6 +9,9 @@ python fabrique.py projets/ayati-mere-de-moussa.json
 
 La vidéo sort dans `sorties/`. Avec `--sans-rendu`, seuls l'audio et la chronologie sont préparés.
 
+**Avant chaque vidéo, relire [`REGLES.md`](REGLES.md)** (ce que Rayan veut, ce qu'il ne veut jamais). Après chaque
+retour lu avec `python a_valider.py retours`, y ajouter la règle correspondante, datée.
+
 ## Comment ça marche
 
 1. `fabrique.py` (Python) prépare tout ce qui est « son » et « temps » :
@@ -39,6 +42,37 @@ Chaque segment est une `narration` (texte lu par la voix) ou un `verset` (`ref` 
 - `accents` : `{"mot": "effet"}`, avec comme effets `impact`, `flash`, `whoosh`, `battement`, `secousse`,
   `zoom`, `pop`, ou `pop:Icone` (une icône de lucide.dev qui surgit, par exemple `pop:Heart`).
 - `titre` : `{"mot": "...", "texte": "..."}`, un gros titre qui claque sur ce mot.
+- `"battement": true` (dans le projet, désactivé par défaut) : les mots des `accents` et du `titre` battent
+  doucement (100 % → 105 % → 100 %) dans les sous-titres. Jamais sur le texte arabe ni sur la récitation.
+- `"format": "long"` : vidéo YouTube 16:9 (voir plus bas). Un segment peut alors avoir une `image`.
+
+## Commandes
+
+| Commande | Rôle |
+|---|---|
+| `python regles.py [slug…]` | contrôle les hashtags (sourate ↔ hashtag, doublons) ; ne modifie rien |
+| `python controle.py <slug>` | planche d'images + son : LUFS, crête, saturation, voix au-dessus du fond |
+| `python a_valider.py envoyer <slug>` | dépôt dans la tuile Studio ; le résumé du son est ajouté à la note |
+| `python longue.py planche <slug>` | format long : planche de style + intro déposées pour validation |
+| `python longue.py miniatures <slug>` | 3 miniatures (`"miniatures": ["texte 1", "texte 2", "texte 3"]` dans le projet) |
+| `python decouper.py <video.mp4>` | 4-6 extraits verticaux sous-titrés d'une vidéo longue de Rayan (jamais un verset coupé) |
+| `python bilan.py` / `python bilan.py jour` | top 3 / flop 3 + recommandation ; résumé des 24 h (lecture seule) |
+| `python nuit.py [--essai]` | fabrication de nuit des scripts validés + journal `sorties/nuit/<date>.txt` |
+| `planifier_nuit.ps1` | enregistre la tâche Windows de 2 h (seulement si Rayan le décide) |
+| `python -m unittest discover -s tests` | tests du Studio |
+
+## Format long (YouTube 16:9)
+
+1. `"format": "long"` dans le projet, puis `python fabrique.py projets/<slug>.json` : voix d'une traite, puis
+   `sorties/<slug>.passages.txt` donne l'horodatage exact de chaque passage sur la voix.
+2. Tant que Rayan n'a pas répondu « OK » sur `<slug>-intro` dans la tuile Studio, seule la planche de style
+   (6 s) + l'intro (≈ 30 s) est rendue et déposée : rien n'est généré en masse avant son accord
+   (`"planche_validee": true` force le rendu complet).
+3. Chaque passage : son `image` en plein cadre avec un zoom très léger, sinon le décor vertical au centre sur
+   son propre fond flouté. Les corrections de Rayan vont dans `REGLES.md` (et les visuels dans `marque/`).
+4. `python longue.py miniatures <slug>` : trois propositions de miniature.
+
+Un Short au-delà de 90 s affiche un avertissement ; au-delà de 3 min, le rendu vertical est refusé.
 
 ## Récitation libre de droits (obligatoire pour publier)
 

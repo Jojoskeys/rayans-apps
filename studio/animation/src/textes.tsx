@@ -20,7 +20,14 @@ function groupes(mots: Mot[]): Mot[][] {
   return out;
 }
 
-export const SousTitres: React.FC<{ segments: Segment[]; y: (scene: string) => number }> = ({ segments, y }) => {
+/** Effet « battement » : 0 → 1 → 0 avec un ressort doux, à partir du début du mot (pour 100 % → 105 % → 100 %). */
+export const battement = (f: number, debut: number) => {
+  const c = { damping: 14, stiffness: 160, mass: 0.6 };
+  return Math.max(0, ressort(f, debut, c) - ressort(f, debut + 6, c));
+};
+
+/** Sous-titres en français uniquement (jamais le texte arabe : il est dans CarteVerset). */
+export const SousTitres: React.FC<{ segments: Segment[]; y: (scene: string) => number; battu?: boolean }> = ({ segments, y, battu = false }) => {
   const f = useCurrentFrame();
   for (const s of segments) {
     if (!s.mots || f < s.debut || f >= s.fin) continue;
@@ -48,7 +55,8 @@ export const SousTitres: React.FC<{ segments: Segment[]; y: (scene: string) => n
         >
           {g.map((m, k) => {
             const actif = f >= m.debut && (k + 1 >= g.length || f < g[k + 1].debut);
-            const s2 = actif ? 1 + 0.12 * Math.exp(-(f - m.debut) / 4) : 1;
+            const pop = actif ? 1 + 0.12 * Math.exp(-(f - m.debut) / 4) : 1;
+            const s2 = battu && m.fort ? pop * (1 + 0.05 * battement(f, m.debut)) : pop;
             return (
               <span
                 key={k}

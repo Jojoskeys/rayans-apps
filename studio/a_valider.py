@@ -76,6 +76,11 @@ def envoyer(slug: str, note: str) -> None:
     if projet.get("hashtags"):
         texte = (texte + "\n\n" + " ".join(projet["hashtags"])).strip()
     version_legere(src, DOSSIER / f"{slug}.mp4")
+    try:  # contrôle du son (controle.py) ajouté à la note pour Rayan
+        from controle import resume_son
+        note = (note + "\n" if note else "") + resume_son(slug)
+    except Exception as e:
+        note = (note + "\n" if note else "") + f"Son : contrôle impossible ({e})"
     meta = {"titre": projet.get("titre_youtube") or projet.get("titre") or slug, "texte": texte, "note": note,
             "version": version, "envoye": int(time.time() * 1000)}
     tmp = meta_p.with_suffix(".tmp")
@@ -142,6 +147,15 @@ def idee_statut(id_: str, statut: str) -> None:
             print(f"idée « {i['texte'][:60]} » → {statut}")
             return
     sys.exit("idée introuvable")
+
+
+def reponse(dossier: Path, slug: str) -> str | None:
+    """Verdict de Rayan sur la dernière version déposée : "ok", "corriger"…, ou None (pas encore de réponse)."""
+    meta = lire(dossier / f"{slug}.json", None)
+    if not meta:
+        return None
+    rs = [r for r in lire(dossier / f"{slug}.retours.json", []) if r.get("version") == meta.get("version", 1)]
+    return rs[-1].get("verdict") if rs else None
 
 
 def retours_de(dossier: Path, avec_mp4: bool, nom: str) -> None:

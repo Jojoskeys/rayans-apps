@@ -7,6 +7,7 @@
 3. Bruitages (impact, flash, souffle, battement…) placés sur les mots marqués dans le script.
 4. Chronologie + audio écrits dans animation/public/<slug>/, puis rendu de l'animation par Remotion.
 Rien n'est publié : la vidéo atterrit dans sorties/ pour validation.
+Avec "format": "long" dans le projet : vidéo 16:9 (voir longue.py). Relire REGLES.md avant chaque vidéo.
 """
 import asyncio
 import base64
@@ -19,6 +20,8 @@ import sys
 from pathlib import Path
 
 import requests
+
+from regles import SHORT_MAX, avis_duree
 
 ICI = Path(__file__).resolve().parent
 CACHE = ICI / "cache"
@@ -619,6 +622,15 @@ def sfx(nom):
 
 
 # ------------------------------------------------------------------ Assemblage
+def marquer_forts(mots, cibles):
+    """Effet « battement » : marque comme forts les mots du sous-titre qui correspondent aux mots-clés."""
+    cles = {_norm(c) for c in cibles if _norm(c)}
+    for m in mots:
+        if _norm(m["texte"]) in cles:
+            m["fort"] = True
+    return mots
+
+
 def fabriquer(chemin_projet, rendre=True):
     projet = json.loads(Path(chemin_projet).read_text(encoding="utf-8"))
     env = lire_env()
@@ -627,6 +639,7 @@ def fabriquer(chemin_projet, rendre=True):
     pub = ANIM / "public" / projet["slug"]
     pub.mkdir(parents=True, exist_ok=True)
     style = projet.get("style", "ayati")
+    long_ = projet.get("format") == "long"   # format long 16:9 (longue.py) ; sinon Short vertical
 
     t, pistes, segs, cues, moteurs = 0.15, [], [], [], set()  # la voix démarre presque tout de suite
     n_son = 0
@@ -636,6 +649,8 @@ def fabriquer(chemin_projet, rendre=True):
         out = {"type": seg["type"], "scene": seg["scene"], "ref": seg.get("ref")}
         if seg.get("visuel"):  # données d'un décor générique (animation/src/generique.tsx)
             out["visuel"] = seg["visuel"]
+        if seg.get("image"):   # format long : image du passage (longue.py)
+            out["image"] = seg["image"]
         if seg["type"] == "verset":
             v = verset(seg["ref"])
             audio, minutage, recitateur = (CACHE / v["audio"]) if v["audio"] else None, v["minutage"], "as-Sudais"
@@ -675,6 +690,8 @@ def fabriquer(chemin_projet, rendre=True):
                         break
                 else:
                     print(f"    ! accent introuvable : {mot}")
+            if projet.get("battement"):   # effet « battement » : mots forts = accents + mot du gros titre
+                marquer_forts(out["mots"], list(accents) + ([seg["titre"]["mot"]] if seg.get("titre") else []))
             if seg.get("titre"):
                 cible = seg["titre"]["mot"]
                 m = next((m for m in out["mots"] if m["texte"].replace(" ", " ").startswith(cible)), out["mots"][0])
@@ -722,7 +739,8 @@ def fabriquer(chemin_projet, rendre=True):
     timeline = {"slug": projet["slug"], "style": style, "fps": FPS, "duree": total,
                 "marque": projet.get("marque"), "segments": segs, "cues": sorted(cues, key=lambda c: c["frame"]),
                 "audio": f"{projet['slug']}/audio.wav", "brouillon": "brouillon" in moteurs,
-                "accroche": projet.get("accroche")}
+                "accroche": projet.get("accroche"), "format": "long" if long_ else "short",
+                "battement": bool(projet.get("battement"))}
     chemin_tl = pub / "timeline.json"
     chemin_tl.write_text(json.dumps(timeline, ensure_ascii=False, indent=1), encoding="utf-8")
     polices = ANIM / "public" / "polices"
@@ -730,10 +748,22 @@ def fabriquer(chemin_projet, rendre=True):
         shutil.copytree(ICI / "polices", polices)
     voix = "voix de BROUILLON (Microsoft)" if timeline["brouillon"] else ("lecture de Rayan (voix Paul K)" if "rayan" in moteurs else "ElevenLabs")
     print(f"Chronologie prête : {t:.1f} s, {voix}")
+    avis = avis_duree(t, vertical=not long_)
+    if avis:
+        print(f"  ! {avis}")
+    if long_:
+        import longue
+        print(f"  passages horodatés : {longue.ecrire_passages(timeline)}")
+        if rendre and not longue.intro_validee(projet["slug"], projet):
+            print("  Format long : planche de style et intro à valider d'abord (rien n'est rendu en entier).")
+            longue.planche(projet["slug"])
+            return
+    elif rendre and t > SHORT_MAX:
+        sys.exit("Rendu arrêté : un Short ne dépasse pas 3 min. Découpe en épisodes ou passe en \"format\": \"long\".")
 
     if rendre:
         sortie = SORTIES / f"{projet['slug']}.mp4"
-        r = subprocess.run(["npx", "remotion", "render", "src/index.ts", "Video", str(sortie),
+        r = subprocess.run(["npx", "remotion", "render", "src/index.ts", "VideoLong" if long_ else "Video", str(sortie),
                             f"--props={chemin_tl}", "--codec=h264", "--crf=18", "--log=error"],
                            cwd=ANIM, shell=sys.platform == "win32")
         if r.returncode:

@@ -35,7 +35,7 @@ const POLICES: [string, string, string][] = [
   ["Amiri", "polices/Amiri-Bold.ttf", "700"],
 ];
 
-function usePolices() {
+export function usePolices() {
   const [poignee] = useState(() => delayRender("polices"));
   useEffect(() => {
     Promise.all(
@@ -73,7 +73,7 @@ const ySous = (style: Timeline["style"]) => (scene: string) => {
   return { lampe: 1330, palais_interieur: 1290, berge: 1180, retour: 1180 }[scene] ?? 1240;
 };
 
-export const Video: React.FC<Timeline> = (t) => {
+export const Video: React.FC<Timeline & { sansAudio?: boolean }> = (t) => {
   usePolices();
   const plans = regrouperPlans(t.segments);
   return (
@@ -93,10 +93,10 @@ export const Video: React.FC<Timeline> = (t) => {
       <Accroche texte={t.accroche} fin={Math.min(105, ...t.segments.filter((x) => x.titre).map((x) => x.titre!.frame - 6))} />
       <Titres segments={t.segments} />
       <Surgissements cues={t.cues} y={t.style === "ayati" ? 640 : 1300} />
-      <SousTitres segments={t.segments} y={ySous(t.style)} />
+      <SousTitres segments={t.segments} y={ySous(t.style)} battu={t.battement === true} />
       <Marque texte={t.marque} />
       <Progression total={t.duree} />
-      <Audio src={staticFile(t.audio)} />
+      {t.audio && !t.sansAudio ? <Audio src={staticFile(t.audio)} /> : null}
     </AbsoluteFill>
   );
 };

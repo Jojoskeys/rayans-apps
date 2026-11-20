@@ -1,4 +1,4 @@
-export type Mot = { debut: number; fin: number; texte: string };
+export type Mot = { debut: number; fin: number; texte: string; fort?: boolean }; // fort : mot-clé (effet battement)
 
 export type Verset = {
   arabe: string[];
@@ -20,6 +20,7 @@ export type Segment = {
   verset?: Verset;
   titre?: { frame: number; texte: string };
   visuel?: Visuel;
+  image?: string | null; // format long : image du passage (chemin dans public/)
 };
 
 /** Décor générique : tout vient du script (voir generique.tsx). */
@@ -45,6 +46,8 @@ export type Timeline = {
   audio: string;
   brouillon?: boolean;
   accroche?: string | null;
+  format?: "short" | "long";
+  battement?: boolean; // effet « battement » sur les mots forts des sous-titres, désactivé par défaut
 };
 
 /** Un « plan » = segments consécutifs qui partagent le même décor. */
