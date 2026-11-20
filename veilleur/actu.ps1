@@ -2,7 +2,7 @@
 # des données, met à jour le workflow du veilleur depuis le modèle, puis lance un premier passage.
 #   powershell -ExecutionPolicy Bypass -File veilleur\actu.ps1
 # La clé est tapée masquée et part directement dans les secrets GitHub : elle ne s'affiche jamais et n'est écrite
-# nulle part sur le PC. Sans clé, la newsletter marche quand même (titres + liens, sans résumé).
+# nulle part sur le PC. Sans clé, la newsletter marche quand même (édition gratuite : rubriques, titres, début du chapô, images, liens).
 $ErrorActionPreference = "Stop"
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) { Write-Host "Installe GitHub CLI : winget install GitHub.cli"; exit 1 }
 gh auth status *> $null

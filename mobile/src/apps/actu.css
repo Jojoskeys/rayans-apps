@@ -1,0 +1,63 @@
+/* « Ton monde ce matin » : mise en page de magazine, dans le style sombre de Rayan's Mobile (suit le thème choisi). */
+.actu { gap: 18px; overflow-x: clip; /* « clip » et non « hidden » : garde le sommaire collant */ }
+.actu a { color: inherit; }
+.actu .a-titre, .actu h3 { font-family: "New York", ui-serif, Georgia, "Times New Roman", serif; letter-spacing: -.01em; color: var(--texte); }
+.rub-essentiel { --c: #E3A33B; } .rub-tech { --c: #5B8DEF; } .rub-cyber { --c: #E8594F; } .rub-geo { --c: #3BA776; } .rub-bref { --c: #9AA3B2; } .rub-une { --c: var(--accent); }
+
+.a-tete { display: flex; flex-direction: column; gap: 6px; padding-bottom: 14px; border-bottom: 1px solid var(--bord); }
+.a-sur { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #E3A33B; }
+.a-titre { margin: 0; font-size: 30px; line-height: 1.1; font-weight: 700; }
+.a-titre span { font-size: 18px; font-weight: 500; color: var(--texte-2); white-space: nowrap; }
+.a-meta { margin: 0; font-size: 13.5px; color: var(--texte-2); }
+.a-jours { margin-top: 6px; }
+
+/* Sommaire collant : les rubriques d'un coup de pouce. */
+.a-sommaire { position: sticky; top: env(safe-area-inset-top); z-index: 5; margin: -6px -16px 0; padding: 8px 16px 10px;
+  box-shadow: 0 calc(-1 * env(safe-area-inset-top)) 0 var(--fond); /* cache ce qui défile sous la barre d'état */
+  display: flex; gap: 6px; background: color-mix(in srgb, var(--fond) 88%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--bord); }
+.a-sommaire { gap: 5px; }
+.a-sommaire button { flex: 1 1 auto; min-width: 0; font: inherit; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--texte-2); background: var(--panneau); border: 1px solid var(--bord); border-radius: 99px; padding: 7px 8px; }
+.a-sommaire button::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 99px; background: var(--c); margin-right: 5px; vertical-align: 1px; }
+.a-sommaire button.actif { color: var(--texte); border-color: var(--c); background: color-mix(in srgb, var(--c) 18%, var(--panneau)); }
+
+.a-rubrique { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: calc(env(safe-area-inset-top) + 64px); }
+.a-rub-titre { display: flex; align-items: baseline; gap: 10px; margin: 6px 0 0; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
+.a-rub-titre::after { content: ""; flex: 1; height: 2px; background: linear-gradient(90deg, var(--c), transparent); align-self: center; opacity: .6; }
+.a-rub-titre small { order: 2; font-size: 12px; color: var(--texte-2); letter-spacing: 0; font-weight: 600; }
+.a-intro { margin: 0; font-size: 17px; line-height: 1.5; color: var(--texte); font-family: "New York", ui-serif, Georgia, serif; font-style: italic; }
+
+/* L'essentiel : grandes cartes avec image. */
+.a-une { background: var(--panneau); border: 1px solid var(--bord); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
+.a-img { display: block; aspect-ratio: 16 / 9; background: var(--panneau-2); overflow: hidden; }
+.a-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.a-une-corps { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; position: relative; }
+.a-num { font: 800 13px/1 -apple-system, system-ui, sans-serif; color: var(--c); letter-spacing: .08em; }
+.a-une h3 { margin: 0; font-size: 22px; line-height: 1.22; font-weight: 700; }
+.a-une h3 a, .a-carte h3 a { text-decoration: none; }
+
+/* Cartes des rubriques : miniature à droite. */
+.a-carte { background: var(--panneau); border: 1px solid var(--bord); border-left: 3px solid var(--c); border-radius: 16px; padding: 14px 14px 14px 15px; display: flex; flex-direction: column; gap: 9px; }
+.a-haut { display: flex; gap: 12px; align-items: flex-start; }
+.a-carte h3 { flex: 1; min-width: 0; margin: 0; font-size: 17.5px; line-height: 1.28; font-weight: 700; overflow-wrap: anywhere; }
+.a-mini { flex: 0 0 76px; width: 76px; height: 76px; border-radius: 12px; overflow: hidden; background: var(--panneau-2); }
+.a-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.a-resume { margin: 0; font-size: 15px; line-height: 1.5; color: var(--texte-2); overflow-wrap: anywhere; }
+.a-pourquoi { margin: 0; font-size: 14.5px; line-height: 1.45; color: var(--texte); padding: 10px 12px; border-radius: 12px;
+  background: color-mix(in srgb, var(--c) 13%, transparent); border: 1px solid color-mix(in srgb, var(--c) 35%, transparent); }
+.a-pourquoi b { display: block; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--c); margin-bottom: 3px; }
+
+.a-sources { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.a-media { font-size: 12.5px; font-weight: 600; text-decoration: none; color: var(--texte); background: var(--panneau-2); border: 1px solid var(--bord); border-radius: 99px; padding: 4px 10px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.a-media:active { border-color: var(--c); }
+.a-seule { font-size: 11.5px; color: var(--texte-2); opacity: .75; font-style: italic; }
+
+/* En bref : une liste serrée. */
+.a-bref { list-style: none; margin: 0; padding: 4px 14px; background: var(--panneau); border: 1px solid var(--bord); border-radius: 16px; }
+.a-bref li { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-top: 1px solid var(--bord); }
+.a-bref li:first-child { border-top: 0; }
+.a-bref a { text-decoration: none; font-size: 15px; line-height: 1.35; font-weight: 600; overflow-wrap: anywhere; }
+.a-bref span { font-size: 12.5px; color: var(--texte-2); }
+.a-pied { font-size: 12.5px; color: var(--texte-2); line-height: 1.45; }
