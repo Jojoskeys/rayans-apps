@@ -4,6 +4,8 @@
 import { StrictMode, useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { mountChrome } from "../shared/chrome.ts";
+import { nettoyerFilm, type Film } from "../shared/film.ts";
+import { ArenaFilm } from "./arene-film.tsx";
 import { dateFr, euros, nettoyerPrix, planMensuel, pourcent, type Plan, type PrixArene, type ResumeArene } from "../shared/arene.ts";
 import "./telecommande.css";
 import "./petites.css";
@@ -35,8 +37,10 @@ function App() {
   const [prix, setPrix] = useState<PrixArene | null | "absent">(null);
   const [resume, setResume] = useState<ResumeArene | null>(null);
   const [montant, setMontant] = useState(100);
+  const [film, setFilm] = useState<Film | null>(null);
   useEffect(() => {
     void fetch("./prix.json", { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).then((j) => setPrix(nettoyerPrix(j) ?? "absent")).catch(() => setPrix("absent"));
+    void fetch("./film.json", { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).then((j) => setFilm(nettoyerFilm(j))).catch(() => setFilm(null));
     void fetch("./resume.json", { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).then((j) => setResume(j && Array.isArray(j.robots) ? j : null)).catch(() => setResume(null));
   }, []);
   const plan = useMemo(() => (prix && prix !== "absent" ? planMensuel(prix.dates, prix.prix, montant) : null), [prix, montant]);
@@ -45,6 +49,14 @@ function App() {
     <div className="tc">
       <h1>Arène</h1>
       <p className="petit">Argent fictif, sur des prix passés réels. Pour apprendre, pas un conseil d'investissement.</p>
+
+      {film && (
+        <section className="carte">
+          <h2>L'arène des robots</h2>
+          <p>Une vraie évolution : 200 robots, chacun avec sa règle d'achat et de vente, s'entraînent sur la bourse américaine ({film.entrainement}).</p>
+          <ArenaFilm film={film} />
+        </section>
+      )}
 
       <section className="carte">
         <h2>Plan mensuel</h2>
