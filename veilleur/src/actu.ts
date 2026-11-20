@@ -81,12 +81,24 @@ const sources = (arts: Article[]): SourceActu[] => {
 };
 const sujet = (titre: string, resume: string, arts: Article[]): SujetActu => ({ titre, resume, sources: sources(arts), uneSource: new Set(arts.map((a) => a.media)).size === 1 });
 
-/** Édition sans clé : sujets regroupés par mots communs, titre + médias + liens, 8 au plus. */
+/** Les deux premières phrases du chapô, 280 caractères au plus (coupé sur un mot, avec « … »). */
+export function extraitChapo(chapo: string): string {
+  const t = chapo.replace(/\s+/g, " ").trim();
+  const phrases = t.match(/[^.!?…]+[.!?…]+["»”]?/g) ?? [t];
+  let out = phrases.slice(0, 2).map((x) => x.trim()).join(" ") || t;
+  if (out.length > 280) out = `${out.slice(0, 279).replace(/\s+\S*$/, "")}…`;
+  return out;
+}
+
+/** Édition sans clé (gratuite) : sujets regroupés par mots communs, titre + médias + liens, 8 au plus. Le résumé est
+ *  le début du chapô que le média publie lui-même dans son flux (fait pour les lecteurs de flux) : usage personnel
+ *  seulement, jamais republié tel quel sur un compte public. */
 export function editionSimple(articles: Article[], now: number): EditionActu {
   const ordre = (a: Article) => { const i = FLUX.findIndex((f) => f.media === a.media); return i < 0 ? FLUX.length : i; };
   const sujets = regrouper(articles).slice(0, SUJETS_MAX_SIMPLE).map((g) => {
-    const tete = [...g].sort((a, b) => ordre(a) - ordre(b) || b.publie - a.publie)[0];
-    return sujet(tete.titre, "", g);
+    const tries = [...g].sort((a, b) => ordre(a) - ordre(b) || b.publie - a.publie);
+    const avecChapo = tries.find((a) => a.chapo.trim());
+    return sujet(tries[0].titre, avecChapo ? extraitChapo(avecChapo.chapo) : "", g);
   });
   return { jour: todayISO(now), genere: now, mode: "simple", sujets };
 }
