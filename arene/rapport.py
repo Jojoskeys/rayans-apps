@@ -6,6 +6,43 @@ import json
 from arene import SORTIES, decrire, pct
 
 
+STYLE = """:root { --fond:#fcfcfb; --carte:#ffffff; --texte:#0b0b0b; --texte2:#52514e; --trait:#e4e3df;
+  --s1:#2a78d6; --s2:#eb6834; --neutre:#8a8984; --alerte:#fff4e0; --alerte-bord:#eda100; }
+@media (prefers-color-scheme: dark) { :root { --fond:#1a1a19; --carte:#242423; --texte:#f0efec;
+  --texte2:#c3c2b7; --trait:#383835; --s1:#3987e5; --s2:#d95926; --neutre:#8f8e88;
+  --alerte:#2e2614; --alerte-bord:#c98500; } }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--fond); color:var(--texte); font:16px/1.5 system-ui,-apple-system,sans-serif; }
+main { max-width:960px; margin:0 auto; padding:16px; }
+h1 { font-size:1.3rem; margin:.2em 0; } h2 { font-size:1.05rem; margin:1.4em 0 .5em; }
+.sous { color:var(--texte2); margin:0 0 1em; }
+.gros { font-size:clamp(1.3rem, 4.5vw, 2rem); font-weight:700; margin:.4em 0; line-height:1.25; }
+.gros span { color:var(--texte2); font-weight:500; }
+.carte { background:var(--carte); border:1px solid var(--trait); border-radius:12px; padding:14px; margin:12px 0; }
+.chiffres { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }
+.chiffres div { background:var(--carte); border:1px solid var(--trait); border-radius:10px; padding:10px; }
+.chiffres b { display:block; font-size:1.25rem; } .chiffres small { color:var(--texte2); }
+svg { width:100%; height:auto; display:block; }
+.grille { stroke:var(--trait); stroke-width:1; } .zero { stroke:var(--neutre); stroke-width:1; }
+.axe, .etiq { fill:var(--texte2); font-size:12px; }
+polyline { fill:none; stroke-width:2; stroke-linejoin:round; }
+.l-arene { stroke:var(--s1); } .l-ag { stroke:var(--s2); }
+.l-hasard { stroke:var(--neutre); stroke-dasharray:5 4; }
+.curseur { stroke:var(--texte2); stroke-width:1; }
+.legende { display:flex; flex-wrap:wrap; gap:14px; font-size:.9rem; color:var(--texte2); margin:6px 0; }
+.legende i { display:inline-block; width:18px; height:0; border-top:2px solid; vertical-align:middle; margin-right:6px; }
+#bulle { min-height:1.5em; font-size:.9rem; color:var(--texte2); }
+.tab { overflow-x:auto; }
+table { border-collapse:collapse; width:100%; font-size:.92rem; }
+th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--trait); vertical-align:top; }
+th { color:var(--texte2); font-weight:600; } td.regle { min-width:240px; } td { white-space:nowrap; } td.regle { white-space:normal; }
+.graphe-boite { overflow-x:auto; } .graphe-boite svg { min-width:620px; }
+.lecon { background:var(--alerte); border:1px solid var(--alerte-bord); border-radius:12px; padding:14px 16px; }
+.lecon h2 { margin-top:0; } .lecon li { margin:.35em 0; }
+footer { color:var(--texte2); font-size:.85rem; margin:24px 0; }
+"""
+
+
 def _points(courbe, larg, haut, ymin, ymax, marge):
     n = len(courbe)
     pts = []
@@ -84,41 +121,7 @@ def ecrire_rapport(actif, res, reglages):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arène {e(actif)}</title>
 <style>
-:root {{ --fond:#fcfcfb; --carte:#ffffff; --texte:#0b0b0b; --texte2:#52514e; --trait:#e4e3df;
-  --s1:#2a78d6; --s2:#eb6834; --neutre:#8a8984; --alerte:#fff4e0; --alerte-bord:#eda100; }}
-@media (prefers-color-scheme: dark) {{ :root {{ --fond:#1a1a19; --carte:#242423; --texte:#f0efec;
-  --texte2:#c3c2b7; --trait:#383835; --s1:#3987e5; --s2:#d95926; --neutre:#8f8e88;
-  --alerte:#2e2614; --alerte-bord:#c98500; }} }}
-* {{ box-sizing:border-box; }}
-body {{ margin:0; background:var(--fond); color:var(--texte); font:16px/1.5 system-ui,-apple-system,sans-serif; }}
-main {{ max-width:960px; margin:0 auto; padding:16px; }}
-h1 {{ font-size:1.3rem; margin:.2em 0; }} h2 {{ font-size:1.05rem; margin:1.4em 0 .5em; }}
-.sous {{ color:var(--texte2); margin:0 0 1em; }}
-.gros {{ font-size:clamp(1.3rem, 4.5vw, 2rem); font-weight:700; margin:.4em 0; line-height:1.25; }}
-.gros span {{ color:var(--texte2); font-weight:500; }}
-.carte {{ background:var(--carte); border:1px solid var(--trait); border-radius:12px; padding:14px; margin:12px 0; }}
-.chiffres {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }}
-.chiffres div {{ background:var(--carte); border:1px solid var(--trait); border-radius:10px; padding:10px; }}
-.chiffres b {{ display:block; font-size:1.25rem; }} .chiffres small {{ color:var(--texte2); }}
-svg {{ width:100%; height:auto; display:block; }}
-.grille {{ stroke:var(--trait); stroke-width:1; }} .zero {{ stroke:var(--neutre); stroke-width:1; }}
-.axe, .etiq {{ fill:var(--texte2); font-size:12px; }}
-polyline {{ fill:none; stroke-width:2; stroke-linejoin:round; }}
-.l-arene {{ stroke:var(--s1); }} .l-ag {{ stroke:var(--s2); }}
-.l-hasard {{ stroke:var(--neutre); stroke-dasharray:5 4; }}
-.curseur {{ stroke:var(--texte2); stroke-width:1; }}
-.legende {{ display:flex; flex-wrap:wrap; gap:14px; font-size:.9rem; color:var(--texte2); margin:6px 0; }}
-.legende i {{ display:inline-block; width:18px; height:0; border-top:2px solid; vertical-align:middle; margin-right:6px; }}
-#bulle {{ min-height:1.5em; font-size:.9rem; color:var(--texte2); }}
-.tab {{ overflow-x:auto; }}
-table {{ border-collapse:collapse; width:100%; font-size:.92rem; }}
-th, td {{ text-align:left; padding:6px 8px; border-bottom:1px solid var(--trait); vertical-align:top; }}
-th {{ color:var(--texte2); font-weight:600; }} td.regle {{ min-width:240px; }} td {{ white-space:nowrap; }} td.regle {{ white-space:normal; }}
-.graphe-boite {{ overflow-x:auto; }} .graphe-boite svg {{ min-width:620px; }}
-.lecon {{ background:var(--alerte); border:1px solid var(--alerte-bord); border-radius:12px; padding:14px 16px; }}
-.lecon h2 {{ margin-top:0; }} .lecon li {{ margin:.35em 0; }}
-footer {{ color:var(--texte2); font-size:.85rem; margin:24px 0; }}
-</style></head><body><main>
+{STYLE}</style></head><body><main>
 <h1>Rayan's Arène · {e(actif)}</h1>
 <p class="sous">Argent fictif uniquement. {reglages['generations']} générations × {reglages['population']}
 stratégies, graine {reglages['graine']}. Entraînement sur 3 ans, test sur l'année suivante sans rien toucher,

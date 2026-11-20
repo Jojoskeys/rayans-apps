@@ -22,6 +22,7 @@ meurent »), mais testée honnêtement :
 | `python arene.py lancer demo` | essai sans réseau sur une série synthétique (graine fixe) |
 | `python arene.py telecharger SPY BTC-USD` | 10 ans de prix journaliers → `donnees/<actif>.csv` (demande `pip install yfinance`) |
 | `python arene.py lancer SPY --generations 20 --population 200 --graine 1` | évolution + walk-forward → `sorties/<actif>-<date>.html` et résumé console |
+| `python arene.py telecharger CW8.PA` puis `python arene.py mensuel CW8.PA --montant 100` | **plan mensuel** : 100 € versés chaque mois sur un ETF monde (CW8 = Amundi MSCI World, éligible PEA), parts entières comme sur un PEA (`--fractions` sinon), frais 0,5 % / 1 € minimum ; versé, valeur, pire chute et temps pour remonter, pire moment en euros, même argent sur un Livret A → `sorties/<actif>-mensuel-<montant>-<date>.html` |
 | `python -m unittest discover -s tests` | tests (frais, pas de fuite du futur, walk-forward, reproductibilité) |
 
 Dépendances : Python 3 et numpy ; `yfinance` seulement pour télécharger. `donnees/` et `sorties/` ne sont
