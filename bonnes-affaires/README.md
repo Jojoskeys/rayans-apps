@@ -155,17 +155,24 @@ bloquer un temps la connexion de la box (pages « vérifie que tu es humain » s
 Le robot (`src/robot.ts`) limite ce risque :
 
 - sans compte ni cookie, il lit la page de recherche publique, comme un navigateur ;
-- **une seule recherche par site et par passage**, à tour de rôle (9 recherches → chacune toutes les 45 min) ;
+- **peu de recherches par site et par passage** (`robot.parPassage`, 2 ; 3 au plus), à tour de rôle, 4 s
+  d'écart entre deux pages (15 recherches → chacune toutes les 40 min environ, 24 pages par heure) ;
 - **rien la nuit** (`robot.nuitDebut` 1 h → `robot.nuitFin` 7 h) ;
 - **aucune ruse** : dès qu'un site demande une vérification ou refuse, pause automatique de 6 h, puis 12 h, 24 h,
   48 h, signalée dans le salon (⏸️ puis ▶️ à la reprise). Si ça revient souvent : `"vinted": false`.
 - **Leboncoin est coupé** (`"leboncoin": false`) : il a demandé une vérification au robot dès le premier essai.
   On ne contourne pas ; ses alertes officielles restent la voie sûre.
 
-Une annonce d'occasion (Vinted, eBay) est postée si elle est au moins `ecartMin` (25 %) sous le prix habituel
-et n'inspire pas méfiance ; l'avis (✅ sûr, ⚠️ à vérifier) est sur la carte. L'électronique envoyée par colis
+Une annonce d'occasion (Vinted, eBay) est postée si elle est au moins `ecartOccasion` (40 %) sous le prix
+habituel, rapporte au moins `gainOccasion` (15 €) à la revente et n'inspire pas méfiance ; l'avis (✅ sûr, ⚠️ à vérifier) est sur la carte. L'électronique envoyée par colis
 reste « à vérifier » (on ne peut pas l'essayer). **Dinguerie** d'occasion : pépite, ou moitié prix qui rapporte
 au moins `gainPepite` (30 €) à la revente.
+
+Vêtements de marque : une recherche par marque **et** type de vêtement (« polo lacoste », « veste carhartt »,
+« nike tech fleece » sans les joggings…), sinon le prix habituel calculé mélange des articles trop différents.
+Les tailles enfant (`enfant`, `fille`, `ans`…) et les lots sont écartés. Recherches de Rayan : Nuptse,
+Patagonia, Ralph Lauren, Polo Lacoste, Nike Tech Fleece, Carhartt, Arc'teryx, Levi's 501, Dunk Low,
+New Balance 530, Longchamp Le Pliage.
 
 1. Discord : sur ton serveur, paramètres du salon → **Intégrations** → **Webhooks** → **Nouveau webhook** →
    **Copier l'URL du webhook**. Ce lien vaut un mot de passe : il va seulement dans `reglages.json`

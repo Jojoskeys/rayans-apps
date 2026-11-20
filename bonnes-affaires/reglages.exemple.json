@@ -26,13 +26,16 @@
     "degresMin": 300,
     "reductionMin": 0.5,
     "dingueDegres": 1000,
-    "dingueReduction": 0.7
+    "dingueReduction": 0.7,
+    "ecartOccasion": 0.4,
+    "gainOccasion": 15
   },
   "robot": {
     "vinted": true,
     "leboncoin": false,
     "nuitDebut": 1,
-    "nuitFin": 7
+    "nuitFin": 7,
+    "parPassage": 2
   },
   "recherches": [
     {

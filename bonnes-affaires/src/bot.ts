@@ -79,10 +79,12 @@ export function carteBonPlan(b: BonPlan, motif: string, dingue = false): Carte {
   };
 }
 
-/** Une offre d'occasion part si elle n'inspire pas méfiance et reste dans la zone (sauf pépite). Elle est déjà
- *  au moins `ecartMin` (25 %) sous son prix habituel, sinon le classement l'aurait écartée. */
-export function offreAEnvoyer(o: Offre): boolean {
-  return o.pepite || (o.surete !== "méfiance" && !o.loin);
+/** Une offre d'occasion part si elle n'inspire pas méfiance, reste dans la zone et vaut vraiment le coup :
+ *  au moins `ecartOccasion` (40 %) sous son prix habituel et `gainOccasion` (15 €) à la revente. Les pépites, toujours. */
+export function offreAEnvoyer(o: Offre, reglages?: Reglages): boolean {
+  if (o.pepite) return true;
+  const d = reglages?.discord;
+  return o.surete !== "méfiance" && !o.loin && o.ecartPct >= (d?.ecartOccasion ?? 0.4) && o.gainRevente >= (d?.gainOccasion ?? 15);
 }
 
 /** Dinguerie d'occasion : pépite sûre, ou moitié prix « à vérifier » qui rapporte quand même gros à la revente. */
@@ -167,7 +169,7 @@ async function alertesOccasion(reglages: Reglages, racine: string, etat: EtatRob
   if (ro.vinted !== false) sites.push("Vinted");
   // Leboncoin demande une vérification aux programmes (constaté le 20/11/2026) : coupé sauf si on l'active.
   if (ro.leboncoin === true) sites.push("Leboncoin");
-  const robot = await passageRobot(reglages.recherches, etat, { sites, nuitDebut: ro.nuitDebut ?? 1, nuitFin: ro.nuitFin ?? 7 });
+  const robot = await passageRobot(reglages.recherches, etat, { sites, nuitDebut: ro.nuitDebut ?? 1, nuitFin: ro.nuitFin ?? 7, parPassage: ro.parPassage });
   annonces.push(...robot.annonces);
   lues.push(...robot.lues);
 
@@ -176,7 +178,7 @@ async function alertesOccasion(reglages: Reglages, racine: string, etat: EtatRob
   }
   const amorcees = new Set(etat.amorces);
   const alertes = classer(annonces, reglages)
-    .filter(offreAEnvoyer)
+    .filter((o) => offreAEnvoyer(o, reglages))
     .map((o) => ({
       lien: o.lien,
       carte: carteOffre(o, offreDingue(o, reglages)),
