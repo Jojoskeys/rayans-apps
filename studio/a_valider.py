@@ -1,6 +1,7 @@
 """Vidéos à faire valider par Rayan depuis l'iPhone (tuile Studio de Rayan's Mobile, via Rayan's Télécommande).
 
-    python a_valider.py envoyer <slug> [--note "ce qui a changé"]   dépose sorties/<slug>.mp4 (version légère)
+    python a_valider.py envoyer <slug> [--note "ce qui a changé"]   dépose sorties/<slug>.mp4 (version légère ;
+                                                                    une story garde aussi <slug>.hd.mp4 pour l'onglet « À poster »)
     python a_valider.py retours                                     réponses de Rayan (dernière version de chaque vidéo)
     python a_valider.py retirer <slug>                              retire la vidéo du téléphone (garde l'historique)
 
@@ -9,6 +10,8 @@ Dossier partagé avec la Télécommande : <Vidéos>\\Rayan's Studio\\A valider (
 import argparse
 import json
 import os
+import re
+import shutil
 import subprocess
 import sys
 import time
@@ -67,7 +70,8 @@ def envoyer(slug: str, note: str) -> None:
     src = ICI / "sorties" / f"{slug}.mp4"
     if not src.exists():
         sys.exit(f"introuvable : {src}")
-    projet = lire(ICI / "projets" / f"{slug}.json", {})
+    story = re.match(r"^(.+)-story-(\d+)$", slug)
+    projet = lire(ICI / "projets" / f"{story[1] if story else slug}.json", {})
     DOSSIER.mkdir(parents=True, exist_ok=True)
     meta_p = DOSSIER / f"{slug}.json"
     ancienne = lire(meta_p, {})
@@ -76,12 +80,20 @@ def envoyer(slug: str, note: str) -> None:
     if projet.get("hashtags"):
         texte = (texte + "\n\n" + " ".join(projet["hashtags"])).strip()
     version_legere(src, DOSSIER / f"{slug}.mp4")
+    if story:  # la story se poste depuis l'iPhone (onglet « À poster ») : on garde aussi la pleine qualité
+        texte = ""
+        tmp = DOSSIER / f"{slug}.hd.tmp"
+        shutil.copyfile(src, tmp)
+        os.replace(tmp, DOSSIER / f"{slug}.hd.mp4")
     try:  # contrôle du son (controle.py) ajouté à la note pour Rayan
         from controle import resume_son
         note = (note + "\n" if note else "") + resume_son(slug)
     except Exception as e:
         note = (note + "\n" if note else "") + f"Son : contrôle impossible ({e})"
-    meta = {"titre": projet.get("titre_youtube") or projet.get("titre") or slug, "texte": texte, "note": note,
+    titre = projet.get("titre_youtube") or projet.get("titre") or slug
+    if story:
+        titre = f"Story {story[2]} · {titre}"
+    meta = {"titre": titre, "texte": texte, "note": note,
             "version": version, "envoye": int(time.time() * 1000)}
     tmp = meta_p.with_suffix(".tmp")
     tmp.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -192,7 +204,7 @@ def retours() -> None:
 
 
 def retirer(slug: str) -> None:
-    for f in (DOSSIER / f"{slug}.mp4", DOSSIER / f"{slug}.json"):
+    for f in (DOSSIER / f"{slug}.mp4", DOSSIER / f"{slug}.hd.mp4", DOSSIER / f"{slug}.json"):
         f.unlink(missing_ok=True)
     print(f"{slug} retirée (historique gardé dans {slug}.retours.json)")
 

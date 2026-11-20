@@ -52,7 +52,7 @@ Chaque segment est une `narration` (texte lu par la voix) ou un `verset` (`ref` 
 |---|---|
 | `python regles.py [slug…]` | contrôle les hashtags (sourate ↔ hashtag, doublons) ; ne modifie rien |
 | `python controle.py <slug>` | planche d'images + son : LUFS, crête, saturation, voix au-dessus du fond |
-| `python a_valider.py envoyer <slug>` | dépôt dans la tuile Studio ; le résumé du son est ajouté à la note |
+| `python a_valider.py envoyer <slug>` | dépôt dans la tuile Studio ; le résumé du son est ajouté à la note. Une story (`<slug>-story-<n>`) garde aussi sa pleine qualité (`.hd.mp4`) : une fois validée, elle passe dans l'onglet **À poster** de l'iPhone, d'où Rayan la poste lui-même |
 | `python longue.py planche <slug>` | format long : planche de style + intro déposées pour validation |
 | `python longue.py miniatures <slug>` | 3 miniatures (`"miniatures": ["texte 1", "texte 2", "texte 3"]` dans le projet) |
 | `python decouper.py <video.mp4>` | 4-6 extraits verticaux sous-titrés d'une vidéo longue de Rayan (jamais un verset coupé) |

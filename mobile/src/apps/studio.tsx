@@ -14,7 +14,7 @@ interface Video { id: string; titre: string; texte: string; note: string; versio
 const reponseActuelle = (v: Video) => [...v.retours].reverse().find((r) => r.version === v.version);
 
 /** Nom du fichier partagé : le titre, lisible par les amis (« L'histoire de Qâroûn.mp4 »). */
-const nomFichier = (v: Video) => `${v.titre.replace(/[\\/:*?"<>|]/g, "").replace(/\s+/g, " ").trim().slice(0, 80) || v.id}.mp4`;
+const nomFichier = (v: { titre: string; id: string }) => `${v.titre.replace(/[\\/:*?"<>|]/g, "").replace(/\s+/g, " ").trim().slice(0, 80) || v.id}.mp4`;
 
 /**
  * iPhone : feuille de partage (Enregistrer la vidéo, Messages, WhatsApp, Snapchat…).
@@ -34,8 +34,8 @@ async function partager(f: File): Promise<"partage" | "telecharge" | "annule"> {
 const minutes = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
 /** Télécharge la vidéo avec sa progression (l'en-tête du code empêche de la lire directement depuis le PC). */
-async function chargerVideo(cfg: Config, id: string, progression: (p: number) => void): Promise<string> {
-  const r = await appel<Response>(cfg, `/api/studio/video?id=${encodeURIComponent(id)}`, { brut: true, timeout: 10 * 60_000 });
+async function chargerVideo(cfg: Config, id: string, progression: (p: number) => void, route = "/api/studio/video"): Promise<string> {
+  const r = await appel<Response>(cfg, `${route}?id=${encodeURIComponent(id)}`, { brut: true, timeout: 10 * 60_000 });
   const total = Number(r.headers.get("Content-Length")) || 0;
   if (!r.body) return URL.createObjectURL(await r.blob());
   const lecteur = r.body.getReader();
@@ -52,7 +52,8 @@ async function chargerVideo(cfg: Config, id: string, progression: (p: number) =>
 
 interface Script { id: string; titre: string; compte: string; texte: string; sources: string[]; note: string; version: number; envoye: number; retours: Retour[] }
 interface Idee { id: string; texte: string; compte: "ayati" | "psycho" | ""; at: number; statut: "nouvelle" | "script" | "faite" | "abandonnée" }
-type Onglet = "videos" | "scripts" | "idees";
+interface Story { id: string; titre: string; version: number; envoye: number; validee: number; taille: number }
+type Onglet = "videos" | "poster" | "scripts" | "idees";
 const NOM_COMPTE: Record<string, string> = { ayati: "Ayati", psycho: "La Psycho Facile", "": "Les deux / à voir" };
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
   const [videos, setVideos] = useState<Video[] | null>(null);
   const [scripts, setScripts] = useState<Script[] | null>(null);
   const [idees, setIdees] = useState<Idee[] | null>(null);
+  const [stories, setStories] = useState<Story[] | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [message, setMessage] = useState<{ ok: boolean; texte: string } | null>(null);
   const charger = useCallback(async () => {
@@ -70,6 +72,7 @@ function App() {
     // Scripts et idées : Télécommande 1.2 ou plus ; avec une version plus ancienne, les onglets l'indiquent.
     try { setScripts((await appel<{ scripts: Script[] }>(cfg, "/api/studio/scripts")).scripts); } catch { setScripts(null); }
     try { setIdees((await appel<{ idees: Idee[] }>(cfg, "/api/studio/idees")).idees); } catch { setIdees(null); }
+    try { setStories((await appel<{ stories: Story[] }>(cfg, "/api/studio/stories")).stories); } catch { setStories(null); }
   }, [cfg]);
   useEffect(() => { void charger(); }, [charger]);
   useEffect(() => { if (!message) return; const t = setTimeout(() => setMessage(null), message.ok ? 4000 : 9000); return () => clearTimeout(t); }, [message]);
@@ -92,8 +95,9 @@ function App() {
   return (
     <div className="tc">
       <div className="titre-carte"><h1>Studio</h1><button className="lien accent" onClick={() => void charger()}>Actualiser</button></div>
-      <nav className="onglets trois">
+      <nav className="onglets">
         <button className={onglet === "videos" ? "actif" : ""} onClick={() => setOnglet("videos")}>Vidéos{pastille(aRegarder.length)}</button>
+        <button className={onglet === "poster" ? "actif" : ""} onClick={() => setOnglet("poster")}>À poster{pastille(stories?.length ?? 0)}</button>
         <button className={onglet === "scripts" ? "actif" : ""} onClick={() => setOnglet("scripts")}>Scripts{pastille(aLire.length)}</button>
         <button className={onglet === "idees" ? "actif" : ""} onClick={() => setOnglet("idees")}>Idées</button>
       </nav>
@@ -101,6 +105,7 @@ function App() {
       {erreur && <section className="carte"><p className="ko">{erreur === INJOIGNABLE ? erreur : `Impossible de lire le Studio : ${erreur}`}</p></section>}
       {onglet === "scripts" && !erreur && <Scripts cfg={cfg} scripts={scripts} dire={dire} />}
       {onglet === "idees" && !erreur && <Idees cfg={cfg} idees={idees} dire={dire} />}
+      {onglet === "poster" && !erreur && <Stories cfg={cfg} stories={stories} dire={dire} />}
       {onglet === "videos" && videos && (
         <>
           <section className="carte">
@@ -143,6 +148,59 @@ function Reponse({ titre, envoyer }: { titre: string; envoyer: (verdict: "ok" | 
         <button className="bouton" disabled={envoi || !commentaire.trim()} onClick={() => void go("corriger")}>{envoi ? "Envoi…" : "Envoyer à Claude"}</button>
       </div>
     </>
+  );
+}
+
+function Stories({ cfg, stories, dire }: { cfg: Config; stories: Story[] | null; dire: Dire }) {
+  if (!stories) return <section className="carte"><p>Mets à jour Rayan's Télécommande sur le PC (Rayan's Launcher) pour utiliser cet onglet.</p></section>;
+  return (
+    <section className="carte">
+      <div className="titre-carte"><h2>Stories à poster</h2>{stories.length > 0 && <span className="puce orange">{stories.length}</span>}</div>
+      {stories.length === 0 ? <p>Rien à poster. Une story arrive ici dès que tu la valides (« C'est bon ») dans l'onglet Vidéos.</p>
+        : stories.map((s) => <FicheStory key={`${s.id}-${s.version}`} cfg={cfg} s={s} dire={dire} />)}
+      <p className="petit">Instagram : 1 h après le Short (et Facebook pour Ayati). « Partager » ouvre le menu de l'iPhone : <b>Enregistrer la vidéo</b> ou directement <b>Instagram</b>.</p>
+    </section>
+  );
+}
+
+function FicheStory({ cfg, s, dire }: { cfg: Config; s: Story; dire: Dire }) {
+  const [src, setSrc] = useState<string | null>(null);
+  const [fichier, setFichier] = useState<File | null>(null);
+  const [progression, setProgression] = useState<number | null>(null);
+  const [envoi, setEnvoi] = useState(false);
+  useEffect(() => () => { if (src) URL.revokeObjectURL(src); }, [src]);
+  // iOS exige un toucher pour ouvrir le partage : premier toucher = chargement, second = feuille de partage.
+  const partagerStory = async () => {
+    if (!fichier) {
+      setProgression(0);
+      try {
+        const url = await chargerVideo(cfg, s.id, setProgression, "/api/studio/story");
+        setSrc(url);
+        setFichier(new File([await (await fetch(url)).blob()], nomFichier(s), { type: "video/mp4" }));
+      } catch (e) { dire.ko(String((e as Error).message ?? e)); }
+      finally { setProgression(null); }
+      return;
+    }
+    const r = await partager(fichier);
+    if (r === "telecharge") dire.ok("Vidéo téléchargée ✓");
+  };
+  const postee = async () => {
+    if (!confirm(`« ${s.titre} » est postée ? Elle quittera cette liste (le fichier reste sur le PC).`)) return;
+    setEnvoi(true);
+    try { await appel(cfg, "/api/studio/story/postee", { corps: { id: s.id } }); dire.ok("Story rangée ✓"); }
+    catch (e) { dire.ko(String((e as Error).message ?? e)); } finally { setEnvoi(false); }
+  };
+  return (
+    <article className="fiche">
+      <div className="entete"><span className="texte"><b>{s.titre}</b><small>Validée {quand(s.validee)} · {taille(s.taille)}</small></span></div>
+      <div className="corps">
+        {src && <video src={src} controls playsInline preload="auto" />}
+        <button className={`bouton ${fichier ? "" : "secondaire"}`} disabled={progression !== null} onClick={() => void partagerStory()}>
+          {progression !== null ? `Chargement… ${Math.round(progression * 100)} %` : fichier ? "⤴ Partager (Enregistrer, Instagram…)" : "⤓ Charger la story"}
+        </button>
+        <button className="bouton vert" disabled={envoi} onClick={() => void postee()}>✓ Postée</button>
+      </div>
+    </article>
   );
 }
 

@@ -77,6 +77,45 @@ export function cheminVideo(dossier: string, id: string): string | null {
   return fs.existsSync(p) ? p : null;
 }
 
+// ------------------------------------------------------------------ stories à poster
+// Une story (« <slug>-story-<n> ») validée par « C'est bon » passe dans l'onglet « À poster » : Rayan l'enregistre
+// ou la partage depuis l'iPhone en pleine qualité (<id>.hd.mp4, sinon la version légère), puis touche « Postée »
+// (<id>.postee.json { at }).
+
+export const ID_STORY = /-story-\d+$/;
+export interface StoryAPoster { id: string; titre: string; version: number; envoye: number; validee: number; taille: number }
+
+const cheminHd = (dossier: string, id: string) => {
+  const hd = path.join(dossier, `${id}.hd.mp4`);
+  return fs.existsSync(hd) ? hd : path.join(dossier, `${id}.mp4`);
+};
+
+/** Stories validées (dernière version) et pas encore postées, les plus récentes d'abord. */
+export function aPoster(dossier: string): StoryAPoster[] {
+  const r: StoryAPoster[] = [];
+  for (const v of lister(dossier)) {
+    if (!ID_STORY.test(v.id) || fs.existsSync(path.join(dossier, `${v.id}.postee.json`))) continue;
+    const rep = [...v.retours].reverse().find((x) => x.version === v.version);
+    if (rep?.verdict !== "ok") continue;
+    let taille = v.taille;
+    try { taille = fs.statSync(cheminHd(dossier, v.id)).size; } catch { /* version légère */ }
+    r.push({ id: v.id, titre: v.titre, version: v.version, envoye: v.envoye, validee: rep.at, taille });
+  }
+  return r;
+}
+
+/** Chemin de la story à poster `id` en pleine qualité, ou null. */
+export function cheminStory(dossier: string, id: string): string | null {
+  if (!ID_VALIDE.test(id) || !ID_STORY.test(id) || !cheminVideo(dossier, id)) return null;
+  return cheminHd(dossier, id);
+}
+
+/** « Postée » : la story quitte l'onglet À poster (le fichier reste sur le PC). */
+export function marquerPostee(dossier: string, id: string, at = Date.now()): void {
+  if (!aPoster(dossier).some((s) => s.id === id)) throw new ErreurRetour(404, "story introuvable (déjà postée ?)");
+  ecrireJson(path.join(dossier, `${id}.postee.json`), { at });
+}
+
 // ------------------------------------------------------------------ scripts
 
 /** Scripts déposés (un .json par script), les plus récents d'abord. */
