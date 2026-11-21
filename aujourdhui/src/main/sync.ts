@@ -84,6 +84,7 @@ const ADAPTERS: Adapter[] = [
   { name: "sport", label: "Sport", read: () => sportText(), write: (t) => applySportText(t) },
   { name: "fac", label: "Cours de la fac", read: () => facText(), write: (t) => applyFacText(t) },
   fileAdapter("revision", "Révision", "Rayans Revision.exe", () => path.join(process.env.REVISION_DATA_DIR || path.join(roaming(), "fr.rayan.revision"), "revision.json")),
+  fileAdapter("memoire", "Mémoire", "Rayans Memoire.exe", () => path.join(process.env.MEMOIRE_DATA_DIR || path.join(roaming(), "fr.rayan.memoire"), "memoire.json")),
   fileAdapter("hifz", "Hifz", "Rayans Hifz.exe", () => path.join(process.env.HIFZ_DATA_DIR || path.join(roaming(), "Rayans Hifz"), "hifz-donnees.json")),
   fileAdapter("chrono", "Chrono", "Rayans Chrono.exe", () => firstExisting(path.join(launcherData("rayans-chrono-app"), "chrono.json"), path.join(roaming(), "Rayans Chrono", "chrono.json"))),
   fileAdapter("priere", "Prière", "Rayans Priere.exe", () => firstExisting(path.join(launcherData("rayans-priere"), "priere.json"), path.join(roaming(), "Rayans Priere", "priere.json"))),

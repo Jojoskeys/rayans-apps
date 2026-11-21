@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Rayans Memoire",
+  "mainBinaryName": "Rayans Memoire",
+  "version": "1.0.0",
+  "identifier": "fr.rayan.memoire",
+  "build": {
+    "beforeDevCommand": "npm run dev:ui",
+    "devUrl": "http://localhost:1434",
+    "beforeBuildCommand": "npm run build:ui",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Rayan’s Mémoire",
+        "width": 1180,
+        "height": 800,
+        "minWidth": 820,
+        "minHeight": 600,
+        "backgroundColor": "#0F1117"
+      }
+    ],
+    "security": {
+      "devCsp": null,
+      "csp": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": false,
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.ico", "icons/icon.png"],
+    "shortDescription": "Jeux et techniques de mémoire",
+    "longDescription": "Rayan’s Mémoire : séance quotidienne, palais de mémoire, jeux de mémoire adaptatifs et techniques fondées sur la recherche."
+  }
+}

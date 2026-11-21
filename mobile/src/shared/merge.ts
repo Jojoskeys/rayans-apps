@@ -4,6 +4,7 @@
 // Fonctions pures, partagées par la web app et par le pont de synchronisation du PC.
 
 import { mergeCourses, mergeMemos } from "./petites.ts";
+import { fusionnerTexte } from "../../../memoire/src/core/model.ts";
 
 type Obj = Record<string, any>;
 
@@ -262,6 +263,8 @@ export const MERGERS: Record<string, (base: Obj | undefined, local: Obj, remote:
   fac: mergeFac,
   courses: (b, l, r) => mergeCourses(b as never, l as never, r as never),
   memos: (b, l, r) => mergeMemos(b as never, l as never, r as never),
+  // Rayan's Mémoire : sa propre fusion (résultats et séances additionnés, palais et listes au plus récent).
+  memoire: (_b, local, remote) => fusionnerTexte(local, remote) as unknown as Obj,
   // Abonnements aux notifications (un par appareil) et préférences.
   notifications: (base, local, remote) => ({
     subscriptions: mergeById(base?.subscriptions, local.subscriptions ?? [], remote.subscriptions ?? [], (x: Obj) => x.endpoint, () => false),

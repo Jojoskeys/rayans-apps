@@ -10,6 +10,8 @@ on:
       - 'mobile/**'
       - 'revision/src/**'
       - 'revision/public/**'
+      - 'memoire/src/**'
+      - 'memoire/public/**'
       - 'aujourdhui/src/**'
       - 'coran-memorisation/src/**'
       - 'coran-memorisation/data/**'
