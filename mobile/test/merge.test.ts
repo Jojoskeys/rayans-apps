@@ -167,3 +167,21 @@ test("Sommeil : nuits notées sur le PC et sur l'iPhone gardées toutes les deux
   assert.deepEqual(m.nuits.map((n: { id: string }) => n.id), ["2026-11-19", "2026-11-20", "2026-11-21"]);
   assert.equal(m.nuits.find((n: { id: string }) => n.id === "2026-11-21").energie, 4);
 });
+
+test("Focus : résultats et distractions du PC et de l'iPhone gardés tous les deux", () => {
+  const vide = { format: "rayans-focus", version: 1 };
+  const pc = { ...vide, resultats: [{ id: "1", exo: "flanker", at: 1, niveau: 2, score: 18, max: 20, reussi: true }] };
+  const iphone = { ...vide, resultats: [{ id: "2", exo: "stroop", at: 2, niveau: 3, score: 14, max: 16, reussi: true }] };
+  const m = JSON.parse(mergeText("focus", null, JSON.stringify(pc), JSON.stringify(iphone))!);
+  assert.equal(m.format, "rayans-focus");
+  assert.deepEqual(m.resultats.map((r: { id: string }) => r.id), ["1", "2"]);
+});
+
+test("Calcul : résultats du PC et de l'iPhone gardés tous les deux", () => {
+  const vide = { format: "rayans-calcul", version: 1 };
+  const pc = { ...vide, resultats: [{ id: "1", sorte: "astuce", ref: "x11", at: 1, bonnes: 9, total: 10, tempsMoyenMs: 3000 }] };
+  const iphone = { ...vide, resultats: [{ id: "2", sorte: "defi", ref: "60s", at: 2, bonnes: 15, total: 17, tempsMoyenMs: 3500 }] };
+  const m = JSON.parse(mergeText("calcul", null, JSON.stringify(pc), JSON.stringify(iphone))!);
+  assert.equal(m.format, "rayans-calcul");
+  assert.deepEqual(m.resultats.map((r: { id: string }) => r.id).sort(), ["1", "2"]);
+});
