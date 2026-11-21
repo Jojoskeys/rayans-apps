@@ -1,0 +1,832 @@
+{
+  "slug": "psycho-long-12-pieges",
+  "titre": "12 pièges de ton cerveau",
+  "titre_youtube": "12 pièges de ton cerveau que tu ne remarques jamais (et comment t'en protéger)",
+  "format": "long",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "compile_depuis": [
+    "psycho-effet-projecteur",
+    "psycho-ancrage",
+    "psycho-prix-99",
+    "psycho-effet-dotation",
+    "psycho-option-defaut",
+    "psycho-suivre-foule",
+    "psycho-faux-consensus",
+    "psycho-je-le-savais",
+    "psycho-repetition-verite",
+    "psycho-horoscope",
+    "psycho-premiere-impression",
+    "psycho-paresse-groupe"
+  ],
+  "style": "psycho",
+  "marque": "@lapsychofacile",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "speed": 1.14,
+    "stability": 0.32,
+    "style": 0.65
+  },
+  "legende": "Ton cerveau te joue des tours tous les jours : l'effet projecteur, l'ancrage, le piège du 9,99 €, la preuve sociale, l'effet Barnum… 12 biais prouvés par de vraies études (auteurs et années à l'écran), et comment t'en protéger.\n\nTu es déjà tombé dans lequel ? OUI ou NON en commentaire 👇",
+  "hashtags": [
+    "#psychologie",
+    "#biaiscognitifs",
+    "#cerveau",
+    "#faitspsychologiques",
+    "#pourquoitu",
+    "#lapsychofacile"
+  ],
+  "miniatures": [
+    "12 PIÈGES DE TON CERVEAU",
+    "Tu tombes dedans tous les jours",
+    "Ton cerveau te ment"
+  ],
+  "sources": [
+    "Gilovich, T., Medvec, V. H. & Savitsky, K. (2000). The spotlight effect in social judgment. Journal of Personality and Social Psychology, 78(2), 211-222 : étudiants de Cornell entrant dans une salle avec un t-shirt jugé gênant (Barry Manilow) ; ils estiment qu'environ la moitié des présents l'ont remarqué ; en réalité environ un quart (≈ 23 %)",
+    "Tversky, A. & Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. Science, 185(4157), 1124-1131 : après avoir vu sortir 10 sur une roue, les gens estimaient en médiane 25 % de pays africains à l'ONU ; après 65, ils estimaient 45 %",
+    "Thomas, M. & Morwitz, V. (2005). Penny wise and pound foolish: The left-digit effect in price cognition. Journal of Consumer Research, 32(1), 54-64 : quand le premier chiffre à gauche change (2,99 contre 3,00), le prix paraît nettement plus bas ; pas quand seul le chiffre de droite change",
+    "Kahneman, D., Knetsch, J. L. & Thaler, R. H. (1990). Experimental tests of the endowment effect and the Coase theorem. Journal of Political Economy, 98(6), 1325-1348 : les étudiants à qui on donnait une tasse demandaient environ deux fois plus pour la vendre que ce que les autres étaient prêts à payer (environ 7 $ contre 3 $)",
+    "Johnson, E. J. & Goldstein, D. (2003). Do defaults save lives? Science, 302(5649), 1338-1339 : dans les pays où il faut cocher pour être donneur d'organes, le consentement va d'environ 4 à 28 % ; là où il faut cocher pour refuser, environ 86 à presque 100 %",
+    "Samuelson, W. & Zeckhauser, R. (1988). Status quo bias in decision making. Journal of Risk and Uncertainty, 1(1), 7-59 : on préfère garder la situation actuelle",
+    "Goldstein, N. J., Cialdini, R. B. & Griskevicius, V. (2008). A room with a viewpoint: Using social norms to motivate environmental conservation in hotels. Journal of Consumer Research, 35(3), 472-482 : le message « la plupart des clients réutilisent leur serviette » a fait passer la réutilisation d'environ 35 % à 44 %, et à 49 % avec « les clients de cette chambre »",
+    "Cialdini, R. B. (1984). Influence: The psychology of persuasion : la preuve sociale",
+    "Ross, L., Greene, D. & House, P. (1977). The « false consensus effect »: An egocentric bias in social perception and attribution processes. Journal of Experimental Social Psychology, 13(3), 279-301 : les étudiants qui acceptaient de porter une pancarte pensaient qu'environ 62 % des autres accepteraient aussi ; ceux qui refusaient pensaient qu'environ 67 % refuseraient",
+    "Fischhoff, B. (1975). Hindsight ≠ foresight: The effect of outcome knowledge on judgment under uncertainty. Journal of Experimental Psychology: Human Perception and Performance, 1(3), 288-299 : une fois le résultat connu, on le juge beaucoup plus prévisible qu'il ne l'était",
+    "Fischhoff, B. & Beyth, R. (1975). « I knew it would happen »: Remembered probabilities of once-future things. Organizational Behavior and Human Performance, 13(1), 1-16 : les gens se souviennent avoir été plus sûrs du bon résultat qu'ils ne l'étaient vraiment",
+    "Hasher, L., Goldstein, D. & Toppino, T. (1977). Frequency and the conference of referential validity. Journal of Verbal Learning and Verbal Behavior, 16(1), 107-112 : une affirmation entendue plusieurs fois paraît plus vraie",
+    "Fazio, L. K., Brashier, N. M., Payne, B. K. & Marsh, E. J. (2015). Knowledge does not protect against illusory truth. Journal of Experimental Psychology: General, 144(5), 993-1002 : l'effet marche même quand on connaît la bonne réponse",
+    "Forer, B. R. (1949). The fallacy of personal validation: A classroom demonstration of gullibility. Journal of Abnormal and Social Psychology, 44(1), 118-123 : des étudiants ont jugé « leur » portrait personnalisé exact à 4,26 sur 5, alors que tous avaient reçu le même texte",
+    "Willis, J. & Todorov, A. (2006). First impressions: Making up your mind after a 100-ms exposure to a face. Psychological Science, 17(7), 592-598 : après avoir vu un visage 0,1 seconde, les jugements (confiance, sympathie…) sont déjà très proches de ceux faits sans limite de temps ; plus de temps augmente surtout la confiance dans son jugement",
+    "Latané, B., Williams, K. & Harkins, S. (1979). Many hands make light the work: The causes and consequences of social loafing. Journal of Personality and Social Psychology, 37(6), 822-832 : en criant ou applaudissant à 6, chacun ne produisait plus qu'environ 36 % de son effort seul",
+    "Karau, S. J. & Williams, K. D. (1993). Social loafing: A meta-analytic review and theoretical integration. Journal of Personality and Social Psychology, 65(4), 681-706 : l'effet diminue quand la contribution de chacun est visible"
+  ],
+  "chapitres": [
+    {
+      "titre": "Introduction",
+      "segment": 0
+    },
+    {
+      "titre": "1. Tout le monde t'a remarqué ? (l'effet projecteur)",
+      "segment": 2,
+      "depuis": "psycho-effet-projecteur"
+    },
+    {
+      "titre": "2. Le premier chiffre qui décide pour toi (l'ancrage)",
+      "segment": 7,
+      "depuis": "psycho-ancrage"
+    },
+    {
+      "titre": "3. Le piège du 9,99 €",
+      "segment": 12,
+      "depuis": "psycho-prix-99"
+    },
+    {
+      "titre": "4. Ce qui est à toi vaut plus cher (l'effet de dotation)",
+      "segment": 17,
+      "depuis": "psycho-effet-dotation"
+    },
+    {
+      "titre": "5. L'option choisie à ta place",
+      "segment": 22,
+      "depuis": "psycho-option-defaut"
+    },
+    {
+      "titre": "6. Le restaurant déjà plein (la preuve sociale)",
+      "segment": 27,
+      "depuis": "psycho-suivre-foule"
+    },
+    {
+      "titre": "7. Tout le monde pense comme toi ? (le faux consensus)",
+      "segment": 32,
+      "depuis": "psycho-faux-consensus"
+    },
+    {
+      "titre": "8. « Je le savais ! » (le biais rétrospectif)",
+      "segment": 37,
+      "depuis": "psycho-je-le-savais"
+    },
+    {
+      "titre": "9. Répété, donc vrai ? (l'effet de vérité illusoire)",
+      "segment": 42,
+      "depuis": "psycho-repetition-verite"
+    },
+    {
+      "titre": "10. Ton horoscope parle de toi (l'effet Barnum)",
+      "segment": 47,
+      "depuis": "psycho-horoscope"
+    },
+    {
+      "titre": "11. Jugé en une fraction de seconde",
+      "segment": 52,
+      "depuis": "psycho-premiere-impression"
+    },
+    {
+      "titre": "12. Moins d'efforts en groupe (la paresse sociale)",
+      "segment": 57,
+      "depuis": "psycho-paresse-groupe"
+    },
+    {
+      "titre": "Le piège le plus courant",
+      "segment": 62
+    }
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "pq_tache",
+      "accents": {
+        "tous": "impact"
+      },
+      "texte": "Ton cerveau te joue des tours. Pas de temps en temps : tous les jours, sans que tu le remarques."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_roue",
+      "titre": {
+        "mot": "12",
+        "texte": "12 pièges de ton cerveau"
+      },
+      "texte": "Voici 12 pièges dans lesquels presque tout le monde tombe. Pour chacun : l'étude qui le prouve, et comment t'en protéger."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_tache",
+      "accents": {
+        "t-shirt": "pop:Shirt",
+        "personne.": "impact"
+      },
+      "texte": "Tu crois que tout le monde a vu la tache sur ton t-shirt ? En vrai… presque personne."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_salle",
+      "accents": {
+        "Cornell,": "pop",
+        "gênant,": "secousse",
+        "pleine.": "whoosh"
+      },
+      "texte": "À l'université Cornell, des chercheurs ont fait porter à des étudiants un t-shirt vraiment gênant, avec la tête d'un chanteur ringard. Puis ils les ont fait entrer dans une salle pleine."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_jauge",
+      "accents": {
+        "moitié": "impact",
+        "quart.": "impact"
+      },
+      "texte": "Les étudiants étaient sûrs que la moitié de la salle l'avait remarqué. En réalité ? À peine un quart."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_projecteur",
+      "titre": {
+        "mot": "projecteur.",
+        "texte": "L'effet projecteur"
+      },
+      "accents": {
+        "projecteur.": "flash",
+        "leur.": "pop"
+      },
+      "texte": "C'est l'effet projecteur. Tu vis ta journée sous ton propre projecteur… mais les autres sont bien trop occupés sous le leur."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_boucle",
+      "accents": {
+        "oublié.": "whoosh",
+        "boucle.": "battement"
+      },
+      "texte": "Ta gaffe d'hier, ton bafouillage en classe : les autres l'ont déjà oublié. Toi seul la repasses en boucle."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_accroche",
+      "accents": {
+        "premier": "pop",
+        "décision": "impact"
+      },
+      "texte": "Pourquoi le premier chiffre que tu entends… influence toute ta décision ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_roue",
+      "accents": {
+        "roue": "whoosh",
+        "10,": "pop",
+        "65.": "pop",
+        "africains": "impact"
+      },
+      "texte": "En 1974, des chercheurs ont fait tourner une roue devant des gens. Elle s'arrêtait sur 10, ou sur 65. Puis ils demandaient : quel pourcentage des pays de l'ONU sont africains ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_resultat",
+      "titre": {
+        "mot": "hasard",
+        "texte": "Le biais d'ancrage"
+      },
+      "accents": {
+        "25": "flash",
+        "45": "flash",
+        "hasard": "impact"
+      },
+      "texte": "Ceux qui avaient vu 10 répondaient environ 25 %. Ceux qui avaient vu 65… environ 45 %. Un chiffre au hasard avait changé leur réponse."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_vente",
+      "accents": {
+        "barré,": "impact",
+        "affaire.": "pop"
+      },
+      "texte": "C'est pour ça qu'on t'affiche d'abord le prix barré, très haut. Le vrai prix te paraît ensuite une bonne affaire."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_an_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "toi-même": "flash"
+      },
+      "texte": "L'astuce : avant de voir un prix, décide toi-même combien tu es prêt à payer."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_accroche",
+      "accents": {
+        "9,99": "pop",
+        "10": "impact"
+      },
+      "texte": "Pourquoi un prix à 9,99 euros te paraît beaucoup moins cher que 10 euros ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_gauche",
+      "titre": {
+        "mot": "premier",
+        "texte": "L'effet du chiffre de gauche"
+      },
+      "accents": {
+        "gauche": "whoosh",
+        "premier": "pop",
+        "10.": "impact"
+      },
+      "texte": "Ton cerveau lit les prix de gauche à droite… et il s'arrête presque au premier chiffre. 9, c'est moins que 10."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_etude",
+      "accents": {
+        "2005,": "pop",
+        "3.": "impact",
+        "différence.": "whoosh",
+        "gauche": "flash"
+      },
+      "texte": "En 2005, des chercheurs l'ont montré : 2,99 paraît nettement moins cher que 3. Mais entre 3,60 et 3,59… presque aucune différence. Seul le chiffre de gauche compte."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_magasins",
+      "accents": {
+        "magasins": "pop",
+        "partout.": "impact"
+      },
+      "texte": "Et les magasins le savent très bien. C'est pour ça que tu vois des 99 partout."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_99_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "10.": "flash"
+      },
+      "texte": "L'astuce : arrondis toujours au-dessus. 9,99, c'est 10."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g1",
+      "accents": {
+        "cher…": "impact",
+        "payer": "pop"
+      },
+      "texte": "Pourquoi tes affaires te semblent valoir plus cher… que ce que les autres veulent payer ?",
+      "visuel": {
+        "perso": {
+          "icone": "Package",
+          "mot": "affaires"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g2",
+      "accents": {
+        "1990,": "pop",
+        "tasse": "pop",
+        "l'acheter.": "pop"
+      },
+      "texte": "En 1990, des chercheurs ont donné une tasse à la moitié d'une classe. L'autre moitié pouvait l'acheter.",
+      "visuel": {
+        "annee": "1990",
+        "icones": [
+          {
+            "nom": "Coffee",
+            "mot": "tasse",
+            "texte": "la tasse"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g3",
+      "accents": {
+        "sept": "flash",
+        "trois.": "impact"
+      },
+      "texte": "Ceux qui avaient la tasse voulaient environ sept dollars pour la vendre. Ceux qui ne l'avaient pas proposaient à peine trois.",
+      "visuel": {
+        "barres": [
+          {
+            "texte": "acheteurs",
+            "valeur": 0.35,
+            "mot": "trois"
+          },
+          {
+            "texte": "propriétaires",
+            "valeur": 0.8,
+            "mot": "sept"
+          }
+        ]
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g4",
+      "titre": {
+        "mot": "dotation",
+        "texte": "L'effet de dotation"
+      },
+      "accents": {
+        "Même": "pop",
+        "dotation": "flash",
+        "yeux.": "pop"
+      },
+      "texte": "Même tasse, juste quelques minutes après. C'est l'effet de dotation : ce qui est à toi vaut plus à tes yeux.",
+      "visuel": {
+        "chiffre": {
+          "texte": "× 2",
+          "mot": "dotation",
+          "sous": "la valeur de ce qui est à toi"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_g5",
+      "accents": {
+        "mal": "impact",
+        "revends,": "pop",
+        "l'acheter": "flash"
+      },
+      "texte": "Perdre quelque chose fait plus mal que gagner. Alors quand tu revends, demande-toi : combien je paierais pour l'acheter ?",
+      "visuel": {
+        "perso": {
+          "bulle": "« je l'achèterais combien ? »",
+          "mot": "demande-toi"
+        }
+      }
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_accroche",
+      "accents": {
+        "l'option": "pop",
+        "place": "impact"
+      },
+      "texte": "Pourquoi tu gardes presque toujours l'option qu'on a choisie… à ta place ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_pays",
+      "accents": {
+        "cocher": "pop",
+        "28": "impact"
+      },
+      "texte": "Le don d'organes : dans certains pays, il faut cocher une case pour être donneur. Là, seulement 4 à 28 % des gens le sont."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_inverse",
+      "titre": {
+        "mot": "défaut.",
+        "texte": "L'option par défaut"
+      },
+      "accents": {
+        "refuser.": "whoosh",
+        "100": "flash",
+        "défaut.": "impact"
+      },
+      "texte": "Dans d'autres, il faut cocher pour refuser. Et là… entre 86 et presque 100 % sont donneurs. Juste à cause de la case par défaut."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_pourquoi",
+      "accents": {
+        "effort,": "pop",
+        "rien.": "impact"
+      },
+      "texte": "Changer demande un effort, et une décision. Garder ce qui est là… ne demande rien."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_od_astuce",
+      "accents": {
+        "mois,": "pop",
+        "abonnements": "flash",
+        "toi.": "impact"
+      },
+      "texte": "L'astuce : une fois par mois, vérifie tes abonnements et tes réglages. Ce sont peut-être d'autres qui ont choisi pour toi."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_accroche",
+      "accents": {
+        "monde…": "pop",
+        "vide": "impact"
+      },
+      "texte": "Pourquoi tu choisis le restaurant où il y a déjà du monde… plutôt que celui qui est vide ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_nom",
+      "titre": {
+        "mot": "sociale",
+        "texte": "La preuve sociale"
+      },
+      "accents": {
+        "sociale": "flash",
+        "autres.": "impact"
+      },
+      "texte": "Ça s'appelle la preuve sociale : quand tu ne sais pas quoi faire, tu regardes ce que font les autres."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_hotel",
+      "accents": {
+        "2008,": "pop",
+        "serviette": "whoosh",
+        "44": "flash"
+      },
+      "texte": "En 2008, dans un hôtel, des chercheurs ont mis une petite carte : « la plupart des clients réutilisent leur serviette ». La réutilisation est passée d'environ 35 à 44 %."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_chambre",
+      "accents": {
+        "chambre": "pop",
+        "49": "flash",
+        "suis.": "impact"
+      },
+      "texte": "Et avec « la plupart des clients de cette chambre »… 49 %. Plus les autres te ressemblent, plus tu les suis."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_sf_astuce",
+      "accents": {
+        "raison.": "pop",
+        "toujours.": "impact",
+        "seul": "flash"
+      },
+      "texte": "Ce n'est pas bête : souvent, la foule a raison. Mais pas toujours. Alors demande-toi : est-ce que je le ferais seul ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_accroche",
+      "accents": {
+        "plupart": "pop",
+        "toi": "impact"
+      },
+      "texte": "Pourquoi tu as l'impression que la plupart des gens… pensent comme toi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_pancarte",
+      "accents": {
+        "1977,": "pop",
+        "pancarte": "impact",
+        "Joe": "flash"
+      },
+      "texte": "En 1977, des chercheurs ont demandé à des étudiants de se promener sur le campus avec une grande pancarte : « Mangez chez Joe »."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_resultat",
+      "titre": {
+        "mot": "majorité.",
+        "texte": "Le faux consensus"
+      },
+      "accents": {
+        "62": "flash",
+        "67": "flash",
+        "majorité.": "impact"
+      },
+      "texte": "Ceux qui acceptaient pensaient que 62 % des autres accepteraient aussi. Ceux qui refusaient pensaient que 67 % refuseraient. Chacun se croyait dans la majorité."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_pourquoi",
+      "accents": {
+        "idées,": "pop",
+        "normal.": "impact"
+      },
+      "texte": "Tu passes ta vie avec tes propres idées, et souvent avec des gens qui te ressemblent. Alors ton avis te paraît normal."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_fc_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "vraiment": "flash",
+        "surpris.": "impact"
+      },
+      "texte": "L'astuce : avant de dire « tout le monde pense ça », demande vraiment autour de toi. Tu risques d'être surpris."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_accroche",
+      "accents": {
+        "fin,": "pop",
+        "début": "impact"
+      },
+      "texte": "Pourquoi, une fois que tu connais la fin, tu as l'impression que tu le savais depuis le début ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_nom",
+      "titre": {
+        "mot": "rétrospectif.",
+        "texte": "Le biais rétrospectif"
+      },
+      "accents": {
+        "rétrospectif.": "flash",
+        "évident.": "impact"
+      },
+      "texte": "Ça a un nom : le biais rétrospectif. Une fois le résultat connu, tout paraît évident."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_etude",
+      "accents": {
+        "1975,": "pop",
+        "prédire": "whoosh",
+        "vraiment.": "impact"
+      },
+      "texte": "En 1975, des chercheurs ont demandé à des gens de prédire des événements. Après coup, ils se souvenaient avoir été bien plus sûrs du bon résultat… qu'ils ne l'étaient vraiment."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_reecrit",
+      "accents": {
+        "réécrit": "whoosh",
+        "doutes.": "impact"
+      },
+      "texte": "Ton cerveau réécrit tes souvenirs avec ce que tu sais maintenant. Et il efface tes doutes."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_js_astuce",
+      "accents": {
+        "note": "pop",
+        "savais…": "impact",
+        "pas.": "flash"
+      },
+      "texte": "L'astuce : avant une décision, note ce que tu penses vraiment. Plus tard, tu verras ce que tu savais… et ce que tu ne savais pas."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_accroche",
+      "accents": {
+        "croire": "pop",
+        "plusieurs": "impact"
+      },
+      "texte": "Pourquoi tu finis par croire une info… juste parce que tu l'as vue plusieurs fois ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_etude",
+      "titre": {
+        "mot": "vraies.",
+        "texte": "L'illusion de vérité"
+      },
+      "accents": {
+        "1977,": "pop",
+        "vraies.": "flash",
+        "fausses.": "impact"
+      },
+      "texte": "En 1977, des chercheurs ont fait lire des phrases, vraies ou fausses, à plusieurs reprises. Les phrases déjà vues paraissaient plus vraies. Même les fausses."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_pourquoi",
+      "accents": {
+        "facile": "pop",
+        "vrai.": "flash"
+      },
+      "texte": "Pour ton cerveau, ce qui est facile à lire, parce que déjà vu, ressemble à ce qui est vrai."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_savoir",
+      "accents": {
+        "2015,": "pop",
+        "connais": "impact"
+      },
+      "texte": "Et en 2015, une étude a montré que ça marche même quand tu connais la bonne réponse."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_rv_astuce",
+      "accents": {
+        "partager": "pop",
+        "vient.": "flash",
+        "vue.": "impact"
+      },
+      "texte": "L'astuce : avant de partager une info, demande-toi d'où elle vient. Pas combien de fois tu l'as vue."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_accroche",
+      "accents": {
+        "horoscope…": "pop",
+        "toi": "impact"
+      },
+      "texte": "Pourquoi ton horoscope… a l'air de parler exactement de toi ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_test",
+      "accents": {
+        "1949,": "pop",
+        "personnalisé.": "flash"
+      },
+      "texte": "En 1949, un professeur a fait passer un test de personnalité à ses étudiants. Une semaine plus tard, chacun reçoit son portrait personnalisé."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_note",
+      "titre": {
+        "mot": "même",
+        "texte": "L'effet Barnum"
+      },
+      "accents": {
+        "juste": "pop",
+        "4,26": "flash",
+        "même": "impact"
+      },
+      "texte": "Ils le trouvent très juste : 4,26 sur 5 en moyenne. Le problème ? Tout le monde avait reçu exactement le même texte."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_phrases",
+      "accents": {
+        "vagues": "pop",
+        "apprécié.": "whoosh",
+        "réservé.": "impact"
+      },
+      "texte": "Le secret : des phrases vagues qui vont à tout le monde. « Tu as un grand besoin d'être apprécié. » « Tu es parfois extraverti, parfois réservé. »"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_ho_astuce",
+      "accents": {
+        "Barnum.": "flash",
+        "parfaitement…": "pop",
+        "monde.": "impact"
+      },
+      "texte": "Ça s'appelle l'effet Barnum. La prochaine fois qu'un texte semble te connaître parfaitement… demande-toi s'il ne marcherait pas pour tout le monde."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_accroche",
+      "accents": {
+        "idée": "pop",
+        "seconde": "impact"
+      },
+      "texte": "Pourquoi tu te fais une idée de quelqu'un… en moins d'une seconde ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_etude",
+      "titre": {
+        "mot": "dixième",
+        "texte": "Un dixième de seconde"
+      },
+      "accents": {
+        "2006,": "pop",
+        "dixième": "flash",
+        "temps.": "impact"
+      },
+      "texte": "En 2006, des chercheurs ont montré des visages pendant un dixième de seconde. Et les gens les jugeaient déjà presque comme avec tout leur temps."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_confiance",
+      "accents": {
+        "longtemps": "pop",
+        "sûrs": "impact"
+      },
+      "texte": "Regarder plus longtemps ne changeait presque pas leur avis. Ça les rendait juste… plus sûrs d'eux."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_piege",
+      "accents": {
+        "piège": "impact",
+        "juste.": "pop",
+        "défend": "whoosh"
+      },
+      "texte": "Le piège : une première impression n'est pas toujours juste. Mais ton cerveau la défend quand même."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pi_astuce",
+      "accents": {
+        "L'astuce": "pop",
+        "deuxième": "flash",
+        "autres.": "impact"
+      },
+      "texte": "L'astuce : donne-toi une deuxième chance de juger. Et donne-la aux autres."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_accroche",
+      "accents": {
+        "groupe,": "pop",
+        "seul": "impact"
+      },
+      "texte": "Pourquoi, dans un travail de groupe, tout le monde en fait moins… que s'il était seul ?"
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_etude",
+      "accents": {
+        "1979,": "pop",
+        "crier": "impact",
+        "six.": "pop"
+      },
+      "texte": "En 1979, des chercheurs ont demandé à des gens de crier et d'applaudir le plus fort possible. Seuls, puis à six."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_resultat",
+      "titre": {
+        "mot": "36",
+        "texte": "La paresse sociale"
+      },
+      "accents": {
+        "36": "flash",
+        "compte.": "impact"
+      },
+      "texte": "À six, chacun ne faisait plus qu'environ 36 % de son effort seul. Sans même s'en rendre compte."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_pourquoi",
+      "accents": {
+        "voit": "pop",
+        "économise.": "whoosh"
+      },
+      "texte": "Dans un groupe, ton effort se voit moins. Alors ton cerveau économise."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_pg_astuce",
+      "accents": {
+        "solution": "pop",
+        "nom": "flash",
+        "tout.": "impact"
+      },
+      "texte": "La solution : que chacun ait une partie précise, avec son nom dessus. Quand ta part se voit, tu donnes tout."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_boucle",
+      "texte": "Connaître ces pièges ne te rend pas immunisé. Mais la prochaine fois, tu auras une seconde d'avance sur ton cerveau."
+    },
+    {
+      "type": "narration",
+      "scene": "pq_jauge",
+      "texte": "Tu es déjà tombé dans au moins trois de ces pièges cette semaine ? Réponds OUI ou NON en commentaire."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "Abonne-toi": "pop",
+        "envoie": "pop"
+      },
+      "texte": "Abonne-toi pour comprendre ce qui se passe vraiment dans ta tête. Et envoie cette vidéo à quelqu'un qui pense ne jamais se faire avoir."
+    }
+  ]
+}

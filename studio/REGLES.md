@@ -16,6 +16,7 @@ Les corrections de style des vidéos longues vont aussi ici (et les fichiers vis
 - 2026-11-20 — Hashtags choisis d'après le sujet du projet, jamais copiés d'un autre projet ; pas de hashtag en double.
 - 2026-11-20 — On s'inspire de la forme des vidéos qui marchent, jamais de leur texte.
 - 2026-11-20 — Vidéos longues : validation par morceaux (planche de style et intro d'abord, le reste après accord).
+- 2026-11-21 — Vidéos longues : titres « histoire complète / version complète » (Ayati) et « chiffre + pièges » (Psycho) ; 12-20 min pour un récit, 8-12 min pour la psycho ; chapitres dans la description ; un seul appel à s'abonner, à la fin ; pas d'étude contestée (Stanford, power pose, Dunning-Kruger) sans la nuancer.
 - 2026-11-20 — Effet « battement » : discret (100 % → 105 %), seulement sur les mots-clés des sous-titres, désactivé par défaut.
 - 2026-11-20 — Stories : teaser du Short (1 à 3 × 15 s depuis l'accroche, jamais la fin, jamais un verset coupé), dernière carte « La vidéo complète est sur le profil », pas de bouton S'abonner ; Instagram (+ Facebook pour Ayati) 1 h après le Short ; TikTok à la main.
 

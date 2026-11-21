@@ -1,0 +1,111 @@
+{
+ "slug": "psycho-long-12-pieges",
+ "titre": "12 pièges de ton cerveau",
+ "titre_youtube": "12 pièges de ton cerveau que tu ne remarques jamais (et comment t'en protéger)",
+ "titre_intro": "Introduction",
+ "titre_fin": "Le piège le plus courant",
+ "intro": [
+  {
+   "type": "narration",
+   "scene": "pq_tache",
+   "accents": {
+    "tous": "impact"
+   },
+   "texte": "Ton cerveau te joue des tours. Pas de temps en temps : tous les jours, sans que tu le remarques."
+  },
+  {
+   "type": "narration",
+   "scene": "pq_an_roue",
+   "titre": {
+    "mot": "12",
+    "texte": "12 pièges de ton cerveau"
+   },
+   "texte": "Voici 12 pièges dans lesquels presque tout le monde tombe. Pour chacun : l'étude qui le prouve, et comment t'en protéger."
+  }
+ ],
+ "episodes": [
+  {
+   "slug": "psycho-effet-projecteur",
+   "chapitre": "1. Tout le monde t'a remarqué ? (l'effet projecteur)"
+  },
+  {
+   "slug": "psycho-ancrage",
+   "chapitre": "2. Le premier chiffre qui décide pour toi (l'ancrage)"
+  },
+  {
+   "slug": "psycho-prix-99",
+   "chapitre": "3. Le piège du 9,99 €"
+  },
+  {
+   "slug": "psycho-effet-dotation",
+   "chapitre": "4. Ce qui est à toi vaut plus cher (l'effet de dotation)"
+  },
+  {
+   "slug": "psycho-option-defaut",
+   "chapitre": "5. L'option choisie à ta place"
+  },
+  {
+   "slug": "psycho-suivre-foule",
+   "chapitre": "6. Le restaurant déjà plein (la preuve sociale)"
+  },
+  {
+   "slug": "psycho-faux-consensus",
+   "chapitre": "7. Tout le monde pense comme toi ? (le faux consensus)"
+  },
+  {
+   "slug": "psycho-je-le-savais",
+   "chapitre": "8. « Je le savais ! » (le biais rétrospectif)"
+  },
+  {
+   "slug": "psycho-repetition-verite",
+   "chapitre": "9. Répété, donc vrai ? (l'effet de vérité illusoire)"
+  },
+  {
+   "slug": "psycho-horoscope",
+   "chapitre": "10. Ton horoscope parle de toi (l'effet Barnum)"
+  },
+  {
+   "slug": "psycho-premiere-impression",
+   "chapitre": "11. Jugé en une fraction de seconde"
+  },
+  {
+   "slug": "psycho-paresse-groupe",
+   "chapitre": "12. Moins d'efforts en groupe (la paresse sociale)"
+  }
+ ],
+ "fin": [
+  {
+   "type": "narration",
+   "scene": "pq_boucle",
+   "texte": "Connaître ces pièges ne te rend pas immunisé. Mais la prochaine fois, tu auras une seconde d'avance sur ton cerveau."
+  },
+  {
+   "type": "narration",
+   "scene": "pq_jauge",
+   "texte": "Tu es déjà tombé dans au moins trois de ces pièges cette semaine ? Réponds OUI ou NON en commentaire."
+  },
+  {
+   "type": "narration",
+   "scene": "cta",
+   "accents": {
+    "Abonne-toi": "pop",
+    "envoie": "pop"
+   },
+   "texte": "Abonne-toi pour comprendre ce qui se passe vraiment dans ta tête. Et envoie cette vidéo à quelqu'un qui pense ne jamais se faire avoir."
+  }
+ ],
+ "legende": "Ton cerveau te joue des tours tous les jours : l'effet projecteur, l'ancrage, le piège du 9,99 €, la preuve sociale, l'effet Barnum… 12 biais prouvés par de vraies études (auteurs et années à l'écran), et comment t'en protéger.\n\nTu es déjà tombé dans lequel ? OUI ou NON en commentaire 👇",
+ "hashtags": [
+  "#psychologie",
+  "#biaiscognitifs",
+  "#cerveau",
+  "#faitspsychologiques",
+  "#pourquoitu",
+  "#lapsychofacile"
+ ],
+ "miniatures": [
+  "12 PIÈGES DE TON CERVEAU",
+  "Tu tombes dedans tous les jours",
+  "Ton cerveau te ment"
+ ]
+}

@@ -1,0 +1,129 @@
+{
+ "slug": "ayati-long-moussa-complet",
+ "titre": "L'histoire complète de Moussa",
+ "titre_youtube": "Moussa (Moïse) et Pharaon : l'histoire complète, du fleuve à la mer | Sourate Al-Qasas",
+ "reglages": {
+  "recitation": "libre",
+  "recitateur": null,
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)"
+ },
+ "titre_intro": "Introduction",
+ "titre_fin": "Ce qu'il faut retenir",
+ "intro": [
+  {
+   "type": "narration",
+   "scene": "berge",
+   "accents": {
+    "fleuve.": "impact"
+   },
+   "texte": "Un bébé confié à un fleuve. Un jeune homme en fuite, seul dans le désert. Un feu aperçu au loin, en pleine nuit.",
+   "voix": "[mysterious] Un bébé… confié à un fleuve. [pause] Un jeune homme en fuite, seul dans le désert. [whispers] Un feu aperçu au loin, en pleine nuit."
+  },
+  {
+   "type": "narration",
+   "scene": "tp_trone",
+   "accents": {
+    "bâton.": "flash"
+   },
+   "texte": "Et un homme qui va se retrouver face au roi le plus puissant de son temps, avec un simple bâton.",
+   "voix": "[dramatic tone] Et un homme qui va se retrouver face au roi le plus puissant de son temps… [pause] avec un simple bâton."
+  },
+  {
+   "type": "narration",
+   "scene": "tp_mer",
+   "titre": {
+    "mot": "complète",
+    "texte": "L'histoire complète de Moussa"
+   },
+   "texte": "Voici l'histoire complète de Moussa, telle que la raconte la sourate Al-Qasas. Du palais de Pharaon… jusqu'à la mer.",
+   "voix": "[serious] Voici l'histoire complète de Moussa, telle que la raconte la sourate Al-Qasas. [pause] Du palais de Pharaon… jusqu'à la mer."
+  }
+ ],
+ "episodes": [
+  {
+   "slug": "ayati-pharaon-opprime",
+   "chapitre": "Pharaon, le tyran d'Égypte"
+  },
+  {
+   "slug": "ayati-mere-de-moussa",
+   "chapitre": "Le bébé confié au fleuve"
+  },
+  {
+   "slug": "ayati-coup-de-poing",
+   "chapitre": "Un seul coup de poing"
+  },
+  {
+   "slug": "ayati-homme-qui-accourt",
+   "chapitre": "L'homme qui accourt"
+  },
+  {
+   "slug": "ayati-puits-madyan",
+   "chapitre": "Seul au puits de Madyan"
+  },
+  {
+   "slug": "ayati-contrat-madyan",
+   "chapitre": "Huit ou dix ans de travail"
+  },
+  {
+   "slug": "ayati-feu-du-mont",
+   "chapitre": "Le feu dans la nuit"
+  },
+  {
+   "slug": "ayati-haroun",
+   "chapitre": "« Envoie mon frère avec moi »"
+  },
+  {
+   "slug": "ayati-face-pharaon",
+   "chapitre": "Face à Pharaon"
+  },
+  {
+   "slug": "ayati-tour-pharaon",
+   "chapitre": "La tour et la mer"
+  }
+ ],
+ "fin": [
+  {
+   "type": "narration",
+   "scene": "retour",
+   "titre": {
+    "mot": "perd",
+    "texte": "Il ne le perd jamais"
+   },
+   "texte": "De la peur d'une mère à la chute de Pharaon, une même promesse : ce que tu confies à Allah, Il ne le perd jamais.",
+   "voix": "[warmly] De la peur d'une mère… à la chute de Pharaon, une même promesse : [softly] ce que tu confies à Allah, Il ne le perd jamais."
+  },
+  {
+   "type": "narration",
+   "scene": "yn_lecon",
+   "texte": "Tu connaissais toute l'histoire de Moussa ? Réponds OUI ou NON en commentaire.",
+   "voix": "[curious] Tu connaissais toute l'histoire de Moussa ? [pause] Réponds OUI… ou NON, en commentaire."
+  },
+  {
+   "type": "narration",
+   "scene": "cta",
+   "accents": {
+    "abonne-toi": "pop",
+    "like,": "pop",
+    "partage-la.": "pop"
+   },
+   "texte": "Si cette histoire t'a touché, abonne-toi pour les prochaines histoires du Coran, like, et partage-la. Le Prophète, paix et salut sur lui, a dit : celui qui indique un bien a la même récompense que celui qui le fait.",
+   "voix": "[warmly] Si cette histoire t'a touché, abonne-toi pour les prochaines histoires du Coran, like, et partage-la. [softly] Le Prophète, paix et salut sur lui, a dit : celui qui indique un bien a la même récompense que celui qui le fait."
+  }
+ ],
+ "legende": "L'histoire complète de Moussa (Moïse), telle que la raconte la sourate Al-Qasas : Pharaon qui opprime les Bani Israïl, le bébé confié au fleuve, la fuite vers Madyan, le feu dans la nuit, la mission… jusqu'à la chute de Pharaon (28:3-40).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+ "hashtags": [
+  "#alqasas",
+  "#moussa",
+  "#coran",
+  "#islam",
+  "#histoiresducoran",
+  "#histoiredesprophetes",
+  "#quran",
+  "#rappel"
+ ],
+ "miniatures": [
+  "L'HISTOIRE COMPLÈTE",
+  "Du palais… à la mer",
+  "Moussa face à Pharaon"
+ ]
+}
