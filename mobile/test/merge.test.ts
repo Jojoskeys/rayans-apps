@@ -146,3 +146,14 @@ test("objectifs : compteur modifié des deux côtés → la plus grande valeur ;
   assert.deepEqual(s.reglages, spc.reglages);
   assert.deepEqual(s.semaine, stel.semaine);
 });
+
+test("Mémoire : séances et résultats du PC et de l'iPhone gardés tous les deux", () => {
+  const vide = { format: "rayans-memoire", version: 1 };
+  const pc = { ...vide, resultats: [{ id: "1", jeu: "corsi", at: 1, niveau: 4, score: 4, max: 4, reussi: true }], seances: { "2026-11-21": { etapes: ["echauffement"] } } };
+  const iphone = { ...vide, resultats: [{ id: "2", jeu: "mots", at: 2, niveau: 8, score: 7, max: 8, reussi: true }], seances: { "2026-11-21": { etapes: ["revisions"], fin: 5 } } };
+  const m = JSON.parse(mergeText("memoire", null, JSON.stringify(pc), JSON.stringify(iphone))!);
+  assert.equal(m.format, "rayans-memoire");
+  assert.deepEqual(m.resultats.map((r: { id: string }) => r.id), ["1", "2"]);
+  assert.deepEqual(m.seances["2026-11-21"].etapes.sort(), ["echauffement", "revisions"]);
+  assert.equal(m.seances["2026-11-21"].fin, 5);
+});
