@@ -1,7 +1,9 @@
 // Film de l'Arène (tuile Arène) : une vraie évolution exportée par arene/publier.py (film.json). Chaque génération :
 // [id, id du parent (-1 au début), type de règle (0-3), rendement sur l'entraînement, survit à la sélection],
 // rangés du mieux noté au moins bien noté (la note tient compte du risque et du nombre d'ordres, pas que du gain).
-// Ici : lecture prudente du fichier et petits calculs purs pour l'animation (positions, tailles, naissances).
+// Ici : lecture prudente du fichier et petits calculs purs pour l'animation (positions, tailles, naissances), et le
+// scénario commun aux vues 2D et 3D (durées, moment du film, texte d'explication, place sur la piste de la course).
+import { pourcent } from "./arene.ts";
 
 export type Agent = [id: number, parent: number, type: number, rendement: number, survit: boolean];
 export interface Film {
@@ -75,4 +77,48 @@ export function placeChampion(f: Film): { id: number; ne: boolean } {
   if (derniere.some((a) => a[0] === f.champion.id)) return { id: f.champion.id, ne: false };
   if (derniere.some((a) => a[0] === f.champion.parent)) return { id: f.champion.parent, ne: true };
   return { id: enTete(derniere)[0], ne: false };
+}
+
+// ── Le scénario du film, commun à la vue 2D (canvas) et à la vue 3D (three.js) ──
+/** Durées en secondes : une génération (ils tradent, puis sélection, puis naissances), le sacre, la course, le verdict. */
+export const DUREES = { GEN: 3.2, SACRE: 3.5, EXAMEN: 7, FIN: 4, MORTS: 1.6, NAISSANCES: 2.4 };
+export const dureeTotale = (f: Film): number => f.generations.length * DUREES.GEN + DUREES.SACRE + DUREES.EXAMEN + DUREES.FIN;
+
+export type Moment =
+  | { phase: "generation"; g: number; ph: number }   // génération g, ph secondes depuis son début
+  | { phase: "sacre"; k: number }                     // 0 → 1 : la championne arrive au centre
+  | { phase: "examen"; te: number; i: number };       // 0 → 1 : avancement de la course ; i = jour de l'année d'examen
+
+/** Où en est le film au temps t (secondes). */
+export function moment(f: Film, t: number): Moment {
+  const G = f.generations.length, { GEN, SACRE, EXAMEN } = DUREES;
+  if (t < G * GEN) { const g = Math.min(G - 1, Math.max(0, Math.floor(t / GEN))); return { phase: "generation", g, ph: Math.max(0, t - g * GEN) }; }
+  if (t < G * GEN + SACRE) return { phase: "sacre", k: Math.min(1, (t - G * GEN) / 1.2) };
+  const te = Math.min(1, (t - G * GEN - SACRE) / EXAMEN), n = f.examen.dates.length;
+  return { phase: "examen", te, i: Math.min(n - 1, Math.max(1, Math.round(te * (n - 1)))) };
+}
+
+/** Le texte d'explication sous l'arène au temps t (le même en 2D et en 3D). */
+export function message(f: Film, t: number): string {
+  const m = moment(f, t);
+  if (m.phase === "generation") return m.ph < DUREES.MORTS ? `Chaque robot applique sa règle sur les prix de ${f.entrainement}. Plus il gagne, plus il grossit.`
+    : m.ph < DUREES.NAISSANCES ? "La moitié la moins bonne meurt." : "Les survivants font des enfants, presque pareils qu'eux.";
+  if (m.phase === "sacre") return `${placeChampion(f).ne ? "Née à la dernière génération. " : ""}Sa règle : ${f.champion.regle}`;
+  const ex = f.examen, n = ex.dates.length, fin = ex.champion[n - 1], ag = ex.ag[n - 1];
+  if (m.te < 1) return "La championne joue sur une année qu'elle n'a jamais vue, sans rien changer à sa règle.";
+  return fin > ag ? `Elle gagne cette fois (${pourcent(fin)} contre ${pourcent(ag)}) : regarde les autres années dans le rapport avant d'y croire.`
+    : `Sur le passé : ${pourcent(f.champion.entrainement)}. À l'examen : ${pourcent(fin)}, contre ${pourcent(ag)} sans rien faire. Elle avait appris le passé par cœur.`;
+}
+
+/** Bornes des gains cumulés de la course, 0 compris (la ligne de départ). */
+export function bornesExamen(ex: Film["examen"]): { lo: number; hi: number } {
+  let lo = 0, hi = 0;
+  for (const v of [...ex.champion, ...ex.ag]) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+  return hi - lo < 1e-9 ? { lo: -0.01, hi: 0.01 } : { lo, hi };
+}
+
+/** Course de la vue 3D : à combien de mètres du début de la piste (0 à longueur) se trouve un robot qui a gagné v.
+ *  Le départ (gain 0) est placé pour que le plus bas et le plus haut gain tiennent sur la piste : un robot qui perd recule. */
+export function surPiste(v: number, lo: number, hi: number, longueur: number): number {
+  return longueur * Math.min(1, Math.max(0, (v - lo) / (hi - lo)));
 }
