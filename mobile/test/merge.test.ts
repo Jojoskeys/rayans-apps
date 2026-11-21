@@ -157,3 +157,13 @@ test("Mémoire : séances et résultats du PC et de l'iPhone gardés tous les de
   assert.deepEqual(m.seances["2026-11-21"].etapes.sort(), ["echauffement", "revisions"]);
   assert.equal(m.seances["2026-11-21"].fin, 5);
 });
+
+test("Sommeil : nuits notées sur le PC et sur l'iPhone gardées toutes les deux, la plus récente gagne", () => {
+  const vide = { format: "rayans-sommeil", version: 1 };
+  const pc = { ...vide, nuits: [{ id: "2026-11-20", coucher: "23:10", lever: "06:55", energie: 3, maj: 1 }, { id: "2026-11-21", coucher: "23:40", lever: "07:00", energie: 2, maj: 5 }] };
+  const iphone = { ...vide, nuits: [{ id: "2026-11-21", coucher: "23:15", lever: "06:56", energie: 4, maj: 9 }, { id: "2026-11-19", coucher: "22:50", lever: "06:50", energie: 5, maj: 2 }] };
+  const m = JSON.parse(mergeText("sommeil", null, JSON.stringify(pc), JSON.stringify(iphone))!);
+  assert.equal(m.format, "rayans-sommeil");
+  assert.deepEqual(m.nuits.map((n: { id: string }) => n.id), ["2026-11-19", "2026-11-20", "2026-11-21"]);
+  assert.equal(m.nuits.find((n: { id: string }) => n.id === "2026-11-21").energie, 4);
+});

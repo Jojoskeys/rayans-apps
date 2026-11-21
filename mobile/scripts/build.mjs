@@ -47,6 +47,7 @@ export const PAGES = [
   { id: "courses", title: "Courses", entry: "src/apps/courses.tsx", root: "racine" },
   { id: "memo", title: "Mémo", entry: "src/apps/memo.tsx", root: "racine" },
   { id: "memoire", title: "Mémoire", entry: "src/apps/memoire.tsx", root: "root", copy: [{ from: "../memoire/public/logo.svg", to: "logo.svg" }] },
+  { id: "sommeil", title: "Sommeil", entry: "src/apps/sommeil.tsx", root: "root", copy: [{ from: "../sommeil/public/logo.svg", to: "logo.svg" }] },
   { id: "papiers", title: "Papiers", entry: "src/apps/papiers.tsx", root: "racine" },
   { id: "favoris", title: "Favoris", entry: "src/apps/favoris.tsx", root: "racine" },
   { id: "recettes", title: "Recettes", entry: "src/apps/recettes.tsx", root: "racine" },

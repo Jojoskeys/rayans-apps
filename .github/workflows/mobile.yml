@@ -12,6 +12,8 @@ on:
       - 'revision/public/**'
       - 'memoire/src/**'
       - 'memoire/public/**'
+      - 'sommeil/src/**'
+      - 'sommeil/public/**'
       - 'aujourdhui/src/**'
       - 'coran-memorisation/src/**'
       - 'coran-memorisation/data/**'
