@@ -20,7 +20,10 @@ meurent »), mais testée honnêtement :
 Tuile **Arène** de Rayan's Mobile (https://jojoskeys.github.io/rayans-apps/arene/, à ouvrir aussi dans le
 navigateur du PC) : **arène animée** (une vraie évolution de 200 petits robots filmée génération par génération :
 ils grossissent quand ils gagnent, la moitié meurt, les survivants font des enfants, puis la championne passe
-l'examen sur l'année jamais vue contre « acheter et garder » ; `film.json`), plan mensuel au choix du montant (calculé sur le téléphone) et résultats des robots avec leurs
+l'examen sur l'année jamais vue contre « acheter et garder » ; `film.json`), en **3D** par défaut (three.js, les
+modèles de `blender/arene/sorties` sur la piste ; caméra qui tourne seule ou au doigt ; la course de l'examen avance
+selon le gain cumulé) ou en 2D (bouton « 2D / 3D » ; la 2D reste seule si le téléphone n'a pas WebGL 2 ; `#t=66`
+dans l'adresse ouvre le film à 66 s), plan mensuel au choix du montant (calculé sur le téléphone) et résultats des robots avec leurs
 rapports. Chaque lundi, `.github/workflows/mobile.yml` lance `python arene/publier.py arene/publie` (prix publics
 et rapports à jour), puis reconstruit Rayan's Mobile.
 

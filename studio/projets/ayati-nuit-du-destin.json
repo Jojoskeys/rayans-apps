@@ -21,7 +21,7 @@
     "Récitation : « Surah Qadr - Abdullah Al Matroud.wav », Wikimedia Commons, CC BY-SA 4.0 (crédit obligatoire)"
   ],
   "legende": "Il existe une nuit qui vaut plus que mille mois : plus de 83 ans. La nuit d'Al-Qadr, la Nuit du Destin (sourate 97).\n\nRécitation : Abdullah Al Matroud, CC BY-SA 4.0, via Wikimedia Commons.\n\nAbonne-toi pour ne rien rater avant Ramadan.",
-  "hashtags": ["#coran", "#islam", "#laylatalqadr", "#ramadan", "#rappel", "#quran", "#histoiresducoran"],
+  "hashtags": ["#alqadr", "#coran", "#islam", "#laylatalqadr", "#ramadan", "#rappel", "#quran", "#histoiresducoran"],
   "segments": [
     {"type": "narration", "scene": "hira_nuit", "ref": "97:3",
      "accents": {"mois.": "impact", "vie,": "flash"},

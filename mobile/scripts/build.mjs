@@ -39,7 +39,11 @@ export const PAGES = [
   { id: "studio", title: "Studio", entry: "src/apps/studio.tsx", root: "racine" },
   { id: "demain", title: "Demain", entry: "src/apps/demain.tsx", root: "racine" },
   { id: "actu", title: "Ton monde", entry: "src/apps/actu.tsx", root: "racine" },
-  { id: "arene", title: "Arène", entry: "src/apps/arene.tsx", root: "racine" },
+  // Arène : la vue 3D (three.js) est un morceau à part (splitting), chargé seulement si on l'affiche ; ses modèles
+  // viennent de blender/arene/sorties.
+  { id: "arene", title: "Arène", entry: "src/apps/arene.tsx", root: "racine", splitting: true,
+    copy: ["arene", "couronne", ...["croisement", "rebond", "momentum", "tendance", "acheter-et-garder"].map((f) => `robot-${f}`)]
+      .map((m) => ({ from: `../blender/arene/sorties/${m}.glb`, to: `modeles/${m}.glb` })) },
   { id: "courses", title: "Courses", entry: "src/apps/courses.tsx", root: "racine" },
   { id: "memo", title: "Mémo", entry: "src/apps/memo.tsx", root: "racine" },
   { id: "memoire", title: "Mémoire", entry: "src/apps/memoire.tsx", root: "root", copy: [{ from: "../memoire/public/logo.svg", to: "logo.svg" }] },
@@ -58,7 +62,7 @@ for (const p of PAGES) {
   await build({
     entryPoints: { app: join(root, p.entry) },
     outdir: dir,
-    bundle: true, minify: true, format: "esm", splitting: false, target: ["safari16"], jsx: "automatic", legalComments: "none",
+    bundle: true, minify: true, format: "esm", splitting: !!p.splitting, chunkNames: "morceaux/[name]-[hash]", target: ["safari16"], jsx: "automatic", legalComments: "none",
     loader: { ".png": "dataurl", ".svg": "dataurl", ".json": "json", ".woff2": "file", ".ttf": "file" },
     assetNames: "assets/[name]-[hash]",
     define: { "process.env.NODE_ENV": '"production"', __BUILD__: JSON.stringify(BUILD) },

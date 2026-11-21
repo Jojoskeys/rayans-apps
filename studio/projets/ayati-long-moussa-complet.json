@@ -1,0 +1,1101 @@
+{
+  "slug": "ayati-long-moussa-complet",
+  "titre": "L'histoire complète de Moussa",
+  "titre_youtube": "Moussa (Moïse) et Pharaon : l'histoire complète, du fleuve à la mer | Sourate Al-Qasas",
+  "format": "long",
+  "version": 1,
+  "statut": "brouillon à valider",
+  "compile_depuis": [
+    "ayati-pharaon-opprime",
+    "ayati-mere-de-moussa",
+    "ayati-coup-de-poing",
+    "ayati-homme-qui-accourt",
+    "ayati-puits-madyan",
+    "ayati-contrat-madyan",
+    "ayati-feu-du-mont",
+    "ayati-haroun",
+    "ayati-face-pharaon",
+    "ayati-tour-pharaon"
+  ],
+  "style": "ayati",
+  "marque": "@ayati142",
+  "voix_elevenlabs": "5l4ttmr4SKNgi0HnOelT",
+  "voix_reglages": {
+    "speed": 1.06,
+    "stability": 0.38,
+    "style": 0.5
+  },
+  "recitation": "libre",
+  "recitateur_nom": "récitation libre de droits (CC0, Wikimedia Commons, Atcovi)",
+  "sourates": {
+    "20": "Sourate Ta-Ha",
+    "28": "Sourate Al-Qasas"
+  },
+  "legende": "L'histoire complète de Moussa (Moïse), telle que la raconte la sourate Al-Qasas : Pharaon qui opprime les Bani Israïl, le bébé confié au fleuve, la fuite vers Madyan, le feu dans la nuit, la mission… jusqu'à la chute de Pharaon (28:3-40).\n\nAbonne-toi pour les prochaines histoires du Coran.",
+  "hashtags": [
+    "#alqasas",
+    "#moussa",
+    "#coran",
+    "#islam",
+    "#histoiresducoran",
+    "#histoiredesprophetes",
+    "#quran",
+    "#rappel"
+  ],
+  "miniatures": [
+    "L'HISTOIRE COMPLÈTE",
+    "Du palais… à la mer",
+    "Moussa face à Pharaon"
+  ],
+  "sources": [
+    "Coran 28:3-6 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes).",
+    "Choix visuels : aucun prophète n'est montré ; des lieux, des objets, de la lumière et des silhouettes lointaines sans visage.",
+    "Coran 28:15-17 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Choix visuels : Moussa n'est jamais montré ; seuls les deux hommes qui se battent apparaissent en silhouettes sans visage.",
+    "Coran 28:18-21 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Choix visuels : Moussa n'est jamais montré ; l'homme qui accourt est une silhouette sans visage.",
+    "Coran 28:21-29 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets ; « il n'avait plus rien » traduit le mot « faqîr » (« j'ai grand besoin ») de 28:24.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que Moussa, Qâroûn et la tour de Pharaon, déjà acceptée par YouTube). Verset 28:24 = 608,30-628,95 s.",
+    "Coran 28:27-28 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "D'après Sahih al-Bukhari (n° 2684), Ibn Abbas rapporte que Moussa a accompli le plus long et le meilleur des deux délais.",
+    "Coran 28:29-32 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (même source que les vidéos précédentes). Verset 28:30 = 812,50-839,35 s.",
+    "Choix visuels : Moussa n'est jamais montré, ni sa main (28:32 est rendu par une lumière blanche) ; seuls le bâton et le serpent sont dessinés.",
+    "Coran 28:33-35 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Coran 28:36-37 (texte et traduction Hamidullah : quran.com). Tous les faits viennent de ces versets.",
+    "Coran 28:38-40 (texte et traduction Hamidullah : quran.com). Tous les faits du récit viennent de ces versets.",
+    "Récitation : « Chapter 28, Al-Qasas (Murattal) », Atcovi, CC0, Wikimedia Commons (déjà validée par YouTube sur la vidéo de la mère de Moussa)"
+  ],
+  "chapitres": [
+    {
+      "titre": "Introduction",
+      "segment": 0
+    },
+    {
+      "titre": "Pharaon, le tyran d'Égypte",
+      "segment": 3,
+      "depuis": "ayati-pharaon-opprime"
+    },
+    {
+      "titre": "Le bébé confié au fleuve",
+      "segment": 11,
+      "depuis": "ayati-mere-de-moussa"
+    },
+    {
+      "titre": "Un seul coup de poing",
+      "segment": 25,
+      "depuis": "ayati-coup-de-poing"
+    },
+    {
+      "titre": "L'homme qui accourt",
+      "segment": 34,
+      "depuis": "ayati-homme-qui-accourt"
+    },
+    {
+      "titre": "Seul au puits de Madyan",
+      "segment": 43,
+      "depuis": "ayati-puits-madyan"
+    },
+    {
+      "titre": "Huit ou dix ans de travail",
+      "segment": 53,
+      "depuis": "ayati-contrat-madyan"
+    },
+    {
+      "titre": "Le feu dans la nuit",
+      "segment": 60,
+      "depuis": "ayati-feu-du-mont"
+    },
+    {
+      "titre": "« Envoie mon frère avec moi »",
+      "segment": 70,
+      "depuis": "ayati-haroun"
+    },
+    {
+      "titre": "Face à Pharaon",
+      "segment": 77,
+      "depuis": "ayati-face-pharaon"
+    },
+    {
+      "titre": "La tour et la mer",
+      "segment": 84,
+      "depuis": "ayati-tour-pharaon"
+    },
+    {
+      "titre": "Ce qu'il faut retenir",
+      "segment": 92
+    }
+  ],
+  "segments": [
+    {
+      "type": "narration",
+      "scene": "berge",
+      "accents": {
+        "fleuve.": "impact"
+      },
+      "texte": "Un bébé confié à un fleuve. Un jeune homme en fuite, seul dans le désert. Un feu aperçu au loin, en pleine nuit.",
+      "voix": "[mysterious] Un bébé… confié à un fleuve. [pause] Un jeune homme en fuite, seul dans le désert. [whispers] Un feu aperçu au loin, en pleine nuit."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "accents": {
+        "bâton.": "flash"
+      },
+      "texte": "Et un homme qui va se retrouver face au roi le plus puissant de son temps, avec un simple bâton.",
+      "voix": "[dramatic tone] Et un homme qui va se retrouver face au roi le plus puissant de son temps… [pause] avec un simple bâton."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_mer",
+      "titre": {
+        "mot": "complète",
+        "texte": "L'histoire complète de Moussa"
+      },
+      "texte": "Voici l'histoire complète de Moussa, telle que la raconte la sourate Al-Qasas. Du palais de Pharaon… jusqu'à la mer.",
+      "voix": "[serious] Voici l'histoire complète de Moussa, telle que la raconte la sourate Al-Qasas. [pause] Du palais de Pharaon… jusqu'à la mer."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "ref": "28:4-5",
+      "accents": {
+        "tout-puissant.": "impact",
+        "faibles.": "secousse",
+        "plan": "battement"
+      },
+      "texte": "Il se croyait tout-puissant. Il écrasait les plus faibles. Mais Allah avait un autre plan pour eux."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "ref": "28:3",
+      "titre": {
+        "mot": "Pharaon.",
+        "texte": "Ceux qu'on écrasait"
+      },
+      "accents": {
+        "vérité,": "pop",
+        "Pharaon.": "impact"
+      },
+      "texte": "Allah nous raconte, en toute vérité, l'histoire de Moussa et de Pharaon. Pour ceux qui croient."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_orgueil",
+      "ref": "28:4",
+      "accents": {
+        "arrogant": "impact",
+        "divisé": "whoosh",
+        "fils,": "secousse"
+      },
+      "texte": "Pharaon était arrogant sur terre. Il avait divisé son peuple en groupes, pour en écraser un : il tuait leurs fils, et laissait vivre leurs femmes."
+    },
+    {
+      "type": "narration",
+      "scene": "village_nuit",
+      "ref": "28:4",
+      "accents": {
+        "force.": "pop",
+        "Rien.": "battement"
+      },
+      "texte": "Ce peuple n'avait aucune force. Aucune armée. Rien."
+    },
+    {
+      "type": "verset",
+      "scene": "qp_priere",
+      "ref": "28:5"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_pardon",
+      "ref": "28:5",
+      "accents": {
+        "favoriser": "flash",
+        "dirigeants,": "impact",
+        "héritiers.": "battement"
+      },
+      "texte": "« Mais Nous voulions favoriser ceux qui avaient été écrasés sur terre, et faire d'eux des dirigeants, et faire d'eux les héritiers. »"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_mer",
+      "ref": "28:6",
+      "accents": {
+        "Pharaon,": "impact",
+        "redoutaient.": "secousse"
+      },
+      "texte": "« Et faire voir à Pharaon, à Hâmân et à leurs soldats… exactement ce qu'ils redoutaient. »"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "accents": {
+        "fort": "impact",
+        "mot.": "pop",
+        "finie.": "battement"
+      },
+      "texte": "Le plus fort d'aujourd'hui n'a pas forcément le dernier mot. Si tu es écrasé, ne crois pas que ton histoire est finie."
+    },
+    {
+      "type": "narration",
+      "scene": "palais_nuit",
+      "ref": "28:4-6",
+      "titre": {
+        "mot": "élever",
+        "texte": "L'enfant qu'il redoutait"
+      },
+      "accents": {
+        "égorger": "impact",
+        "élever,": "flash"
+      },
+      "texte": "Pharaon faisait égorger les nouveau-nés pour empêcher une seule chose. Et Allah lui a fait élever, dans son propre palais, l'enfant qu'il redoutait. Voici comment.",
+      "voix": "[mysterious] Pharaon faisait égorger les nouveau-nés… pour empêcher une seule chose. [pause] [dramatic tone] Et Allah lui a fait élever, dans son propre palais… l'enfant qu'il redoutait. [whispers] Voici comment."
+    },
+    {
+      "type": "narration",
+      "scene": "village_nuit",
+      "ref": "28:4",
+      "accents": {
+        "garçon": "impact",
+        "filles.": "pop:Moon"
+      },
+      "texte": "Égypte. Pharaon est un tyran. Chez les Bani Israïl, il fait égorger chaque garçon qui naît, et il laisse vivre les filles.",
+      "voix": "[serious] Égypte. [pause] Pharaon est un tyran. Chez les Bani Israïl, il fait égorger chaque garçon qui naît… [sad] et il laisse vivre les filles."
+    },
+    {
+      "type": "narration",
+      "scene": "lampe",
+      "accents": {
+        "garçon.": "pop:Baby",
+        "trahir.": "battement"
+      },
+      "texte": "Cette nuit-là, une femme des Bani Israïl met au monde un garçon. Elle sait ce que les soldats font aux garçons. Chaque pleur du bébé peut le trahir.",
+      "voix": "[softly] Cette nuit-là, une femme des Bani Israïl met au monde un garçon. [nervous] Elle sait ce que les soldats font aux garçons. [whispers] Chaque pleur du bébé… peut le trahir."
+    },
+    {
+      "type": "narration",
+      "scene": "calligraphie",
+      "accents": {
+        "d'impensable.": "flash"
+      },
+      "texte": "Alors Allah lui inspire quelque chose d'impensable.",
+      "voix": "[pause] Alors Allah lui inspire… [dramatic tone] quelque chose d'impensable."
+    },
+    {
+      "type": "verset",
+      "scene": "calligraphie",
+      "ref": "28:7"
+    },
+    {
+      "type": "narration",
+      "scene": "coffre_nuit",
+      "ref": "20:39",
+      "titre": {
+        "mot": "fleuve.",
+        "texte": "Dans le fleuve"
+      },
+      "accents": {
+        "fleuve.": "whoosh",
+        "lâchent.": "impact"
+      },
+      "texte": "Jeter son bébé dans le fleuve. Pour le sauver. Imagine ses mains qui ferment le coffre… qui le posent sur l'eau… et qui le lâchent.",
+      "voix": "[intense] Jeter son bébé dans le fleuve. [pause] Pour le sauver. [softly] Imagine ses mains qui ferment le coffre… qui le posent sur l'eau… [whispers] et qui le lâchent."
+    },
+    {
+      "type": "narration",
+      "scene": "matin_vide",
+      "ref": "28:10",
+      "accents": {
+        "vide.": "battement",
+        "raffermi": "flash"
+      },
+      "texte": "Le Coran dit qu'au matin, son cœur était vide. Elle a failli révéler que c'était son fils. Mais Allah a raffermi son cœur.",
+      "voix": "[sad] Le Coran dit qu'au matin, son cœur était vide. [nervous] Elle a failli révéler que c'était son fils. [pause] [calm] Mais Allah a raffermi son cœur."
+    },
+    {
+      "type": "narration",
+      "scene": "berge",
+      "ref": "28:11",
+      "accents": {
+        "Suis-le.": "pop:Eye"
+      },
+      "texte": "Elle dit à sa sœur : « Suis-le. » La petite marche le long du fleuve, cachée, les yeux sur le coffre.",
+      "voix": "[firmly] Elle dit à sa sœur : « Suis-le. » [whispers] La petite marche le long du fleuve, cachée, les yeux sur le coffre."
+    },
+    {
+      "type": "narration",
+      "scene": "palais_aube",
+      "ref": "28:8",
+      "titre": {
+        "mot": "Pharaon.",
+        "texte": "Chez Pharaon"
+      },
+      "accents": {
+        "Pharaon.": "impact",
+        "mains.": "zoom"
+      },
+      "texte": "Et le fleuve le dépose… chez Pharaon. Ses gens le recueillent. Le bébé qu'il voulait tuer est entre ses mains.",
+      "voix": "[suspenseful] Et le fleuve le dépose… [dramatic tone] chez Pharaon. Ses gens le recueillent. [pause] Le bébé qu'il voulait tuer… est entre ses mains."
+    },
+    {
+      "type": "narration",
+      "scene": "palais_interieur",
+      "ref": "28:9 · 20:39",
+      "accents": {
+        "tuez": "impact",
+        "amour": "pop:Heart"
+      },
+      "texte": "Mais sa femme dit : « Ne le tuez pas. Il pourrait nous être utile, ou nous l'adopterons comme enfant. » Allah avait mis sur ce bébé un amour venu de Lui.",
+      "voix": "[urgent] Mais sa femme dit : « Ne le tuez pas. Il pourrait nous être utile, ou nous l'adopterons comme enfant. » [warmly] Allah avait mis sur ce bébé un amour venu de Lui."
+    },
+    {
+      "type": "narration",
+      "scene": "palais_interieur",
+      "ref": "28:12",
+      "accents": {
+        "refuse": "secousse",
+        "l'autre.": "secousse",
+        "s'avance": "pop:Footprints"
+      },
+      "texte": "Mais le bébé refuse toutes les nourrices. Une. Après. L'autre. Et là, une petite fille s'avance : « Voulez-vous que je vous indique une famille qui s'occupera de lui ? »",
+      "voix": "[frustrated] Mais le bébé refuse toutes les nourrices. Une. Après. L'autre. [pause] [curious] Et là, une petite fille s'avance : « Voulez-vous que je vous indique une famille qui s'occupera de lui ? »"
+    },
+    {
+      "type": "narration",
+      "scene": "retour",
+      "titre": {
+        "mot": "mère.",
+        "texte": "Chez sa mère"
+      },
+      "accents": {
+        "mère.": "flash"
+      },
+      "texte": "Elle les mène… chez sa propre mère.",
+      "voix": "[emotional] Elle les mène… [pause] chez sa propre mère."
+    },
+    {
+      "type": "verset",
+      "scene": "retour",
+      "ref": "28:13"
+    },
+    {
+      "type": "narration",
+      "scene": "retour",
+      "titre": {
+        "mot": "perd",
+        "texte": "Il ne le perd jamais"
+      },
+      "texte": "Ce que tu confies à Allah, Il ne le perd jamais. Même quand ça ressemble à un fleuve qui emporte tout.",
+      "voix": "[warmly] Ce que tu confies à Allah, Il ne le perd jamais. [softly] Même quand ça ressemble à un fleuve qui emporte tout."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_poing",
+      "ref": "28:15",
+      "accents": {
+        "poing…": "impact",
+        "tombe.": "secousse",
+        "leçon": "battement"
+      },
+      "texte": "Un seul coup de poing… et un homme tombe. Ce que Moussa a fait juste après, c'est une leçon pour chacun de nous."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_ville",
+      "ref": "28:14-15",
+      "titre": {
+        "mot": "ville",
+        "texte": "Le coup de poing"
+      },
+      "accents": {
+        "homme.": "pop",
+        "ville": "whoosh"
+      },
+      "texte": "Moussa est devenu un homme. Un jour, il entre dans la ville à un moment où ses habitants ne font pas attention."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_bagarre",
+      "ref": "28:15",
+      "accents": {
+        "battent": "impact",
+        "secours.": "whoosh"
+      },
+      "texte": "Il y trouve deux hommes qui se battent : l'un est de son peuple, l'autre de leurs ennemis. Et l'homme de son peuple l'appelle au secours."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_coup",
+      "ref": "28:15",
+      "accents": {
+        "poing…": "impact",
+        "meurt.": "secousse",
+        "Diable.": "battement"
+      },
+      "texte": "Moussa lui donne un coup de poing… et l'homme meurt. Moussa dit : « Ceci est l'œuvre du Diable. C'est un ennemi, un égareur évident. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_priere",
+      "ref": "28:16",
+      "accents": {
+        "d'excuse.": "pop",
+        "Seigneur.": "battement"
+      },
+      "texte": "Mais il ne cherche pas d'excuse. Il se tourne aussitôt vers son Seigneur."
+    },
+    {
+      "type": "verset",
+      "scene": "qp_priere",
+      "ref": "28:16"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_pardon",
+      "ref": "28:16",
+      "accents": {
+        "pardonne-moi": "battement",
+        "pardonna.": "flash"
+      },
+      "texte": "« Seigneur ! Je me suis fait du tort à moi-même, pardonne-moi ! » Et Il lui pardonna. C'est Lui le Pardonneur, le Miséricordieux."
+    },
+    {
+      "type": "narration",
+      "scene": "qp_promesse",
+      "ref": "28:17",
+      "accents": {
+        "promet": "pop",
+        "jamais": "impact"
+      },
+      "texte": "Alors Moussa promet : « Seigneur, par les bienfaits dont Tu m'as comblé, jamais je ne soutiendrai les criminels. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qp_lecon",
+      "accents": {
+        "faute,": "pop",
+        "changé.": "impact",
+        "ouverte.": "battement"
+      },
+      "texte": "Il a reconnu sa faute, il a demandé pardon… et il a changé. Quelle que soit ta faute, la porte du pardon reste ouverte."
+    },
+    {
+      "type": "narration",
+      "scene": "qa_course",
+      "ref": "28:20",
+      "accents": {
+        "mort.": "impact",
+        "courant": "whoosh",
+        "nom.": "battement"
+      },
+      "texte": "Les notables veulent sa mort. Et un homme traverse toute la ville en courant pour le prévenir… On ne connaît même pas son nom."
+    },
+    {
+      "type": "narration",
+      "scene": "qa_aube",
+      "ref": "28:18",
+      "titre": {
+        "mot": "lendemain",
+        "texte": "L'homme qui accourt"
+      },
+      "accents": {
+        "lendemain": "pop",
+        "peur,": "battement"
+      },
+      "texte": "Le lendemain matin, Moussa est en ville. Il a peur, il regarde autour de lui."
+    },
+    {
+      "type": "narration",
+      "scene": "qa_cri",
+      "ref": "28:18",
+      "accents": {
+        "cris.": "impact",
+        "provocateur": "pop"
+      },
+      "texte": "Et voilà que l'homme qu'il avait aidé la veille l'appelle encore à grands cris. Moussa lui dit : « Tu es vraiment un provocateur ! »"
+    },
+    {
+      "type": "narration",
+      "scene": "qa_secret",
+      "ref": "28:19",
+      "accents": {
+        "tuer,": "impact",
+        "hier": "secousse",
+        "découvert.": "battement"
+      },
+      "texte": "Quand Moussa veut s'en prendre à leur ennemi, on lui lance : « Veux-tu me tuer, comme tu as tué un homme hier ? » Le secret est découvert."
+    },
+    {
+      "type": "narration",
+      "scene": "qa_course",
+      "ref": "28:20",
+      "accents": {
+        "bout": "pop",
+        "courant.": "whoosh"
+      },
+      "texte": "Et c'est alors qu'un homme arrive du bout de la ville, en courant."
+    },
+    {
+      "type": "verset",
+      "scene": "qa_course",
+      "ref": "28:20"
+    },
+    {
+      "type": "narration",
+      "scene": "qa_conseil",
+      "ref": "28:20",
+      "accents": {
+        "tuer.": "impact",
+        "Quitte": "whoosh",
+        "conseil": "battement"
+      },
+      "texte": "« Ô Moussa ! Les notables se concertent pour te tuer. Quitte la ville. C'est un conseil que je te donne. »"
+    },
+    {
+      "type": "narration",
+      "scene": "qa_depart",
+      "ref": "28:21",
+      "accents": {
+        "sort": "whoosh",
+        "Sauve-moi": "battement"
+      },
+      "texte": "Moussa sort de la ville, inquiet, regardant autour de lui. Il dit : « Seigneur ! Sauve-moi de ce peuple injuste ! »"
+    },
+    {
+      "type": "narration",
+      "scene": "qa_lecon",
+      "accents": {
+        "nom.": "pop",
+        "Coran.": "flash",
+        "perdu.": "battement"
+      },
+      "texte": "Cet homme, on ne connaît même pas son nom. Mais il a couru pour sauver quelqu'un, et son geste est raconté dans le Coran. Un bien fait en silence n'est jamais perdu."
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:24",
+      "accents": {
+        "rien.": "impact",
+        "dou'â…": "battement",
+        "changé.": "whoosh"
+      },
+      "texte": "Il n'avait plus rien. Ni maison, ni personne. Alors il a fait une seule dou'â… et sa vie a changé."
+    },
+    {
+      "type": "narration",
+      "scene": "md_desert",
+      "ref": "28:21-22",
+      "titre": {
+        "mot": "Madyan.",
+        "texte": "Le puits de Madyan"
+      },
+      "accents": {
+        "tuer.": "battement",
+        "Madyan.": "impact",
+        "droite.": "pop"
+      },
+      "texte": "Moussa vient de fuir l'Égypte : on veut le tuer. Il marche seul vers Madyan. Et il dit : « Il se peut que mon Seigneur me guide sur la voie droite. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_puits",
+      "ref": "28:23",
+      "accents": {
+        "puits": "whoosh",
+        "écart,": "pop",
+        "âgé.": "battement"
+      },
+      "texte": "Au puits de Madyan, une foule de bergers fait boire ses bêtes. À l'écart, deux femmes retiennent leur troupeau : « Nous attendrons que les bergers partent. Notre père est très âgé. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_puits",
+      "ref": "28:24",
+      "accents": {
+        "abreuve": "pop",
+        "ombre,": "whoosh"
+      },
+      "texte": "Alors Moussa abreuve leurs bêtes pour elles. Puis il se retire à l'ombre, et il dit…"
+    },
+    {
+      "type": "verset",
+      "scene": "md_ombre",
+      "ref": "28:24"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "accents": {
+        "plainte.": "pop",
+        "rien.": "battement"
+      },
+      "texte": "Ce n'est pas une plainte. C'est l'aveu d'un homme qui n'a plus rien : « Seigneur, j'ai grand besoin du bien que Tu feras descendre vers moi. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_reponse",
+      "ref": "28:25",
+      "accents": {
+        "aussitôt.": "impact",
+        "pudique": "pop",
+        "récompenser.": "pop"
+      },
+      "texte": "Et la réponse arrive aussitôt. L'une des deux femmes revient, d'une démarche pudique : « Mon père t'appelle, pour te récompenser. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_maison",
+      "ref": "28:25-27",
+      "accents": {
+        "crainte.": "battement",
+        "toit,": "pop",
+        "travail,": "pop",
+        "mariage.": "impact"
+      },
+      "texte": "Le vieil homme écoute son histoire et lui dit : « N'aie aucune crainte. » Puis il lui offre un toit, un travail… et l'une de ses filles en mariage."
+    },
+    {
+      "type": "narration",
+      "scene": "md_lecon",
+      "ref": "28:29",
+      "accents": {
+        "rien.": "battement",
+        "famille.": "pop",
+        "dou'â.": "impact"
+      },
+      "texte": "Il était arrivé seul et sans rien. Il est reparti, des années plus tard, avec sa famille. Tout a commencé par cette dou'â."
+    },
+    {
+      "type": "narration",
+      "scene": "md_lecon",
+      "accents": {
+        "toi": "pop",
+        "rien.": "battement"
+      },
+      "texte": "Cette dou'â, toi aussi tu peux la faire. Surtout le jour où tu as l'impression de ne plus rien avoir."
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:28",
+      "accents": {
+        "papier,": "pop",
+        "parole": "impact",
+        "témoin.": "flash"
+      },
+      "texte": "Un accord sans papier, sans signature. Juste une parole donnée… et Allah pour témoin."
+    },
+    {
+      "type": "narration",
+      "scene": "md_reponse",
+      "ref": "28:27",
+      "titre": {
+        "mot": "marier",
+        "texte": "Un contrat devant Allah"
+      },
+      "accents": {
+        "marier": "pop",
+        "huit": "impact",
+        "dix,": "flash"
+      },
+      "texte": "Le père des deux jeunes femmes dit à Moussa : « Je voudrais te marier à l'une de mes deux filles, si tu travailles pour moi huit ans. Et si tu en fais dix, ce sera de ton plein gré. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:27",
+      "accents": {
+        "difficile.": "pop",
+        "bien.": "battement"
+      },
+      "texte": "« Je ne veux rien t'imposer de difficile. Tu me trouveras, si Allah le veut, parmi les gens de bien. »"
+    },
+    {
+      "type": "verset",
+      "scene": "md_lecon",
+      "ref": "28:28"
+    },
+    {
+      "type": "narration",
+      "scene": "md_lecon",
+      "ref": "28:28",
+      "accents": {
+        "entendu": "pop",
+        "rien.": "impact",
+        "garant": "flash"
+      },
+      "texte": "Moussa répond : « C'est entendu entre toi et moi. Quel que soit le délai que je remplirai, on ne me reprochera rien. Et Allah est garant de ce que nous disons. »"
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "dix": "flash",
+        "plus": "impact"
+      },
+      "texte": "D'après les savants, Moussa a choisi le plus long délai : dix ans. Il a donné plus que ce qu'on lui demandait."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "contrat.": "impact",
+        "témoin…": "battement",
+        "l'est.": "flash"
+      },
+      "texte": "Ta parole, c'est un contrat. Tiens-la, comme si Allah en était témoin… parce qu'Il l'est."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_feu",
+      "ref": "28:29-30",
+      "accents": {
+        "feu": "whoosh",
+        "réchauffer…": "battement",
+        "voix": "impact"
+      },
+      "texte": "Une nuit, dans le désert, il voit un feu au loin. Il y va pour trouver de quoi se réchauffer… Il va y entendre la voix de son Seigneur."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_route",
+      "ref": "28:29",
+      "titre": {
+        "mot": "Mont,",
+        "texte": "Le feu sur le Mont"
+      },
+      "accents": {
+        "famille.": "pop",
+        "feu.": "impact"
+      },
+      "texte": "Moussa a fini ses années de travail à Madyan. Il repart avec sa famille. Et sur la route, près du Mont, il aperçoit un feu."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_route",
+      "ref": "28:29",
+      "accents": {
+        "Restez": "pop",
+        "réchauffer.": "battement"
+      },
+      "texte": "Il dit aux siens : « Restez ici. Peut-être que je vous rapporterai une nouvelle, ou un tison pour vous réchauffer. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_vallee",
+      "ref": "28:30",
+      "accents": {
+        "approche.": "whoosh",
+        "arbre,": "battement",
+        "appelle…": "impact"
+      },
+      "texte": "Il s'approche. Et là, du flanc droit de la vallée, dans le lieu béni, depuis l'arbre, on l'appelle…"
+    },
+    {
+      "type": "verset",
+      "scene": "mf_arbre",
+      "ref": "28:30"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_arbre",
+      "accents": {
+        "Moussa !": "impact",
+        "l'Univers.": "battement"
+      },
+      "texte": "« Ô Moussa ! C'est Moi, Allah, le Seigneur de l'Univers. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_baton",
+      "ref": "28:31",
+      "accents": {
+        "Jette": "impact",
+        "serpent.": "secousse",
+        "recule": "whoosh"
+      },
+      "texte": "« Jette ton bâton ! » Le bâton se met à remuer, comme un serpent. Moussa recule et s'enfuit, sans se retourner."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_baton",
+      "ref": "28:31",
+      "accents": {
+        "approche": "pop",
+        "sécurité.": "battement"
+      },
+      "texte": "« Ô Moussa, approche et n'aie pas peur. Tu es de ceux qui sont en sécurité. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_preuves",
+      "ref": "28:32",
+      "accents": {
+        "blanche,": "flash",
+        "Deux": "pop",
+        "Pharaon.": "impact"
+      },
+      "texte": "« Mets ta main dans l'ouverture de ta tunique : elle ressortira blanche, sans aucun mal. » Deux preuves de son Seigneur, pour aller devant Pharaon."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_mission",
+      "accents": {
+        "feu": "pop",
+        "mission": "impact",
+        "réserve.": "battement"
+      },
+      "texte": "Il était parti chercher un peu de feu pour sa famille. Il est revenu avec la mission de sa vie. Parfois, ce que tu cherches n'est que le chemin vers ce qu'Allah te réserve."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_arbre",
+      "ref": "28:33-34",
+      "accents": {
+        "difficile": "impact",
+        "simple.": "battement"
+      },
+      "texte": "Allah lui confie la mission la plus difficile de sa vie. Et Moussa répond par une demande toute simple."
+    },
+    {
+      "type": "narration",
+      "scene": "mf_vallee",
+      "ref": "28:33",
+      "titre": {
+        "mot": "Moussa",
+        "texte": "Le frère de Moussa"
+      },
+      "accents": {
+        "tué": "impact",
+        "peur": "battement"
+      },
+      "texte": "Moussa dit : « Seigneur, j'ai tué un des leurs, et j'ai peur qu'ils me tuent. »"
+    },
+    {
+      "type": "narration",
+      "scene": "md_ombre",
+      "ref": "28:34",
+      "accents": {
+        "Haroun": "pop",
+        "mieux": "flash",
+        "menteur.": "impact"
+      },
+      "texte": "« Mon frère Haroun parle mieux que moi. Envoie-le avec moi pour m'aider, pour confirmer mes paroles. J'ai peur qu'ils me traitent de menteur. »"
+    },
+    {
+      "type": "verset",
+      "scene": "mf_arbre",
+      "ref": "28:35"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_mission",
+      "ref": "28:35",
+      "accents": {
+        "frère,": "pop",
+        "preuves.": "flash",
+        "vainqueurs.": "impact"
+      },
+      "texte": "Allah répond : « Nous allons te renforcer par ton frère, et vous donner à tous les deux des preuves. Ils ne pourront pas vous atteindre. Vous, et ceux qui vous suivront, serez les vainqueurs. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "peur,": "battement",
+        "d'aide.": "pop",
+        "faiblesse.": "impact"
+      },
+      "texte": "Moussa était un prophète. Et il n'a pas eu honte de dire : j'ai peur, et j'ai besoin d'aide. Demander de l'aide, ce n'est pas une faiblesse."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_lecon",
+      "accents": {
+        "soutient…": "pop",
+        "lui.": "battement"
+      },
+      "texte": "Et si tu as un frère, une sœur, un ami qui te soutient… remercie Allah pour lui."
+    },
+    {
+      "type": "narration",
+      "scene": "palais_interieur",
+      "ref": "28:36",
+      "accents": {
+        "puissant": "impact",
+        "claires.": "flash",
+        "moque": "secousse"
+      },
+      "texte": "Il arrive devant le roi le plus puissant de son temps, avec des preuves claires. Et on se moque de lui."
+    },
+    {
+      "type": "narration",
+      "scene": "kq_routes",
+      "ref": "28:35-36",
+      "titre": {
+        "mot": "palais",
+        "texte": "Face à Pharaon"
+      },
+      "accents": {
+        "palais": "whoosh",
+        "signes": "flash"
+      },
+      "texte": "Moussa et son frère Haroun vont au palais de Pharaon, avec les signes qu'Allah leur a donnés."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "ref": "28:36",
+      "accents": {
+        "magie": "impact",
+        "ancêtres": "pop"
+      },
+      "texte": "Mais Pharaon et ses ministres répondent : « Ce n'est que de la magie inventée. Jamais nos ancêtres n'ont entendu parler de ça. »"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_baton",
+      "ref": "28:37",
+      "accents": {
+        "s'énerve": "pop",
+        "débat.": "whoosh"
+      },
+      "texte": "Moussa ne s'énerve pas. Il ne cherche pas à gagner le débat. Il répond simplement :"
+    },
+    {
+      "type": "verset",
+      "scene": "mf_arbre",
+      "ref": "28:37"
+    },
+    {
+      "type": "narration",
+      "scene": "mf_mission",
+      "ref": "28:37",
+      "accents": {
+        "guidée,": "flash",
+        "fin.": "battement",
+        "réussiront": "impact"
+      },
+      "texte": "« Mon Seigneur sait mieux qui est venu avec la vraie guidée, et à qui reviendra la meilleure fin. Les injustes ne réussiront pas. »"
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "accents": {
+        "crier.": "impact",
+        "calmement…": "pop",
+        "Allah.": "battement"
+      },
+      "texte": "Quand on se moque de ta foi, tu n'as pas besoin de crier. Dis la vérité, calmement… et laisse la fin de l'histoire à Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_tour",
+      "ref": "28:38",
+      "accents": {
+        "tour…": "impact",
+        "Moussa.": "whoosh"
+      },
+      "texte": "Pharaon a fait construire une tour… pour monter voir le Dieu de Moussa."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_trone",
+      "ref": "28:38",
+      "titre": {
+        "mot": "moi.",
+        "texte": "« Pas d'autre divinité que moi »"
+      },
+      "accents": {
+        "notables,": "pop",
+        "moi.": "impact"
+      },
+      "texte": "Devant ses notables, il déclare : « Je ne vous connais pas d'autre divinité que moi. »"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_briques",
+      "ref": "28:38",
+      "accents": {
+        "Hâmân": "pop",
+        "feu": "whoosh",
+        "tour.": "impact"
+      },
+      "texte": "Puis il donne un ordre à Hâmân : « Allume le feu sur l'argile, et construis-moi une tour. Peut-être que je monterai jusqu'au Dieu de Moussa. »"
+    },
+    {
+      "type": "verset",
+      "scene": "tp_briques",
+      "ref": "28:38"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_orgueil",
+      "ref": "28:39",
+      "accents": {
+        "d'orgueil": "battement",
+        "jamais": "impact"
+      },
+      "texte": "Lui et ses soldats s'enflent d'orgueil sur la terre, sans aucun droit. Ils pensent qu'ils ne reviendront jamais vers Allah."
+    },
+    {
+      "type": "narration",
+      "scene": "tp_mer",
+      "ref": "28:40",
+      "titre": {
+        "mot": "flots.",
+        "texte": "Jetés dans les flots"
+      },
+      "accents": {
+        "saisit,": "secousse",
+        "flots.": "impact"
+      },
+      "texte": "Alors Allah les saisit, lui et ses soldats, et les jette dans les flots."
+    },
+    {
+      "type": "verset",
+      "scene": "tp_mer",
+      "ref": "28:40"
+    },
+    {
+      "type": "narration",
+      "scene": "tp_ruines",
+      "accents": {
+        "ciel": "whoosh",
+        "mer.": "impact",
+        "injustes.": "battement"
+      },
+      "texte": "L'homme qui voulait monter jusqu'au ciel a fini au fond de la mer. Regarde quelle a été la fin des injustes."
+    },
+    {
+      "type": "narration",
+      "scene": "retour",
+      "titre": {
+        "mot": "perd",
+        "texte": "Il ne le perd jamais"
+      },
+      "texte": "De la peur d'une mère à la chute de Pharaon, une même promesse : ce que tu confies à Allah, Il ne le perd jamais.",
+      "voix": "[warmly] De la peur d'une mère… à la chute de Pharaon, une même promesse : [softly] ce que tu confies à Allah, Il ne le perd jamais."
+    },
+    {
+      "type": "narration",
+      "scene": "yn_lecon",
+      "texte": "Tu connaissais toute l'histoire de Moussa ? Réponds OUI ou NON en commentaire.",
+      "voix": "[curious] Tu connaissais toute l'histoire de Moussa ? [pause] Réponds OUI… ou NON, en commentaire."
+    },
+    {
+      "type": "narration",
+      "scene": "cta",
+      "accents": {
+        "abonne-toi": "pop",
+        "like,": "pop",
+        "partage-la.": "pop"
+      },
+      "texte": "Si cette histoire t'a touché, abonne-toi pour les prochaines histoires du Coran, like, et partage-la. Le Prophète, paix et salut sur lui, a dit : celui qui indique un bien a la même récompense que celui qui le fait.",
+      "voix": "[warmly] Si cette histoire t'a touché, abonne-toi pour les prochaines histoires du Coran, like, et partage-la. [softly] Le Prophète, paix et salut sur lui, a dit : celui qui indique un bien a la même récompense que celui qui le fait."
+    }
+  ]
+}

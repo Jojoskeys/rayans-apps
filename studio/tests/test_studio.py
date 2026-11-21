@@ -248,3 +248,23 @@ class Battement(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CompilerLong(unittest.TestCase):
+    def test_long_sans_cta_au_milieu(self):
+        import compiler_long
+        r = json.loads((Path(__file__).resolve().parent.parent / "projets/longs/psycho-long-12-pieges.recette.json").read_text(encoding="utf-8"))
+        p = compiler_long.compiler(r)
+        self.assertEqual(p["format"], "long")
+        ctas = [i for i, s in enumerate(p["segments"]) if s.get("scene") == "cta"]
+        self.assertEqual(ctas, [len(p["segments"]) - 1])          # un seul appel à s'abonner, à la fin
+        self.assertEqual(len(p["chapitres"]), len(r["episodes"]) + 2)
+        self.assertTrue(p["sources"])
+
+    def test_recitateur_impose(self):
+        import compiler_long
+        r = json.loads((Path(__file__).resolve().parent.parent / "projets/longs/ayati-long-moussa-complet.recette.json").read_text(encoding="utf-8"))
+        p = compiler_long.compiler(r)
+        self.assertNotIn("recitateur", p)
+        self.assertEqual(p["recitation"], "libre")
+        self.assertTrue(all(s["ref"].startswith("28:") for s in p["segments"] if s["type"] == "verset"))

@@ -74,6 +74,14 @@ Chaque segment est une `narration` (texte lu par la voix) ou un `verset` (`ref` 
    son propre fond flouté. Les corrections de Rayan vont dans `REGLES.md` (et les visuels dans `marque/`).
 4. `python longue.py miniatures <slug>` : trois propositions de miniature.
 
+**Assembler un long à partir de Shorts d'une même série** : une « recette » dans `projets/longs/` (liste des Shorts
+dans l'ordre, intro et fin écrites pour le long, titres de chapitres, réglages imposés comme le récitateur), puis
+`python compiler_long.py projets/longs/<slug>.recette.json` → `projets/<slug>.json` en `"format": "long"`. Les textes
+et versets des épisodes sont repris tels quels ; les appels à s'abonner du milieu sont retirés (un seul, à la fin) ;
+les chapitres et les sources des épisodes sont rassemblés pour la description YouTube (minutes exactes dans
+`sorties/<slug>.passages.txt` après fabrication). Prêts : `ayati-long-moussa-complet` (≈ 13-15 min, 12 versets
+d'Al-Qasas, récitation libre d'Atcovi) et `psycho-long-12-pieges` (≈ 9 min, 12 biais avec leurs études).
+
 Un Short au-delà de 90 s affiche un avertissement ; au-delà de 3 min, le rendu vertical est refusé.
 
 ## Récitation libre de droits (obligatoire pour publier)
