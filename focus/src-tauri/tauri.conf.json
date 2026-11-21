@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Rayans Focus",
+  "mainBinaryName": "Rayans Focus",
+  "version": "1.0.0",
+  "identifier": "fr.rayan.focus",
+  "build": {
+    "beforeDevCommand": "npm run dev:ui",
+    "devUrl": "http://localhost:1435",
+    "beforeBuildCommand": "npm run build:ui",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Rayan’s Focus",
+        "width": 1180,
+        "height": 800,
+        "minWidth": 820,
+        "minHeight": 600,
+        "backgroundColor": "#0F1117"
+      }
+    ],
+    "security": {
+      "devCsp": null,
+      "csp": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": false,
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.ico", "icons/icon.png"],
+    "shortDescription": "Exercices d'attention et travail profond",
+    "longDescription": "Rayan’s Focus : exercices d'attention adaptatifs, travail profond par paliers et journal des distractions, avec ce que dit vraiment la recherche."
+  }
+}
