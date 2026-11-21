@@ -147,6 +147,9 @@ export async function lancer3D(boite: HTMLElement, titre: HTMLElement, film: Fil
   const ctl = new OrbitControls(camera, toile);
   ctl.target.set(20, 0, 0);
   Object.assign(ctl, { enableDamping: true, enablePan: false, enableZoom: false, autoRotate: true, autoRotateSpeed: 0.5, minPolarAngle: 0.35, maxPolarAngle: 1.32 });
+  // Sur téléphone : un glissement vertical fait défiler la page (le navigateur le garde), seul un glissement
+  // horizontal fait tourner la caméra. OrbitControls met touch-action à « none » : on le remplace.
+  toile.style.touchAction = "pan-y";
   const cible = new Vector3(20, 0, 0), ecart = new Vector3();
   let distance = 37;
 
@@ -170,7 +173,7 @@ export async function lancer3D(boite: HTMLElement, titre: HTMLElement, film: Fil
     }));
   };
   const aide = document.createElement("div");
-  aide.textContent = "↻ glisse pour tourner";
+  aide.textContent = "↻ glisse sur le côté pour tourner";
   aide.style.cssText = "position:absolute;right:12px;bottom:9px;font-size:11.5px;color:#9AA3B2;pointer-events:none;opacity:.8;z-index:1";
   boite.appendChild(aide);
   const css = (c: Color) => `#${c.getHexString()}`;
