@@ -193,6 +193,71 @@ return {
 			</Item>
 			<Item class="ModuleScript" referent="RBX00000000000000000000000000000008">
 				<Properties>
+					<string name="Name">Recompenses</string>
+					<ProtectedString name="Source"><![CDATA[-- Récompenses quotidiennes : logique pure (testable sans Roblox). Aucun argent du jeu : des aspects et
+-- des objets uniques. Le jour 2 (aide à revenir le lendemain) et le jour 7 sont les grosses récompenses.
+local M = {}
+
+M.SECONDES_PAR_JOUR = 86400
+
+M.LISTE = {
+	{ jour = 1, nom = "Étincelle bleue", genre = "aspect", grosse = false },
+	{ jour = 2, nom = "Robot argenté", genre = "robot rare", grosse = true },
+	{ jour = 3, nom = "Antenne à pompon", genre = "aspect", grosse = false },
+	{ jour = 4, nom = "Traînée de feu", genre = "aspect", grosse = false },
+	{ jour = 5, nom = "Lunettes de soleil", genre = "aspect", grosse = false },
+	{ jour = 6, nom = "Boîte mystère", genre = "boîte", grosse = false },
+	{ jour = 7, nom = "Robot arc-en-ciel", genre = "robot rare", grosse = true },
+}
+
+-- numéro du jour (UTC) pour une heure Unix en secondes
+function M.numeroJour(secondes: number): number
+	return math.floor(secondes / M.SECONDES_PAR_JOUR)
+end
+
+-- donnees = { dernier = numéro du dernier jour récupéré, serie = jour de la série (1 à 7), objets = {noms} } ou nil
+-- renvoie { droit = peut récupérer aujourd'hui, jour = jour de la série concerné }
+function M.etat(donnees, aujourdhui: number)
+	if donnees == nil or donnees.dernier == nil then
+		return { droit = true, jour = 1 }
+	end
+	if aujourdhui <= donnees.dernier then
+		return { droit = false, jour = donnees.serie }
+	end
+	if aujourdhui == donnees.dernier + 1 then
+		return { droit = true, jour = donnees.serie % #M.LISTE + 1 }
+	end
+	return { droit = true, jour = 1 } -- un jour manqué : la série repart du jour 1
+end
+
+-- renvoie (nouvelles données, récompense) ; ne modifie pas l'entrée ; (nil, nil) si rien à récupérer
+function M.appliquer(donnees, aujourdhui: number)
+	local e = M.etat(donnees, aujourdhui)
+	if not e.droit then
+		return nil, nil
+	end
+	local recompense = M.LISTE[e.jour]
+	local objets = {}
+	local possede = false
+	local anciens = if donnees and donnees.objets then donnees.objets else {}
+	for _, nom in anciens do
+		table.insert(objets, nom)
+		if nom == recompense.nom then
+			possede = true
+		end
+	end
+	if not possede then
+		table.insert(objets, recompense.nom)
+	end
+	return { dernier = aujourdhui, serie = e.jour, objets = objets }, recompense
+end
+
+return M
+]]></ProtectedString>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX00000000000000000000000000000009">
+				<Properties>
 					<string name="Name">Regles</string>
 					<ProtectedString name="Source"><![CDATA[-- Rayan's Arène (Roblox) : logique pure, sans rien de Roblox, testable avec le CLI `luau`.
 -- Port simplifié de arene/arene.py (genome_hasard, muter, positions, evaluer) sur des prix
@@ -554,11 +619,136 @@ return Regles
 			</Item>
 		</Item>
 	</Item>
-	<Item class="ServerScriptService" referent="RBX00000000000000000000000000000009">
+	<Item class="ServerScriptService" referent="RBX0000000000000000000000000000000A">
 		<Properties>
 			<string name="Name">ServerScriptService</string>
 		</Properties>
-		<Item class="ModuleScript" referent="RBX0000000000000000000000000000000A">
+		<Item class="Script" referent="RBX0000000000000000000000000000000B">
+			<Properties>
+				<string name="Name">Cadeaux</string>
+				<ProtectedString name="Source"><![CDATA[-- Récompenses quotidiennes (côté serveur : le client ne peut pas tricher, il ne fait que demander).
+-- Elles s'ouvrent quand le joueur a choisi son premier robot (fin du mini-tutoriel).
+-- Données gardées : le dernier jour récupéré, la série et les objets obtenus (rien d'autre, pas de chat).
+local DataStoreService = game:GetService("DataStoreService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Dossier = ReplicatedStorage:WaitForChild("Arene")
+local R = require(Dossier:WaitForChild("Regles"))
+local Rec = require(Dossier:WaitForChild("Recompenses"))
+local evenementJeu = Dossier:WaitForChild("Evenement") :: RemoteEvent -- créé par Jeu
+
+local evenement = Instance.new("RemoteEvent")
+evenement.Name = "Recompense"
+evenement.Parent = Dossier
+
+local ok, magasin = pcall(function()
+	return DataStoreService:GetDataStore("RecompensesQuotidiennes")
+end)
+if not ok then
+	magasin = nil
+end
+
+local joueurs = {} -- [Player] = { donnees = table ou nil, pret, ouvert, enCours, tutoFini }
+
+local function cle(joueur: Player): string
+	return "joueur_" .. joueur.UserId
+end
+
+local function aujourdhui(): number
+	return Rec.numeroJour(os.time())
+end
+
+local function proposer(joueur: Player)
+	local j = joueurs[joueur]
+	if not j or not j.pret or j.ouvert then
+		return
+	end
+	j.ouvert = true
+	local e = Rec.etat(j.donnees, aujourdhui())
+	evenement:FireClient(joueur, "proposer", e.jour, e.droit, Rec.LISTE, if j.donnees then j.donnees.objets else {})
+end
+
+Players.PlayerAdded:Connect(function(joueur)
+	joueurs[joueur] = { pret = false, ouvert = false, enCours = false, tutoFini = false }
+	local donnees = nil
+	if magasin then
+		local lu, valeur = pcall(function()
+			return magasin:GetAsync(cle(joueur))
+		end)
+		if not lu then
+			warn("Récompenses : lecture impossible, pas de récompense cette fois.")
+			joueurs[joueur] = nil
+			return
+		end
+		donnees = valeur
+	end
+	local j = joueurs[joueur]
+	if j then
+		j.donnees = donnees
+		j.pret = true
+		if j.tutoFini then
+			proposer(joueur)
+		end
+	end
+end)
+
+Players.PlayerRemoving:Connect(function(joueur)
+	joueurs[joueur] = nil
+end)
+
+-- le mini-tutoriel est fini quand le joueur a choisi la famille de son robot (Jeu valide le choix de son côté)
+evenementJeu.OnServerEvent:Connect(function(joueur, action, famille)
+	if action ~= "choisir" or type(famille) ~= "string" or R.NOMS[famille] == nil then
+		return
+	end
+	local j = joueurs[joueur]
+	if j then
+		j.tutoFini = true
+		task.delay(6, proposer, joueur)
+	end
+end)
+
+evenement.OnServerEvent:Connect(function(joueur, action)
+	local j = joueurs[joueur]
+	if action ~= "reclamer" or not j or not j.pret or j.enCours then
+		return
+	end
+	j.enCours = true
+	local jour = aujourdhui()
+	local recompense = nil
+	local nouvelles = nil
+	if magasin then
+		local fait, err = pcall(function()
+			magasin:UpdateAsync(cle(joueur), function(ancien)
+				-- vérifié avec la valeur enregistrée, jamais avec ce que dit le client
+				local d, r = Rec.appliquer(ancien, jour)
+				if d == nil then
+					return nil -- déjà récupérée : on n'écrit rien
+				end
+				nouvelles, recompense = d, r
+				return d
+			end)
+		end)
+		if not fait then
+			warn("Récompenses : enregistrement impossible : " .. tostring(err))
+			nouvelles, recompense = nil, nil
+		end
+	else
+		nouvelles, recompense = Rec.appliquer(j.donnees, jour)
+	end
+	if nouvelles and recompense and joueurs[joueur] then
+		j.donnees = nouvelles
+		evenement:FireClient(joueur, "recu", recompense, nouvelles.objets)
+	else
+		evenement:FireClient(joueur, "refus")
+	end
+	j.enCours = false
+end)
+]]></ProtectedString>
+			</Properties>
+		</Item>
+		<Item class="ModuleScript" referent="RBX0000000000000000000000000000000C">
 			<Properties>
 				<string name="Name">Decor</string>
 				<ProtectedString name="Source"><![CDATA[-- Décor créé par script au démarrage : piste à couloirs, grand écran, robots, couronne, explosions.
@@ -882,7 +1072,7 @@ return Decor
 ]]></ProtectedString>
 			</Properties>
 		</Item>
-		<Item class="Script" referent="RBX0000000000000000000000000000000B">
+		<Item class="Script" referent="RBX0000000000000000000000000000000D">
 			<Properties>
 				<string name="Name">Jeu</string>
 				<ProtectedString name="Source"><![CDATA[-- Rayan's Arène (Roblox) : le serveur décide de tout (règles, frais, sélection, examen).
@@ -1230,15 +1420,174 @@ end
 			</Properties>
 		</Item>
 	</Item>
-	<Item class="StarterPlayer" referent="RBX0000000000000000000000000000000C">
+	<Item class="StarterPlayer" referent="RBX0000000000000000000000000000000E">
 		<Properties>
 			<string name="Name">StarterPlayer</string>
 		</Properties>
-		<Item class="StarterPlayerScripts" referent="RBX0000000000000000000000000000000D">
+		<Item class="StarterPlayerScripts" referent="RBX0000000000000000000000000000000F">
 			<Properties>
 				<string name="Name">StarterPlayerScripts</string>
 			</Properties>
-			<Item class="LocalScript" referent="RBX0000000000000000000000000000000E">
+			<Item class="LocalScript" referent="RBX00000000000000000000000000000010">
+				<Properties>
+					<string name="Name">EcranCadeaux</string>
+					<ProtectedString name="Source"><![CDATA[-- Petit écran des récompenses quotidiennes : 7 cases, le jour 2 et le jour 7 sont mis en valeur (bord or animé).
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+local Dossier = ReplicatedStorage:WaitForChild("Arene")
+local evenement = Dossier:WaitForChild("Recompense") :: RemoteEvent
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "Recompenses"
+gui.ResetOnSpawn = false
+gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local fond = Instance.new("Frame")
+fond.Size = UDim2.new(0, 640, 0, 300)
+fond.AnchorPoint = Vector2.new(0.5, 0.5)
+fond.Position = UDim2.fromScale(0.5, 0.5)
+fond.BackgroundColor3 = Color3.fromRGB(20, 22, 32)
+fond.BackgroundTransparency = 0.05
+fond.Visible = false
+fond.Parent = gui
+local coin = Instance.new("UICorner")
+coin.CornerRadius = UDim.new(0, 16)
+coin.Parent = fond
+local contrainte = Instance.new("UISizeConstraint")
+contrainte.MaxSize = Vector2.new(640, 300)
+contrainte.Parent = fond
+local ratio = Instance.new("UIAspectRatioConstraint")
+ratio.AspectRatio = 640 / 300
+ratio.Parent = fond
+
+local function etiquette(parent, props): TextLabel
+	local t = Instance.new("TextLabel")
+	t.BackgroundTransparency = 1
+	t.Font = Enum.Font.GothamBold
+	t.TextColor3 = Color3.new(1, 1, 1)
+	t.TextScaled = true
+	t.TextWrapped = true
+	for k, v in props do
+		(t :: any)[k] = v
+	end
+	t.Parent = parent
+	return t
+end
+
+local titre = etiquette(fond, {
+	Size = UDim2.new(1, -24, 0.14, 0),
+	Position = UDim2.new(0, 12, 0.03, 0),
+	Text = "Récompense du jour",
+})
+local sousTitre = etiquette(fond, {
+	Size = UDim2.new(1, -24, 0.08, 0),
+	Position = UDim2.new(0, 12, 0.17, 0),
+	Font = Enum.Font.Gotham,
+	TextColor3 = Color3.fromRGB(190, 190, 205),
+	Text = "Reviens chaque jour : le jour 2 et le jour 7 sont les plus grosses.",
+})
+
+local cases = {}
+for i = 1, 7 do
+	local c = Instance.new("Frame")
+	c.Size = UDim2.new(0.13, 0, 0.42, 0)
+	c.Position = UDim2.new(0.015 + (i - 1) * 0.139, 0, 0.3, 0)
+	c.BackgroundColor3 = Color3.fromRGB(45, 50, 70)
+	c.Parent = fond
+	local cc = Instance.new("UICorner")
+	cc.CornerRadius = UDim.new(0, 10)
+	cc.Parent = c
+	local bord = Instance.new("UIStroke")
+	bord.Thickness = 0
+	bord.Color = Color3.fromRGB(242, 201, 76)
+	bord.Parent = c
+	etiquette(c, { Size = UDim2.new(1, -6, 0.22, 0), Position = UDim2.new(0, 3, 0.04, 0), Text = "Jour " .. i })
+	local nom = etiquette(c, {
+		Size = UDim2.new(1, -6, 0.6, 0),
+		Position = UDim2.new(0, 3, 0.3, 0),
+		Font = Enum.Font.Gotham,
+		Text = "",
+	})
+	cases[i] = { cadre = c, bord = bord, nom = nom }
+end
+
+local bouton = Instance.new("TextButton")
+bouton.Size = UDim2.new(0.5, 0, 0.17, 0)
+bouton.AnchorPoint = Vector2.new(0.5, 0)
+bouton.Position = UDim2.new(0.5, 0, 0.78, 0)
+bouton.BackgroundColor3 = Color3.fromRGB(76, 175, 80)
+bouton.Font = Enum.Font.GothamBold
+bouton.TextColor3 = Color3.new(1, 1, 1)
+bouton.TextScaled = true
+bouton.Text = "Récupérer"
+bouton.Parent = fond
+local cb = Instance.new("UICorner")
+cb.CornerRadius = UDim.new(0, 12)
+cb.Parent = bouton
+
+local etape = "proposer" -- "proposer" : le bouton demande la récompense ; "fermer" : il ferme l'écran
+local anime = false
+
+local function mettreEnValeur(jour: number, liste)
+	for i, c in cases do
+		local r = liste[i]
+		c.nom.Text = r.nom
+		c.bord.Thickness = if r.grosse then 3 else 0
+		c.cadre.BackgroundColor3 = if r.grosse then Color3.fromRGB(95, 78, 20) else Color3.fromRGB(45, 50, 70)
+		if i == jour then
+			c.cadre.BackgroundColor3 = Color3.fromRGB(46, 110, 60)
+		end
+	end
+	if not anime then
+		anime = true
+		for _, i in { 2, 7 } do -- les deux grosses récompenses : bord qui pulse
+			TweenService
+				:Create(
+					cases[i].bord,
+					TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+					{ Color = Color3.fromRGB(255, 120, 80) }
+				)
+				:Play()
+		end
+	end
+end
+
+bouton.Activated:Connect(function()
+	if etape == "proposer" then
+		bouton.Active = false
+		evenement:FireServer("reclamer")
+	else
+		fond.Visible = false
+	end
+end)
+
+evenement.OnClientEvent:Connect(function(action, a, b, c)
+	if action == "proposer" then
+		local jour, droit, liste = a, b, c
+		mettreEnValeur(jour, liste)
+		if droit then
+			etape = "proposer"
+			titre.Text = "Récompense du jour " .. jour
+			bouton.Text = "Récupérer"
+			bouton.Active = true
+			fond.Visible = true
+		end
+	elseif action == "recu" then
+		etape = "fermer"
+		titre.Text = "Tu as obtenu : " .. a.nom .. " !"
+		sousTitre.Text = "Reviens demain pour la suite de la série."
+		bouton.Text = "OK"
+		bouton.Active = true
+	elseif action == "refus" then
+		fond.Visible = false
+	end
+end)
+]]></ProtectedString>
+				</Properties>
+			</Item>
+			<Item class="LocalScript" referent="RBX00000000000000000000000000000011">
 				<Properties>
 					<string name="Name">Interface</string>
 					<ProtectedString name="Source"><![CDATA[-- Interface du joueur : bandeau d'état, choix de la famille de règle, messages.

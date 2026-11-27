@@ -7,3 +7,10 @@ out-tauri-ci.json
 
 # Dépôt privé rayans-studio, cloné ici (voir telecommande/src/main/modules.ts)
 /studio/
+
+# Cartes Roblox : sources Blender et textures lourdes (les .glb légers restent)
+blender/cartes/**/*.blend
+blender/cartes/**/*.blend1
+blender/cartes/**/textures/
+blender/cartes/**/*.exr
+blender/cartes/**/*.hdr

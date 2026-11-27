@@ -2,8 +2,19 @@
   "mcpServers": {
     "earshot": {
       "command": "earshot",
-      "args": ["mcp"],
-      "env": { "EARSHOT_THREADS": "3" }
+      "args": [
+        "mcp"
+      ],
+      "env": {
+        "EARSHOT_THREADS": "3"
+      }
+    },
+    "Roblox_Studio": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "%LOCALAPPDATA%\\Roblox\\mcp.bat"
+      ]
     }
   }
 }

@@ -20,6 +20,23 @@ environ 1,7 m avec l'antenne ; le point de référence est sous les pieds, l'ava
 Accueil → **Importer en 3D** → choisir un `.fbx` (ou `.glb`) de `sorties/` → Importer. Le modèle arrive dans
 l'espace de travail (MeshPart) ; on peut le ranger dans ReplicatedStorage et le cloner par script.
 
+## Méthode : donner de la vie à un robot avec Claude et Blender
+
+Règles tirées d'une vidéo, essayées sur `robot-croisement` (rien d'installé, rien d'acheté) :
+
+1. **Lumière** : une lumière forte en haut à gauche, deux faibles ailleurs (à droite et derrière), fond plus
+   sombre. Une lumière plate (tout éclairé pareil) donne un personnage mou.
+2. **Une étape, une image** : après chaque étape (lumière, yeux, mouvement), regarder une image de contrôle
+   avant de continuer ; corriger une seule chose à la fois.
+3. **Comparer en gris** avec une référence : passer l'image en noir et blanc pour juger les volumes et les
+   ombres sans être distrait par les couleurs.
+4. **Anticipation** : avant chaque geste, un petit mouvement inverse (s'accroupir avant de sauter, étirer en l'air,
+   écraser à l'atterrissage). Un clignement des yeux rend le robot vivant.
+
+Essai fait (5 s, 24 images/s : clignement, accroupi, saut, atterrissage, clignement) : `sorties/methode-avant-apres.png`
+(lumière plate à gauche, lumière en place à droite) et `sorties/methode-controle.png` (images 1, 21, 42, 70, 92).
+Le `.blend` d'essai n'est pas gardé dans le dépôt ; les yeux sont séparés du corps pour pouvoir les écraser.
+
 ## Refaire les modèles
 
 ```bash

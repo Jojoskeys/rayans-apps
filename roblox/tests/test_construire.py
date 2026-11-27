@@ -127,12 +127,13 @@ class Place(unittest.TestCase):
 
         self.assertEqual(noms(enfants["Workspace"]), {"Baseplate", "SpawnLocation"})
         self.assertIn("Jeu", noms(enfants["ServerScriptService"]))
+        self.assertIn("Cadeaux", noms(enfants["ServerScriptService"]))
         arene_rs = enfants["ReplicatedStorage"].find("Item")
         self.assertEqual(arene_rs.get("class"), "Folder")
-        self.assertEqual(noms(arene_rs), {"Regles", "Config", "Prix"})
+        self.assertEqual(noms(arene_rs), {"Regles", "Config", "Prix", "Recompenses"})
         sps = enfants["StarterPlayer"].find("Item")
         self.assertEqual(sps.get("class"), "StarterPlayerScripts")
-        self.assertEqual(noms(sps), {"Interface"})
+        self.assertEqual(noms(sps), {"Interface", "EcranCadeaux"})
 
     def test_cdata_protege(self):
         self.assertEqual(ET.fromstring("<a>" + C.p_source("x = ']]>'") + "</a>")[0].text, "x = ']]>'")
@@ -146,6 +147,11 @@ class Place(unittest.TestCase):
 class Luau(unittest.TestCase):
     def test_tests_luau(self):
         r = lancer_luau("tests/regles.test.luau")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("tests réussis", r.stdout)
+
+    def test_recompenses_quotidiennes(self):
+        r = lancer_luau("tests/recompenses.test.luau")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn("tests réussis", r.stdout)
 
