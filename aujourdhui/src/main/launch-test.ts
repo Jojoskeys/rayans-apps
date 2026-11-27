@@ -52,7 +52,10 @@ function writeFixtures(dir: string, now: number) {
   fs.writeFileSync(path.join(dir, "revision", "revision.json"), JSON.stringify(revision));
   fs.writeFileSync(path.join(dir, "hifz", "hifz-donnees.json"), JSON.stringify(hifz));
   fs.writeFileSync(path.join(dir, "ouvertures", "joueurs", "rayan", "exercices.json"), JSON.stringify(ouv));
-  return { revision: path.join(dir, "revision", "revision.json"), hifz: path.join(dir, "hifz", "hifz-donnees.json"), ouvertures: path.join(dir, "ouvertures", "joueurs") };
+  const memoire = { listes: [{ id: "l1", due: now - 1000 }, { id: "l2", due: now + 86_400_000 }, { id: "l3", due: null }, { id: "l4", due: now - 1000, deleted: true }] };
+  fs.mkdirSync(path.join(dir, "memoire"), { recursive: true });
+  fs.writeFileSync(path.join(dir, "memoire", "memoire.json"), JSON.stringify(memoire));
+  return { revision: path.join(dir, "revision", "revision.json"), hifz: path.join(dir, "hifz", "hifz-donnees.json"), ouvertures: path.join(dir, "ouvertures", "joueurs"), memoire: path.join(dir, "memoire", "memoire.json") };
 }
 
 /** Faux flux ADE du jour : TD Analyse 10 h 15 dans `room`, CM 14 h, et un TD demain. */
@@ -87,12 +90,12 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     report.uiLoaded = true;
     h.refresh();
     await waitFor("nombres affichés", async () => (await text(w, '[data-testid="nombre-revision"]')) === "5", 5000);
-    const shown = { revision: await text(w, '[data-testid="nombre-revision"]'), hifz: await text(w, '[data-testid="nombre-hifz"]'), ouvertures: await text(w, '[data-testid="nombre-ouvertures"]') };
+    const shown = { revision: await text(w, '[data-testid="nombre-revision"]'), hifz: await text(w, '[data-testid="nombre-hifz"]'), ouvertures: await text(w, '[data-testid="nombre-ouvertures"]'), memoire: await text(w, '[data-testid="nombre-memoire"]') };
     report.affiche = shown;
-    if (shown.hifz !== "2" || shown.ouvertures !== "1") throw new Error(`nombres affichés : ${JSON.stringify(shown)}`);
+    if (shown.hifz !== "2" || shown.ouvertures !== "1" || shown.memoire !== "1") throw new Error(`nombres affichés : ${JSON.stringify(shown)}`);
     const resume = await text(w, '[data-testid="resume"]');
-    if (resume !== "8 éléments à réviser") throw new Error(`résumé : ${resume}`);
-    step(`à réviser : Révision ${shown.revision} (2 révisions, 1 en réapprentissage, 2 nouvelles sur 3 : limite du paquet), Hifz ${shown.hifz} (dont 1 verset à revoir), Ouvertures ${shown.ouvertures} → « ${resume} »`);
+    if (resume !== "9 éléments à réviser") throw new Error(`résumé : ${resume}`);
+    step(`à réviser : Révision ${shown.revision} (2 révisions, 1 en réapprentissage, 2 nouvelles sur 3 : limite du paquet), Hifz ${shown.hifz} (dont 1 verset à revoir), Ouvertures ${shown.ouvertures}, Mémoire ${shown.memoire} → « ${resume} »`);
 
     // Seuls les rappels de révision comptent ici (les objectifs du jour ont leurs propres notifications).
     const revisions = () => h.testHooks.sent.filter((x) => x.startsWith("Il reste des révisions"));
@@ -106,7 +109,7 @@ export function runLaunchTest(reportPath: string, h: Hooks) {
     step(`rappel de 19 h envoyé une seule fois : « ${revisions()[0]} »`);
 
     // Tout est fait : le lendemain, avec des données à jour, aucun rappel.
-    h.testHooks.paths = { revision: path.join(path.dirname(h.dataFile), "absent.json"), hifz: path.join(path.dirname(h.dataFile), "absent2.json"), ouvertures: path.join(path.dirname(h.dataFile), "absent") };
+    h.testHooks.paths = { revision: path.join(path.dirname(h.dataFile), "absent.json"), hifz: path.join(path.dirname(h.dataFile), "absent2.json"), ouvertures: path.join(path.dirname(h.dataFile), "absent"), memoire: path.join(path.dirname(h.dataFile), "absent3.json") };
     h.testHooks.clock = () => at(19, 5) + 86_400_000;
     h.refresh();
     if (revisions().length !== 1) throw new Error("rappel envoyé alors que rien ne reste");

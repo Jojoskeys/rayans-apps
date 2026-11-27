@@ -1,8 +1,8 @@
-// Lecture des fichiers de données de Révision, Hifz et Ouvertures (lecture seule).
+// Lecture des fichiers de données de Révision, Hifz, Ouvertures et Mémoire (lecture seule).
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { hifzCount, hifzDetail, ouverturesCount, ouverturesDetail, revisionCount, revisionDetail, type SourceCount, type SourceId } from "../core/counts.ts";
+import { hifzCount, hifzDetail, memoireCount, memoireDetail, ouverturesCount, ouverturesDetail, revisionCount, revisionDetail, type SourceCount, type SourceId } from "../core/counts.ts";
 
 const roaming = () => process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming");
 
@@ -12,6 +12,7 @@ export function sourcePaths() {
     revision: path.join(process.env.REVISION_DATA_DIR || path.join(roaming(), "fr.rayan.revision"), "revision.json"),
     hifz: path.join(process.env.HIFZ_DATA_DIR || path.join(roaming(), "Rayans Hifz"), "hifz-donnees.json"),
     ouvertures: path.join(process.env.RAYANS_OUVERTURES_DATA || path.join(roaming(), "Rayans Ouvertures", "donnees"), "joueurs"),
+    memoire: path.join(process.env.MEMOIRE_DATA_DIR || path.join(roaming(), "fr.rayan.memoire"), "memoire.json"),
   };
 }
 
@@ -59,6 +60,12 @@ export function readCounts(now: number, paths = sourcePaths()): SourceCount[] {
       }
       const c = ouverturesCount(files, now);
       return { total: c.total, detail: ouverturesDetail(c) };
+    }),
+    source("memoire", () => {
+      const raw = readJson(paths.memoire);
+      if (raw === undefined) return null;
+      const c = memoireCount(raw, now);
+      return { total: c.total, detail: memoireDetail(c) };
     }),
   ];
 }

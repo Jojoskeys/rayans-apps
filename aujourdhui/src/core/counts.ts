@@ -4,8 +4,9 @@
 //   Révision    : revision/src/core/session.ts (dueCounts)
 //   Hifz        : coran-memorisation/src/core/store.ts (dueQueue)
 //   Ouvertures  : echecs-ouvertures/src/core/repertoire.js (exercices dont l'échéance est passée)
+//   Mémoire     : memoire/src/core/espacement.ts (listesDues)
 
-export type SourceId = "revision" | "hifz" | "ouvertures";
+export type SourceId = "revision" | "hifz" | "ouvertures" | "memoire";
 
 export interface SourceCount {
   id: SourceId;
@@ -108,6 +109,19 @@ export function ouverturesCount(files: unknown[], now: number): { total: number;
   return { total, players };
 }
 
+// ----- Rayan's Mémoire ---------------------------------------------------------------------------
+
+/** Listes rangées dans un palais dont la révision espacée est due (même règle que listesDues). */
+export function memoireCount(raw: unknown, now: number): { total: number } {
+  const data = raw as { listes?: { deleted?: boolean; due?: number | null }[] };
+  if (!data || typeof data !== "object" || !Array.isArray(data.listes)) throw new Error("format inattendu");
+  return { total: data.listes.filter((l) => l && !l.deleted && typeof l.due === "number" && l.due <= now).length };
+}
+
+export function memoireDetail(c: ReturnType<typeof memoireCount>): string {
+  return c.total ? `${plural(c.total, "liste")} à retrouver de mémoire` : "Aucune liste à réviser";
+}
+
 // ----- Présentation -------------------------------------------------------------------------------
 
 export function revisionDetail(c: ReturnType<typeof revisionCount>): string {
@@ -137,7 +151,7 @@ export function reminderText(counts: SourceCount[]): string | null {
   return parts.length ? parts.join(" · ") : null;
 }
 
-export const NAMES: Record<SourceId, string> = { revision: "Révision", hifz: "Hifz", ouvertures: "Ouvertures" };
+export const NAMES: Record<SourceId, string> = { revision: "Révision", hifz: "Hifz", ouvertures: "Ouvertures", memoire: "Mémoire" };
 
 /** Moment du rappel du jour (heure:minute locale) ; le rappel n'est envoyé qu'une fois par jour. */
 export function reminderDue(now: number, hour: number, minute: number, lastSentDay: string | null): boolean {

@@ -35,7 +35,7 @@ const dataFile = path.join(dataDir, "aujourdhui.json");
 const assets = path.join(__dirname, "..", "assets");
 const rendererHtml = path.join(__dirname, "renderer", "index.html");
 
-export const APP_IDS: Record<SourceId, string> = { revision: "rayans-revision", hifz: "rayans-hifz", ouvertures: "rayans-ouvertures" };
+export const APP_IDS: Record<SourceId, string> = { revision: "rayans-revision", hifz: "rayans-hifz", ouvertures: "rayans-ouvertures", memoire: "rayans-memoire" };
 
 const DEFAULTS: Settings = { reminder: true, reminderHour: 19, reminderMinute: 0, startWithWindows: false, closeToTray: true };
 let settings: Settings = { ...DEFAULTS };

@@ -62,6 +62,7 @@ export function mesures(p: { revision?: unknown; chrono?: unknown; journal?: unk
     coucherMin: j.coucherMin,
     hifzRestantes: reste("hifz"),
     ouverturesRestantes: reste("ouvertures"),
+    memoireRestantes: reste("memoire"),
     ...resumeSport(nettoyerSport(p.sport)),
   };
 }

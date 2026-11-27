@@ -110,6 +110,7 @@ export interface Mesures {
   coucherMin?: Record<string, number>;
   hifzRestantes?: number;
   ouverturesRestantes?: number;
+  memoireRestantes?: number;
   /** Les adhkar sont déjà rappelés et cochés dans le bilan du jour. */
   sansAdhkar?: boolean;
   /** Sport : séance faite par journée, et journées de repos. */
@@ -169,6 +170,7 @@ const MODELES: Modele[] = [
   { id: "preparer", domaine: "etudes", normal: "Préparer tes affaires de cours pour demain", facile: "Regarder ton emploi du temps de demain", detail: "Le soir." },
   { id: "lecture", domaine: "etudes", normal: "Lire 10 pages d'un livre", facile: "Lire 5 pages d'un livre", detail: "Papier ou liseuse, pas le téléphone." },
   { id: "ouvertures", domaine: "etudes", normal: "Rejouer 3 positions dans Rayan's Ouvertures", facile: "Rejouer 1 position dans Rayan's Ouvertures", detail: "Des positions t'attendent.", si: (m) => (m.ouverturesRestantes ?? 0) > 0 },
+  { id: "memoire", domaine: "etudes", normal: "Retrouver tes listes du jour dans Rayan's Mémoire", facile: "Retrouver 1 liste dans Rayan's Mémoire", detail: "Des listes t'attendent dans ton palais.", si: (m) => (m.memoireRestantes ?? 0) > 0 },
   { id: "pause-ecran", domaine: "ecran", normal: "30 minutes sans écran", facile: "15 minutes sans écran", detail: "Marche, lecture, discussion…" },
   { id: "repas", domaine: "ecran", normal: "Pas de téléphone pendant les repas", facile: "Un repas sans téléphone", detail: "" },
   { id: "tel-soir", domaine: "ecran", normal: "Poser le téléphone 30 min avant de dormir", facile: "Poser le téléphone 10 min avant de dormir", detail: "" },

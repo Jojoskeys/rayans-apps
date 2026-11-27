@@ -17,6 +17,7 @@ const DESCRIPTIONS: Record<SourceId, string> = {
   revision: "Cartes de révision",
   hifz: "Portions du Coran à réciter",
   ouvertures: "Positions d'ouverture à rejouer",
+  memoire: "Listes du palais de mémoire à retrouver",
 };
 
 export function App() {
@@ -147,4 +148,5 @@ const IconCheck = (p: P) => <Svg {...p}><path d="M5 12l5 5 9-10" /></Svg>;
 const IconCards = (p: P) => <Svg {...p}><rect x="3" y="6" width="14" height="14" rx="2" /><path d="M7 3h12a2 2 0 0 1 2 2v12" /></Svg>;
 const IconBook = (p: P) => <Svg {...p}><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5zM12 6v14" /></Svg>;
 const IconKnight = (p: P) => <Svg {...p}><path d="M7 20h11M8 20c0-4 3-5 3-8l-3 1-2-2 4-6h2c4 1 6 5 5 15" /></Svg>;
-const ICONS: Record<SourceId, ReactNode> = { revision: <IconCards size={22} />, hifz: <IconBook size={22} />, ouvertures: <IconKnight size={22} /> };
+const IconPalace = (p: P) => <Svg {...p}><path d="M3 10l9-6 9 6M5 10v9M19 10v9M9 10v9M15 10v9M3 20h18" /></Svg>;
+const ICONS: Record<SourceId, ReactNode> = { revision: <IconCards size={22} />, hifz: <IconBook size={22} />, ouvertures: <IconKnight size={22} />, memoire: <IconPalace size={22} /> };

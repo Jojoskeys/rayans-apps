@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { dayStart, hifzCount, hifzDetail, ouverturesCount, reminderDue, reminderText, revisionCount, revisionDetail, todayISO, totalLeft } from "../src/core/counts.ts";
+import { dayStart, hifzCount, hifzDetail, memoireCount, memoireDetail, ouverturesCount, reminderDue, reminderText, revisionCount, revisionDetail, todayISO, totalLeft } from "../src/core/counts.ts";
 
 const H = 3_600_000;
 const NOW = new Date(2026, 10, 13, 15, 0).getTime();
@@ -67,4 +67,12 @@ test("rappel du soir", () => {
   assert.equal(reminderText(counts), "Révision : 4");
   assert.equal(totalLeft(counts), 4);
   assert.equal(reminderText([counts[1]]), null);
+});
+
+test("Mémoire : listes dues, sans les supprimées ni les apprises", () => {
+  const c = memoireCount({ listes: [{ due: NOW - H }, { due: NOW + H }, { due: null }, { due: NOW - H, deleted: true }, { due: NOW }] }, NOW);
+  assert.equal(c.total, 2);
+  assert.equal(memoireDetail(c), "2 listes à retrouver de mémoire");
+  assert.equal(memoireDetail(memoireCount({ listes: [] }, NOW)), "Aucune liste à réviser");
+  assert.throws(() => memoireCount({ palais: [] }, NOW));
 });
