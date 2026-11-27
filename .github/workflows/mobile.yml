@@ -18,6 +18,8 @@ on:
       - 'focus/public/**'
       - 'calcul/src/**'
       - 'calcul/public/**'
+      - 'calme/src/**'
+      - 'calme/public/**'
       - 'aujourdhui/src/**'
       - 'coran-memorisation/src/**'
       - 'coran-memorisation/data/**'

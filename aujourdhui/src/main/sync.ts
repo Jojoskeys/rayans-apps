@@ -88,6 +88,7 @@ const ADAPTERS: Adapter[] = [
   fileAdapter("sommeil", "Sommeil", "Rayans Sommeil.exe", () => path.join(process.env.SOMMEIL_DATA_DIR || path.join(roaming(), "fr.rayan.sommeil"), "sommeil.json")),
   fileAdapter("focus", "Focus", "Rayans Focus.exe", () => path.join(process.env.FOCUS_DATA_DIR || path.join(roaming(), "fr.rayan.focus"), "focus.json")),
   fileAdapter("calcul", "Calcul mental", "Rayans Calcul.exe", () => path.join(process.env.CALCUL_DATA_DIR || path.join(roaming(), "fr.rayan.calcul"), "calcul.json")),
+  fileAdapter("calme", "Calme", "Rayans Calme.exe", () => path.join(process.env.CALME_DATA_DIR || path.join(roaming(), "fr.rayan.calme"), "calme.json")),
   fileAdapter("hifz", "Hifz", "Rayans Hifz.exe", () => path.join(process.env.HIFZ_DATA_DIR || path.join(roaming(), "Rayans Hifz"), "hifz-donnees.json")),
   fileAdapter("chrono", "Chrono", "Rayans Chrono.exe", () => firstExisting(path.join(launcherData("rayans-chrono-app"), "chrono.json"), path.join(roaming(), "Rayans Chrono", "chrono.json"))),
   fileAdapter("priere", "Prière", "Rayans Priere.exe", () => firstExisting(path.join(launcherData("rayans-priere"), "priere.json"), path.join(roaming(), "Rayans Priere", "priere.json"))),

@@ -25,6 +25,7 @@ export const APPS: MobileApp[] = [
   { id: "sommeil", name: "Sommeil", tagline: "Coucher selon Fajr, journal", icon: "☾", color: "#7C8CF8", files: ["sommeil", "priere"] },
   { id: "focus", name: "Focus", tagline: "Attention, travail profond", icon: "◎", color: "#3FB7D9", files: ["focus"] },
   { id: "calcul", name: "Calcul mental", tagline: "Astuces, entraînement, défis", icon: "∑", color: "#F2994A", files: ["calcul"] },
+  { id: "calme", name: "Calme", tagline: "Respirer, souffler, nommer", icon: "≈", color: "#5FB3A8", files: ["calme"] },
   { id: "memo", name: "Mémo", tagline: "Idées et notes rapides", icon: "✎", color: "#C77DDB", files: ["memos"] },
   { id: "papiers", name: "Papiers", tagline: "Documents retrouvables", icon: "▤", color: "#7A8BA6", files: [] },
   { id: "recettes", name: "Recettes", tagline: "Plan du jour, courses", icon: "✿", color: "#F472B6", files: [] },

@@ -8,6 +8,7 @@ import { fusionnerTexte } from "../../../memoire/src/core/model.ts";
 import { fusionnerTexte as fusionnerSommeil } from "../../../sommeil/src/core/model.ts";
 import { fusionnerTexte as fusionnerFocus } from "../../../focus/src/core/model.ts";
 import { fusionnerTexte as fusionnerCalcul } from "../../../calcul/src/core/model.ts";
+import { fusionnerTexte as fusionnerCalme } from "../../../calme/src/core/model.ts";
 
 type Obj = Record<string, any>;
 
@@ -272,6 +273,7 @@ export const MERGERS: Record<string, (base: Obj | undefined, local: Obj, remote:
   sommeil: (_b, local, remote) => JSON.parse(fusionnerSommeil(JSON.stringify(local), JSON.stringify(remote))!) as Obj,
   focus: (_b, local, remote) => JSON.parse(fusionnerFocus(JSON.stringify(local), JSON.stringify(remote))!) as Obj,
   calcul: (_b, local, remote) => JSON.parse(fusionnerCalcul(JSON.stringify(local), JSON.stringify(remote))!) as Obj,
+  calme: (_b, local, remote) => JSON.parse(fusionnerCalme(JSON.stringify(local), JSON.stringify(remote))!) as Obj,
   // Abonnements aux notifications (un par appareil) et préférences.
   notifications: (base, local, remote) => ({
     subscriptions: mergeById(base?.subscriptions, local.subscriptions ?? [], remote.subscriptions ?? [], (x: Obj) => x.endpoint, () => false),

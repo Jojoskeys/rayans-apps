@@ -185,3 +185,13 @@ test("Calcul : résultats du PC et de l'iPhone gardés tous les deux", () => {
   assert.equal(m.format, "rayans-calcul");
   assert.deepEqual(m.resultats.map((r: { id: string }) => r.id).sort(), ["1", "2"]);
 });
+
+test("Calme : respirations et « 3 choses bien » du PC et de l'iPhone gardées toutes les deux", () => {
+  const vide = { format: "rayans-calme", version: 1 };
+  const pc = { ...vide, respirations: [{ id: "1", at: 1, jour: "2026-11-26", rythme: "six", dureeMin: 3, secondes: 180, terminee: true }] };
+  const iphone = { ...vide, gratitudes: [{ id: "g", at: 2, jour: "2026-11-27", choses: [{ quoi: "a", pourquoi: "b" }], maj: 2 }] };
+  const m = JSON.parse(mergeText("calme", null, JSON.stringify(pc), JSON.stringify(iphone))!);
+  assert.equal(m.format, "rayans-calme");
+  assert.deepEqual(m.respirations.map((r: { id: string }) => r.id), ["1"]);
+  assert.deepEqual(m.gratitudes.map((g: { id: string }) => g.id), ["g"]);
+});

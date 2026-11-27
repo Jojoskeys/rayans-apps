@@ -50,6 +50,7 @@ export const PAGES = [
   { id: "sommeil", title: "Sommeil", entry: "src/apps/sommeil.tsx", root: "root", copy: [{ from: "../sommeil/public/logo.svg", to: "logo.svg" }] },
   { id: "focus", title: "Focus", entry: "src/apps/focus.tsx", root: "root", copy: [{ from: "../focus/public/logo.svg", to: "logo.svg" }] },
   { id: "calcul", title: "Calcul mental", entry: "src/apps/calcul.tsx", root: "root", copy: [{ from: "../calcul/public/logo.svg", to: "logo.svg" }] },
+  { id: "calme", title: "Calme", entry: "src/apps/calme.tsx", root: "root", copy: [{ from: "../calme/public/logo.svg", to: "logo.svg" }] },
   { id: "papiers", title: "Papiers", entry: "src/apps/papiers.tsx", root: "racine" },
   { id: "favoris", title: "Favoris", entry: "src/apps/favoris.tsx", root: "racine" },
   { id: "recettes", title: "Recettes", entry: "src/apps/recettes.tsx", root: "racine" },
