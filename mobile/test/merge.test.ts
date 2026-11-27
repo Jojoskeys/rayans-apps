@@ -213,3 +213,15 @@ test("Échecs Vision : résultats du PC et de l'iPhone gardés tous les deux", (
   assert.equal(m.format, "rayans-echecs-vision");
   assert.deepEqual(m.resultats.map((r: { id: string }) => r.id), ["1", "2"]);
 });
+
+test("Langues : mots et résultats du PC et de l'iPhone gardés tous les deux, carte la plus récente gagne", () => {
+  const vide = { format: "rayans-langues", version: 1 };
+  const carte = (maj: number, etape: number) => ({ id: "zh:你好", langue: "zh", mot: "你好", vu: 1, etape, due: 2, justes: etape, fautes: 0, maj });
+  const pc = { ...vide, cartes: [carte(5, 2)], resultats: [{ id: "1", langue: "zh", exo: "cartes", at: 1, niveau: 1, score: 8, max: 10 }] };
+  const iphone = { ...vide, cartes: [carte(3, 1)], resultats: [{ id: "2", langue: "ar", exo: "lettres", at: 2, niveau: 1, score: 9, max: 10 }] };
+  const m = JSON.parse(mergeText("langues", null, JSON.stringify(pc), JSON.stringify(iphone))!);
+  assert.equal(m.format, "rayans-langues");
+  assert.equal(m.cartes.length, 1);
+  assert.equal(m.cartes[0].etape, 2);
+  assert.deepEqual(m.resultats.map((r: { id: string }) => r.id), ["1", "2"]);
+});

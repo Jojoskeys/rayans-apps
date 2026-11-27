@@ -1,0 +1,18 @@
+Rayan's Langues
+===============
+
+Chinois mandarin (environ 300 mots courants, caractères simplifiés et pinyin, tons en couleur) et arabe standard
+(28 lettres et leurs formes, voyelles courtes, mots et phrases de tous les jours) pour débuter.
+Chaque jour, une séance de 10 minutes : révisions espacées des mots, nouveaux mots (avec radical, racine ou mot-clé),
+phrase à remettre dans l'ordre ou dictée, puis tons à l'oreille (chinois) ou lettres (arabe).
+La difficulté de chaque exercice s'adapte toute seule. Fiches, quiz vrai/faux, progrès et test de la semaine.
+
+Lancer : double-cliquer sur « Rayans Langues.exe » (ou passer par Rayan's Launcher).
+Nécessite Microsoft Edge WebView2, déjà présent sur Windows 10 et 11 à jour.
+
+Pour entendre les mots, il faut une voix chinoise ou arabe dans Windows :
+Paramètres → Heure et langue → Voix → Ajouter des voix. Sans voix, la dictée se fait en lisant.
+
+Les données restent sur ce PC, dans :
+  %APPDATA%\fr.rayan.langues\langues.json
+avec la version précédente (langues.bak.json) et une copie par jour (dossier « sauvegardes », 14 jours).

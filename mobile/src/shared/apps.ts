@@ -26,6 +26,7 @@ export const APPS: MobileApp[] = [
   { id: "focus", name: "Focus", tagline: "Attention, travail profond", icon: "◎", color: "#3FB7D9", files: ["focus"] },
   { id: "calcul", name: "Calcul mental", tagline: "Astuces, entraînement, défis", icon: "∑", color: "#F2994A", files: ["calcul"] },
   { id: "calme", name: "Calme", tagline: "Respirer, souffler, nommer", icon: "≈", color: "#5FB3A8", files: ["calme"] },
+  { id: "langues", name: "Langues", tagline: "Chinois et arabe, 10 min par jour", icon: "文", color: "#E0665A", files: ["langues"] },
   { id: "culture", name: "Culture", tagline: "Quiz du jour, culture et actu", icon: "✦", color: "#C9A227", files: ["culture"] },
   { id: "echecs-vision", name: "Échecs Vision", tagline: "Voir l'échiquier de tête", icon: "♞", color: "#8E7CC3", files: ["echecs-vision"] },
   { id: "memo", name: "Mémo", tagline: "Idées et notes rapides", icon: "✎", color: "#C77DDB", files: ["memos"] },

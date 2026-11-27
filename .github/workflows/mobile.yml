@@ -20,6 +20,8 @@ on:
       - 'calcul/public/**'
       - 'calme/src/**'
       - 'calme/public/**'
+      - 'langues/src/**'
+      - 'langues/public/**'
       - 'culture/src/**'
       - 'culture/public/**'
       - 'echecs-vision/src/**'
