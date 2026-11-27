@@ -20,8 +20,9 @@ if ($Retirer) {
 $node = (Get-Command node -ErrorAction SilentlyContinue).Source
 if (-not $node) { Write-Host "Node.js introuvable : installe-le d'abord (winget install OpenJS.NodeJS.LTS)."; exit 1 }
 $script = Join-Path $PSScriptRoot "lancer.ps1"
-$action = New-ScheduledTaskAction -Execute "powershell.exe" `
-  -Argument "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script`" -Node `"$node`"" `
+# conhost --headless : aucune fenêtre ne clignote (-WindowStyle Hidden l'affiche un instant avant de la cacher).
+$action = New-ScheduledTaskAction -Execute "conhost.exe" `
+  -Argument "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$script`" -Node `"$node`"" `
   -WorkingDirectory $PSScriptRoot
 $declencheur = New-ScheduledTaskTrigger -Daily -At $Heure
 if ($Intervalle -gt 0) {
