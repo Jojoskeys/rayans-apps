@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { COLORS, KIND_LABELS, chronoName, itemLabel, normalizeUrl, relativeDay, type AppData, type Item, type ItemKind, type Workspace } from "../core/model.ts";
 import type { InitialState, LaunchReport } from "./api-types.ts";
 
@@ -11,19 +11,21 @@ export function App() {
   const [sel, setSel] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [report, setReport] = useState<LaunchReport | null>(null);
+  const saves = useRef(0);
 
   useEffect(() => {
     api.getState().then((v) => { setS(v); setSel(v.data.workspaces[0]?.id ?? null); if (v.warning) setToast(v.warning); });
     const off1 = api.onState(setS);
     const off2 = api.onMessage(setToast);
-    const refresh = () => api.getState().then(setS);
+    // Une relecture partie avant un enregistrement ramènerait l'ancien état : on l'ignore.
+    const refresh = () => { const v = saves.current; api.getState().then((st) => { if (v === saves.current) setS(st); }); };
     window.addEventListener("focus", refresh);
     return () => { off1(); off2(); window.removeEventListener("focus", refresh); };
   }, []);
   useEffect(() => { if (!toast) return; const id = setTimeout(() => setToast(null), 8000); return () => clearTimeout(id); }, [toast]);
   if (!s) return <div className="chargement">Chargement…</div>;
 
-  const save = (d: AppData) => { setS({ ...s, data: d }); void api.save(d); };
+  const save = (d: AppData) => { saves.current++; setS({ ...s, data: d }); void api.save(d); };
   const update = (id: string, patch: Partial<Workspace>) => save({ ...s.data, workspaces: s.data.workspaces.map((w) => (w.id === id ? { ...w, ...patch } : w)) });
   const ws = s.data.workspaces.find((w) => w.id === sel) ?? null;
 
