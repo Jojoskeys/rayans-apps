@@ -1,0 +1,15 @@
+Rayan's Lecture
+===============
+
+Lire plus efficacement sans perdre la compréhension. Chaque jour, une séance de 10 minutes : un texte écrit pour
+l'app, lu à ton rythme et chronométré, puis des questions sans le texte ; un résumé de mémoire ; certains jours le
+plan du texte ou un survol en 60 secondes. Aussi : lire en prenant des notes, essai de lecture mot à mot,
+tests de suivi chaque semaine, fiches, quiz vrai/faux et sources.
+La vitesse est toujours montrée avec la compréhension : lire vite sans comprendre ne compte pas.
+
+Lancer : double-cliquer sur « Rayans Lecture.exe » (ou passer par Rayan's Launcher).
+Nécessite Microsoft Edge WebView2, déjà présent sur Windows 10 et 11 à jour.
+
+Les données restent sur ce PC, dans :
+  %APPDATA%\fr.rayan.lecture\lecture.json
+avec la version précédente (lecture.bak.json) et une copie par jour (dossier « sauvegardes », 14 jours).

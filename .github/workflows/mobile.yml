@@ -22,6 +22,8 @@ on:
       - 'calme/public/**'
       - 'langues/src/**'
       - 'langues/public/**'
+      - 'lecture/src/**'
+      - 'lecture/public/**'
       - 'culture/src/**'
       - 'culture/public/**'
       - 'echecs-vision/src/**'

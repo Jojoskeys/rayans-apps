@@ -225,3 +225,13 @@ test("Langues : mots et résultats du PC et de l'iPhone gardés tous les deux, c
   assert.equal(m.cartes[0].etape, 2);
   assert.deepEqual(m.resultats.map((r: { id: string }) => r.id), ["1", "2"]);
 });
+
+test("Lecture : résultats et résumés du PC et de l'iPhone gardés tous les deux", () => {
+  const vide = { format: "rayans-lecture", version: 1 };
+  const pc = { ...vide, resultats: [{ id: "1", exo: "lecture", texteId: "abeilles", niveau: 1, at: 1, mots: 300, ms: 90000, mpm: 200, bonnes: 6, total: 7, part: 6 / 7 }] };
+  const iphone = { ...vide, resumes: [{ id: "r", texteId: "abeilles", at: 2, texte: "Les abeilles dansent.", idees: [1], total: 5 }] };
+  const m = JSON.parse(mergeText("lecture", null, JSON.stringify(pc), JSON.stringify(iphone))!);
+  assert.equal(m.format, "rayans-lecture");
+  assert.deepEqual(m.resultats.map((r: { id: string }) => r.id), ["1"]);
+  assert.deepEqual(m.resumes.map((r: { id: string }) => r.id), ["r"]);
+});

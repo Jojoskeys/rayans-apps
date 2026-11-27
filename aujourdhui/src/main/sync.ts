@@ -93,6 +93,7 @@ const ADAPTERS: Adapter[] = [
   fileAdapter("calcul", "Calcul mental", "Rayans Calcul.exe", () => path.join(process.env.CALCUL_DATA_DIR || path.join(roaming(), "fr.rayan.calcul"), "calcul.json")),
   fileAdapter("calme", "Calme", "Rayans Calme.exe", () => path.join(process.env.CALME_DATA_DIR || path.join(roaming(), "fr.rayan.calme"), "calme.json")),
   fileAdapter("langues", "Langues", "Rayans Langues.exe", () => path.join(process.env.LANGUES_DATA_DIR || path.join(roaming(), "fr.rayan.langues"), "langues.json")),
+  fileAdapter("lecture", "Lecture", "Rayans Lecture.exe", () => path.join(process.env.LECTURE_DATA_DIR || path.join(roaming(), "fr.rayan.lecture"), "lecture.json")),
   fileAdapter("culture", "Culture", "Rayans Culture.exe", () => path.join(process.env.CULTURE_DATA_DIR || path.join(roaming(), "fr.rayan.culture"), "culture.json")),
   fileAdapter("echecs-vision", "Échecs Vision", "Rayans Echecs Vision.exe", () => path.join(process.env.ECHECS_VISION_DATA_DIR || path.join(roaming(), "fr.rayan.echecs-vision"), "echecs-vision.json")),
   // « Ton monde » (écrit par le Veilleur) : seulement récupéré, pour les questions d'actu de Rayan's Culture.
