@@ -20,6 +20,8 @@ on:
       - 'calcul/public/**'
       - 'calme/src/**'
       - 'calme/public/**'
+      - 'culture/src/**'
+      - 'culture/public/**'
       - 'aujourdhui/src/**'
       - 'coran-memorisation/src/**'
       - 'coran-memorisation/data/**'

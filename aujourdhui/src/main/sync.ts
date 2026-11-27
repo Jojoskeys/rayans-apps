@@ -32,6 +32,8 @@ interface Adapter {
   write(text: string): void;
   /** Publication seule (PC → iPhone), sans fusion. */
   publishOnly?: boolean;
+  /** Récupération seule (dépôt → PC), sans fusion ni envoi. */
+  fetchOnly?: boolean;
 }
 
 interface Ctx { dataDir: string; changed: () => void }
@@ -49,6 +51,7 @@ function writeFile(f: string, text: string) {
   fs.writeFileSync(`${f}.tmp`, text);
   fs.renameSync(`${f}.tmp`, f);
 }
+const cultureActu = () => process.env.CULTURE_ACTU_FILE || path.join(process.env.CULTURE_DATA_DIR || path.join(roaming(), "fr.rayan.culture"), "actu.json");
 const firstExisting = (...files: string[]) => files.find((f) => fs.existsSync(f)) ?? files[0];
 const fileAdapter = (name: string, label: string, exe: string, file: () => string): Adapter => ({ name, label, exe, read: () => readFile(file()), write: (t) => writeFile(file(), t) });
 
@@ -89,6 +92,9 @@ const ADAPTERS: Adapter[] = [
   fileAdapter("focus", "Focus", "Rayans Focus.exe", () => path.join(process.env.FOCUS_DATA_DIR || path.join(roaming(), "fr.rayan.focus"), "focus.json")),
   fileAdapter("calcul", "Calcul mental", "Rayans Calcul.exe", () => path.join(process.env.CALCUL_DATA_DIR || path.join(roaming(), "fr.rayan.calcul"), "calcul.json")),
   fileAdapter("calme", "Calme", "Rayans Calme.exe", () => path.join(process.env.CALME_DATA_DIR || path.join(roaming(), "fr.rayan.calme"), "calme.json")),
+  fileAdapter("culture", "Culture", "Rayans Culture.exe", () => path.join(process.env.CULTURE_DATA_DIR || path.join(roaming(), "fr.rayan.culture"), "culture.json")),
+  // « Ton monde » (écrit par le Veilleur) : seulement récupéré, pour les questions d'actu de Rayan's Culture.
+  { name: "actu", label: "Ton monde (pour Culture)", exe: "Rayans Culture.exe", fetchOnly: true, read: () => readFile(cultureActu()), write: (t) => writeFile(cultureActu(), t) },
   fileAdapter("hifz", "Hifz", "Rayans Hifz.exe", () => path.join(process.env.HIFZ_DATA_DIR || path.join(roaming(), "Rayans Hifz"), "hifz-donnees.json")),
   fileAdapter("chrono", "Chrono", "Rayans Chrono.exe", () => firstExisting(path.join(launcherData("rayans-chrono-app"), "chrono.json"), path.join(roaming(), "Rayans Chrono", "chrono.json"))),
   fileAdapter("priere", "Prière", "Rayans Priere.exe", () => firstExisting(path.join(launcherData("rayans-priere"), "priere.json"), path.join(roaming(), "Rayans Priere", "priere.json"))),
@@ -187,6 +193,13 @@ export async function syncAll(reason = "") {
           const remote = await pull(cfg, a.name);
           await push(cfg, a.name, cur, remote?.sha ?? null);
           details.push({ name: a.label, result: "publié" });
+          continue;
+        }
+        if (a.fetchOnly) {
+          const remote = await pull(cfg, a.name);
+          if (!remote) { details.push({ name: a.label, result: "rien à récupérer" }); continue; }
+          if (remote.text !== cur) a.write(remote.text);
+          details.push({ name: a.label, result: remote.text !== cur ? "récupéré" : "à jour" });
           continue;
         }
         let done = false;

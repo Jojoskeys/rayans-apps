@@ -195,3 +195,12 @@ test("Calme : respirations et « 3 choses bien » du PC et de l'iPhone gardées 
   assert.deepEqual(m.respirations.map((r: { id: string }) => r.id), ["1"]);
   assert.deepEqual(m.gratitudes.map((g: { id: string }) => g.id), ["g"]);
 });
+
+test("Culture : cartes et réponses du PC et de l'iPhone gardées toutes les deux", () => {
+  const vide = { format: "rayans-culture", version: 1 };
+  const a = { ...vide, reponses: [{ id: "r1", at: 1, carte: "q1", juste: true, niveau: 1 }] };
+  const b = { ...vide, reponses: [{ id: "r2", at: 2, carte: "q2", juste: false, niveau: 2 }] };
+  const m = JSON.parse(mergeText("culture", null, JSON.stringify(a), JSON.stringify(b))!);
+  assert.equal(m.format, "rayans-culture");
+  assert.deepEqual(m.reponses.map((r: { id: string }) => r.id), ["r1", "r2"]);
+});
