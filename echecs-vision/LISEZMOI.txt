@@ -1,0 +1,23 @@
+Rayan's Échecs Vision
+=====================
+
+Entraîner sa « vision » aux échecs, honnêtement : une séance du jour (~10 min) en trois étapes qui
+s'adaptent à ton niveau (2 réussites de suite → plus dur, 1 échec → plus facile) :
+  - Mémoire de position : une vraie position (partie célèbre, ouverture, finale) s'affiche quelques
+    secondes, puis tu la replaces sur un échiquier vide ; chaque pièce bien placée compte.
+  - Vision sans échiquier : la position n'est donnée qu'en texte ; tu dis de tête quelles pièces sont
+    attaquées, qui défend quoi, si une case est contrôlée (réponses vérifiées par chess.js).
+  - Tactiques en révision espacée : mats en 1, fourchettes, clouages, pièces en prise, découvertes,
+    qui reviennent à J+1, J+3, J+7, J+14… (toutes les positions sont vérifiées automatiquement).
+Avec des fiches qui disent ce qui est prouvé ou discuté (de Groot, Chase et Simon…), un quiz « vrai ou
+faux » et une page Progrès.
+
+Lancer : double-cliquer sur « Rayans Echecs Vision.exe » (ou passer par Rayan's Launcher).
+Nécessite Microsoft Edge WebView2, déjà présent sur Windows 10 et 11 à jour.
+
+Tes données restent sur ce PC, dans :
+  %APPDATA%\fr.rayan.echecs-vision\echecs-vision.json
+avec la version précédente (echecs-vision.bak.json) et une copie par jour (dossier « sauvegardes », 14 jours).
+
+Licences : l'application est sous GPL-3.0-or-later car elle embarque chessground (échiquier de lichess,
+GPL-3.0, avec les pièces « cburnett ») ; chess.js est sous licence BSD-2.
