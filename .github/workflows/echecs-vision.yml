@@ -1,0 +1,101 @@
+# Rayan's Échecs Vision (echecs-vision) : tests unitaires (positions, vision, tactiques vérifiées par chess.js, espacement, fusion),
+# construction Windows (Tauri), test de lancement de l'exe, puis ZIP pour Rayan's Launcher en « Artifact ».
+name: Rayan's Échecs Vision
+
+on:
+  push:
+    paths:
+      - 'echecs-vision/**'
+      - '.github/workflows/echecs-vision.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows (tests, exe, test de lancement, paquet launcher)
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+        working-directory: echecs-vision
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: echecs-vision/src-tauri
+      - run: npm ci
+      - name: Tests unitaires (TypeScript)
+        run: npm test
+      - name: Tests de la couche Tauri (Rust)
+        working-directory: echecs-vision/src-tauri
+        run: cargo test
+      # Version : majeur.mineur de package.json, correctif = numéro d'exécution de la CI + 100 (même règle que
+      # les autres applications du dépôt : chaque construction est une mise à jour pour le launcher).
+      - name: Version de la construction
+        id: version
+        shell: pwsh
+        run: |
+          $pkg = Get-Content package.json -Raw | ConvertFrom-Json
+          $p = $pkg.version.Split('.')
+          $v = "$($p[0]).$($p[1]).$([int]$env:GITHUB_RUN_NUMBER + 100)"
+          [IO.File]::WriteAllText("$PWD/out-ci.json", (@{ version = $v } | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          "version=$v" >> $env:GITHUB_OUTPUT
+          Write-Host "Version $v"
+      - name: Construction de l'exe (interface embarquée)
+        run: npx tauri build --no-bundle --config out-ci.json
+      - name: Test de lancement (premier démarrage, données dans un dossier vide)
+        run: node scripts/smoke.mjs "src-tauri/target/release/Rayans Echecs Vision.exe" 120
+      # Rayan's Launcher : fiche rayans-launcher.json à la racine du ZIP, lue quand le ZIP est déposé dans
+      # « Documents\Rayan's Launcher\À ajouter » ou choisi avec « Ajouter un ZIP ».
+      - name: Paquet pour Rayan's Launcher
+        shell: pwsh
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          $v = $env:VERSION
+          $sha = $env:GITHUB_SHA.Substring(0, 7)
+          $dir = New-Item -ItemType Directory -Force out/paquet
+          Copy-Item "src-tauri/target/release/Rayans Echecs Vision.exe" $dir
+          $fiche = [ordered]@{
+            id = 'rayans-echecs-vision'
+            name = "Rayan's Échecs Vision"
+            description = 'Séance du jour : mémoire de position, vision sans échiquier et tactiques en révision espacée.'
+            version = $v
+            releaseNotes = "Construction CI n°$env:GITHUB_RUN_NUMBER (commit $sha)."
+            executable = 'Rayans Echecs Vision.exe'
+          }
+          [IO.File]::WriteAllText("$dir/rayans-launcher.json", ($fiche | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
+          Copy-Item LISEZMOI.txt $dir
+          New-Item -ItemType Directory -Force out/launcher | Out-Null
+          Compress-Archive -Path "$dir/*" -DestinationPath "out/launcher/Rayans-Echecs-Vision-$v.zip"
+          Get-ChildItem out/launcher
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Rayans-Echecs-Vision-pour-le-launcher
+          path: echecs-vision/out/launcher/*.zip
+          compression-level: 0
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: rayans-echecs-vision-test-lancement
+          path: echecs-vision/smoke-output/
+          if-no-files-found: ignore
+
+  # Sur main seulement : release GitHub + catalogue signé de Rayan's Launcher (voir launcher/README.md).
+  publier:
+    name: Publication dans Rayan's Launcher
+    needs: windows
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/rayans-launcher-publier.yml
+    with:
+      artifact: Rayans-Echecs-Vision-pour-le-launcher
+      icon: echecs-vision/assets/icone.png
+    secrets: inherit
