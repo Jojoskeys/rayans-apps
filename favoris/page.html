@@ -159,7 +159,7 @@ function carte(v) {
     f.resume && el("p", {}, f.resume),
     stats(v.stats) && el("p", { class: "meta" }, stats(v.stats)),
     f.pour_rayan && [el("h3", {}, "Pour toi"), el("p", {}, f.pour_rayan)],
-    f.inspiration && [el("h3", {}, "Inspiration pour " + ({ compte-a: "compte-a", compte-b: "Compte B" }[f.inspiration.compte] || "le Studio")
+    f.inspiration && [el("h3", {}, "Inspiration pour le Studio" + (f.inspiration.compte ? " (" + f.inspiration.compte + ")" : "")
         + (f.inspiration.a_marche ? " — idée ajoutée au Studio" : " — n'a pas assez marché pour être reprise")),
       el("p", {}, f.inspiration.pourquoi), el("p", {}, el("b", {}, "Idée : "), f.inspiration.idee)],
     puces("Ce qui est dit", f.points),

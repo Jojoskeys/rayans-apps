@@ -11,7 +11,7 @@
 // plans et promotions sont écartés. Les avis de sécurité du CERT-FR sont rassemblés en un seul sujet.
 import { todayISO } from "../../aujourdhui/src/core/counts.ts";
 import { RUBRIQUES, type EditionActu, type RubriqueActu, type SourceActu, type SujetActu } from "../../mobile/src/shared/actu.ts";
-import { entites } from "./videos.ts";
+import { entites } from "./texte.ts";
 
 export type Rubrique = "tech" | "cyber" | "geo";
 export interface Flux {

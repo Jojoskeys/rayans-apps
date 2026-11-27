@@ -24,9 +24,9 @@ Pour créer ou recréer le raccourci : `python installer.py` (`--retirer` pour l
    faisable ou non, prompt et liste de ce qui sera fait. Chaque vidéo est vraiment analysée : la fiche dit
    toujours ce qu'elle peut t'apporter. Seules les blagues sans rien d'utile sont ignorées ; les recettes vont
    dans `recettes.md`.
-   **Inspiration Studio** : pour les vidéos de religion ou de psychologie, Claude note ce qui les fait marcher
+   **Inspiration Studio** : pour les vidéos qui peuvent servir au Studio, Claude note ce qui les fait marcher
    (accroche, structure, rythme…) d'après leurs chiffres (vues, j'aime, partages). Si elles ont bien marché,
-   une idée de vidéo pour compte-a ou Compte B part dans la boîte à idées du Studio, et l'explication dans
+   une idée de vidéo part dans la boîte à idées du Studio, et l'explication dans
    `Vidéos\Rayan's Studio\inspirations.md`.
 4. **Tu décides** sur la page de tri : `python favoris.py page`, puis http://127.0.0.1:8765. Valider,
    Refuser, avec une note si tu veux. Une vidéo jugée dangereuse ne peut pas être validée.

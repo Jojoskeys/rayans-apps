@@ -46,16 +46,17 @@ santé, sa religion, ses études, ses apps, ses vidéos, son organisation). Si q
 dans `prompt` et `actions` (même pour `psychologie`, `religion`, `sport`, `a-regarder`), avec `faisable`. Ne réponds
 « rien » que si c'est vraiment le cas, et dis pourquoi.
 
-### a ter) Inspiration pour Rayan's Studio (compte-a, Compte B)
-Pour toute vidéo de religion, de psychologie, ou dont le format pourrait servir aux deux comptes, ajoute `inspiration` :
-- `compte` : `compte-a` (Coran, rappels), `compte-b` (Compte B) ou `""` (les deux) ;
+### a ter) Inspiration pour Rayan's Studio
+Pour toute vidéo dont le sujet ou le format pourrait servir aux comptes du Studio (liste et identifiants dans
+`studio/README.md`, dossier local privé), ajoute `inspiration` :
+- `compte` : l'identifiant court du compte visé (minuscules, chiffres, tirets) ou `""` (tous) ;
 - `a_marche` : `true` si elle a bien marché d'après la ligne « Chiffres » (repère : beaucoup de vues pour la taille
   du compte, et un bon rapport j'aime / partages / commentaires sur vues ; partages et enregistrements comptent plus
   que les vues). Sans chiffres, juge sur ce que tu vois et reste prudent (`false` en cas de doute) ;
 - `pourquoi` : ce qui la fait marcher — accroche des 2 premières secondes, sujet, émotion, structure, durée, rythme,
   texte à l'écran, fin, appel à l'action ;
-- `idee` : une vidéo à faire chez nous, à notre manière : on reprend la forme et l'angle, jamais le texte. Pour compte-a,
-  les règles du Studio s'appliquent (versets vérifiés, récitation libre de droits, voir `studio/README.md`).
+- `idee` : une vidéo à faire chez nous, à notre manière : on reprend la forme et l'angle, jamais le texte. Les règles
+  du Studio s'appliquent (voir `studio/README.md`).
 Si `a_marche` est vrai, l'idée part d'elle-même dans la boîte à idées du Studio et dans `inspirations.md`
 (dossier Vidéos\Rayan's Studio). Ce n'est qu'une idée : aucune vidéo n'est faite ni publiée sans Rayan.
 
@@ -113,7 +114,7 @@ Si la commande la refuse, corrige ce qu'elle dit. Format :
   "prompt": "…",
   "actions": ["…"],
   "recette": { "titre": "…", "portions": "…", "ingredients": ["…"], "etapes": ["…"] },
-  "inspiration": { "compte": "compte-b", "a_marche": true, "pourquoi": "…", "idee": "…" }
+  "inspiration": { "compte": "b", "a_marche": true, "pourquoi": "…", "idee": "…" }
 }
 ```
 (`recette` seulement pour une recette ; une recette est ajoutée d'elle-même à `recettes.md`, c'est du rangement.

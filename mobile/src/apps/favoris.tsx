@@ -6,7 +6,7 @@ import { createRoot } from "react-dom/client";
 import { mountChrome } from "../shared/chrome.ts";
 import { appel, INJOIGNABLE, lireConfig, type Config } from "../shared/pc.ts";
 import "./telecommande.css";
-import "./studio.css";
+import "./fiches.css";
 import "./petites.css";
 
 interface Resume {

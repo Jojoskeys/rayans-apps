@@ -1,5 +1,5 @@
 // Connexion au PC à travers Rayan's Télécommande (Tailscale + code d'association), partagée par les tuiles
-// Télécommande et Studio : l'adresse et le code saisis une fois servent aux deux.
+// tuiles qui parlent au PC (Télécommande, Papiers, Favoris…) : l'adresse et le code saisis une fois servent à toutes.
 
 export interface Config { adresse: string; code: string }
 const CLE = "rm-telecommande";

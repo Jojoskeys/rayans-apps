@@ -16,7 +16,6 @@ export const APPS: MobileApp[] = [
   { id: "chrono", name: "Chrono", tagline: "Pomodoro et temps passé", icon: "◔", color: "#E8594F", files: ["chrono"] },
   { id: "ouvertures", name: "Ouvertures", tagline: "Positions d'échecs à rejouer", icon: "♞", color: "#9B7BEA", files: ["ouvertures", "ouvertures-donnees"] },
   { id: "telecommande", name: "Télécommande", tagline: "Piloter le PC, fichiers", icon: "⌘", color: "#3D8BFD", files: [] },
-  { id: "studio", name: "Studio", tagline: "Vidéos à valider", icon: "▶", color: "#D9534F", files: [] },
   { id: "demain", name: "Demain", tagline: "Heure de réveil, Fajr", icon: "☼", color: "#F08A4B", files: [] },
   { id: "actu", name: "Ton monde", tagline: "L'actu du monde ce matin", icon: "◍", color: "#4A9FD8", files: ["actu"] },
   { id: "arene", name: "Arène", tagline: "Bourse en argent fictif", icon: "◈", color: "#E3A33B", files: [] },

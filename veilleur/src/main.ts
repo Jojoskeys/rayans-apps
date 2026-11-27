@@ -6,7 +6,8 @@
 // RAYANS_CLE, et réécrit chiffré. Il n'écrit JAMAIS de donnée personnelle dans le journal (dépôt public du code).
 //
 // Variables : RAYANS_CLE, VAPID_PUBLIC, VAPID_PRIVATE, GITHUB_TOKEN, GITHUB_REPOSITORY ; RAYANS_GH_API pour les tests.
-// Facultative (vidéos en ligne) : VIDEOS_COMPTES ; RAYANS_YT pour les tests.
+// Facultative : VEILLEUR_MODULE, chemin d'un module privé (hors de ce dépôt) qui exporte messages(now, log) → { key, m }[]
+// (par exemple les vidéos en ligne) ; ses messages passent par la préférence « videos ».
 // Facultative (« Ton monde ce matin ») : ANTHROPIC_API_KEY pour les résumés par Claude ; sans elle, édition gratuite.
 import webpush from "web-push";
 import { decrypt, encrypt, isEncrypted, unb64 } from "../../mobile/src/shared/e2e.ts";
@@ -14,8 +15,8 @@ import { mergeText } from "../../mobile/src/shared/merge.ts";
 import { parseIcs } from "../../aujourdhui/src/core/ics.ts";
 import { applyFetch, prune, sanitizeFac, type FacData } from "../../aujourdhui/src/core/fac.ts";
 import { sanitizeRoutine } from "../../aujourdhui/src/core/routine.ts";
-import { lireComptes, telechargerFlux, videosEnLigne } from "./videos.ts";
-import { DEFAULT_PREFS, EMPTY_STATE, fenetreActu, plan, type Prefs, type VeilleurState } from "./plan.ts";
+import { pathToFileURL } from "node:url";
+import { DEFAULT_PREFS, EMPTY_STATE, fenetreActu, plan, type Message, type Prefs, type VeilleurState } from "./plan.ts";
 import { preparerEdition } from "./actu.ts";
 import { ajouterEdition, nettoyerActu } from "../../mobile/src/shared/actu.ts";
 import { todayISO } from "../../aujourdhui/src/core/counts.ts";
@@ -74,14 +75,15 @@ async function heuresDuJour(priere: unknown, now: number) {
   }
 }
 
-/** Vidéos sorties depuis peu (flux publics YouTube). Sans le secret, ou si YouTube ne répond pas : rien, sans bloquer le reste. */
-async function videos(now: number) {
-  const out = [];
-  for (const c of lireComptes(process.env.VIDEOS_COMPTES ?? "")) {
-    try { out.push(...videosEnLigne(c, await telechargerFlux(c.youtube, process.env.RAYANS_YT), now)); }
-    catch (e) { log(`flux YouTube indisponible : ${String((e as Error).message).slice(0, 80)}`); }
-  }
-  return out;
+/** Messages du module privé facultatif. Absent ou en erreur : rien, sans bloquer le reste. */
+async function videos(now: number): Promise<{ key: string; m: Message }[]> {
+  const chemin = process.env.VEILLEUR_MODULE;
+  if (!chemin) return [];
+  try {
+    const mod = await import(pathToFileURL(chemin).href);
+    const out = await mod.messages(now, log);
+    return Array.isArray(out) ? out : [];
+  } catch (e) { log(`module privé indisponible : ${String((e as Error).message).slice(0, 80)}`); return []; }
 }
 
 async function main() {

@@ -4,3 +4,6 @@ node_modules/
 out/
 out-maj/
 out-tauri-ci.json
+
+# Dépôt privé rayans-studio, cloné ici (voir telecommande/src/main/modules.ts)
+/studio/

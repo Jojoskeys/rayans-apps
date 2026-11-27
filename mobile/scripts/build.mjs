@@ -36,7 +36,6 @@ export const PAGES = [
       { from: "node_modules/stockfish/Copying.txt", to: "stockfish-LICENCE.txt" },
     ] },
   { id: "telecommande", title: "Télécommande", entry: "src/apps/telecommande.tsx", root: "racine" },
-  { id: "studio", title: "Studio", entry: "src/apps/studio.tsx", root: "racine" },
   { id: "demain", title: "Demain", entry: "src/apps/demain.tsx", root: "racine" },
   { id: "actu", title: "Ton monde", entry: "src/apps/actu.tsx", root: "racine" },
   // Arène : la vue 3D (three.js) est un morceau à part (splitting), chargé seulement si on l'affiche ; ses modèles

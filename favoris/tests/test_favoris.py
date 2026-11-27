@@ -124,13 +124,13 @@ class Fiches(Base):
     def test_inspiration_vers_le_studio(self):
         os.environ["STUDIO_RACINE"] = self.tmp.name + "/studio"
         try:
-            insp = {"compte": "compte-b", "a_marche": True, "pourquoi": "accroche forte", "idee": "Le biais de confirmation en 30 s"}
+            insp = {"compte": "b", "a_marche": True, "pourquoi": "accroche forte", "idee": "Le biais de confirmation en 30 s"}
             f = self.complete(categorie="psychologie", inspiration=insp)
             favoris.enregistrer_fiche(self.stock, self.fiche(**f))
             favoris.enregistrer_fiche(self.stock, self.fiche(**f))  # pas de doublon
             idees = json.loads((Path(self.tmp.name) / "studio" / "idees.json").read_text("utf-8"))
             self.assertEqual(len(idees), 1)
-            self.assertEqual(idees[0]["compte"], "compte-b")
+            self.assertEqual(idees[0]["compte"], "b")
             self.assertEqual(idees[0]["statut"], "nouvelle")
             self.assertIn("biais de confirmation", idees[0]["texte"])
             notes = (Path(self.tmp.name) / "studio" / "inspirations.md").read_text("utf-8")

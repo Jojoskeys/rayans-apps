@@ -20,7 +20,7 @@ export interface Prefs {
   sport: boolean;
   /** Heures de prière (celles cochées dans Rayan's Prière). */
   prieres: boolean;
-  /** Vidéos du Studio en ligne (flux YouTube), avec les liens à partager. */
+  /** Messages du module privé facultatif (VEILLEUR_MODULE, voir main.ts). */
   videos: boolean;
   /** « Ton monde ce matin » : revue de l'actualité du monde, un peu avant le résumé du matin. */
   actu: boolean;
@@ -59,7 +59,7 @@ export interface Inputs {
   prieres?: Prieres | null;
   /** Réglages de Rayan's Prière (lieu, méthode, prières à notifier, pause), déchiffrés. */
   priere?: unknown;
-  /** Vidéos en ligne repérées sur YouTube (calculées par main.ts avec videos.ts). */
+  /** Messages du module privé facultatif (calculés par main.ts). */
   videos?: { key: string; m: Message }[];
   /** Édition d'actualité du jour (préparée par main.ts avec actu.ts), ou null. */
   actu?: EditionActu | null;

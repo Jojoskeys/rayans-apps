@@ -14,7 +14,6 @@ import { codeValide, LimiteEssais, ORIGINES } from "../core/securite.ts";
 import { nomDepuisUrl, nomLibre, nomSur, resoudre, type Racine } from "../core/chemins.ts";
 import { profilValide } from "../core/wifi.ts";
 import type { Donnees } from "../core/donnees.ts";
-import * as studio from "../core/studio.ts";
 import * as papiers from "../core/papiers.ts";
 import * as favoris from "../core/favoris.ts";
 import * as recettes from "../core/recettes.ts";
@@ -25,6 +24,7 @@ import type { Push } from "./push.ts";
 import type { AlertesAffaires } from "./alertes-affaires.ts";
 import * as sys from "./systeme.ts";
 import { etatTailscale, PORT } from "./tailscale.ts";
+import { chargerModule, fichierPage, listerModules, typeContenu } from "./modules.ts";
 
 export interface Contexte {
   donnees(): Donnees;
@@ -56,10 +56,8 @@ const dossiersUtilisateur = (): Racine[] => {
 };
 
 export const dossierReception = () => path.join(app.getPath("downloads"), "Depuis le téléphone");
-/** Vidéos du Studio déposées par Claude pour validation (voir core/studio.ts). */
-export const dossierStudio = () => path.join(app.getPath("videos"), "Rayan's Studio", "A valider");
-export const dossierScripts = () => path.join(app.getPath("videos"), "Rayan's Studio", "Scripts");
-export const fichierIdees = () => path.join(app.getPath("videos"), "Rayan's Studio", "idees.json");
+/** Modules privés facultatifs (voir modules.ts), hors du dépôt public. */
+export const dossierModules = () => path.join(app.getPath("userData"), "modules");
 /** Photos de documents envoyées depuis la tuile Papiers (voir core/papiers.ts). */
 export const dossierPapiers = () => path.join(app.getPath("documents"), "Rayan's Papiers");
 /** Liens et vidéos envoyés depuis la tuile Favoris, lus par l'app Python favoris/ (voir core/favoris.ts). */
@@ -106,6 +104,15 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
       const login = req.headers["tailscale-user-login"];
       const proprietaire = obtenirProprietaire();
       if (!proprietaire || typeof login !== "string" || login.toLowerCase() !== proprietaire.toLowerCase()) throw new ErreurHttp(403, "accès réservé à ton compte Tailscale");
+      // Page d'un module privé (/<nom>/…) : réservée au compte Tailscale, sans code (le navigateur ne l'envoie pas) ;
+      // ses appels /api/<nom>/… passent ensuite par le code comme les autres.
+      if (req.method === "GET" && !(req.url ?? "").startsWith("/api/")) {
+        const f = fichierPage(dossierModules(), new URL(req.url ?? "/", "http://pc").pathname);
+        if (!f) throw new ErreurHttp(404, "page introuvable");
+        res.writeHead(200, { "Content-Type": typeContenu(f)!, "Content-Length": String(fs.statSync(f).size), "Cache-Control": "no-cache", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer" });
+        await pipeline(fs.createReadStream(f), res);
+        return;
+      }
       if (limite.bloque()) throw new ErreurHttp(429, "trop d'essais avec un mauvais code : réessaie dans 15 minutes");
       const jeton = (req.headers.authorization ?? "").replace(/^Bearer\s+/i, "");
       const url = new URL(req.url ?? "/", "http://pc");
@@ -302,83 +309,6 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           return envoyer(200, { ok: true });
         }
 
-        case "GET /api/studio":
-          return envoyer(200, { videos: studio.lister(dossierStudio()) });
-
-        case "GET /api/studio/video": {
-          const p = studio.cheminVideo(dossierStudio(), url.searchParams.get("id") ?? "");
-          if (!p) throw new ErreurHttp(404, "vidéo introuvable");
-          res.writeHead(200, { ...entetesCors, "Content-Type": "video/mp4", "Content-Length": String(fs.statSync(p).size), "Cache-Control": "no-store" });
-          await pipeline(fs.createReadStream(p), res);
-          return;
-        }
-
-        case "POST /api/studio/retour": {
-          const b = await lireJson(req);
-          const id = String(b.id ?? "");
-          let r: studio.Retour;
-          try { r = studio.ajouterRetour(dossierStudio(), id, Number(b.version), String(b.verdict ?? ""), String(b.commentaire ?? "")); }
-          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
-          const titre = studio.lister(dossierStudio()).find((v) => v.id === id)?.titre ?? id;
-          ctx.journaliser(r.verdict === "ok" ? "Vidéo validée" : "Vidéo à corriger", titre);
-          ctx.alerte("Rayan's Studio", r.verdict === "ok" ? `Validée : ${titre}` : `À corriger : ${titre}\n${r.commentaire.slice(0, 200)}`);
-          return envoyer(200, { ok: true, retour: r });
-        }
-
-        case "GET /api/studio/stories":
-          return envoyer(200, { stories: studio.aPoster(dossierStudio()) });
-
-        case "GET /api/studio/story": {
-          const p = studio.cheminStory(dossierStudio(), url.searchParams.get("id") ?? "");
-          if (!p) throw new ErreurHttp(404, "story introuvable");
-          res.writeHead(200, { ...entetesCors, "Content-Type": "video/mp4", "Content-Length": String(fs.statSync(p).size), "Cache-Control": "no-store" });
-          await pipeline(fs.createReadStream(p), res);
-          return;
-        }
-
-        case "POST /api/studio/story/postee": {
-          const b = await lireJson(req);
-          try { studio.marquerPostee(dossierStudio(), String(b.id ?? "")); }
-          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
-          ctx.journaliser("Story postée", String(b.id ?? ""));
-          return envoyer(200, { ok: true });
-        }
-
-        case "GET /api/studio/scripts":
-          return envoyer(200, { scripts: studio.listerScripts(dossierScripts()) });
-
-        case "POST /api/studio/script/retour": {
-          const b = await lireJson(req);
-          const id = String(b.id ?? "");
-          let r: studio.Retour;
-          try { r = studio.ajouterRetourScript(dossierScripts(), id, Number(b.version), String(b.verdict ?? ""), String(b.commentaire ?? "")); }
-          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
-          const titre = studio.listerScripts(dossierScripts()).find((v) => v.id === id)?.titre ?? id;
-          ctx.journaliser(r.verdict === "ok" ? "Script validé" : "Script à corriger", titre);
-          ctx.alerte("Rayan's Studio", r.verdict === "ok" ? `Script validé : ${titre}` : `Script à corriger : ${titre}\n${r.commentaire.slice(0, 200)}`);
-          return envoyer(200, { ok: true, retour: r });
-        }
-
-        case "GET /api/studio/idees":
-          return envoyer(200, { idees: studio.listerIdees(fichierIdees()) });
-
-        case "POST /api/studio/idees": {
-          const b = await lireJson(req);
-          let idee: studio.Idee;
-          try { idee = studio.ajouterIdee(fichierIdees(), String(b.texte ?? ""), String(b.compte ?? "")); }
-          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
-          ctx.journaliser("Nouvelle idée de vidéo", idee.texte.slice(0, 80));
-          ctx.alerte("Rayan's Studio", `Nouvelle idée : ${idee.texte.slice(0, 200)}`);
-          return envoyer(200, { ok: true, idee });
-        }
-
-        case "POST /api/studio/idees/supprimer": {
-          const b = await lireJson(req);
-          try { studio.supprimerIdee(fichierIdees(), String(b.id ?? "")); }
-          catch (e) { if (e instanceof studio.ErreurRetour) throw new ErreurHttp(e.code, e.message); throw e; }
-          return envoyer(200, { ok: true });
-        }
-
         // ----- Rayan's Bonnes Affaires : classement des annonces, en lecture seule -----
         case "GET /api/bonnes-affaires":
           return envoyer(200, bonnesAffaires.lire(dossierBonnesAffaires()));
@@ -540,6 +470,16 @@ export function demarrerServeur(ctx: Contexte, obtenirProprietaire: () => string
           const bureau = await sys.connexionsBureau(10);
           return envoyer(200, { evenements: d.journal.slice(-60).reverse(), bureau });
         }
+      }
+      // Module privé : /api/<nom> ou /api/<nom>/…
+      const nomModule = /^\/api\/([a-z][a-z0-9-]{0,30})(\/|$)/.exec(url.pathname)?.[1];
+      if (nomModule && listerModules(dossierModules()).includes(nomModule)) {
+        const m = await chargerModule(dossierModules(), nomModule);
+        if (m && await m.gerer({
+          route, url, req, res, entetes: entetesCors, envoyer, lireJson: () => lireJson(req),
+          erreur: (code, message) => { throw new ErreurHttp(code, message); },
+          journaliser: ctx.journaliser, alerte: ctx.alerte, dossier: (n) => app.getPath(n),
+        })) return;
       }
       throw new ErreurHttp(404, "adresse inconnue");
     } catch (e) {

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import threading
 import time
@@ -65,8 +66,8 @@ def verifier_fiche(f: dict, stock: Stock) -> list[str]:
         pb.append("pour_rayan vide : dire à quoi la vidéo peut servir à Rayan (ou « rien », et pourquoi)")
     insp = f.get("inspiration")
     if insp is not None:
-        if insp.get("compte") not in ("compte-a", "compte-b", ""):
-            pb.append("inspiration.compte parmi compte-a, compte-b, \"\"")
+        if not isinstance(insp.get("compte"), str) or not re.fullmatch(r"[a-z0-9-]{0,30}", insp["compte"]):
+            pb.append("inspiration.compte : identifiant court du compte (minuscules, chiffres, tirets) ou \"\"")
         if not isinstance(insp.get("a_marche"), bool):
             pb.append("inspiration.a_marche : true ou false (d'après les chiffres)")
         for k in ("pourquoi", "idee"):
