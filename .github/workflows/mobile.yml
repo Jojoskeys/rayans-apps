@@ -22,6 +22,8 @@ on:
       - 'calme/public/**'
       - 'culture/src/**'
       - 'culture/public/**'
+      - 'echecs-vision/src/**'
+      - 'echecs-vision/public/**'
       - 'aujourdhui/src/**'
       - 'coran-memorisation/src/**'
       - 'coran-memorisation/data/**'

@@ -52,6 +52,7 @@ export const PAGES = [
   { id: "calcul", title: "Calcul mental", entry: "src/apps/calcul.tsx", root: "root", copy: [{ from: "../calcul/public/logo.svg", to: "logo.svg" }] },
   { id: "calme", title: "Calme", entry: "src/apps/calme.tsx", root: "root", copy: [{ from: "../calme/public/logo.svg", to: "logo.svg" }] },
   { id: "culture", title: "Culture", entry: "src/apps/culture.tsx", root: "root", copy: [{ from: "../culture/public/logo.svg", to: "logo.svg" }] },
+  { id: "echecs-vision", title: "Échecs Vision", entry: "src/apps/echecs-vision.tsx", root: "root", copy: [{ from: "../echecs-vision/public/logo.svg", to: "logo.svg" }] },
   { id: "papiers", title: "Papiers", entry: "src/apps/papiers.tsx", root: "racine" },
   { id: "favoris", title: "Favoris", entry: "src/apps/favoris.tsx", root: "racine" },
   { id: "recettes", title: "Recettes", entry: "src/apps/recettes.tsx", root: "racine" },

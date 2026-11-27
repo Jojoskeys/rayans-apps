@@ -27,6 +27,7 @@ export const APPS: MobileApp[] = [
   { id: "calcul", name: "Calcul mental", tagline: "Astuces, entraînement, défis", icon: "∑", color: "#F2994A", files: ["calcul"] },
   { id: "calme", name: "Calme", tagline: "Respirer, souffler, nommer", icon: "≈", color: "#5FB3A8", files: ["calme"] },
   { id: "culture", name: "Culture", tagline: "Quiz du jour, culture et actu", icon: "✦", color: "#C9A227", files: ["culture"] },
+  { id: "echecs-vision", name: "Échecs Vision", tagline: "Voir l'échiquier de tête", icon: "♞", color: "#8E7CC3", files: ["echecs-vision"] },
   { id: "memo", name: "Mémo", tagline: "Idées et notes rapides", icon: "✎", color: "#C77DDB", files: ["memos"] },
   { id: "papiers", name: "Papiers", tagline: "Documents retrouvables", icon: "▤", color: "#7A8BA6", files: [] },
   { id: "recettes", name: "Recettes", tagline: "Plan du jour, courses", icon: "✿", color: "#F472B6", files: [] },

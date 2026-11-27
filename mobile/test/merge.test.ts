@@ -204,3 +204,12 @@ test("Culture : cartes et réponses du PC et de l'iPhone gardées toutes les deu
   assert.equal(m.format, "rayans-culture");
   assert.deepEqual(m.reponses.map((r: { id: string }) => r.id), ["r1", "r2"]);
 });
+
+test("Échecs Vision : résultats du PC et de l'iPhone gardés tous les deux", () => {
+  const vide = { format: "rayans-echecs-vision", version: 1 };
+  const pc = { ...vide, resultats: [{ id: "1", exo: "memoire", at: 1, niveau: 2, score: 8, max: 10, reussi: true }] };
+  const iphone = { ...vide, resultats: [{ id: "2", exo: "vision", at: 2, niveau: 1, score: 3, max: 4, reussi: true }] };
+  const m = JSON.parse(mergeText("echecs-vision", null, JSON.stringify(pc), JSON.stringify(iphone))!);
+  assert.equal(m.format, "rayans-echecs-vision");
+  assert.deepEqual(m.resultats.map((r: { id: string }) => r.id), ["1", "2"]);
+});
