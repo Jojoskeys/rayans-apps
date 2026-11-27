@@ -27,10 +27,13 @@ async function waitFor<T>(what: string, fn: () => T | Promise<T>, timeout = 20_0
   throw new Error(`Délai dépassé : ${what}${last ? ` (${String(last)})` : ""}`);
 }
 const js = <T = unknown>(w: BrowserWindow, code: string) => w.webContents.executeJavaScript(code, true) as Promise<T>;
-const type = (w: BrowserWindow, css: string, value: string) => js(w, `(() => { const i = document.querySelector(${JSON.stringify(css)});
+const type = (w: BrowserWindow, css: string, value: string) => waitFor(`saisie dans ${css}`,
+  () => js<boolean>(w, `(() => { const i = document.querySelector(${JSON.stringify(css)}); if (!i) return false;
   Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set.call(i, ${JSON.stringify(value)});
-  i.dispatchEvent(new Event("input", { bubbles: true })); })()`);
-const click = (w: BrowserWindow, css: string) => js(w, `document.querySelector(${JSON.stringify(css)}).click()`);
+  i.dispatchEvent(new Event("input", { bubbles: true })); return true; })()`), 8000);
+// Attend que l'élément soit là avant de cliquer (sur la CI, l'interface peut s'afficher en plusieurs fois).
+const click = (w: BrowserWindow, css: string) => waitFor(`clic sur ${css}`,
+  () => js<boolean>(w, `(() => { const e = document.querySelector(${JSON.stringify(css)}); if (!e) return false; e.click(); return true; })()`), 8000);
 
 export function runLaunchTest(reportPath: string, h: Hooks) {
   const report: Record<string, unknown> = {
